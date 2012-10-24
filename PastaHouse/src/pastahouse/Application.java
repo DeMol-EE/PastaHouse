@@ -19,6 +19,8 @@ public class Application extends javax.swing.JFrame {
     /** Creates new form Application */
     public Application() {
 	initComponents();
+	
+	setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
@@ -30,18 +32,33 @@ public class Application extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        content = new javax.swing.JPanel();
+        menu = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 400, Short.MAX_VALUE)
+        org.jdesktop.layout.GroupLayout contentLayout = new org.jdesktop.layout.GroupLayout(content);
+        content.setLayout(contentLayout);
+        contentLayout.setHorizontalGroup(
+            contentLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 747, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
+        contentLayout.setVerticalGroup(
+            contentLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 540, Short.MAX_VALUE)
         );
+
+        getContentPane().add(content, java.awt.BorderLayout.CENTER);
+
+        jMenu1.setText("File");
+        menu.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        menu.add(jMenu2);
+
+        setJMenuBar(menu);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -82,5 +99,9 @@ public class Application extends javax.swing.JFrame {
 	});
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel content;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar menu;
     // End of variables declaration//GEN-END:variables
 }
