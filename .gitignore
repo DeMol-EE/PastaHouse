@@ -5,3 +5,4 @@
 *.war
 *.ear
 /PastaHouse/nbproject/private/
+/PastaHouse/build/
