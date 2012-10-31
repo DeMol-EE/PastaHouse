@@ -10,15 +10,68 @@
  */
 package gui;
 
+import database.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 /**
  *
  * @author Warkst
  */
-public class IngredientViewController extends javax.swing.JPanel {
+public class IngredientViewController extends javax.swing.JPanel implements ViewController{
 
+    private boolean editing = false;
+    
     /** Creates new form IngredientViewController */
     public IngredientViewController() {
 	initComponents();
+	
+	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	listOutlet.addListSelectionListener(new ListSelectionListener() {
+
+	    @Override
+	    public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+		    System.out.println("Selected index "+listOutlet.getSelectedIndex()+": "+listOutlet.getSelectedValue());
+		    
+		    updateDetail(listOutlet.getSelectedValue());
+		}
+	    }
+	});
+	
+	try {
+	    // load from the db
+	    Map<String, BasicIngredient> bi = Database.driver().loadBasicIngredients();
+	    ArrayList<BasicIngredient> bil = new ArrayList<BasicIngredient>();
+	    System.out.println("basic ingredients:");
+	    for (Map.Entry<String, BasicIngredient> entry : bi.entrySet()) {
+		System.out.println("\t("+entry.getValue().getId()+")\t"+entry.getValue().getName());
+		bil.add(entry.getValue());
+	    }
+	    
+	    listOutlet.setModel(ListModelFactory.createBasicIngredientModel(bil));
+	} catch (SQLException ex) {
+	    Logger.getLogger(IngredientViewController.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
+    
+    private void updateDetail(Object value){
+	BasicIngredient bi = (BasicIngredient)value;
+	nameOutlet.setText(bi.getName());
+	priceOutlet.setText(""+bi.getPrice());
+    }
+    
+    @Override
+    public JPanel view(){
+	return this;
     }
 
     /** This method is called from within the constructor to
@@ -34,59 +87,157 @@ public class IngredientViewController extends javax.swing.JPanel {
         master = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jComboBox1 = new javax.swing.JComboBox();
+        listOutlet = new javax.swing.JList();
         detail = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        nameOutlet = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        priceOutlet = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        editOutlet = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(200);
         jSplitPane1.setDividerSize(3);
 
-        master.setBackground(new java.awt.Color(255, 153, 153));
+        master.setBackground(new java.awt.Color(255, 255, 153));
         master.setLayout(new java.awt.BorderLayout());
 
         jButton1.setText("Toevoegen...");
+        jButton1.setFocusable(false);
         master.add(jButton1, java.awt.BorderLayout.SOUTH);
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        listOutlet.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(listOutlet);
 
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        master.add(jComboBox1, java.awt.BorderLayout.PAGE_START);
 
         jSplitPane1.setLeftComponent(master);
 
         detail.setBackground(new java.awt.Color(153, 153, 255));
+        detail.setLayout(new java.awt.BorderLayout());
 
-        org.jdesktop.layout.GroupLayout detailLayout = new org.jdesktop.layout.GroupLayout(detail);
-        detail.setLayout(detailLayout);
-        detailLayout.setHorizontalGroup(
-            detailLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+        jPanel4.setLayout(new java.awt.GridLayout(5, 0));
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setText("Name:");
+        jPanel1.add(jLabel1, java.awt.BorderLayout.LINE_START);
+
+        nameOutlet.setEnabled(false);
+        jPanel1.add(nameOutlet, java.awt.BorderLayout.CENTER);
+
+        jPanel4.add(jPanel1);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setText("Price:");
+        jPanel2.add(jLabel2, java.awt.BorderLayout.LINE_START);
+
+        priceOutlet.setEnabled(false);
+        jPanel2.add(priceOutlet, java.awt.BorderLayout.CENTER);
+
+        jPanel4.add(jPanel2);
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 371, Short.MAX_VALUE)
         );
-        detailLayout.setVerticalGroup(
-            detailLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 479, Short.MAX_VALUE)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 90, Short.MAX_VALUE)
         );
+
+        jPanel4.add(jPanel3);
+
+        detail.add(jPanel4, java.awt.BorderLayout.CENTER);
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        editOutlet.setText("Edit");
+        editOutlet.setFocusable(false);
+        editOutlet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editOutletActionPerformed(evt);
+            }
+        });
+        jPanel5.add(editOutlet, java.awt.BorderLayout.CENTER);
+
+        detail.add(jPanel5, java.awt.BorderLayout.PAGE_START);
 
         jSplitPane1.setRightComponent(detail);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void editOutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editOutletActionPerformed
+        
+	// input test:
+	try{
+	    Double.parseDouble(priceOutlet.getText());
+	} catch(Exception e){
+	    // show error dialog and return
+	    JOptionPane.showMessageDialog(null, "Enter a valid price (\""+priceOutlet.getText()+"\" is not a valid value)!", "Error: invalid price", JOptionPane.ERROR_MESSAGE);
+	    return;
+	}
+	
+	
+	editing = !editing;
+	listOutlet.setFocusable(!editing);
+	nameOutlet.setEnabled(editing);
+	priceOutlet.setEnabled(editing);
+	if(editing) {
+	    nameOutlet.requestFocus();
+	    editOutlet.setText("Save");
+	} else {
+	    listOutlet.requestFocus();
+	    editOutlet.setText("Edit");
+	    // save changes to dynamic memory
+	    // get values from outlets and save them to the selected object
+	    
+	    if(listOutlet.getSelectedValue().getClass() == BasicIngredient.class){
+		BasicIngredient c = (BasicIngredient)listOutlet.getSelectedValue();
+		c.setName(nameOutlet.getText());
+		c.setPrice(Double.parseDouble(priceOutlet.getText()));
+	    }
+	    
+	    // save changes to the db!
+	    Component c = (Component)listOutlet.getSelectedValue();
+	    try {
+		c.update();
+	    } catch (Exception ex) {
+		Logger.getLogger(IngredientViewController.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+    }//GEN-LAST:event_editOutletActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel detail;
+    private javax.swing.JButton editOutlet;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JList jList1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
+    private javax.swing.JTextField nameOutlet;
+    private javax.swing.JTextField priceOutlet;
     // End of variables declaration//GEN-END:variables
 }

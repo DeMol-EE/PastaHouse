@@ -27,11 +27,29 @@ public class TestData {
         stat.executeUpdate("drop table if exists recipesingredients;");
 	
 	// create new and fresh tables
-        stat.executeUpdate("create table ingredients (id INTEGER PRIMARY KEY, name TEXT NOT NULL ON CONFLICT FAIL, price REAL NOT NULL ON CONFLICT FAIL);");
-        stat.executeUpdate("create table recipes (id INTEGER PRIMARY KEY, name TEXT NOT NULL ON CONFLICT FAIL, preparation TEXT, loss INTEGER CHECK (loss BETWEEN 0 AND 100));");
-        stat.executeUpdate("create table recipesrecipes (id INTEGER PRIMARY KEY, parentid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, childid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, quantity REAL NOT NULL ON CONFLICT FAIL);");
-        stat.executeUpdate("create table recipesingredients (id INTEGER PRIMARY KEY, parentid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, childid INTEGER REFERENCES ingredients (id) ON DELETE RESTRICT, quantity REAL NOT NULL ON CONFLICT FAIL);");
-
+        stat.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_INGR()+"("
+		    + "id INTEGER PRIMARY KEY, "
+		    + "name TEXT NOT NULL ON CONFLICT FAIL, "
+		    + "price REAL NOT NULL ON CONFLICT FAIL);");
+	stat.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC()+" ("
+		    + "id INTEGER PRIMARY KEY, "
+		    + "name TEXT NOT NULL ON CONFLICT FAIL, "
+		    + "preparation TEXT, "
+		    + "loss INTEGER CHECK (loss BETWEEN 0 AND 100));");
+	stat.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC_INGR()+" ("
+		    + "id INTEGER PRIMARY KEY, "
+		    + "parentid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
+		    + "childid INTEGER REFERENCES ingredients (id) ON DELETE RESTRICT, "
+		    + "rank INTEGER NOT NULL ON CONFLICT FAIL,"
+		    + "quantity REAL NOT NULL ON CONFLICT FAIL);");
+	stat.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC_REC()+" ("
+		    + "id INTEGER PRIMARY KEY, "
+		    + "parentid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
+		    + "childid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
+		    + "rank INTEGER NOT NULL ON CONFLICT FAIL,"
+		    + "quantity REAL NOT NULL ON CONFLICT FAIL);");
+	// ADD RANG INDEX TO RELATION ATTRIBUTES TO INDICATE POSITION IN INGREDIENT LIST
+	
 	
 	//add test data
 	PreparedStatement prepIngr = conn.prepareStatement("insert into ingredients values (null, ?, ?);");
@@ -60,14 +78,16 @@ public class TestData {
         prepRec.executeBatch();
         conn.setAutoCommit(true);
 	
-	PreparedStatement prepRecIngr = conn.prepareStatement("insert into recipesingredients values (null, ?, ?, ?);");
+	PreparedStatement prepRecIngr = conn.prepareStatement("insert into recipesingredients values (null, ?, ?, ?, ?);");
 	prepRecIngr.setInt(1, 1);
 	prepRecIngr.setInt(2, 2);
-	prepRecIngr.setDouble(3, 2.1);
+	prepRecIngr.setDouble(3, 2);
+	prepRecIngr.setDouble(4, 2.1);
 	prepRecIngr.addBatch();
 	prepRecIngr.setInt(1, 1);
 	prepRecIngr.setInt(2, 3);
-	prepRecIngr.setDouble(3, 0.04);
+	prepRecIngr.setDouble(3, 1);
+	prepRecIngr.setDouble(4, 0.04);
 	prepRecIngr.addBatch();
         conn.setAutoCommit(false);
         prepRecIngr.executeBatch();
