@@ -10,7 +10,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -110,14 +109,27 @@ public class Database {
 	}
 	// also load all linked ingredients and recipes
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
+	int ingrLinks = 0;
 	while(rs.next()){
 	    int recipeId = rs.getInt("receptid");
 	    int ingredientId = rs.getInt("ingredientid");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
+	    recipes.get(recipeId).addIngredient(basicIngredients.get(ingredientId), rank, quantity);
+	    ingrLinks++;
+	}
+	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_REC());
+	int recLinks = 0;
+	while(rs.next()){
+	    int recipeId = rs.getInt("receptid");
+	    int subrecipeId = rs.getInt("deelreceptid");
+	    int rank = rs.getInt("rang");
+	    double quantity = rs.getDouble("quantiteit");
+	    recipes.get(recipeId).addIngredient(recipes.get(subrecipeId), rank, quantity);
+	    recLinks++;
 	}
 	
-	System.out.println("Database driver:: loaded "+recipes.size()+" recipes!");
+	System.out.println("Database driver:: loaded "+recipes.size()+" recipes (linked "+ingrLinks+" ingredients and "+recLinks+" recipes)!");
     }
 
     public Map<Integer, Supplier> getSuppliers() {
