@@ -34,8 +34,10 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         txtContact = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtAdres = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         txtGemeente = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
@@ -53,7 +55,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setLayout(new java.awt.GridLayout(8, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(9, 2));
 
         jLabel11.setText("Firma");
         jPanel2.add(jLabel11);
@@ -67,9 +69,15 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel13);
         jPanel2.add(txtAdres);
 
+        jLabel1.setText("Postcode");
+        jPanel2.add(jLabel1);
+        jPanel2.add(txtGemeente);
+
         jLabel12.setText("Gemeente");
         jPanel2.add(jLabel12);
-        jPanel2.add(txtGemeente);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(jComboBox1);
 
         jLabel9.setText("Telefoon");
         jPanel2.add(jLabel9);
@@ -110,7 +118,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -173,6 +181,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
