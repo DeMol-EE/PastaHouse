@@ -4,6 +4,11 @@
  */
 package gui;
 
+import database.Database;
+import database.Supplier;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.JPanel;
 
 /**
@@ -17,6 +22,26 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
      */
     public SupplierViewController() {
 	initComponents();
+	
+	Map<Integer, Supplier> s = Database.driver().getSuppliers();
+	Map<String, Supplier> ss = new TreeMap<String, Supplier>();
+	
+	for (Map.Entry<Integer, Supplier> entry : s.entrySet()) {
+	    ss.put(entry.getValue().getFirm(), entry.getValue());
+	}
+	
+	ArrayList<Supplier> data = new ArrayList<Supplier>();
+	
+	for (Map.Entry<String, Supplier> entry : ss.entrySet()) {
+	    data.add(entry.getValue());
+	}
+	
+	listOutlet.setModel(ListModelFactory.createSupplierListModel(data));
+    }
+    
+    public void selectSupplier(Supplier supplier){
+//	System.out.println("SVC::select index stub called with index "+);
+	listOutlet.setSelectedValue(supplier, true);
     }
     
     @Override
@@ -33,17 +58,37 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
-        );
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listOutlet = new javax.swing.JList();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jSplitPane1.setRightComponent(jPanel1);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        listOutlet.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listOutlet);
+
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jSplitPane1.setLeftComponent(jPanel2);
+
+        add(jSplitPane1, java.awt.BorderLayout.LINE_START);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JList listOutlet;
     // End of variables declaration//GEN-END:variables
 }

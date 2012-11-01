@@ -11,10 +11,12 @@ package database;
 public abstract class Component implements Comparable<Component> {
     private final int id;
     private String name;
+    private String date;
     
-    public Component(int id, String name){
+    public Component(int id, String name, String date){
 	this.id = id;
 	this.name = name;
+	this.date = date;
     }
 
     public String getName() {

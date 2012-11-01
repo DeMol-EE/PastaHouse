@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,13 +25,15 @@ public class Database {
     private Connection connection;
     private Statement statement;
     
-    private Map<String, BasicIngredient> basicIngredients;
-    private Map<String, Recipe> recipes;
+    private Map<Integer, Supplier> suppliers;
+    private Map<Integer, BasicIngredient> basicIngredients;
+    private Map<Integer, Recipe> recipes;
     
     private Database() {
 	try {
-	    basicIngredients = new TreeMap<String, BasicIngredient>();
-	    recipes = new TreeMap<String, Recipe>();
+	    suppliers = new TreeMap<Integer, Supplier>();
+	    basicIngredients = new TreeMap<Integer, BasicIngredient>();
+	    recipes = new TreeMap<Integer, Recipe>();
 	    
 	    // connect to db
 	    Class.forName("org.sqlite.JDBC");
@@ -38,27 +41,51 @@ public class Database {
 	    statement = connection.createStatement();
 	    
 	    //first time run: set up the database (create if not exists...)
+	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_SUP()+" ("
+		    + "id INTEGER PRIMARY KEY, "
+		    + "firma TEXT NOT NULL ON CONFLICT FAIL, "
+		    + "adres TEXT, "
+		    + "gemeente TEXT, "
+		    + "tel TEXT, "
+		    + "gsm TEXT, "
+		    + "email TEXT, "
+		    + "opmerking TEXT, "
+		    + "contactpersoon TEXT, "
+		    + "verwijderd INTEGER DEFAULT 0);");
 	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_INGR()+"("
 		    + "id INTEGER PRIMARY KEY, "
-		    + "name TEXT NOT NULL ON CONFLICT FAIL, "
-		    + "price REAL NOT NULL ON CONFLICT FAIL);");
+		    + "leverancierid INTEGER REFERENCES "+Configuration.center().getDB_TABLE_SUP()+ " (id) ON DELETE NO ACTION, "
+		    + "naam TEXT NOT NULL ON CONFLICT FAIL, "
+		    + "merk TEXT, "
+		    + "verpakking TEXT, "
+		    + "prijsPerVerpakking REAL NOT NULL ON CONFLICT FAIL, "
+		    + "gewichtPerVerpakking REAL NOT NULL ON CONFLICT FAIL, "
+		    + "verliespercentage REAL DEFAULT 0, "
+		    + "BTW REAL DEFAULT 6, "
+		    + "datum TEXT);");
 	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC()+" ("
 		    + "id INTEGER PRIMARY KEY, "
-		    + "name TEXT NOT NULL ON CONFLICT FAIL, "
-		    + "preparation TEXT, "
-		    + "loss INTEGER CHECK (loss BETWEEN 0 AND 100));");
+		    + "naam TEXT NOT NULL ON CONFLICT FAIL, "
+		    + "bereiding TEXT, "
+		    + "datum TEXT, "
+		    + "nettogewicht REAL NOT NULL ON CONFLICT FAIL);");
 	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC_INGR()+" ("
 		    + "id INTEGER PRIMARY KEY, "
-		    + "parentid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
-		    + "childid INTEGER REFERENCES ingredients (id) ON DELETE RESTRICT, "
-		    + "rank INTEGER NOT NULL ON CONFLICT FAIL,"
-		    + "quantity REAL NOT NULL ON CONFLICT FAIL);");
+		    + "receptid INTEGER REFERENCES recipes (id) ON DELETE CASCADE, "
+		    + "ingredientid INTEGER REFERENCES ingredients (id) ON DELETE RESTRICT, "
+		    + "rang INTEGER NOT NULL ON CONFLICT FAIL,"
+		    + "quantiteit REAL NOT NULL ON CONFLICT FAIL);");
 	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC_REC()+" ("
 		    + "id INTEGER PRIMARY KEY, "
-		    + "parentid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
-		    + "childid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
-		    + "rank INTEGER NOT NULL ON CONFLICT FAIL,"
-		    + "quantity REAL NOT NULL ON CONFLICT FAIL);");
+		    + "receptid INTEGER REFERENCES recipes (id) ON DELETE CASCADE, "
+		    + "deelreceptid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
+		    + "rang INTEGER NOT NULL ON CONFLICT FAIL,"
+		    + "quantiteit REAL NOT NULL ON CONFLICT FAIL);");
+	    
+	    // load data
+	    loadSuppliers();
+	    loadBasicIngredients();
+	    loadRecipes();
 	    
 	} catch (Exception ex) {
 	    Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,10 +99,33 @@ public class Database {
 	return driver;
     }
     
-    public Map<String, BasicIngredient> loadBasicIngredients() throws SQLException{
+    public Map<Integer, Supplier> loadSuppliers() throws SQLException{
+	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
+	while (rs.next()) {	    
+	    suppliers.put(rs.getInt("id"), 
+		    Supplier.loadWithValues(rs.getInt("id"), rs.getString("firma"), rs.getString("adres")));
+	}
+	
+	System.out.println(suppliers);
+	
+	return suppliers;
+    }
+    
+    public Map<Integer, BasicIngredient> loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
-	    basicIngredients.put(rs.getString("name"), BasicIngredient.loadWithValues(rs.getInt("id"), rs.getString("name"), rs.getDouble("price")));
+	    basicIngredients.put(rs.getInt("id"), 
+		    BasicIngredient.loadWithValues(
+		    suppliers.get(rs.getInt("leverancierid")), 
+		    rs.getString("merk"), 
+		    rs.getString("verpakking"), 
+		    rs.getDouble("prijsPerVerpakking"), 
+		    rs.getDouble("gewichtPerVerpakking"), 
+		    rs.getDouble("verliespercentage"), 
+		    rs.getDouble("BTW"), 
+		    rs.getInt("id"), 
+		    rs.getString("naam"), 
+		    rs.getString("datum")));
 	}
 	
 	return basicIngredients;
@@ -91,27 +141,17 @@ public class Database {
 	
 	return null;
     }
-    
-    public Map<String, Component> loadIngredients(){
-	TreeMap<String, Component> ingredients = new TreeMap<String, Component>();
-	
-	for (Map.Entry<String, BasicIngredient> entry : basicIngredients.entrySet()) {
-	    if(!ingredients.containsKey(entry.getKey())){
-		ingredients.put(entry.getKey(), entry.getValue());
-	    } else {
-		System.err.println("Duplicate entry found in components table for ingredient with name \""+entry.getKey()+"\" (did not overwrite already present value)");
-	    }
-	}
-	
-	for (Map.Entry<String, Recipe> entry : recipes.entrySet()) {
-	    if(!ingredients.containsKey(entry.getKey())){
-		ingredients.put(entry.getKey(), entry.getValue());
-	    } else {
-		System.err.println("Duplicate entry found in components table for recipe with name \""+entry.getKey()+"\" (did not overwrite already present value)");
-	    }
-	}
-	
-	return ingredients;
+
+    public Map<Integer, Supplier> getSuppliers() {
+	return suppliers;
+    }
+
+    public Map<Integer, BasicIngredient> getBasicIngredients() {
+	return basicIngredients;
+    }
+
+    public Map<Integer, Recipe> getRecipes() {
+	return recipes;
     }
     
     public void executeStatement(String s){

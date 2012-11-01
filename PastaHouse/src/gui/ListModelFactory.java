@@ -5,6 +5,7 @@
 package gui;
 
 import database.BasicIngredient;
+import database.Supplier;
 import java.util.ArrayList;
 import javax.swing.AbstractListModel;
 
@@ -34,5 +35,24 @@ public class ListModelFactory {
 	};
     }
     
-    
+    public static AbstractListModel createSupplierListModel(final ArrayList<Supplier> data){
+	return new AbstractListModel() {
+
+	    @Override
+	    public int getSize() {
+		return data.size();
+	    }
+
+	    @Override
+	    public Object getElementAt(int index) {
+		return data.get(index);
+	    }
+	    
+	    public void add(Supplier o){
+		if (data.add(o)) {
+		    fireContentsChanged(this, 0, getSize());
+		}
+	    }
+	};
+    }
 }

@@ -11,6 +11,7 @@
 package pastahouse;
 
 import database.Configuration;
+import database.Supplier;
 import gui.IngredientViewController;
 import gui.RecipeViewController;
 import gui.SupplierViewController;
@@ -21,6 +22,10 @@ import gui.SupplierViewController;
  */
 public class Application extends javax.swing.JFrame {
 
+    private RecipeViewController rvc;
+    private IngredientViewController ivc;
+    private SupplierViewController svc;
+    
     /** Creates new form Application */
     public Application() {
 	initComponents();
@@ -29,9 +34,13 @@ public class Application extends javax.swing.JFrame {
 	
 	// load viewControllers
 	
-	recipeTab.add(new RecipeViewController().view());
-	ingredientTab.add(new IngredientViewController().view());
-	supplierTab.add(new SupplierViewController().view());
+	rvc = new RecipeViewController();
+	ivc = new IngredientViewController(this);
+	svc = new SupplierViewController();
+	
+	recipeTab.add(rvc.view());
+	ingredientTab.add(ivc.view());
+	supplierTab.add(svc.view());
     }
 
     /** This method is called from within the constructor to
@@ -125,6 +134,11 @@ public class Application extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabController.setSelectedIndex(2);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    public void selectAndSwitchToSupplier(Supplier supplier){
+	svc.selectSupplier(supplier);
+	tabController.setSelectedIndex(2);
+    }
     
     /**
      * @param args the command line arguments

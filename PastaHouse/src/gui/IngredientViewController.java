@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import pastahouse.Application;
 
 /**
  *
@@ -28,10 +29,14 @@ import javax.swing.event.ListSelectionListener;
  */
 public class IngredientViewController extends javax.swing.JPanel implements ViewController{
 
+    private Application application;
+    
     private boolean editing = false;
     
     /** Creates new form IngredientViewController */
-    public IngredientViewController() {
+    public IngredientViewController(Application application) {
+	this.application = application;
+	
 	initComponents();
 	
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -49,10 +54,10 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	
 	try {
 	    // load from the db
-	    Map<String, BasicIngredient> bi = Database.driver().loadBasicIngredients();
+	    Map<Integer, BasicIngredient> bi = Database.driver().loadBasicIngredients();
 	    ArrayList<BasicIngredient> bil = new ArrayList<BasicIngredient>();
 	    System.out.println("basic ingredients:");
-	    for (Map.Entry<String, BasicIngredient> entry : bi.entrySet()) {
+	    for (Map.Entry<Integer, BasicIngredient> entry : bi.entrySet()) {
 		System.out.println("\t("+entry.getValue().getId()+")\t"+entry.getValue().getName());
 		bil.add(entry.getValue());
 	    }
@@ -66,7 +71,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private void updateDetail(Object value){
 	BasicIngredient bi = (BasicIngredient)value;
 	nameOutlet.setText(bi.getName());
-	priceOutlet.setText(""+bi.getPrice());
+	supplierOutlet.setText(bi.getSupplier().getFirm());
     }
     
     @Override
@@ -97,6 +102,8 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         jLabel2 = new javax.swing.JLabel();
         priceOutlet = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        supplierOutlet = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         editOutlet = new javax.swing.JButton();
 
@@ -148,16 +155,26 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
         jPanel4.add(jPanel2);
 
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 371, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 90, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel3.setText("Leverancier");
+        jPanel3.add(jLabel3);
+
+        supplierOutlet.setForeground(new java.awt.Color(0, 0, 255));
+        supplierOutlet.setText("<>");
+        supplierOutlet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        supplierOutlet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseReleased(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseEntered(evt);
+            }
+        });
+        jPanel3.add(supplierOutlet);
 
         jPanel4.add(jPanel3);
 
@@ -209,7 +226,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	    if(listOutlet.getSelectedValue().getClass() == BasicIngredient.class){
 		BasicIngredient c = (BasicIngredient)listOutlet.getSelectedValue();
 		c.setName(nameOutlet.getText());
-		c.setPrice(Double.parseDouble(priceOutlet.getText()));
+//		c.setPrice(Double.parseDouble(priceOutlet.getText()));
 	    }
 	    
 	    // save changes to the db!
@@ -222,12 +239,28 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	}
     }//GEN-LAST:event_editOutletActionPerformed
 
+    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseReleased
+	BasicIngredient selectedIngredient = (BasicIngredient)listOutlet.getSelectedValue();
+	
+	application.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
+    }//GEN-LAST:event_supplierOutletMouseReleased
+
+    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseEntered
+        supplierOutlet.setText("<html><u>"+supplierOutlet.getText()+"</u></html>");
+    }//GEN-LAST:event_supplierOutletMouseEntered
+
+    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseExited
+        BasicIngredient bi = (BasicIngredient)listOutlet.getSelectedValue();
+	supplierOutlet.setText(bi.getSupplier().getFirm());
+    }//GEN-LAST:event_supplierOutletMouseExited
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel detail;
     private javax.swing.JButton editOutlet;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -239,5 +272,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.JPanel master;
     private javax.swing.JTextField nameOutlet;
     private javax.swing.JTextField priceOutlet;
+    private javax.swing.JLabel supplierOutlet;
     // End of variables declaration//GEN-END:variables
 }
