@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,7 +10,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,50 +39,7 @@ public class Database {
 	    Class.forName("org.sqlite.JDBC");
 	    connection = DriverManager.getConnection(Configuration.center().getDB_URL());
 	    statement = connection.createStatement();
-	    
-	    //first time run: set up the database (create if not exists...)
-	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_SUP()+" ("
-		    + "id INTEGER PRIMARY KEY, "
-		    + "firma TEXT NOT NULL ON CONFLICT FAIL, "
-		    + "adres TEXT, "
-		    + "gemeente TEXT, "
-		    + "tel TEXT, "
-		    + "gsm TEXT, "
-		    + "fax TEXT, "
-		    + "email TEXT, "
-		    + "opmerking TEXT, "
-		    + "contactpersoon TEXT, "
-		    + "verwijderd INTEGER DEFAULT 0);");
-	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_INGR()+"("
-		    + "id INTEGER PRIMARY KEY, "
-		    + "leverancierid INTEGER REFERENCES "+Configuration.center().getDB_TABLE_SUP()+ " (id) ON DELETE NO ACTION, "
-		    + "naam TEXT NOT NULL ON CONFLICT FAIL, "
-		    + "merk TEXT, "
-		    + "verpakking TEXT, "
-		    + "prijsPerVerpakking REAL NOT NULL ON CONFLICT FAIL, "
-		    + "gewichtPerVerpakking REAL NOT NULL ON CONFLICT FAIL, "
-		    + "verliespercentage REAL DEFAULT 0, "
-		    + "BTW REAL DEFAULT 6, "
-		    + "datum TEXT);");
-	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC()+" ("
-		    + "id INTEGER PRIMARY KEY, "
-		    + "naam TEXT NOT NULL ON CONFLICT FAIL, "
-		    + "bereiding TEXT, "
-		    + "datum TEXT, "
-		    + "nettogewicht REAL NOT NULL ON CONFLICT FAIL);");
-	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC_INGR()+" ("
-		    + "id INTEGER PRIMARY KEY, "
-		    + "receptid INTEGER REFERENCES recipes (id) ON DELETE CASCADE, "
-		    + "ingredientid INTEGER REFERENCES ingredients (id) ON DELETE RESTRICT, "
-		    + "rang INTEGER NOT NULL ON CONFLICT FAIL,"
-		    + "quantiteit REAL NOT NULL ON CONFLICT FAIL);");
-	    statement.executeUpdate("create table IF NOT EXISTS "+Configuration.center().getDB_TABLE_REC_REC()+" ("
-		    + "id INTEGER PRIMARY KEY, "
-		    + "receptid INTEGER REFERENCES recipes (id) ON DELETE CASCADE, "
-		    + "deelreceptid INTEGER REFERENCES recipes (id) ON DELETE RESTRICT, "
-		    + "rang INTEGER NOT NULL ON CONFLICT FAIL,"
-		    + "quantiteit REAL NOT NULL ON CONFLICT FAIL);");
-	    
+	     
 	    // load data
 	    loadSuppliers();
 	    loadBasicIngredients();
@@ -100,7 +57,7 @@ public class Database {
 	return driver;
     }
     
-    private Map<Integer, Supplier> loadSuppliers() throws SQLException{
+    public Map<Integer, Supplier> loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
 	    suppliers.put(rs.getInt("id"), 
@@ -122,7 +79,7 @@ public class Database {
 	return suppliers;
     }
     
-    private Map<Integer, BasicIngredient> loadBasicIngredients() throws SQLException{
+    public Map<Integer, BasicIngredient> loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
 	    basicIngredients.put(rs.getInt("id"), 
@@ -142,7 +99,7 @@ public class Database {
 	return basicIngredients;
     }
     
-    private ArrayList<BasicIngredient> loadRecipes() throws SQLException{
+    public ArrayList<BasicIngredient> loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
 	// also load all recipes and ingredients linked to the recipe
 	// ...
