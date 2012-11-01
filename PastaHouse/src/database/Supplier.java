@@ -25,7 +25,7 @@ public class Supplier extends Record{
     
     private boolean verwijderd;
 
-    private Supplier(int id, String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
+    public Supplier(int id, String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
 	super(id);
 	this.firm = firm;
 	this.address = address;
@@ -42,7 +42,7 @@ public class Supplier extends Record{
     public static Supplier loadWithValues(int id, String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
 	return new Supplier(id, firm, address, municipality, telephone, cellphone, fax, email, notes, contact, verwijderd);
     }
-
+    
     public String getAddress() {
 	return address;
     }
