@@ -254,6 +254,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 	AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true);
+        
         dia.setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 

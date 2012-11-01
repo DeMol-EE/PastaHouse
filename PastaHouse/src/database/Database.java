@@ -75,6 +75,10 @@ public class Database {
 	System.out.println("Database driver:: loaded "+suppliers.size()+" suppliers!");
     }
     
+    public boolean addSupplier(Supplier sup){
+        return false;
+    }
+    
     private void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
@@ -92,6 +96,10 @@ public class Database {
 	}
 	
 	System.out.println("Database driver:: loaded "+basicIngredients.size()+" basic ingredients!");
+    }
+    
+    public boolean addIngredient(BasicIngredient ingredient){
+        return true;
     }
     
     private void loadRecipes() throws SQLException{
@@ -112,7 +120,7 @@ public class Database {
 	    String ingredientName = rs.getString("ingredientnaam");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
-	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity, true);
+	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity);
 	    ingrLinks++;
 	}
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_REC());
@@ -122,11 +130,15 @@ public class Database {
 	    String subrecipeName = rs.getString("deelreceptnaam");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
-	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity, false);
+	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity);
 	    recLinks++;
 	}
 	
 	System.out.println("Database driver:: loaded "+recipes.size()+" recipes (linked "+ingrLinks+" ingredients and "+recLinks+" recipes)!");
+    }
+    
+    public boolean addRecipe(Recipe recipe){
+        return true;
     }
 
     public Map<String, Supplier> getSuppliers() {

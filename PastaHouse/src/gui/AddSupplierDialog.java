@@ -4,7 +4,10 @@
  */
 package gui;
 
+import database.Database;
 import database.Supplier;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +21,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     public AddSupplierDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -50,7 +54,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         txtEmail = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        NotesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -105,9 +109,9 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
         jScrollPane2.setName(""); // NOI18N
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        NotesOutlet.setColumns(20);
+        NotesOutlet.setRows(5);
+        jScrollPane2.setViewportView(NotesOutlet);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -158,52 +162,17 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-
-        
-    }//GEN-LAST:event_btnOKActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddSupplierDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddSupplierDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddSupplierDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddSupplierDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
+        Database db = Database.driver();
+        if (db.addSupplier(sup)) {
+            db.getSuppliers().put(txtFirma.getText(), sup);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
         }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AddSupplierDialog dialog = new AddSupplierDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_btnOKActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea NotesOutlet;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
     private javax.swing.Box.Filler filler1;
@@ -222,7 +191,6 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;
