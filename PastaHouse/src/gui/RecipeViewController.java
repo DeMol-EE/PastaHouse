@@ -4,7 +4,13 @@
  */
 package gui;
 
+import database.Database;
+import database.Recipe;
+import java.text.DecimalFormat;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -17,11 +23,43 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
      */
     public RecipeViewController() {
 	initComponents();
+	
+	recipeListOutlet.setModel(ListModelFactory.createRecipeListModel(Database.driver().getRecipes()));
+	recipeListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	recipeListOutlet.addListSelectionListener(new ListSelectionListener() {
+
+	    @Override
+	    public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+		    updateDetail(recipeListOutlet.getSelectedValue());
+		}
+	    }
+	});
+	
+	recipeListOutlet.setSelectedIndex(0);
+	
+	ingredientListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     @Override
     public JPanel view(){
 	return this;
+    }
+    
+    private void updateDetail(Object value){
+	Recipe r = (Recipe)value;
+	
+	nameOutlet.setText(Utilities.capitalize(r.getName()));
+	dateOutlet.setText(r.getDate());
+	
+	DecimalFormat threeFormatter = new DecimalFormat("0.000");
+	grossWeightOutlet.setText(threeFormatter.format(r.getGrossWeight())+" kg");
+	netWeightOutlet.setText(threeFormatter.format(r.getNetWeight())+" kg");
+	pricePerWeightOutlet.setText(threeFormatter.format(r.getPricePerWeight())+" euro / kg");
+	
+	preparationOutlet.setText(r.getPreparation());
+	
+	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getIngredients()));
     }
 
     /**
@@ -36,63 +74,67 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        recipeListOutlet = new javax.swing.JList();
+        add = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        nameOutlet = new javax.swing.JLabel();
+        dateOutlet = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        ingredientListOutlet = new javax.swing.JList();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        preparationOutlet = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        grossWeightOutlet = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        netWeightOutlet = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        pricePerWeightOutlet = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(200);
 
-        jPanel1.setBackground(new java.awt.Color(153, 255, 153));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        recipeListOutlet.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(recipeListOutlet);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        add.setText("Toevoegen...");
+        jPanel1.add(add, java.awt.BorderLayout.SOUTH);
+
         jSplitPane1.setLeftComponent(jPanel1);
 
-        jPanel2.setBackground(new java.awt.Color(153, 153, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
-        jLabel1.setText("jLabel1");
-        jPanel5.add(jLabel1);
+        nameOutlet.setText("<nameOutlet>");
+        jPanel5.add(nameOutlet);
 
-        jLabel5.setText("jLabel5");
-        jPanel5.add(jLabel5);
+        dateOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        dateOutlet.setText("<dateOutlet>");
+        jPanel5.add(dateOutlet);
 
         jPanel2.add(jPanel5, java.awt.BorderLayout.NORTH);
 
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(400, 200));
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
+        ingredientListOutlet.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane2.setViewportView(ingredientListOutlet);
 
         jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -101,31 +143,32 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 
         jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Bereiding:"));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        preparationOutlet.setColumns(20);
+        preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
+        preparationOutlet.setRows(5);
+        jScrollPane3.setViewportView(preparationOutlet);
 
         jPanel7.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
         jPanel6.setLayout(new java.awt.GridLayout(3, 2));
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Totaalgewicht ingrediënten");
         jPanel6.add(jLabel2);
 
-        jLabel3.setText("jLabel3");
-        jPanel6.add(jLabel3);
+        grossWeightOutlet.setText("<grossWeightOutlet>");
+        jPanel6.add(grossWeightOutlet);
 
-        jLabel4.setText("jLabel4");
+        jLabel4.setText("Gewicht na bereiding");
         jPanel6.add(jLabel4);
 
-        jLabel6.setText("jLabel6");
-        jPanel6.add(jLabel6);
+        netWeightOutlet.setText("<netWeightOutlet>");
+        jPanel6.add(netWeightOutlet);
 
-        jLabel7.setText("jLabel7");
+        jLabel7.setText("Kostprijs per kg (BTW excl)");
         jPanel6.add(jLabel7);
 
-        jLabel8.setText("jLabel8");
-        jPanel6.add(jLabel8);
+        pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
+        jPanel6.add(pricePerWeightOutlet);
 
         jPanel7.add(jPanel6, java.awt.BorderLayout.NORTH);
 
@@ -136,16 +179,13 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton add;
+    private javax.swing.JLabel dateOutlet;
+    private javax.swing.JLabel grossWeightOutlet;
+    private javax.swing.JList ingredientListOutlet;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
@@ -155,6 +195,10 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel nameOutlet;
+    private javax.swing.JLabel netWeightOutlet;
+    private javax.swing.JTextArea preparationOutlet;
+    private javax.swing.JLabel pricePerWeightOutlet;
+    private javax.swing.JList recipeListOutlet;
     // End of variables declaration//GEN-END:variables
 }

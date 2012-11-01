@@ -5,6 +5,8 @@
 package gui;
 
 import database.BasicIngredient;
+import database.Component;
+import database.Recipe;
 import database.Supplier;
 import java.util.Map;
 import javax.swing.AbstractListModel;
@@ -49,6 +51,46 @@ public class ListModelFactory {
 	    
 	    public void add(Supplier o){
 		data.put(o.getFirm(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+	};
+    }
+    
+    public static AbstractListModel createRecipeListModel(final Map<String, Recipe> data){
+	return new AbstractListModel() {
+
+	    @Override
+	    public int getSize() {
+		return data.size();
+	    }
+
+	    @Override
+	    public Object getElementAt(int index) {
+		return data.values().toArray()[index];
+	    }
+	    
+	    public void add(Recipe o){
+		data.put(o.getName(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+	};
+    }
+    
+    public static AbstractListModel createComponentListModel(final Map<Integer, Component> data){
+	return new AbstractListModel() {
+
+	    @Override
+	    public int getSize() {
+		return data.size();
+	    }
+
+	    @Override
+	    public Object getElementAt(int index) {
+		return data.values().toArray()[index];
+	    }
+	    
+	    public void add(Component o){
+		data.put(o.getRank(), o);
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};

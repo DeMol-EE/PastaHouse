@@ -180,7 +180,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
         jSplitPane1.setDividerLocation(200);
 
-        master.setBackground(new java.awt.Color(255, 255, 153));
         master.setLayout(new java.awt.BorderLayout());
 
         jButton1.setText("Toevoegen...");
@@ -198,7 +197,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
         jSplitPane1.setLeftComponent(master);
 
-        detail.setBackground(new java.awt.Color(153, 153, 255));
         detail.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);

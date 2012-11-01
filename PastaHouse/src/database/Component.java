@@ -12,11 +12,13 @@ public class Component {
     private Ingredient ingredient;
     private int rank;
     private double quantity;
+    private boolean isIngredient;
     
-    public Component(Ingredient ingr, int rank, double quantity) {
+    public Component(Ingredient ingr, int rank, double quantity, boolean isIngredient) {
 	this.ingredient = ingr;
 	this.rank = rank;
 	this.quantity = quantity;
+	this.isIngredient = isIngredient;
     }
 
     public Ingredient getIngredient() {
@@ -29,5 +31,9 @@ public class Component {
 
     public double getQuantity() {
 	return quantity;
+    }
+    
+    public boolean isIngredient(){
+	return isIngredient;
     }
 }

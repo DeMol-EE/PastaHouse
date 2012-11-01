@@ -4,9 +4,10 @@
  */
 package database;
 
+import gui.Utilities;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -18,9 +19,7 @@ public class Recipe extends Ingredient {
     // database variables
     private double netWeight;
     private String preparation;
-//    private ArrayList<BasicIngredient> basicIngredients;
-//    private ArrayList<Recipe> recipes;
-    private HashMap<Integer, Component> ingredients;
+    private Map<Integer, Component> ingredients;
     
     // derived variables
     
@@ -33,25 +32,15 @@ public class Recipe extends Ingredient {
 	this.preparation = preparation;
 	this.netWeight = netWeight;
 	
-//	basicIngredients = new ArrayList<BasicIngredient>();
-//	recipes = new ArrayList<Recipe>();
-	ingredients = new HashMap<Integer, Component>();
+	ingredients = new TreeMap<Integer, Component>();
     }
     
     public static Recipe createStub(String name, String date, String preparation, double netWeight){
 	return new Recipe(name, date, preparation, netWeight);
     }
     
-//    public void addBasicIngredient(BasicIngredient bi){
-//	
-//    }
-//    
-//    public void addRecipe(Recipe r){
-//	
-//    }
-    
-    public void addIngredient(Ingredient i, int rank, double quantity){
-	ingredients.put(rank, new Component(i, rank, quantity));
+    public void addIngredient(Ingredient i, int rank, double quantity, boolean isIngredient){
+	ingredients.put(rank, new Component(i, rank, quantity, isIngredient));
     }
     
     public double getNetWeight() {
@@ -60,6 +49,36 @@ public class Recipe extends Ingredient {
 
     public String getPreparation() {
 	return preparation;
+    }
+    
+    /**
+     * Lazily calculate and return the gross weight of the recipe's ingredients
+     * 
+     * @return 
+     */
+    public double getGrossWeight(){
+	double returnMe = 0.0;
+	
+	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
+	    returnMe += entry.getValue().getQuantity();
+	}
+	
+	return returnMe;
+    }
+    
+    public Map<Integer, Component> getIngredients(){
+	return ingredients;
+    }
+    
+    @Override
+    public double getPricePerWeight(){
+	double returnMe = 0.0;
+	
+	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
+	    returnMe += entry.getValue().getIngredient().getPricePerWeight();
+	}
+	
+	return returnMe;
     }
     
     @Override
@@ -77,5 +96,10 @@ public class Recipe extends Ingredient {
     @Override
     public void delete(){
 	
+    }
+    
+    @Override
+    public String toString(){
+	return Utilities.capitalize(getName());
     }
 }

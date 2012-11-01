@@ -8,7 +8,7 @@ package database;
  *
  * @author Warkst
  */
-public abstract class Ingredient extends Record implements Comparable<Ingredient> {
+public abstract class Ingredient implements Record {
     private String name;
     private String date;
     
@@ -28,9 +28,6 @@ public abstract class Ingredient extends Record implements Comparable<Ingredient
     public void setName(String name) {
 	this.name = name;
     }
-
-    @Override
-    public int compareTo(Ingredient o) {
-	return getName().compareTo(o.getName());
-    }
+    
+    public abstract double getPricePerWeight();
 }

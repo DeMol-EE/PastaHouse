@@ -86,6 +86,7 @@ public class BasicIngredient extends Ingredient {
 	return taxes;
     }
 
+    @Override
     public double getPricePerWeight() {
 	return pricePerWeight;
     }
@@ -96,10 +97,6 @@ public class BasicIngredient extends Ingredient {
 
     public double getNetPrice() {
 	return netPrice;
-    }
-    
-    public String getDate() {
-	return date;
     }
     
     @Override

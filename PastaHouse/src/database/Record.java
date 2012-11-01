@@ -8,14 +8,14 @@ package database;
  *
  * @author Robin jr
  */
-public abstract class Record {
+public interface Record {
     
     // save changes to the db
-    public abstract void create() throws Exception;
+    public void create() throws Exception;
     
     // save changes to the db
-    public abstract void update() throws Exception;
+    public void update() throws Exception;
     
     // save changes to the db
-    public abstract void delete() throws Exception;
+    public void delete() throws Exception;
 }

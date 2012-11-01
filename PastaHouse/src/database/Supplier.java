@@ -10,7 +10,7 @@ import gui.Utilities;
  *
  * @author Warkst
  */
-public class Supplier extends Record{
+public class Supplier implements Record{
     private final String table_id = Configuration.center().getDB_TABLE_SUP();
     
     private String firm;
