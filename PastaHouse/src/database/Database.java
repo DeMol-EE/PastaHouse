@@ -76,7 +76,7 @@ public class Database {
     }
     
     public boolean addSupplier(Supplier sup){
-        return false;
+        return true;
     }
     
     private void loadBasicIngredients() throws SQLException{
@@ -120,7 +120,7 @@ public class Database {
 	    String ingredientName = rs.getString("ingredientnaam");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
-	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity);
+	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity, true);
 	    ingrLinks++;
 	}
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_REC());
@@ -130,7 +130,7 @@ public class Database {
 	    String subrecipeName = rs.getString("deelreceptnaam");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
-	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity);
+	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity, false);
 	    recLinks++;
 	}
 	

@@ -6,7 +6,6 @@ package gui;
 
 import database.Database;
 import database.Supplier;
-import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
