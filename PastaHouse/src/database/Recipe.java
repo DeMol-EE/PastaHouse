@@ -17,8 +17,9 @@ public class Recipe extends Ingredient {
     // database variables
     private double netWeight;
     private String preparation;
-    private ArrayList<BasicIngredient> basicIngredients;
-    private ArrayList<Recipe> recipes;
+//    private ArrayList<BasicIngredient> basicIngredients;
+//    private ArrayList<Recipe> recipes;
+    private ArrayList<Component> ingredients;
     
     // derived variables
     
@@ -31,20 +32,25 @@ public class Recipe extends Ingredient {
 	this.preparation = preparation;
 	this.netWeight = netWeight;
 	
-	basicIngredients = new ArrayList<BasicIngredient>();
-	recipes = new ArrayList<Recipe>();
+//	basicIngredients = new ArrayList<BasicIngredient>();
+//	recipes = new ArrayList<Recipe>();
+	ingredients = new ArrayList<Component>();
     }
     
     public static Recipe createStub(int id, String name, String date, String preparation, double netWeight){
 	return new Recipe(id, name, date, preparation, netWeight);
     }
     
-    public void addBasicIngredient(BasicIngredient bi){
-	
-    }
+//    public void addBasicIngredient(BasicIngredient bi){
+//	
+//    }
+//    
+//    public void addRecipe(Recipe r){
+//	
+//    }
     
-    public void addRecipe(Recipe r){
-	
+    public void addIngredient(Ingredient i, int rank, double quantity){
+	ingredients.add(new Component(i, rank, quantity));
     }
     
     public double getNetWeight() {

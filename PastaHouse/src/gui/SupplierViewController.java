@@ -55,7 +55,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     private void updateDetail(Object value){
 	Supplier s = (Supplier)value;
 	firmOutlet.setText(Utilities.capitalize(s.getFirm()));
-	contactOutlet.setText(Utilities.capitalize(s.getContact()));
+	contactOutlet.setText(Utilities.capitalizeEach(s.getContact()));
 	addressOutlet.setText(Utilities.capitalizeEach(s.getAddress()));
 	municipalityOutlet.setText(Utilities.capitalize(s.getMunicipality()));
 	telephoneOutlet.setText(s.getTelephone());
@@ -85,6 +85,8 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jSplitPane1 = new javax.swing.JSplitPane();
         detail = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
@@ -111,6 +113,19 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -300,7 +315,9 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
     private javax.swing.JLabel municipalityOutlet;

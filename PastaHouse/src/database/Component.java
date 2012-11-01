@@ -13,7 +13,7 @@ public class Component {
     private int rank;
     private double quantity;
     
-    public Component(Ingredient ingr, int rank, int quantity) {
+    public Component(Ingredient ingr, int rank, double quantity) {
 	this.ingredient = ingr;
 	this.rank = rank;
 	this.quantity = quantity;
