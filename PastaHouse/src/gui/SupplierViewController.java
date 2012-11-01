@@ -9,8 +9,10 @@ import database.Supplier;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -256,7 +258,8 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	System.out.println("Add supplier button stub clicked");
+	AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true);
+        dia.setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
