@@ -212,9 +212,9 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="pricePerKgOutlet">
+                <Component class="javax.swing.JLabel" name="pricePerWeightOutlet">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;pricePerKgOutlet&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;pricePerWeightOutlet&gt;"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -236,9 +236,9 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="priceNoBTWOutlet">
+                <Component class="javax.swing.JLabel" name="grossPriceOutlet">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;priceNoBTWOutlet&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;grossPriceOutlet&gt;"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -248,9 +248,9 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="BTWOutlet">
+                <Component class="javax.swing.JLabel" name="taxesOutlet">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;BTWOutlet&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;taxesOutlet&gt;"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -260,9 +260,9 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="priceTotalOutlet">
+                <Component class="javax.swing.JLabel" name="netPriceOutlet">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;priceTotalOutlet&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;netPriceOutlet&gt;"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>

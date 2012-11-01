@@ -32,36 +32,31 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
-        jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
-        jSplitPane1.setDividerLocation(100);
-        jSplitPane1.setDividerSize(2);
+        jSplitPane1.setDividerLocation(200);
 
         jPanel1.setBackground(new java.awt.Color(153, 255, 153));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -77,22 +72,18 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 
         jSplitPane1.setLeftComponent(jPanel1);
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jTextField1.setText("jTextField1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        jPanel2.add(jTextField1, gridBagConstraints);
+        jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
         jLabel1.setText("jLabel1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        jPanel2.add(jLabel1, gridBagConstraints);
+        jPanel5.add(jLabel1);
+
+        jLabel5.setText("jLabel5");
+        jPanel5.add(jLabel5);
+
+        jPanel2.add(jPanel5, java.awt.BorderLayout.NORTH);
 
         jScrollPane2.setPreferredSize(new java.awt.Dimension(400, 200));
 
@@ -103,104 +94,67 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         });
         jScrollPane2.setViewportView(jList2);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        jPanel2.add(jScrollPane2, gridBagConstraints);
+        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jLabel2.setText("jLabel2");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        jPanel2.add(jLabel2, gridBagConstraints);
+        jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
-        jLabel3.setText("jLabel3");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        jPanel2.add(jLabel3, gridBagConstraints);
-
-        jLabel4.setText("jLabel4");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        jPanel2.add(jLabel4, gridBagConstraints);
-
-        jTextField2.setText("jTextField2");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        jPanel2.add(jTextField2, gridBagConstraints);
-
-        jTextField3.setText("jTextField3");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        jPanel2.add(jTextField3, gridBagConstraints);
-
-        jTextField4.setText("jTextField4");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        jPanel2.add(jTextField4, gridBagConstraints);
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Bereiding:"));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane3.setViewportView(jTextArea1);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        jPanel2.add(jScrollPane3, gridBagConstraints);
+        jPanel7.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel2, java.awt.BorderLayout.CENTER);
+        jPanel6.setLayout(new java.awt.GridLayout(3, 2));
 
-        jPanel4.setPreferredSize(new java.awt.Dimension(722, 35));
-        jPanel4.setLayout(new java.awt.GridLayout(1, 4));
+        jLabel2.setText("jLabel2");
+        jPanel6.add(jLabel2);
 
-        jButton1.setText("jButton1");
-        jPanel4.add(jButton1);
+        jLabel3.setText("jLabel3");
+        jPanel6.add(jLabel3);
 
-        jButton2.setText("jButton2");
-        jPanel4.add(jButton2);
+        jLabel4.setText("jLabel4");
+        jPanel6.add(jLabel4);
 
-        jButton3.setText("jButton3");
-        jPanel4.add(jButton3);
+        jLabel6.setText("jLabel6");
+        jPanel6.add(jLabel6);
 
-        jButton4.setText("jButton4");
-        jPanel4.add(jButton4);
+        jLabel7.setText("jLabel7");
+        jPanel6.add(jLabel7);
 
-        jPanel3.add(jPanel4, java.awt.BorderLayout.NORTH);
+        jLabel8.setText("jLabel8");
+        jPanel6.add(jLabel8);
 
-        jSplitPane1.setRightComponent(jPanel3);
+        jPanel7.add(jPanel6, java.awt.BorderLayout.NORTH);
+
+        jPanel2.add(jPanel7, java.awt.BorderLayout.SOUTH);
+
+        jSplitPane1.setRightComponent(jPanel2);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JList jList1;
     private javax.swing.JList jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }

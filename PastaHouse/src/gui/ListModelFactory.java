@@ -6,7 +6,6 @@ package gui;
 
 import database.BasicIngredient;
 import database.Supplier;
-import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.AbstractListModel;
 
@@ -15,7 +14,7 @@ import javax.swing.AbstractListModel;
  * @author Warkst
  */
 public class ListModelFactory {
-    public static AbstractListModel createBasicIngredientModel(final ArrayList<BasicIngredient> data){
+    public static AbstractListModel createBasicIngredientModel(final Map<String, BasicIngredient> data){
 	return new AbstractListModel() {
 
 	    @Override
@@ -25,34 +24,12 @@ public class ListModelFactory {
 
 	    @Override
 	    public Object getElementAt(int index) {
-		return data.get(index);
+		return data.values().toArray()[index];
 	    }
 	    
 	    public void add(BasicIngredient o){
-		if (data.add(o)) {
-		    fireContentsChanged(this, 0, getSize());
-		}
-	    }
-	};
-    }
-    
-    public static AbstractListModel createSupplierListModel(final ArrayList<Supplier> data){
-	return new AbstractListModel() {
-
-	    @Override
-	    public int getSize() {
-		return data.size();
-	    }
-
-	    @Override
-	    public Object getElementAt(int index) {
-		return data.get(index);
-	    }
-	    
-	    public void add(Supplier o){
-		if (data.add(o)) {
-		    fireContentsChanged(this, 0, getSize());
-		}
+		data.put(o.getName(), o);
+		fireContentsChanged(this, 0, getSize());
 	    }
 	};
     }

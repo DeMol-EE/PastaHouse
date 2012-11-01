@@ -13,6 +13,7 @@ import java.sql.SQLException;
 public class BasicIngredient extends Component {
     private final String table_id = Configuration.center().getDB_TABLE_INGR();
     
+    // database columns
     private Supplier supplier;
     
     private String brand;
@@ -21,7 +22,12 @@ public class BasicIngredient extends Component {
     private double weightPerUnit;
     private double lossPercent;
     private double taxes;
+    private String date;
     
+    // derived variables
+    private double pricePerWeight;
+    private double grossPrice;
+    private double netPrice;
     
     public BasicIngredient(int id, String name, String date){
 	super(id, name, date);
@@ -36,6 +42,11 @@ public class BasicIngredient extends Component {
 	this.weightPerUnit = weightPerUnit;
 	this.lossPercent = lossPercent;
 	this.taxes = taxes;
+	this.date = date;
+	
+	this.pricePerWeight = pricePerUnit/weightPerUnit;
+	this.grossPrice = pricePerWeight/(1.0-(0.01*lossPercent));
+	this.netPrice = grossPrice * (1.0 + 0.01*taxes);
     }
     
     public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, int id, String name, String date) {
@@ -73,6 +84,22 @@ public class BasicIngredient extends Component {
     public double getTaxes() {
 	return taxes;
     }
+
+    public double getPricePerWeight() {
+	return pricePerWeight;
+    }
+
+    public double getGrossPrice() {
+	return grossPrice;
+    }
+
+    public double getNetPrice() {
+	return netPrice;
+    }
+    
+    public String getDate() {
+	return date;
+    }
     
     @Override
     public void create() throws SQLException{
@@ -94,6 +121,6 @@ public class BasicIngredient extends Component {
 	/*
 	 * The default cell renderer knows how to display strings and icons and it displays Objects by invoking toString.
 	 */
-	return super.getName();
+	return super.getName().substring(0, 1).toUpperCase()+super.getName().substring(1).toLowerCase();
     }
 }

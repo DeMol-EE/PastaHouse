@@ -11,11 +11,12 @@
 package gui;
 
 import database.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -44,8 +45,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-		    System.out.println("Selected index "+listOutlet.getSelectedIndex()+": "+listOutlet.getSelectedValue());
-		    
 		    updateDetail(listOutlet.getSelectedValue());
 		}
 	    }
@@ -53,23 +52,37 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
 	// load from the db
 	Map<Integer, BasicIngredient> bi = Database.driver().getBasicIngredients();
-	ArrayList<BasicIngredient> bil = new ArrayList<BasicIngredient>();
-	System.out.println("basic ingredients:");
+	Map<String, BasicIngredient> bis = new TreeMap<String, BasicIngredient>();
+	
 	for (Map.Entry<Integer, BasicIngredient> entry : bi.entrySet()) {
-	    System.out.println("\t("+entry.getValue().getId()+")\t"+entry.getValue().getName());
-	    bil.add(entry.getValue());
+	    bis.put(entry.getValue().getName(), entry.getValue());
 	}
 
-	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(bil));
-	
+	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(bis));
 	listOutlet.setSelectedIndex(0);
     }
     
     private void updateDetail(Object value){
 	BasicIngredient bi = (BasicIngredient)value;
 	
+	DecimalFormat threeFormatter = new DecimalFormat("0.000");
+	DecimalFormat twoFormatter = new DecimalFormat("0.00");
+	
 	String firm = bi.getSupplier().getFirm();
 	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
+	
+	//€-sign?
+	nameOutlet.setText(bi.getName().substring(0, 1).toUpperCase()+bi.getName().substring(1).toLowerCase());
+	brandOutlet.setText(bi.getBrand());
+	packagingOutlet.setText(bi.getPackaging());
+	pricePerUnitOutlet.setText(""+threeFormatter.format(bi.getPricePerUnit())+" euro / "+bi.getPackaging());
+	weightPerUnitOutlet.setText(""+threeFormatter.format(bi.getWeightPerUnit())+" kg / "+bi.getPackaging());
+	pricePerWeightOutlet.setText(""+threeFormatter.format(bi.getPricePerWeight())+" euro / kg");
+	lossPercentOutlet.setText(""+twoFormatter.format(bi.getLossPercent())+" %");
+	grossPriceOutlet.setText(""+threeFormatter.format(bi.getGrossPrice())+" euro / kg");
+	taxesOutlet.setText(""+twoFormatter.format(bi.getTaxes())+" %");
+	netPriceOutlet.setText(""+twoFormatter.format(bi.getNetPrice())+" euro / kg");
+	dateOutlet.setText(bi.getDate());
     }
     
     @Override
@@ -107,15 +120,15 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         jLabel8 = new javax.swing.JLabel();
         weightPerUnitOutlet = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        pricePerKgOutlet = new javax.swing.JLabel();
+        pricePerWeightOutlet = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         lossPercentOutlet = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        priceNoBTWOutlet = new javax.swing.JLabel();
+        grossPriceOutlet = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        BTWOutlet = new javax.swing.JLabel();
+        taxesOutlet = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        priceTotalOutlet = new javax.swing.JLabel();
+        netPriceOutlet = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         dateOutlet = new javax.swing.JLabel();
         stretchableFields = new javax.swing.JPanel();
@@ -223,9 +236,9 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         jLabel12.setFocusable(false);
         fixedFields.add(jLabel12);
 
-        pricePerKgOutlet.setText("<pricePerKgOutlet>");
-        pricePerKgOutlet.setFocusable(false);
-        fixedFields.add(pricePerKgOutlet);
+        pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
+        pricePerWeightOutlet.setFocusable(false);
+        fixedFields.add(pricePerWeightOutlet);
 
         jLabel14.setText("Verliespercentage");
         jLabel14.setFocusable(false);
@@ -239,25 +252,25 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         jLabel16.setFocusable(false);
         fixedFields.add(jLabel16);
 
-        priceNoBTWOutlet.setText("<priceNoBTWOutlet>");
-        priceNoBTWOutlet.setFocusable(false);
-        fixedFields.add(priceNoBTWOutlet);
+        grossPriceOutlet.setText("<grossPriceOutlet>");
+        grossPriceOutlet.setFocusable(false);
+        fixedFields.add(grossPriceOutlet);
 
         jLabel18.setText("BTW");
         jLabel18.setFocusable(false);
         fixedFields.add(jLabel18);
 
-        BTWOutlet.setText("<BTWOutlet>");
-        BTWOutlet.setFocusable(false);
-        fixedFields.add(BTWOutlet);
+        taxesOutlet.setText("<taxesOutlet>");
+        taxesOutlet.setFocusable(false);
+        fixedFields.add(taxesOutlet);
 
         jLabel20.setText("Totaalprijs");
         jLabel20.setFocusable(false);
         fixedFields.add(jLabel20);
 
-        priceTotalOutlet.setText("<priceTotalOutlet>");
-        priceTotalOutlet.setFocusable(false);
-        fixedFields.add(priceTotalOutlet);
+        netPriceOutlet.setText("<netPriceOutlet>");
+        netPriceOutlet.setFocusable(false);
+        fixedFields.add(netPriceOutlet);
 
         jLabel22.setText("Datum");
         jLabel22.setFocusable(false);
@@ -345,12 +358,12 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     }//GEN-LAST:event_supplierOutletMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel BTWOutlet;
     private javax.swing.JLabel brandOutlet;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton editOutlet;
     private javax.swing.JPanel fixedFields;
+    private javax.swing.JLabel grossPriceOutlet;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -371,14 +384,14 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.JLabel lossPercentOutlet;
     private javax.swing.JPanel master;
     private javax.swing.JLabel nameOutlet;
+    private javax.swing.JLabel netPriceOutlet;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JLabel packagingOutlet;
-    private javax.swing.JLabel priceNoBTWOutlet;
-    private javax.swing.JLabel pricePerKgOutlet;
     private javax.swing.JLabel pricePerUnitOutlet;
-    private javax.swing.JLabel priceTotalOutlet;
+    private javax.swing.JLabel pricePerWeightOutlet;
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JLabel supplierOutlet;
+    private javax.swing.JLabel taxesOutlet;
     private javax.swing.JLabel weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
 }
