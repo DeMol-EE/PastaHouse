@@ -57,7 +57,7 @@ public class Database {
 	return driver;
     }
     
-    public Map<Integer, Supplier> loadSuppliers() throws SQLException{
+    public void loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
 	    suppliers.put(rs.getInt("id"), 
@@ -74,12 +74,10 @@ public class Database {
 		    rs.getBoolean("verwijderd")));
 	}
 	
-	System.out.println(suppliers);
-	
-	return suppliers;
+	System.out.println("Database driver:: loaded "+suppliers.size()+" suppliers!");
     }
     
-    public Map<Integer, BasicIngredient> loadBasicIngredients() throws SQLException{
+    public void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
 	    basicIngredients.put(rs.getInt("id"), 
@@ -96,18 +94,30 @@ public class Database {
 		    rs.getString("datum")));
 	}
 	
-	return basicIngredients;
+	System.out.println("Database driver:: loaded "+basicIngredients.size()+" basic ingredients!");
     }
     
-    public ArrayList<BasicIngredient> loadRecipes() throws SQLException{
+    public void loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
-	// also load all recipes and ingredients linked to the recipe
-	// ...
 	while (rs.next()) {	    
-	    
+	    recipes.put(rs.getInt("id"), 
+		    Recipe.createStub(
+		    rs.getInt("id"), 
+		    rs.getString("naam"), 
+		    rs.getString("datum"), 
+		    rs.getString("bereiding"), 
+		    rs.getDouble("nettogewicht")));
+	}
+	// also load all linked ingredients and recipes
+	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
+	while(rs.next()){
+	    int recipeId = rs.getInt("receptid");
+	    int ingredientId = rs.getInt("ingredientid");
+	    int rank = rs.getInt("rang");
+	    double quantity = rs.getDouble("quantiteit");
 	}
 	
-	return null;
+	System.out.println("Database driver:: loaded "+recipes.size()+" recipes!");
     }
 
     public Map<Integer, Supplier> getSuppliers() {

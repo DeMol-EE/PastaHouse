@@ -37,16 +37,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 	    }
 	}
 	
-//	ArrayList<Supplier> data = new ArrayList<Supplier>();
-//	
-//	for (Map.Entry<String, Supplier> entry : ss.entrySet()) {
-//	    data.add(entry.getValue());
-//	}
-//	
-//	listOutlet.setModel(ListModelFactory.createSupplierListModel(data));
-	
 	listOutlet.setModel(ListModelFactory.createSupplierListModel(ss));
-	
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.addListSelectionListener(new ListSelectionListener() {
 
@@ -63,10 +54,10 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     
     private void updateDetail(Object value){
 	Supplier s = (Supplier)value;
-	firmOutlet.setText(s.getFirm());
-	contactOutlet.setText(s.getContact());
-	addressOutlet.setText(s.getAddress());
-	municipalityOutlet.setText(s.getMunicipality());
+	firmOutlet.setText(Utilities.capitalize(s.getFirm()));
+	contactOutlet.setText(Utilities.capitalize(s.getContact()));
+	addressOutlet.setText(Utilities.capitalizeEach(s.getAddress()));
+	municipalityOutlet.setText(Utilities.capitalize(s.getMunicipality()));
 	telephoneOutlet.setText(s.getTelephone());
 	cellphoneOutlet.setText(s.getCellphone());
 	faxOutlet.setText(s.getFax());
@@ -263,19 +254,28 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     }//GEN-LAST:event_addActionPerformed
 
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
-        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)){
+        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F1) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F2) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F3)){
 	    evt.consume();
 	}
     }//GEN-LAST:event_notesOutletKeyPressed
 
     private void notesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyReleased
-        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)){
+        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F1) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F2) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F3)){
 	    evt.consume();
 	}
     }//GEN-LAST:event_notesOutletKeyReleased
 
     private void notesOutletKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyTyped
-        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)){
+        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F1) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F2) 
+		&& !(evt.getKeyCode()==KeyEvent.VK_F3)){
 	    evt.consume();
 	}
     }//GEN-LAST:event_notesOutletKeyTyped

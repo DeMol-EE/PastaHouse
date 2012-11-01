@@ -6,28 +6,28 @@ package database;
 
 /**
  *
- * @author Warkst
+ * @author Robin jr
  */
-public abstract class Component extends Record implements Comparable<Component> {
-    private String name;
-    private String date;
+public class Component {
+    private Ingredient ingredient;
+    private int rank;
+    private double quantity;
     
-    public Component(int id, String name, String date){
-	super(id);
-	this.name = name;
-	this.date = date;
+    public Component(Ingredient ingr, int rank, int quantity) {
+	this.ingredient = ingr;
+	this.rank = rank;
+	this.quantity = quantity;
     }
 
-    public String getName() {
-	return name;
+    public Ingredient getIngredient() {
+	return ingredient;
     }
 
-    public void setName(String name) {
-	this.name = name;
+    public int getRank() {
+	return rank;
     }
 
-    @Override
-    public int compareTo(Component o) {
-	return getName().compareTo(o.getName());
+    public double getQuantity() {
+	return quantity;
     }
 }

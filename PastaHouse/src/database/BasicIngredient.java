@@ -4,13 +4,14 @@
  */
 package database;
 
+import gui.Utilities;
 import java.sql.SQLException;
 
 /**
  *
  * @author Warkst
  */
-public class BasicIngredient extends Component {
+public class BasicIngredient extends Ingredient {
     private final String table_id = Configuration.center().getDB_TABLE_INGR();
     
     // database columns
@@ -121,6 +122,6 @@ public class BasicIngredient extends Component {
 	/*
 	 * The default cell renderer knows how to display strings and icons and it displays Objects by invoking toString.
 	 */
-	return super.getName().substring(0, 1).toUpperCase()+super.getName().substring(1).toLowerCase();
+	return Utilities.capitalize(super.getName());
     }
 }

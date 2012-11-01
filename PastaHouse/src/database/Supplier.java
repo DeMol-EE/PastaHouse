@@ -4,6 +4,8 @@
  */
 package database;
 
+import gui.Utilities;
+
 /**
  *
  * @author Warkst
@@ -123,7 +125,7 @@ public class Supplier extends Record{
     
     @Override
     public String toString(){
-	return firm.substring(0, 1).toUpperCase() + firm.substring(1).toLowerCase();
+	return Utilities.capitalize(firm);
     }
 
     @Override

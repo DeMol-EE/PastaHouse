@@ -68,13 +68,12 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	DecimalFormat twoFormatter = new DecimalFormat("0.00");
 	
-	String firm = bi.getSupplier().getFirm();
-	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
+	supplierOutlet.setText(Utilities.capitalize(bi.getSupplier().getFirm()));
 	
 	//€-sign?
-	nameOutlet.setText(bi.getName().substring(0, 1).toUpperCase()+bi.getName().substring(1).toLowerCase());
-	brandOutlet.setText(bi.getBrand());
-	packagingOutlet.setText(bi.getPackaging());
+	nameOutlet.setText(Utilities.capitalize(bi.getName()));
+	brandOutlet.setText(Utilities.capitalize(bi.getBrand()));
+	packagingOutlet.setText(Utilities.capitalize(bi.getPackaging()));
 	pricePerUnitOutlet.setText(""+threeFormatter.format(bi.getPricePerUnit())+" euro / "+bi.getPackaging());
 	weightPerUnitOutlet.setText(""+threeFormatter.format(bi.getWeightPerUnit())+" kg / "+bi.getPackaging());
 	pricePerWeightOutlet.setText(""+threeFormatter.format(bi.getPricePerWeight())+" euro / kg");
@@ -332,7 +331,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	    }
 	    
 	    // save changes to the db!
-	    Component c = (Component)listOutlet.getSelectedValue();
+	    Ingredient c = (Ingredient)listOutlet.getSelectedValue();
 	    try {
 		c.update();
 	    } catch (Exception ex) {
