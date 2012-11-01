@@ -244,7 +244,8 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	System.out.println("Add supplier button stub clicked");
+	AddSupplierViewController addsupplier = new AddSupplierViewController();
+        addsupplier.setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
