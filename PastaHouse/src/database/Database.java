@@ -44,6 +44,7 @@ public class Database {
 	    loadSuppliers();
 	    loadBasicIngredients();
 	    loadRecipes();
+            loadMunicipalities ();
 	    
 	} catch (Exception ex) {
 	    Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -120,6 +121,11 @@ public class Database {
 	System.out.println("Database driver:: loaded "+recipes.size()+" recipes!");
     }
 
+    private void loadMunicipalities() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    
     public Map<Integer, Supplier> getSuppliers() {
 	return suppliers;
     }
@@ -174,4 +180,5 @@ public class Database {
     public void shutdown() throws SQLException{
 	connection.close();
     }
+
 }
