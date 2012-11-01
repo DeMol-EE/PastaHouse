@@ -75,6 +75,10 @@ public class Database {
 	System.out.println("Database driver:: loaded "+suppliers.size()+" suppliers!");
     }
     
+    public boolean addSupplier(Supplier sup){
+        return false;
+    }
+    
     private void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
@@ -92,6 +96,10 @@ public class Database {
 	}
 	
 	System.out.println("Database driver:: loaded "+basicIngredients.size()+" basic ingredients!");
+    }
+    
+    public boolean addIngredient(BasicIngredient ingredient){
+        return true;
     }
     
     private void loadRecipes() throws SQLException{
@@ -127,6 +135,10 @@ public class Database {
 	}
 	
 	System.out.println("Database driver:: loaded "+recipes.size()+" recipes (linked "+ingrLinks+" ingredients and "+recLinks+" recipes)!");
+    }
+    
+    public boolean addRecipe(Recipe recipe){
+        return true;
     }
 
     public Map<String, Supplier> getSuppliers() {
