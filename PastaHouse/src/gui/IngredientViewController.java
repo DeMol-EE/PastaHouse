@@ -13,14 +13,10 @@ package gui;
 import database.*;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -57,14 +53,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	});
 
 	// load from the db
-	Map<Integer, BasicIngredient> bi = Database.driver().getBasicIngredients();
-	Map<String, BasicIngredient> bis = new TreeMap<String, BasicIngredient>();
-	
-	for (Map.Entry<Integer, BasicIngredient> entry : bi.entrySet()) {
-	    bis.put(entry.getValue().getName(), entry.getValue());
-	}
-
-	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(bis));
+	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredients()));
 	listOutlet.setSelectedIndex(0);
     }
     

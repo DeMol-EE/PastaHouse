@@ -12,8 +12,7 @@ public abstract class Ingredient extends Record implements Comparable<Ingredient
     private String name;
     private String date;
     
-    public Ingredient(int id, String name, String date){
-	super(id);
+    public Ingredient(String name, String date){
 	this.name = name;
 	this.date = date;
     }

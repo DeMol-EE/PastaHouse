@@ -7,8 +7,6 @@ package gui;
 import database.Database;
 import database.Supplier;
 import java.awt.event.KeyEvent;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -28,16 +26,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     public SupplierViewController() {
 	initComponents();
 	
-	Map<Integer, Supplier> s = Database.driver().getSuppliers();
-	Map<String, Supplier> ss = new TreeMap<String, Supplier>();
-	
-	for (Map.Entry<Integer, Supplier> entry : s.entrySet()) {
-	    if (!entry.getValue().isDeleted()) {
-		ss.put(entry.getValue().getFirm(), entry.getValue());
-	    }
-	}
-	
-	listOutlet.setModel(ListModelFactory.createSupplierListModel(ss));
+	listOutlet.setModel(ListModelFactory.createSupplierListModel(Database.driver().getSuppliers()));
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.addListSelectionListener(new ListSelectionListener() {
 

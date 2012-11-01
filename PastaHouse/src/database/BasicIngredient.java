@@ -30,12 +30,12 @@ public class BasicIngredient extends Ingredient {
     private double grossPrice;
     private double netPrice;
     
-    public BasicIngredient(int id, String name, String date){
-	super(id, name, date);
+    public BasicIngredient(String name, String date){
+	super(name, date);
     }
 
-    private  BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, int id, String name, String date) {
-	super(id, name, date);
+    private  BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date) {
+	super(name, date);
 	this.supplier = supplier;
 	this.brand = brand;
 	this.packaging = packaging;
@@ -50,8 +50,8 @@ public class BasicIngredient extends Ingredient {
 	this.netPrice = grossPrice * (1.0 + 0.01*taxes);
     }
     
-    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, int id, String name, String date) {
-	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, id, name, date);
+    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date) {
+	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date);
     }
 
     public String getTable_id() {

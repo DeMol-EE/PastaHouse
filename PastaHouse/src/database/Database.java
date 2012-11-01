@@ -24,15 +24,15 @@ public class Database {
     private Connection connection;
     private Statement statement;
     
-    private Map<Integer, Supplier> suppliers;
-    private Map<Integer, BasicIngredient> basicIngredients;
-    private Map<Integer, Recipe> recipes;
+    private Map<String, Supplier> suppliers;
+    private Map<String, BasicIngredient> basicIngredients;
+    private Map<String, Recipe> recipes;
     
     private Database() {
 	try {
-	    suppliers = new TreeMap<Integer, Supplier>();
-	    basicIngredients = new TreeMap<Integer, BasicIngredient>();
-	    recipes = new TreeMap<Integer, Recipe>();
+	    suppliers = new TreeMap<String, Supplier>();
+	    basicIngredients = new TreeMap<String, BasicIngredient>();
+	    recipes = new TreeMap<String, Recipe>();
 	    
 	    // connect to db
 	    Class.forName("org.sqlite.JDBC");
@@ -59,9 +59,8 @@ public class Database {
     private void loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
-	    suppliers.put(rs.getInt("id"), 
-		    Supplier.loadWithValues(rs.getInt("id"), 
-		    rs.getString("firma"), 
+	    suppliers.put(rs.getString("firma"),
+		    Supplier.loadWithValues(rs.getString("firma"), 
 		    rs.getString("adres"), 
 		    rs.getString("gemeente"), 
 		    rs.getString("tel"), 
@@ -79,16 +78,15 @@ public class Database {
     private void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
-	    basicIngredients.put(rs.getInt("id"), 
+	    basicIngredients.put(rs.getString("naam"), 
 		    BasicIngredient.loadWithValues(
-		    suppliers.get(rs.getInt("leverancierid")), 
+		    suppliers.get(rs.getString("firma")), 
 		    rs.getString("merk"), 
 		    rs.getString("verpakking"), 
 		    rs.getDouble("prijsPerVerpakking"), 
 		    rs.getDouble("gewichtPerVerpakking"), 
 		    rs.getDouble("verliespercentage"), 
 		    rs.getDouble("BTW"), 
-		    rs.getInt("id"), 
 		    rs.getString("naam"), 
 		    rs.getString("datum")));
 	}
@@ -99,9 +97,8 @@ public class Database {
     private void loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
 	while (rs.next()) {	    
-	    recipes.put(rs.getInt("id"), 
+	    recipes.put(rs.getString("naam"), 
 		    Recipe.createStub(
-		    rs.getInt("id"), 
 		    rs.getString("naam"), 
 		    rs.getString("datum"), 
 		    rs.getString("bereiding"), 
@@ -111,36 +108,36 @@ public class Database {
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
 	int ingrLinks = 0;
 	while(rs.next()){
-	    int recipeId = rs.getInt("receptid");
-	    int ingredientId = rs.getInt("ingredientid");
+	    String recipeName = rs.getString("receptnaam");
+	    String ingredientName = rs.getString("ingredientnaam");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
-	    recipes.get(recipeId).addIngredient(basicIngredients.get(ingredientId), rank, quantity);
+	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity);
 	    ingrLinks++;
 	}
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_REC());
 	int recLinks = 0;
 	while(rs.next()){
-	    int recipeId = rs.getInt("receptid");
-	    int subrecipeId = rs.getInt("deelreceptid");
+	    String recipeName = rs.getString("receptnaam");
+	    String subrecipeName = rs.getString("deelreceptnaam");
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
-	    recipes.get(recipeId).addIngredient(recipes.get(subrecipeId), rank, quantity);
+	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity);
 	    recLinks++;
 	}
 	
 	System.out.println("Database driver:: loaded "+recipes.size()+" recipes (linked "+ingrLinks+" ingredients and "+recLinks+" recipes)!");
     }
 
-    public Map<Integer, Supplier> getSuppliers() {
+    public Map<String, Supplier> getSuppliers() {
 	return suppliers;
     }
 
-    public Map<Integer, BasicIngredient> getBasicIngredients() {
+    public Map<String, BasicIngredient> getBasicIngredients() {
 	return basicIngredients;
     }
 
-    public Map<Integer, Recipe> getRecipes() {
+    public Map<String, Recipe> getRecipes() {
 	return recipes;
     }
     
@@ -169,9 +166,9 @@ public class Database {
      * @param values The new set of values for the record.
      * @throws SQLException when the update statement fails to complete.
      */
-    public void executeUpdate(String table, int id, String values) throws SQLException{
-	statement.executeUpdate("UPDATE "+table+" SET "+values+" WHERE id = "+id);
-	System.out.println("DatabaseDriver::Executed update of ("+values+") into "+table+" for id "+id);
+    public void executeUpdate(String table, String primaryKey, String values) throws SQLException{
+	statement.executeUpdate("UPDATE "+table+" SET "+values+" WHERE id = "+primaryKey);
+	System.out.println("DatabaseDriver::Executed update of ("+values+") into "+table+" for PK "+primaryKey);
     }
     
     public void executeDelete(String table, int id){

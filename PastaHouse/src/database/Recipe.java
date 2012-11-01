@@ -24,12 +24,12 @@ public class Recipe extends Ingredient {
     
     // derived variables
     
-    public Recipe(int id, String name, String date){
-	super(id, name, date);
+    public Recipe(String name, String date){
+	super(name, date);
     }
     
-    private Recipe(int id, String name, String date, String preparation, double netWeight){
-	super(id, name, date);
+    private Recipe(String name, String date, String preparation, double netWeight){
+	super(name, date);
 	this.preparation = preparation;
 	this.netWeight = netWeight;
 	
@@ -38,8 +38,8 @@ public class Recipe extends Ingredient {
 	ingredients = new HashMap<Integer, Component>();
     }
     
-    public static Recipe createStub(int id, String name, String date, String preparation, double netWeight){
-	return new Recipe(id, name, date, preparation, netWeight);
+    public static Recipe createStub(String name, String date, String preparation, double netWeight){
+	return new Recipe(name, date, preparation, netWeight);
     }
     
 //    public void addBasicIngredient(BasicIngredient bi){
@@ -69,7 +69,7 @@ public class Recipe extends Ingredient {
     
     @Override
     public void update() throws SQLException{
-	Database.driver().executeUpdate(table_id, super.getId(), "bereiding = "+preparation);
+	Database.driver().executeUpdate(table_id, getName(), "bereiding = "+preparation);
 	// update recipes-recipes
 	// update recipes-ingredients
     }
