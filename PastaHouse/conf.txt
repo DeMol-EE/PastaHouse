@@ -1,0 +1,6 @@
+db_url,jdbc:sqlite:pastahouse.db
+table_ingredients,ingredients
+table_recipes,recipes
+table_recipes_ingredients,recipesingredients
+table_recipes_recipes,recipesrecipes
+table_suppliers,suppliers
