@@ -32,7 +32,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 	Map<String, Supplier> ss = new TreeMap<String, Supplier>();
 	
 	for (Map.Entry<Integer, Supplier> entry : s.entrySet()) {
-	    if (!entry.getValue().isVerwijderd()) {
+	    if (!entry.getValue().isDeleted()) {
 		ss.put(entry.getValue().getFirm(), entry.getValue());
 	    }
 	}

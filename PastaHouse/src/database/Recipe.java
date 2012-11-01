@@ -6,6 +6,7 @@ package database;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Recipe extends Ingredient {
     private String preparation;
 //    private ArrayList<BasicIngredient> basicIngredients;
 //    private ArrayList<Recipe> recipes;
-    private ArrayList<Component> ingredients;
+    private HashMap<Integer, Component> ingredients;
     
     // derived variables
     
@@ -34,7 +35,7 @@ public class Recipe extends Ingredient {
 	
 //	basicIngredients = new ArrayList<BasicIngredient>();
 //	recipes = new ArrayList<Recipe>();
-	ingredients = new ArrayList<Component>();
+	ingredients = new HashMap<Integer, Component>();
     }
     
     public static Recipe createStub(int id, String name, String date, String preparation, double netWeight){
@@ -50,7 +51,7 @@ public class Recipe extends Ingredient {
 //    }
     
     public void addIngredient(Ingredient i, int rank, double quantity){
-	ingredients.add(new Component(i, rank, quantity));
+	ingredients.put(rank, new Component(i, rank, quantity));
     }
     
     public double getNetWeight() {

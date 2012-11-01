@@ -23,9 +23,9 @@ public class Supplier extends Record{
     private String notes;
     private String contact;
     
-    private boolean verwijderd;
+    private boolean deleted;
 
-    private Supplier(int id, String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
+    private Supplier(int id, String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
 	super(id);
 	this.firm = firm;
 	this.address = address;
@@ -36,7 +36,7 @@ public class Supplier extends Record{
 	this.email = email;
 	this.notes = notes;
 	this.contact = contact;
-	this.verwijderd = verwijderd;
+	this.deleted = deleted;
     }
     
     public static Supplier loadWithValues(int id, String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
@@ -115,12 +115,12 @@ public class Supplier extends Record{
 	this.telephone = telephone;
     }
 
-    public boolean isVerwijderd() {
-	return verwijderd;
+    public boolean isDeleted() {
+	return deleted;
     }
 
     public void setVerwijderd(boolean verwijderd) {
-	this.verwijderd = verwijderd;
+	this.deleted = verwijderd;
     }
     
     @Override

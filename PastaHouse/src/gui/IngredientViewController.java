@@ -11,6 +11,12 @@
 package gui;
 
 import database.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -69,6 +75,30 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	DecimalFormat twoFormatter = new DecimalFormat("0.00");
 	
 	supplierOutlet.setText(Utilities.capitalize(bi.getSupplier().getFirm()));
+	if(bi.getSupplier().isDeleted()){
+	    supplierOutlet.setForeground(Color.RED);
+	    supplierOutlet.setCursor(Cursor.getDefaultCursor());
+	    for (MouseListener mouseListener : supplierOutlet.getMouseListeners()) {
+		supplierOutlet.removeMouseListener(mouseListener);
+	    }
+	} else {
+	    supplierOutlet.setForeground(Color.BLUE);
+	    supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	    supplierOutlet.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		    supplierOutletMouseReleased(e);
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		    supplierOutletMouseEntered(e);
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+		    supplierOutletMouseExited(e);
+		}
+	    });
+	}
 	
 	//€-sign?
 	nameOutlet.setText(Utilities.capitalize(bi.getName()));
@@ -88,6 +118,21 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     public JPanel view(){
 	return this;
     }
+    
+    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {                                             
+	BasicIngredient selectedIngredient = (BasicIngredient)listOutlet.getSelectedValue();
+	application.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
+    }                                            
+
+    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {                                            
+        supplierOutlet.setText("<html><u>"+supplierOutlet.getText()+"</u></html>");
+    }                                           
+
+    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {                                           
+        BasicIngredient bi = (BasicIngredient)listOutlet.getSelectedValue();
+	String firm = bi.getSupplier().getFirm();
+	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
+    }       
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -202,17 +247,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         supplierOutlet.setText("<supplierOutlet>");
         supplierOutlet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         supplierOutlet.setFocusable(false);
-        supplierOutlet.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                supplierOutletMouseReleased(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                supplierOutletMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                supplierOutletMouseExited(evt);
-            }
-        });
         fixedFields.add(supplierOutlet);
 
         jLabel10.setText("Prijs per verpakking (BTW excl)");
@@ -339,22 +373,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	    }
 	}
     }//GEN-LAST:event_editOutletActionPerformed
-
-    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseReleased
-	BasicIngredient selectedIngredient = (BasicIngredient)listOutlet.getSelectedValue();
-	
-	application.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
-    }//GEN-LAST:event_supplierOutletMouseReleased
-
-    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseEntered
-        supplierOutlet.setText("<html><u>"+supplierOutlet.getText()+"</u></html>");
-    }//GEN-LAST:event_supplierOutletMouseEntered
-
-    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseExited
-        BasicIngredient bi = (BasicIngredient)listOutlet.getSelectedValue();
-	String firm = bi.getSupplier().getFirm();
-	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
-    }//GEN-LAST:event_supplierOutletMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel brandOutlet;
