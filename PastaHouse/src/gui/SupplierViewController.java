@@ -116,6 +116,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
+        add = new javax.swing.JButton();
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -229,12 +230,25 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
+
         jSplitPane1.setLeftComponent(master);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+	System.out.println("Add supplier button stub clicked");
+    }//GEN-LAST:event_addActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
     private javax.swing.JLabel addressOutlet;
     private javax.swing.JLabel cellphoneOutlet;
     private javax.swing.JLabel contactOutlet;

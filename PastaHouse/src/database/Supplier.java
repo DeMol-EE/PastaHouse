@@ -130,8 +130,15 @@ public class Supplier extends Record{
     public void create() throws Exception {
 	Database.driver().executeInsert(table_id, 
 		"firma = "+ firm +", "
-		+ "address = "+ address +", "
-		+ "municipality = "+municipality +", ");
+		+ "adres = "+ address +", "
+		+ "gemeente = "+municipality +", "
+		+ "tel = "+telephone+", "
+		+ "gsm = "+cellphone+", "
+		+ "fax = "+fax+", "
+		+ "email = "+email+", "
+		+ "opmerking = "+notes+", "
+		+ "contactpersoon = "+contact+", "
+		+ "verwijderd = 0");
     }
 
     @Override
