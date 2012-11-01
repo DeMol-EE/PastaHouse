@@ -6,6 +6,7 @@ package gui;
 
 import database.Database;
 import database.Supplier;
+import java.awt.event.KeyEvent;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JPanel;
@@ -203,11 +204,22 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
         jScrollPane2.setFocusable(false);
 
         notesOutlet.setColumns(20);
+        notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         notesOutlet.setLineWrap(true);
         notesOutlet.setRows(5);
         notesOutlet.setWrapStyleWord(true);
-        notesOutlet.setEnabled(false);
-        notesOutlet.setFocusable(false);
+        notesOutlet.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        notesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                notesOutletKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                notesOutletKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                notesOutletKeyTyped(evt);
+            }
+        });
         jScrollPane2.setViewportView(notesOutlet);
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -246,6 +258,24 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 	System.out.println("Add supplier button stub clicked");
     }//GEN-LAST:event_addActionPerformed
+
+    private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
+        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)){
+	    evt.consume();
+	}
+    }//GEN-LAST:event_notesOutletKeyPressed
+
+    private void notesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyReleased
+        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)){
+	    evt.consume();
+	}
+    }//GEN-LAST:event_notesOutletKeyReleased
+
+    private void notesOutletKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyTyped
+        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)){
+	    evt.consume();
+	}
+    }//GEN-LAST:event_notesOutletKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;

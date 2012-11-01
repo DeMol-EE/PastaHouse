@@ -67,8 +67,9 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     
     private void updateDetail(Object value){
 	BasicIngredient bi = (BasicIngredient)value;
-	nameOutlet.setText(bi.getName());
-	supplierOutlet.setText(bi.getSupplier().getFirm());
+	
+	String firm = bi.getSupplier().getFirm();
+	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
     }
     
     @Override
@@ -85,29 +86,53 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editOutlet = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
         detail = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        nameOutlet = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
+        nameOutlet = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        priceOutlet = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
+        brandOutlet = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        packagingOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         supplierOutlet = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        editOutlet = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        pricePerUnitOutlet = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        weightPerUnitOutlet = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        pricePerKgOutlet = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        lossPercentOutlet = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        priceNoBTWOutlet = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        BTWOutlet = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        priceTotalOutlet = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        dateOutlet = new javax.swing.JLabel();
+        stretchableFields = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        notesOutlet = new javax.swing.JTextArea();
+
+        editOutlet.setText("Edit");
+        editOutlet.setFocusable(false);
+        editOutlet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editOutletActionPerformed(evt);
+            }
+        });
 
         setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(200);
-        jSplitPane1.setDividerSize(3);
 
         master.setBackground(new java.awt.Color(255, 255, 153));
         master.setLayout(new java.awt.BorderLayout());
@@ -130,65 +155,132 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         detail.setBackground(new java.awt.Color(153, 153, 255));
         detail.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setLayout(new java.awt.GridLayout(5, 0));
+        fixedFields.setFocusable(false);
+        fixedFields.setLayout(new java.awt.GridLayout(12, 2, 0, 5));
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jLabel1.setText("Naam");
+        jLabel1.setFocusable(false);
+        fixedFields.add(jLabel1);
 
-        jLabel1.setText("Name:");
-        jPanel1.add(jLabel1, java.awt.BorderLayout.LINE_START);
+        nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setFocusable(false);
+        fixedFields.add(nameOutlet);
 
-        nameOutlet.setEnabled(false);
-        jPanel1.add(nameOutlet, java.awt.BorderLayout.CENTER);
+        jLabel2.setText("Merk");
+        jLabel2.setFocusable(false);
+        fixedFields.add(jLabel2);
 
-        jPanel4.add(jPanel1);
+        brandOutlet.setText("<brandOutlet>");
+        brandOutlet.setFocusable(false);
+        fixedFields.add(brandOutlet);
 
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        jLabel6.setText("Verpakking");
+        jLabel6.setFocusable(false);
+        fixedFields.add(jLabel6);
 
-        jLabel2.setText("Price:");
-        jPanel2.add(jLabel2, java.awt.BorderLayout.LINE_START);
-
-        priceOutlet.setEnabled(false);
-        jPanel2.add(priceOutlet, java.awt.BorderLayout.CENTER);
-
-        jPanel4.add(jPanel2);
-
-        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
+        packagingOutlet.setText("<packagingOutlet>");
+        packagingOutlet.setFocusable(false);
+        fixedFields.add(packagingOutlet);
 
         jLabel3.setText("Leverancier");
-        jPanel3.add(jLabel3);
+        jLabel3.setFocusable(false);
+        fixedFields.add(jLabel3);
 
         supplierOutlet.setForeground(new java.awt.Color(0, 0, 255));
-        supplierOutlet.setText("<>");
+        supplierOutlet.setText("<supplierOutlet>");
         supplierOutlet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        supplierOutlet.setFocusable(false);
         supplierOutlet.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 supplierOutletMouseReleased(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                supplierOutletMouseExited(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 supplierOutletMouseEntered(evt);
             }
-        });
-        jPanel3.add(supplierOutlet);
-
-        jPanel4.add(jPanel3);
-
-        detail.add(jPanel4, java.awt.BorderLayout.CENTER);
-
-        jPanel5.setLayout(new java.awt.BorderLayout());
-
-        editOutlet.setText("Edit");
-        editOutlet.setFocusable(false);
-        editOutlet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editOutletActionPerformed(evt);
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseExited(evt);
             }
         });
-        jPanel5.add(editOutlet, java.awt.BorderLayout.CENTER);
+        fixedFields.add(supplierOutlet);
 
-        detail.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+        jLabel10.setText("Prijs per verpakking (BTW excl)");
+        jLabel10.setFocusable(false);
+        fixedFields.add(jLabel10);
+
+        pricePerUnitOutlet.setText("<pricePerUnitOutlet>");
+        pricePerUnitOutlet.setFocusable(false);
+        fixedFields.add(pricePerUnitOutlet);
+
+        jLabel8.setText("Gewicht per verpakking");
+        jLabel8.setFocusable(false);
+        fixedFields.add(jLabel8);
+
+        weightPerUnitOutlet.setText("<weightPerUnitOutlet>");
+        weightPerUnitOutlet.setFocusable(false);
+        fixedFields.add(weightPerUnitOutlet);
+
+        jLabel12.setText("Prijs per kg (BTW excl)");
+        jLabel12.setFocusable(false);
+        fixedFields.add(jLabel12);
+
+        pricePerKgOutlet.setText("<pricePerKgOutlet>");
+        pricePerKgOutlet.setFocusable(false);
+        fixedFields.add(pricePerKgOutlet);
+
+        jLabel14.setText("Verliespercentage");
+        jLabel14.setFocusable(false);
+        fixedFields.add(jLabel14);
+
+        lossPercentOutlet.setText("<lossPercentOutlet>");
+        lossPercentOutlet.setFocusable(false);
+        fixedFields.add(lossPercentOutlet);
+
+        jLabel16.setText("Totaalprijs (BTW excl)");
+        jLabel16.setFocusable(false);
+        fixedFields.add(jLabel16);
+
+        priceNoBTWOutlet.setText("<priceNoBTWOutlet>");
+        priceNoBTWOutlet.setFocusable(false);
+        fixedFields.add(priceNoBTWOutlet);
+
+        jLabel18.setText("BTW");
+        jLabel18.setFocusable(false);
+        fixedFields.add(jLabel18);
+
+        BTWOutlet.setText("<BTWOutlet>");
+        BTWOutlet.setFocusable(false);
+        fixedFields.add(BTWOutlet);
+
+        jLabel20.setText("Totaalprijs");
+        jLabel20.setFocusable(false);
+        fixedFields.add(jLabel20);
+
+        priceTotalOutlet.setText("<priceTotalOutlet>");
+        priceTotalOutlet.setFocusable(false);
+        fixedFields.add(priceTotalOutlet);
+
+        jLabel22.setText("Datum");
+        jLabel22.setFocusable(false);
+        fixedFields.add(jLabel22);
+
+        dateOutlet.setText("<dateOutlet>");
+        dateOutlet.setFocusable(false);
+        fixedFields.add(dateOutlet);
+
+        detail.add(fixedFields, java.awt.BorderLayout.NORTH);
+
+        stretchableFields.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+
+        notesOutlet.setColumns(20);
+        notesOutlet.setRows(5);
+        notesOutlet.setFocusable(false);
+        jScrollPane2.setViewportView(notesOutlet);
+
+        stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -198,21 +290,21 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private void editOutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editOutletActionPerformed
         
 	// input test:
-	try{
-	    Double.parseDouble(priceOutlet.getText());
-	} catch(Exception e){
-	    // show error dialog and return
-	    JOptionPane.showMessageDialog(null, "Enter a valid price (\""+priceOutlet.getText()+"\" is not a valid value)!", "Error: invalid price", JOptionPane.ERROR_MESSAGE);
-	    return;
-	}
+//	try{
+//	    Double.parseDouble(priceOutlet.getText());
+//	} catch(Exception e){
+//	    // show error dialog and return
+//	    JOptionPane.showMessageDialog(null, "Enter a valid price (\""+priceOutlet.getText()+"\" is not a valid value)!", "Error: invalid price", JOptionPane.ERROR_MESSAGE);
+//	    return;
+//	}
 	
 	
 	editing = !editing;
 	listOutlet.setFocusable(!editing);
-	nameOutlet.setEnabled(editing);
-	priceOutlet.setEnabled(editing);
+//	nameOutlet.setEnabled(editing);
+//	priceOutlet.setEnabled(editing);
 	if(editing) {
-	    nameOutlet.requestFocus();
+//	    nameOutlet.requestFocus();
 	    editOutlet.setText("Save");
 	} else {
 	    listOutlet.requestFocus();
@@ -222,7 +314,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	    
 	    if(listOutlet.getSelectedValue().getClass() == BasicIngredient.class){
 		BasicIngredient c = (BasicIngredient)listOutlet.getSelectedValue();
-		c.setName(nameOutlet.getText());
+//		c.setName(nameOutlet.getText());
 //		c.setPrice(Double.parseDouble(priceOutlet.getText()));
 	    }
 	    
@@ -248,27 +340,45 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
     private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseExited
         BasicIngredient bi = (BasicIngredient)listOutlet.getSelectedValue();
-	supplierOutlet.setText(bi.getSupplier().getFirm());
+	String firm = bi.getSupplier().getFirm();
+	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
     }//GEN-LAST:event_supplierOutletMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BTWOutlet;
+    private javax.swing.JLabel brandOutlet;
+    private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton editOutlet;
+    private javax.swing.JPanel fixedFields;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList listOutlet;
+    private javax.swing.JLabel lossPercentOutlet;
     private javax.swing.JPanel master;
-    private javax.swing.JTextField nameOutlet;
-    private javax.swing.JTextField priceOutlet;
+    private javax.swing.JLabel nameOutlet;
+    private javax.swing.JTextArea notesOutlet;
+    private javax.swing.JLabel packagingOutlet;
+    private javax.swing.JLabel priceNoBTWOutlet;
+    private javax.swing.JLabel pricePerKgOutlet;
+    private javax.swing.JLabel pricePerUnitOutlet;
+    private javax.swing.JLabel priceTotalOutlet;
+    private javax.swing.JPanel stretchableFields;
     private javax.swing.JLabel supplierOutlet;
+    private javax.swing.JLabel weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
 }
