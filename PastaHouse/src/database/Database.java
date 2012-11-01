@@ -44,7 +44,6 @@ public class Database {
 	    loadSuppliers();
 	    loadBasicIngredients();
 	    loadRecipes();
-            loadMunicipalities ();
 	    
 	} catch (Exception ex) {
 	    Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,7 +57,7 @@ public class Database {
 	return driver;
     }
     
-    public void loadSuppliers() throws SQLException{
+    private void loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
 	    suppliers.put(rs.getInt("id"), 
@@ -78,7 +77,7 @@ public class Database {
 	System.out.println("Database driver:: loaded "+suppliers.size()+" suppliers!");
     }
     
-    public void loadBasicIngredients() throws SQLException{
+    private void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
 	    basicIngredients.put(rs.getInt("id"), 
@@ -98,7 +97,7 @@ public class Database {
 	System.out.println("Database driver:: loaded "+basicIngredients.size()+" basic ingredients!");
     }
     
-    public void loadRecipes() throws SQLException{
+    private void loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
 	while (rs.next()) {	    
 	    recipes.put(rs.getInt("id"), 
@@ -121,11 +120,6 @@ public class Database {
 	System.out.println("Database driver:: loaded "+recipes.size()+" recipes!");
     }
 
-    private void loadMunicipalities() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    
     public Map<Integer, Supplier> getSuppliers() {
 	return suppliers;
     }
@@ -180,5 +174,4 @@ public class Database {
     public void shutdown() throws SQLException{
 	connection.close();
     }
-
 }
