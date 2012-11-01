@@ -27,7 +27,7 @@ public class BasicIngredient extends Component {
 	super(id, name, date);
     }
 
-    public BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, int id, String name, String date) {
+    private  BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, int id, String name, String date) {
 	super(id, name, date);
 	this.supplier = supplier;
 	this.brand = brand;

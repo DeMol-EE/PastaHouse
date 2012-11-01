@@ -8,13 +8,12 @@ package database;
  *
  * @author Warkst
  */
-public abstract class Component implements Comparable<Component> {
-    private final int id;
+public abstract class Component extends Record implements Comparable<Component> {
     private String name;
     private String date;
     
     public Component(int id, String name, String date){
-	this.id = id;
+	super(id);
 	this.name = name;
 	this.date = date;
     }
@@ -27,21 +26,8 @@ public abstract class Component implements Comparable<Component> {
 	this.name = name;
     }
 
-    public int getId() {
-	return id;
-    }
-
     @Override
     public int compareTo(Component o) {
 	return getName().compareTo(o.getName());
     }
-    
-    // save changes to the db
-    public abstract void create() throws Exception;
-    
-    // save changes to the db
-    public abstract void update() throws Exception;
-    
-    // save changes to the db
-    public abstract void delete() throws Exception;
 }

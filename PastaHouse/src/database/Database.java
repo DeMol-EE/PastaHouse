@@ -48,6 +48,7 @@ public class Database {
 		    + "gemeente TEXT, "
 		    + "tel TEXT, "
 		    + "gsm TEXT, "
+		    + "fax TEXT, "
 		    + "email TEXT, "
 		    + "opmerking TEXT, "
 		    + "contactpersoon TEXT, "
@@ -99,11 +100,21 @@ public class Database {
 	return driver;
     }
     
-    public Map<Integer, Supplier> loadSuppliers() throws SQLException{
+    private Map<Integer, Supplier> loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
 	    suppliers.put(rs.getInt("id"), 
-		    Supplier.loadWithValues(rs.getInt("id"), rs.getString("firma"), rs.getString("adres")));
+		    Supplier.loadWithValues(rs.getInt("id"), 
+		    rs.getString("firma"), 
+		    rs.getString("adres"), 
+		    rs.getString("gemeente"), 
+		    rs.getString("tel"), 
+		    rs.getString("gsm"), 
+		    rs.getString("fax"), 
+		    rs.getString("email"), 
+		    rs.getString("opmerking"), 
+		    rs.getString("contactpersoon"), 
+		    rs.getBoolean("verwijderd")));
 	}
 	
 	System.out.println(suppliers);
@@ -111,7 +122,7 @@ public class Database {
 	return suppliers;
     }
     
-    public Map<Integer, BasicIngredient> loadBasicIngredients() throws SQLException{
+    private Map<Integer, BasicIngredient> loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
 	    basicIngredients.put(rs.getInt("id"), 
@@ -131,7 +142,7 @@ public class Database {
 	return basicIngredients;
     }
     
-    public ArrayList<BasicIngredient> loadRecipes() throws SQLException{
+    private ArrayList<BasicIngredient> loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
 	// also load all recipes and ingredients linked to the recipe
 	// ...

@@ -35,6 +35,7 @@ public class TestData {
 		    + "gemeente TEXT, "
 		    + "tel TEXT, "
 		    + "gsm TEXT, "
+		    + "fax TEXT, "
 		    + "email TEXT, "
 		    + "opmerking TEXT, "
 		    + "contactpersoon TEXT, "
@@ -72,24 +73,26 @@ public class TestData {
 	
 	
 	//add test data
-	PreparedStatement prepSup = conn.prepareStatement("insert into suppliers values (null, ?, ?, ?, ?, ?, ?, ?, ?, 0);");
+	PreparedStatement prepSup = conn.prepareStatement("insert into suppliers values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0);");
 	prepSup.setString(1, "colruyt");
 	prepSup.setString(2, "derpstraat 5");
 	prepSup.setString(3, "gent");
 	prepSup.setString(4, "09 221 77 40");
 	prepSup.setString(5, "");
-	prepSup.setString(6, "colruyt@gent.be");
-	prepSup.setString(7, "open in de week van 8 tot 19");
-	prepSup.setString(8, "Jos de Josser");
+	prepSup.setString(6, "");
+	prepSup.setString(7, "colruyt@gent.be");
+	prepSup.setString(8, "open in de week van 8 tot 19");
+	prepSup.setString(9, "Jos de Josser");
 	prepSup.addBatch();
 	prepSup.setString(1, "delhaize");
 	prepSup.setString(2, "voskenslaan 1");
 	prepSup.setString(3, "gent");
 	prepSup.setString(4, "");
 	prepSup.setString(5, "");
-	prepSup.setString(6, "delhaize@gent.be");
-	prepSup.setString(7, "");
-	prepSup.setString(8, "Jeanine de Bakker");
+	prepSup.setString(6, "");
+	prepSup.setString(7, "delhaize@gent.be");
+	prepSup.setString(8, "");
+	prepSup.setString(9, "Jeanine de Bakker");
 	prepSup.addBatch();
         conn.setAutoCommit(false);
         prepSup.executeBatch();

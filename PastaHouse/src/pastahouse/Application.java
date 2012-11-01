@@ -30,6 +30,8 @@ public class Application extends javax.swing.JFrame {
     public Application() {
 	initComponents();
 	
+	setTitle("Pasta House");
+	
 	setLocationRelativeTo(null);
 	
 	// load viewControllers
@@ -68,13 +70,17 @@ public class Application extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(800, 600));
 
         tabController.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        tabController.setFocusable(false);
 
+        recipeTab.setFocusable(false);
         recipeTab.setLayout(new java.awt.BorderLayout());
         tabController.addTab("Recepten", recipeTab);
 
+        ingredientTab.setFocusable(false);
         ingredientTab.setLayout(new java.awt.BorderLayout());
         tabController.addTab("Ingrediënten", ingredientTab);
 
+        supplierTab.setFocusable(false);
         supplierTab.setLayout(new java.awt.BorderLayout());
         tabController.addTab("Leveranciers", supplierTab);
 

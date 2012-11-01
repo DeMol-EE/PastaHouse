@@ -11,7 +11,6 @@
 package gui;
 
 import database.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
@@ -51,21 +50,19 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 		}
 	    }
 	});
-	
-	try {
-	    // load from the db
-	    Map<Integer, BasicIngredient> bi = Database.driver().loadBasicIngredients();
-	    ArrayList<BasicIngredient> bil = new ArrayList<BasicIngredient>();
-	    System.out.println("basic ingredients:");
-	    for (Map.Entry<Integer, BasicIngredient> entry : bi.entrySet()) {
-		System.out.println("\t("+entry.getValue().getId()+")\t"+entry.getValue().getName());
-		bil.add(entry.getValue());
-	    }
-	    
-	    listOutlet.setModel(ListModelFactory.createBasicIngredientModel(bil));
-	} catch (SQLException ex) {
-	    Logger.getLogger(IngredientViewController.class.getName()).log(Level.SEVERE, null, ex);
+
+	// load from the db
+	Map<Integer, BasicIngredient> bi = Database.driver().getBasicIngredients();
+	ArrayList<BasicIngredient> bil = new ArrayList<BasicIngredient>();
+	System.out.println("basic ingredients:");
+	for (Map.Entry<Integer, BasicIngredient> entry : bi.entrySet()) {
+	    System.out.println("\t("+entry.getValue().getId()+")\t"+entry.getValue().getName());
+	    bil.add(entry.getValue());
 	}
+
+	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(bil));
+	
+	listOutlet.setSelectedIndex(0);
     }
     
     private void updateDetail(Object value){
