@@ -7,6 +7,7 @@ package gui;
 import database.Database;
 import database.Supplier;
 import java.awt.event.KeyEvent;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -58,6 +59,12 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     public void selectSupplier(Supplier supplier){
 //	System.out.println("SVC::select index stub called with index "+);
 	listOutlet.setSelectedValue(supplier, true);
+    }
+    
+    public void addSupplier(Supplier supplier){
+	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	dlm.add(supplier);
+	listOutlet.requestFocus();
     }
     
     @Override
@@ -253,8 +260,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true);
-        
+	AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this);
         dia.setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 

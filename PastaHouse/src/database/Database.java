@@ -76,7 +76,7 @@ public class Database {
     }
     
     public boolean addSupplier(Supplier sup){
-        return true;
+        return false;
     }
     
     private void loadBasicIngredients() throws SQLException{

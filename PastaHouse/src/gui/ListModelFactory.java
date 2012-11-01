@@ -17,7 +17,7 @@ import javax.swing.AbstractListModel;
  */
 public class ListModelFactory {
     public static AbstractListModel createBasicIngredientModel(final Map<String, BasicIngredient> data){
-	return new AbstractListModel() {
+	return new DynamicListModel<BasicIngredient>() {
 
 	    @Override
 	    public int getSize() {
@@ -29,6 +29,7 @@ public class ListModelFactory {
 		return data.values().toArray()[index];
 	    }
 	    
+	    @Override
 	    public void add(BasicIngredient o){
 		data.put(o.getName(), o);
 		fireContentsChanged(this, 0, getSize());
@@ -37,7 +38,7 @@ public class ListModelFactory {
     }
     
     public static AbstractListModel createSupplierListModel(final Map<String, Supplier> data){
-	return new AbstractListModel() {
+	return new DynamicListModel<Supplier>() {
 
 	    @Override
 	    public int getSize() {
@@ -49,6 +50,7 @@ public class ListModelFactory {
 		return data.values().toArray()[index];
 	    }
 	    
+	    @Override
 	    public void add(Supplier o){
 		data.put(o.getFirm(), o);
 		fireContentsChanged(this, 0, getSize());
@@ -57,7 +59,7 @@ public class ListModelFactory {
     }
     
     public static AbstractListModel createRecipeListModel(final Map<String, Recipe> data){
-	return new AbstractListModel() {
+	return new DynamicListModel<Recipe>() {
 
 	    @Override
 	    public int getSize() {
@@ -69,6 +71,7 @@ public class ListModelFactory {
 		return data.values().toArray()[index];
 	    }
 	    
+	    @Override
 	    public void add(Recipe o){
 		data.put(o.getName(), o);
 		fireContentsChanged(this, 0, getSize());
@@ -77,7 +80,7 @@ public class ListModelFactory {
     }
     
     public static AbstractListModel createComponentListModel(final Map<Integer, Component> data){
-	return new AbstractListModel() {
+	return new DynamicListModel<Component>() {
 
 	    @Override
 	    public int getSize() {
@@ -89,6 +92,7 @@ public class ListModelFactory {
 		return data.values().toArray()[index];
 	    }
 	    
+	    @Override
 	    public void add(Component o){
 		data.put(o.getRank(), o);
 		fireContentsChanged(this, 0, getSize());

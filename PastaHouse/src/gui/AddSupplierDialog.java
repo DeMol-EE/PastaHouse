@@ -14,13 +14,17 @@ import javax.swing.JOptionPane;
  */
 public class AddSupplierDialog extends javax.swing.JDialog {
 
+    private SupplierViewController delegate;
+    
     /**
      * Creates new form AddSupplierDialog
      */
-    public AddSupplierDialog(java.awt.Frame parent, boolean modal) {
+    public AddSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate) {
         super(parent, modal);
-        initComponents();
+	initComponents();
+	setTitle("Leverancier toevoegen");
         this.setLocationRelativeTo(null);
+	this.delegate = delegate;
     }
 
     /**
@@ -164,7 +168,10 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
         Database db = Database.driver();
         if (db.addSupplier(sup)) {
-            db.getSuppliers().put(txtFirma.getText(), sup);
+//            db.getSuppliers().put(sup.getFirm(), sup);
+	    
+	    delegate.addSupplier(sup);
+	    
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
