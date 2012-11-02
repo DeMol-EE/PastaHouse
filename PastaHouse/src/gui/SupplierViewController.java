@@ -7,7 +7,6 @@ package gui;
 import database.Database;
 import database.Supplier;
 import java.awt.event.KeyEvent;
-import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -105,6 +104,8 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        edit = new javax.swing.JButton();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
@@ -230,6 +231,18 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 
         detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        edit.setText("Wijzigen...");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jPanel1.add(edit, java.awt.BorderLayout.EAST);
+
+        detail.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
         jSplitPane1.setRightComponent(detail);
 
         master.setFocusable(false);
@@ -304,12 +317,17 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 	}
     }//GEN-LAST:event_notesOutletKeyTyped
 
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        new EditSupplierDialog(null, true, this, (Supplier)listOutlet.getSelectedValue()).setVisible(true);
+    }//GEN-LAST:event_editActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JLabel addressOutlet;
     private javax.swing.JLabel cellphoneOutlet;
     private javax.swing.JLabel contactOutlet;
     private javax.swing.JPanel detail;
+    private javax.swing.JButton edit;
     private javax.swing.JLabel emailOutlet;
     private javax.swing.JLabel faxOutlet;
     private javax.swing.JLabel firmOutlet;
@@ -322,6 +340,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
