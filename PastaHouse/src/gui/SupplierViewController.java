@@ -66,6 +66,12 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 	listOutlet.requestFocus();
     }
     
+    public void updateList(){
+	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	dlm.update();
+	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+    }
+    
     @Override
     public JPanel view(){
 	return this;
@@ -234,6 +240,7 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         edit.setText("Wijzigen...");
+        edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);

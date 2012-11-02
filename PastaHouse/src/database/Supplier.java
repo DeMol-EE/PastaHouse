@@ -38,6 +38,32 @@ public class Supplier implements Record{
 	this.deleted = deleted;
     }
     
+    public Supplier(Supplier s){
+	this.firm = s.getFirm();
+	this.address = s.getAddress();
+	this.municipality = s.getMunicipality();
+	this.telephone = s.getTelephone();
+	this.cellphone = s.getCellphone();
+	this.fax = s.getFax();
+	this.email = s.getEmail();
+	this.notes = s.getNotes();
+	this.contact = s.getContact();
+	this.deleted = s.isDeleted();
+    }
+    
+    public void load(Supplier s){
+	this.firm = s.getFirm();
+	this.address = s.getAddress();
+	this.municipality = s.getMunicipality();
+	this.telephone = s.getTelephone();
+	this.cellphone = s.getCellphone();
+	this.fax = s.getFax();
+	this.email = s.getEmail();
+	this.notes = s.getNotes();
+	this.contact = s.getContact();
+	this.deleted = s.isDeleted();
+    }
+    
     public static Supplier loadWithValues(String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
 	return new Supplier(firm, address, municipality, telephone, cellphone, fax, email, notes, contact, verwijderd);
     }
@@ -128,8 +154,8 @@ public class Supplier implements Record{
     }
 
     @Override
-    public void create() throws Exception {
-	Database.driver().executeInsert(table_id, 
+    public boolean create() {
+	return Database.driver().executeInsert(table_id, 
 		"firma = "+ firm +", "
 		+ "adres = "+ address +", "
 		+ "gemeente = "+municipality +", "
@@ -142,13 +168,34 @@ public class Supplier implements Record{
 		+ "verwijderd = 0");
     }
 
+    /**
+     * Tells the database object proxy to synchronize the database with the actual values. This will
+     * cause an UPDATE command saving the current values to the database.
+     * 
+     * @return <code>true</code> if the UPDATE was succesful, <code>false</code> if it failed.
+     */
     @Override
-    public void update() throws Exception {
-	
+    public boolean update() {
+	return Database.driver().executeUpdate(table_id, getPrimaryKey(), firm,  
+		"firma = \""+ firm +"\", "
+		+ "adres = "+(address.length()>0 ? "\""+ address +"\"":"NULL")+", "
+		+ "gemeente = "+(municipality.length()>0 ?"\""+municipality +"\"":"NULL")+", "
+		+ "tel = "+(telephone.length()>0? "\""+telephone +"\"":"NULL")+", "
+		+ "gsm = "+(cellphone.length()>0? "\""+cellphone +"\"":"NULL")+", "
+		+ "fax = "+(fax.length()>0? "\""+fax +"\"":"NULL")+", "
+		+ "email = "+(email.length()>0? "\""+email +"\"":"NULL")+", "
+		+ "opmerking = "+(notes.length()>0? "\""+notes +"\"":"NULL")+", "
+		+ "contactpersoon = "+(contact.length()>0 ? "\""+contact +"\"":"NULL")+", "
+		+ "verwijderd = 0");
     }
 
     @Override
-    public void delete() throws Exception {
-	
+    public boolean delete() {
+	return false;
+    }
+    
+    @Override
+    public String getPrimaryKey(){
+	return "firma";
     }
 }

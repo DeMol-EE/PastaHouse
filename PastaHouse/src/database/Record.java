@@ -10,12 +10,18 @@ package database;
  */
 public interface Record {
     
-    // save changes to the db
-    public void create() throws Exception;
+    /**
+     * Returns the primary key of this database proxy-object.
+     * @return The primary key of the object.
+     */
+    public String getPrimaryKey();
     
     // save changes to the db
-    public void update() throws Exception;
+    public boolean create();
     
     // save changes to the db
-    public void delete() throws Exception;
+    public boolean update();
+    
+    // save changes to the db
+    public boolean delete();
 }
