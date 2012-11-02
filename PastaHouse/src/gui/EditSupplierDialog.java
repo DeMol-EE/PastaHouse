@@ -10,21 +10,38 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Hannes
+ * @author Warkst
  */
-public class AddSupplierDialog extends javax.swing.JDialog {
+public class EditSupplierDialog extends javax.swing.JDialog {
 
     private SupplierViewController delegate;
+    private final Supplier model;
     
     /**
-     * Creates new form AddSupplierDialog
+     * Creates new form EditSupplierDialog
      */
-    public AddSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate) {
-        super(parent, modal);
+    public EditSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate, Supplier model) {
+	super(parent, modal);
 	initComponents();
-	setTitle("Leverancier toevoegen");
-        this.setLocationRelativeTo(null);
+	
+	setModalityType(ModalityType.APPLICATION_MODAL);
+	setLocationRelativeTo(null);
+	
 	this.delegate = delegate;
+	this.model = model;
+	
+	loadModel();
+    }
+    
+    private void loadModel(){
+	txtFirma.setText(model.getFirm());
+	txtContact.setText(model.getContact());
+	txtAdres.setText(model.getAddress());
+	txtTel.setText(model.getTelephone());
+	txtGSM.setText(model.getCellphone());
+	txtFax.setText(model.getFax());
+	txtEmail.setText(model.getEmail());
+	notesOutlet.setText(model.getNotes());
     }
 
     /**
@@ -57,7 +74,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         txtEmail = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        NotesOutlet = new javax.swing.JTextArea();
+        notesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
@@ -69,67 +86,76 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel2.setLayout(new java.awt.GridLayout(9, 2));
 
         jLabel11.setText("Firma");
+        jLabel11.setFocusable(false);
         jPanel2.add(jLabel11);
         jPanel2.add(txtFirma);
 
         jLabel10.setText("Contactpersoon");
+        jLabel10.setFocusable(false);
         jPanel2.add(jLabel10);
         jPanel2.add(txtContact);
 
         jLabel13.setText("Adres");
+        jLabel13.setFocusable(false);
         jPanel2.add(jLabel13);
         jPanel2.add(txtAdres);
 
         jLabel1.setText("Postcode");
+        jLabel1.setFocusable(false);
         jPanel2.add(jLabel1);
         jPanel2.add(txtGemeente);
 
         jLabel12.setText("Gemeente");
+        jLabel12.setFocusable(false);
         jPanel2.add(jLabel12);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel2.add(jComboBox1);
 
         jLabel9.setText("Telefoon");
+        jLabel9.setFocusable(false);
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
 
         jLabel14.setText("GSM");
+        jLabel14.setFocusable(false);
         jPanel2.add(jLabel14);
         jPanel2.add(txtGSM);
 
         jLabel15.setText("Fax");
+        jLabel15.setFocusable(false);
         jPanel2.add(jLabel15);
         jPanel2.add(txtFax);
 
         jLabel16.setText("Email");
+        jLabel16.setFocusable(false);
         jPanel2.add(jLabel16);
         jPanel2.add(txtEmail);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking"));
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
         jScrollPane2.setName(""); // NOI18N
 
-        NotesOutlet.setColumns(20);
-        NotesOutlet.setRows(5);
-        jScrollPane2.setViewportView(NotesOutlet);
+        notesOutlet.setColumns(20);
+        notesOutlet.setRows(5);
+        jScrollPane2.setViewportView(notesOutlet);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 508, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 420, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -141,7 +167,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 30));
         jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
 
-        btnOK.setText("OK");
+        btnOK.setText("Opslaan");
+        btnOK.setFocusable(false);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -150,6 +177,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel4.add(btnOK);
 
         btnCancel.setText("Cancel");
+        btnCancel.setFocusable(false);
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -164,25 +192,25 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
-
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
+        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), notesOutlet.getText(), txtContact.getText(), false);
         Database db = Database.driver();
         if (db.addSupplier(sup)) {
-//            db.getSuppliers().put(sup.getFirm(), sup);
-	    
-	    delegate.addSupplier(sup);
-	    
+            //            db.getSuppliers().put(sup.getFirm(), sup);
+
+            delegate.addSupplier(sup);
+
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnOKActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea NotesOutlet;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
     private javax.swing.Box.Filler filler1;
@@ -201,6 +229,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea notesOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;
