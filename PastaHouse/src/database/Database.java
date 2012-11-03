@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -163,9 +164,17 @@ public class Database {
      * @param values
      * @throws SQLException 
      */
-    public void executeInsert(String table, String values) throws SQLException{
-	statement.executeUpdate("INSERT INTO "+table+" VALUES (null, "+values+")");
-	System.out.println("DatabaseDriver::Executed insert of ("+values+") into "+table);
+    public boolean executeInsert(String table, String values){
+	try{
+	    statement.executeUpdate("INSERT INTO "+table+" VALUES (null, "+values+")");
+	    System.out.println("DatabaseDriver::Executed insert of ("+values+") into "+table);
+	    return true;
+	} catch (Exception e){
+	    // do logging
+	    // show error elsewhere (hence the return false!)
+	    
+	    return false;
+	}
     }
     
     /**
@@ -173,18 +182,29 @@ public class Database {
      * with the specified id of the specified table to set the new values.
      * Values is expected to be of the format: "column_name = value, ...".
      * 
-     * @param table The table of the record to be updated.
-     * @param id The primary key of the record to be updated.
-     * @param values The new set of values for the record.
-     * @throws SQLException when the update statement fails to complete.
+     * @param table
+     * @param primaryKey
+     * @param primaryKeyValue
+     * @param values
+     * @return 
      */
-    public void executeUpdate(String table, String primaryKey, String values) throws SQLException{
-	statement.executeUpdate("UPDATE "+table+" SET "+values+" WHERE id = "+primaryKey);
-	System.out.println("DatabaseDriver::Executed update of ("+values+") into "+table+" for PK "+primaryKey);
+    public boolean executeUpdate(String table, String primaryKey, String primaryKeyValue, String values){
+	try{
+	    statement.executeUpdate("UPDATE "+table+" SET "+values+" WHERE "+primaryKey+" = \""+primaryKeyValue+"\"");
+	    System.out.println("DatabaseDriver::Executed update:\n"
+		    + "UPDATE "+table+" SET "+values+" WHERE "+primaryKey+" = \""+primaryKeyValue+"\" \nSUCCES!");
+	    return true;
+	} catch(Exception e){
+	    // do logging
+	    System.err.println("DatabaseDriver::Update command: \n"
+		    + "UPDATE "+table+" SET "+values+" WHERE "+primaryKey+" = \""+primaryKeyValue+"\" \nFAILED:\n"+e.getMessage());
+	    
+	    return false;
+	}
     }
     
-    public void executeDelete(String table, int id){
-	
+    public boolean executeDelete(String table, int id){
+	return false;
     }
     
     /**

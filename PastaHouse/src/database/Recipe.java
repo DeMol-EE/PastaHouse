@@ -82,20 +82,21 @@ public class Recipe extends Ingredient {
     }
     
     @Override
-    public void create() throws SQLException{
-	Database.driver().executeInsert(table_id, "bereiding = "+preparation);
+    public boolean create(){
+	return Database.driver().executeInsert(table_id, "bereiding = "+preparation);
     }
     
     @Override
-    public void update() throws SQLException{
-	Database.driver().executeUpdate(table_id, getName(), "bereiding = "+preparation);
+    public boolean update(){
+	return false;
+//	return Database.driver().executeUpdate(table_id, getName(), "bereiding = "+preparation);
 	// update recipes-recipes
 	// update recipes-ingredients
     }
     
     @Override
-    public void delete(){
-	
+    public boolean delete(){
+	return false;
     }
     
     @Override

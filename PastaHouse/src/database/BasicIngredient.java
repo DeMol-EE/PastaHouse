@@ -100,18 +100,18 @@ public class BasicIngredient extends Ingredient {
     }
     
     @Override
-    public void create() throws SQLException{
-//	Database.driver().executeInsert(table_id, "price = "+price);
+    public boolean create(){
+	return false;
     }
     
     @Override
-    public void update() throws SQLException{
-//	Database.driver().executeUpdate(table_id, super.getId(), "price = "+price);
+    public boolean update(){
+	return false;
     }
     
     @Override
-    public void delete(){
-	
+    public boolean delete(){
+	return false;
     }
     
     @Override

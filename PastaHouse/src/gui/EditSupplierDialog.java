@@ -16,6 +16,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
     private SupplierViewController delegate;
     private final Supplier model;
+    private final Supplier defaultModel;
     
     /**
      * Creates new form EditSupplierDialog
@@ -30,6 +31,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	this.delegate = delegate;
 	this.model = model;
 	
+	this.defaultModel = new Supplier(model);
+	
 	loadModel();
     }
     
@@ -37,6 +40,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	txtFirma.setText(model.getFirm());
 	txtContact.setText(model.getContact());
 	txtAdres.setText(model.getAddress());
+	// load municipale
 	txtTel.setText(model.getTelephone());
 	txtGSM.setText(model.getCellphone());
 	txtFax.setText(model.getFax());
@@ -82,6 +86,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(528, 500));
 
         jPanel2.setLayout(new java.awt.GridLayout(9, 2));
 
@@ -134,11 +139,14 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
+        jPanel3.setPreferredSize(new java.awt.Dimension(528, 300));
+
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 300));
         jScrollPane2.setName(""); // NOI18N
 
         notesOutlet.setColumns(20);
+        notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         notesOutlet.setRows(5);
         jScrollPane2.setViewportView(notesOutlet);
 
@@ -155,7 +163,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 420, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -193,21 +201,29 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), notesOutlet.getText(), txtContact.getText(), false);
-        Database db = Database.driver();
-        if (db.addSupplier(sup)) {
-            //            db.getSuppliers().put(sup.getFirm(), sup);
-
-            delegate.addSupplier(sup);
-
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
-        }
+        model.setFirm(txtFirma.getText());
+        model.setContact(txtContact.getText());
+        model.setAddress(txtAdres.getText());
+	// set municipale
+        model.setTelephone(txtTel.getText());
+        model.setCellphone(txtGSM.getText());
+        model.setFax(txtFax.getText());
+        model.setEmail(txtEmail.getText());
+        model.setNotes(notesOutlet.getText());
+	
+	if(model.update()){
+	    delegate.updateList();
+	    this.dispose();
+	} else {
+	    JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	}
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose();
+        // reset values to default
+	model.load(defaultModel);
+	
+	this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
