@@ -5,6 +5,7 @@
 package gui;
 
 import database.Database;
+import database.Ingredient;
 import database.Recipe;
 import java.text.DecimalFormat;
 import javax.swing.JPanel;
@@ -38,7 +39,7 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 	
 	recipeListOutlet.setSelectedIndex(0);
 	
-	ingredientListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//	ingredientListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     @Override
@@ -59,7 +60,13 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 	
 	preparationOutlet.setText(r.getPreparation());
 	
-	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getIngredients()));
+	ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer());
+	ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createDoubleCellRenderer());
+	ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createIngredientCellRenderer());
+	
+	ingredientsOutlet.setModel(new DynamicTableModel(r.getIngredients()));
+	
+//	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getIngredients()));
     }
 
     /**
@@ -80,8 +87,6 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         jPanel5 = new javax.swing.JPanel();
         nameOutlet = new javax.swing.JLabel();
         dateOutlet = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        ingredientListOutlet = new javax.swing.JList();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         preparationOutlet = new javax.swing.JTextArea();
@@ -92,6 +97,8 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         netWeightOutlet = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         pricePerWeightOutlet = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        ingredientsOutlet = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -125,18 +132,6 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         jPanel5.add(dateOutlet);
 
         jPanel2.add(jPanel5, java.awt.BorderLayout.NORTH);
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(400, 200));
-
-        ingredientListOutlet.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(ingredientListOutlet);
-
-        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
         jPanel7.setLayout(new java.awt.BorderLayout());
@@ -174,6 +169,26 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 
         jPanel2.add(jPanel7, java.awt.BorderLayout.SOUTH);
 
+        jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
+
+        ingredientsOutlet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        ingredientsOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        ingredientsOutlet.setRowSelectionAllowed(false);
+        ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
+        jScrollPane4.setViewportView(ingredientsOutlet);
+
+        jPanel2.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
         jSplitPane1.setRightComponent(jPanel2);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
@@ -182,7 +197,7 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
     private javax.swing.JButton add;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JLabel grossWeightOutlet;
-    private javax.swing.JList ingredientListOutlet;
+    private javax.swing.JTable ingredientsOutlet;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
@@ -192,8 +207,8 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel nameOutlet;
     private javax.swing.JLabel netWeightOutlet;

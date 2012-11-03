@@ -36,4 +36,8 @@ public class Component {
     public boolean isIngredient(){
 	return isIngredient;
     }
+    
+    public String isIngredientType(){
+	return isIngredient? "Basisingrediënt" : "Recept";
+    }
 }
