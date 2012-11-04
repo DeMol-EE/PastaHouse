@@ -4,14 +4,19 @@
  */
 package gui;
 
+import com.qt.datapicker.DatePicker;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
 import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import net.sourceforge.jdatepicker.JDateComponentFactory;
 
 /**
  *
@@ -116,6 +121,11 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
         jPanel1.add(add, java.awt.BorderLayout.SOUTH);
 
         jSplitPane1.setLeftComponent(jPanel1);
@@ -193,6 +203,11 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+
+    }//GEN-LAST:event_addActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JLabel dateOutlet;

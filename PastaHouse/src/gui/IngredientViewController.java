@@ -167,6 +167,9 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        edit = new javax.swing.JButton();
 
         editOutlet.setText("Edit");
         editOutlet.setFocusable(false);
@@ -315,6 +318,19 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
         detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
+
+        edit.setText("Wijzigen...");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jPanel1.add(edit, java.awt.BorderLayout.EAST);
+
+        detail.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
         jSplitPane1.setRightComponent(detail);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
@@ -361,11 +377,17 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	}
     }//GEN-LAST:event_editOutletActionPerformed
 
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        new EditIngredientDialog(null, true).setVisible(true);
+    }//GEN-LAST:event_editActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel brandOutlet;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
+    private javax.swing.JButton edit;
     private javax.swing.JButton editOutlet;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
     private javax.swing.JButton jButton1;
@@ -381,6 +403,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
