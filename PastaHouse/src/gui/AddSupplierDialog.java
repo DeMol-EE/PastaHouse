@@ -6,6 +6,11 @@ package gui;
 
 import database.Database;
 import database.Supplier;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 /**
  *
@@ -21,16 +27,16 @@ import javax.swing.JOptionPane;
 public class AddSupplierDialog extends javax.swing.JDialog {
 
     private SupplierViewController delegate;
-    
+
     /**
      * Creates new form AddSupplierDialog
      */
     public AddSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate) {
         super(parent, modal);
-	initComponents();
-	setTitle("Leverancier toevoegen");
+        initComponents();
+        setTitle("Leverancier toevoegen");
         this.setLocationRelativeTo(null);
-	this.delegate = delegate;
+        this.delegate = delegate;
         loadModel();
     }
 
@@ -88,6 +94,12 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Postcode");
         jPanel2.add(jLabel1);
+
+        txtGemeente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtGemeenteKeyReleased(evt);
+            }
+        });
         jPanel2.add(txtGemeente);
 
         jLabel12.setText("Gemeente");
@@ -176,14 +188,34 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         Database db = Database.driver();
         if (db.addSupplier(sup)) {
 //            db.getSuppliers().put(sup.getFirm(), sup);
-	    
-	    delegate.addSupplier(sup);
-	    
+
+            delegate.addSupplier(sup);
+
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnOKActionPerformed
+
+    private void txtGemeenteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGemeenteKeyReleased
+        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        ArrayList items = new ArrayList();
+        if (!txtGemeente.getText().isEmpty()) {
+            int code = Integer.parseInt(txtGemeente.getText());
+            if (munies.containsValue(code)) {
+                for (String munie : munies.keySet()) {
+                    if (munies.get(munie) == code) {
+                        items.add(munie);
+                    }
+                }
+            }
+
+        } else {
+            items.add("");
+            items.addAll(munies.keySet());
+        }
+        comboGemeentes.setDataList(items);
+    }//GEN-LAST:event_txtGemeenteKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea NotesOutlet;
     private javax.swing.JButton btnCancel;
@@ -212,6 +244,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtGemeente;
     private javax.swing.JTextField txtTel;
     // End of variables declaration//GEN-END:variables
+    private AutocompleteCombobox comboGemeentes;
 
     private void loadModel() {
 
@@ -219,10 +252,42 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         ArrayList items = new ArrayList();
         items.add("");
         items.addAll(munies.keySet());
-        AutocompleteCombobox comboGemeentes = new AutocompleteCombobox(items);
-        
-        
+        comboGemeentes = new AutocompleteCombobox(items);
+        comboGemeentes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setMunicipal();
+            }
+        });
+        comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                setMunicipal();
+            }
+        });
+
         jPanel2.add(comboGemeentes, 9);
-        
+
+    }
+
+    private void setMunicipal() {
+        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        String munie = comboGemeentes.getSelectedItem().toString();
+        if (munies.containsKey(munie)) {
+            txtGemeente.setText(munies.get(comboGemeentes.getSelectedItem()).toString());
+        } else {
+            txtGemeente.setText("");
+        }
     }
 }
