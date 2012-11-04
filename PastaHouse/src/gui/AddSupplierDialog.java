@@ -6,6 +6,12 @@ package gui;
 
 import database.Database;
 import database.Supplier;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +31,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 	setTitle("Leverancier toevoegen");
         this.setLocationRelativeTo(null);
 	this.delegate = delegate;
+        loadModel();
     }
 
     /**
@@ -46,7 +53,6 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtGemeente = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
@@ -87,9 +93,6 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel12.setText("Gemeente");
         jPanel2.add(jLabel12);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(jComboBox1);
-
         jLabel9.setText("Telefoon");
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
@@ -129,7 +132,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 481, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -186,7 +189,6 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -210,4 +212,17 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtGemeente;
     private javax.swing.JTextField txtTel;
     // End of variables declaration//GEN-END:variables
+
+    private void loadModel() {
+
+        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        ArrayList items = new ArrayList();
+        items.add("");
+        items.addAll(munies.keySet());
+        AutocompleteCombobox comboGemeentes = new AutocompleteCombobox(items);
+        
+        
+        jPanel2.add(comboGemeentes, 9);
+        
+    }
 }

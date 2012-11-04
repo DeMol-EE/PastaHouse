@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -28,13 +29,14 @@ public class Database {
     private Map<String, Supplier> suppliers;
     private Map<String, BasicIngredient> basicIngredients;
     private Map<String, Recipe> recipes;
+    private Map<String, Integer> municipales;
     
     private Database() {
 	try {
 	    suppliers = new TreeMap<String, Supplier>();
 	    basicIngredients = new TreeMap<String, BasicIngredient>();
 	    recipes = new TreeMap<String, Recipe>();
-	    
+	    municipales = new TreeMap<String, Integer>();
 	    // connect to db
 	    Class.forName("org.sqlite.JDBC");
 	    connection = DriverManager.getConnection(Configuration.center().getDB_URL());
@@ -44,6 +46,7 @@ public class Database {
 	    loadSuppliers();
 	    loadBasicIngredients();
 	    loadRecipes();
+            loadMunicipales();
 	    
 	} catch (Exception ex) {
 	    Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,6 +144,15 @@ public class Database {
     public boolean addRecipe(Recipe recipe){
         return true;
     }
+    
+    private void loadMunicipales() throws SQLException{
+        ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_MUNI());
+        while(rs.next()){
+            int code = rs.getInt("code");
+            String name = rs.getString("name");
+            municipales.put(name, code);
+        }
+    }
 
     public Map<String, Supplier> getSuppliers() {
 	return suppliers;
@@ -153,6 +165,12 @@ public class Database {
     public Map<String, Recipe> getRecipes() {
 	return recipes;
     }
+
+    public Map<String, Integer> getMunicipales() {
+        return municipales;
+    }
+    
+    
     
     public void executeStatement(String s){
 	
