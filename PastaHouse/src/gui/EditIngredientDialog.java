@@ -7,9 +7,16 @@ package gui;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.BasicIngredient;
 import database.Database;
+import database.Supplier;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.text.DateFormatter;
 
 /**
  *
@@ -20,6 +27,8 @@ public class EditIngredientDialog extends javax.swing.JDialog{
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
     private IngredientViewController delegate;
+    
+    private final DatePicker dp;
     
     /**
      * Creates new form EditIngredientDialog
@@ -38,9 +47,8 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
 	
-	fixedFields.add(new DatePicker());
-	
-//	new DatePicker().
+	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
+	fixedFields.add(dp);
 	
 	loadModel();
     }
@@ -503,11 +511,27 @@ public class EditIngredientDialog extends javax.swing.JDialog{
     }
     
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        if(model.update()){
-	    delegate.updateList();
-	    this.dispose();
-	} else {
-	    JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+        try{
+	    model.setName(nameOutlet.getText());
+	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
+	    model.setNotes(notesOutlet.getText());
+	    model.setSupplier((Supplier)supplierOutlet.getSelectedItem());
+	    model.setBrand(brandOutlet.getText());
+	    model.setPackaging(packagingOutlet.getText());
+	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
+	    model.setPricePerUnit(Double.parseDouble(pricePerUnitOutlet.getText()));
+	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
+
+	    if(model.update()){
+		delegate.updateList();
+		this.dispose();
+	    } else {
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    }
+	} catch (ParseException ex) {
+	    System.err.println(ex.getMessage());
+	    JOptionPane.showMessageDialog(null, "Zorg ervoor dat alle velden geldig ingevoerd zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	}
     }//GEN-LAST:event_saveActionPerformed
 

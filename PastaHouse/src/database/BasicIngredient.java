@@ -90,6 +90,34 @@ public class BasicIngredient extends Ingredient {
 	return table_id;
     }
 
+    public void setSupplier(Supplier supplier) {
+	this.supplier = supplier;
+    }
+
+    public void setBrand(String brand) {
+	this.brand = brand;
+    }
+
+    public void setPackaging(String packaging) {
+	this.packaging = packaging;
+    }
+
+    public void setPricePerUnit(double pricePerUnit) {
+	this.pricePerUnit = pricePerUnit;
+    }
+
+    public void setWeightPerUnit(double weightPerUnit) {
+	this.weightPerUnit = weightPerUnit;
+    }
+
+    public void setLossPercent(double lossPercent) {
+	this.lossPercent = lossPercent;
+    }
+
+    public void setTaxes(double taxes) {
+	this.taxes = taxes;
+    }
+
     public Supplier getSupplier() {
 	return supplier;
     }
@@ -133,6 +161,10 @@ public class BasicIngredient extends Ingredient {
     
     public String getNotes(){
 	return notes;
+    }
+    
+    public void setNotes(String notes){
+	this.notes = notes;
     }
     
     @Override

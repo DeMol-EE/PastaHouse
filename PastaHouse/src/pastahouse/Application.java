@@ -85,9 +85,9 @@ public class Application extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         viewMenu = new javax.swing.JMenu();
+        recipeMenuItem = new javax.swing.JMenuItem();
         ingredientMenuItem = new javax.swing.JMenuItem();
         supplierMenuItem = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
 
         jPanel2.setLayout(new java.awt.GridLayout(8, 2));
 
@@ -148,7 +148,7 @@ public class Application extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         jButton1.setText("jButton1");
         jPanel1.add(jButton1);
@@ -185,8 +185,17 @@ public class Application extends javax.swing.JFrame {
 
         viewMenu.setText("View");
 
-        ingredientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        ingredientMenuItem.setText("Recepten");
+        recipeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        recipeMenuItem.setText("Recepten");
+        recipeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recipeMenuItemActionPerformed(evt);
+            }
+        });
+        viewMenu.add(recipeMenuItem);
+
+        ingredientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        ingredientMenuItem.setText("Ingrediënten");
         ingredientMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ingredientMenuItemActionPerformed(evt);
@@ -194,23 +203,14 @@ public class Application extends javax.swing.JFrame {
         });
         viewMenu.add(ingredientMenuItem);
 
-        supplierMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        supplierMenuItem.setText("Ingrediënten");
+        supplierMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        supplierMenuItem.setText("Leveranciers");
         supplierMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supplierMenuItemActionPerformed(evt);
             }
         });
         viewMenu.add(supplierMenuItem);
-
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        jMenuItem3.setText("Leveranciers");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        viewMenu.add(jMenuItem3);
 
         menu.add(viewMenu);
 
@@ -219,17 +219,17 @@ public class Application extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ingredientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingredientMenuItemActionPerformed
+    private void recipeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipeMenuItemActionPerformed
         tabController.setSelectedIndex(0);
+    }//GEN-LAST:event_recipeMenuItemActionPerformed
+
+    private void ingredientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingredientMenuItemActionPerformed
+        tabController.setSelectedIndex(1);
     }//GEN-LAST:event_ingredientMenuItemActionPerformed
 
     private void supplierMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierMenuItemActionPerformed
-        tabController.setSelectedIndex(1);
-    }//GEN-LAST:event_supplierMenuItemActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabController.setSelectedIndex(2);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_supplierMenuItemActionPerformed
 
     public void selectAndSwitchToSupplier(Supplier supplier){
 	svc.selectSupplier(supplier);
@@ -289,13 +289,13 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JMenuItem recipeMenuItem;
     private javax.swing.JPanel recipeTab;
     private javax.swing.JMenuItem supplierMenuItem;
     private javax.swing.JPanel supplierTab;
