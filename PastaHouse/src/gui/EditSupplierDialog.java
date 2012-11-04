@@ -4,7 +4,6 @@
  */
 package gui;
 
-import database.Database;
 import database.Supplier;
 import javax.swing.JOptionPane;
 
@@ -24,6 +23,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     public EditSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate, Supplier model) {
 	super(parent, modal);
 	initComponents();
+	
+	setTitle("Leverancier wijzigen");
 	
 	setModalityType(ModalityType.APPLICATION_MODAL);
 	setLocationRelativeTo(null);

@@ -29,6 +29,10 @@ public abstract class Ingredient implements Record {
 	this.name = name;
     }
     
+    public void setDate(String date){
+	this.date = date;
+    }
+    
     @Override
     public String getPrimaryKey(){
 	return "naam";

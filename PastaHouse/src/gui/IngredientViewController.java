@@ -17,8 +17,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -32,8 +30,6 @@ import pastahouse.Application;
 public class IngredientViewController extends javax.swing.JPanel implements ViewController{
 
     private Application application;
-    
-    private boolean editing = false;
     
     /** Creates new form IngredientViewController */
     public IngredientViewController(Application application) {
@@ -101,6 +97,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	taxesOutlet.setText(""+twoFormatter.format(bi.getTaxes())+" %");
 	netPriceOutlet.setText(""+twoFormatter.format(bi.getNetPrice())+" euro / kg");
 	dateOutlet.setText(bi.getDate());
+	notesOutlet.setText(bi.getNotes());
     }
     
     @Override
@@ -121,7 +118,13 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         BasicIngredient bi = (BasicIngredient)listOutlet.getSelectedValue();
 	String firm = bi.getSupplier().getFirm();
 	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
-    }       
+    }
+    
+    public void updateList(){
+	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	dlm.update();
+	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -135,7 +138,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         editOutlet = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        add = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
         detail = new javax.swing.JPanel();
@@ -185,9 +188,14 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
         master.setLayout(new java.awt.BorderLayout());
 
-        jButton1.setText("Toevoegen...");
-        jButton1.setFocusable(false);
-        master.add(jButton1, java.awt.BorderLayout.SOUTH);
+        add.setText("Toevoegen...");
+        add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
 
         listOutlet.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -322,6 +330,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
         edit.setText("Wijzigen...");
+        edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);
@@ -338,50 +347,18 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 
     private void editOutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editOutletActionPerformed
         
-	// input test:
-//	try{
-//	    Double.parseDouble(priceOutlet.getText());
-//	} catch(Exception e){
-//	    // show error dialog and return
-//	    JOptionPane.showMessageDialog(null, "Enter a valid price (\""+priceOutlet.getText()+"\" is not a valid value)!", "Error: invalid price", JOptionPane.ERROR_MESSAGE);
-//	    return;
-//	}
-	
-	
-	editing = !editing;
-	listOutlet.setFocusable(!editing);
-//	nameOutlet.setEnabled(editing);
-//	priceOutlet.setEnabled(editing);
-	if(editing) {
-//	    nameOutlet.requestFocus();
-	    editOutlet.setText("Save");
-	} else {
-	    listOutlet.requestFocus();
-	    editOutlet.setText("Edit");
-	    // save changes to dynamic memory
-	    // get values from outlets and save them to the selected object
-	    
-	    if(listOutlet.getSelectedValue().getClass() == BasicIngredient.class){
-		BasicIngredient c = (BasicIngredient)listOutlet.getSelectedValue();
-//		c.setName(nameOutlet.getText());
-//		c.setPrice(Double.parseDouble(priceOutlet.getText()));
-	    }
-	    
-	    // save changes to the db!
-	    Ingredient c = (Ingredient)listOutlet.getSelectedValue();
-	    try {
-		c.update();
-	    } catch (Exception ex) {
-		Logger.getLogger(IngredientViewController.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	}
     }//GEN-LAST:event_editOutletActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditIngredientDialog(null, true).setVisible(true);
+        new EditIngredientDialog(null, true, this, (BasicIngredient)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+	new AddIngredientDialog(null, true).setVisible(true);
+    }//GEN-LAST:event_addActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
     private javax.swing.JLabel brandOutlet;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
@@ -390,7 +367,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;

@@ -4,19 +4,14 @@
  */
 package gui;
 
-import com.qt.datapicker.DatePicker;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
 import java.text.DecimalFormat;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import net.sourceforge.jdatepicker.JDateComponentFactory;
 
 /**
  *

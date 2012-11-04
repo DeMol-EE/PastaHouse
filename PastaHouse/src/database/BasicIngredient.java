@@ -5,7 +5,6 @@
 package database;
 
 import gui.Utilities;
-import java.sql.SQLException;
 
 /**
  *
@@ -23,7 +22,7 @@ public class BasicIngredient extends Ingredient {
     private double weightPerUnit;
     private double lossPercent;
     private double taxes;
-    private String date;
+    private String notes;
     
     // derived variables
     private double pricePerWeight;
@@ -34,7 +33,7 @@ public class BasicIngredient extends Ingredient {
 	super(name, date);
     }
 
-    private  BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date) {
+    private BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
 	super(name, date);
 	this.supplier = supplier;
 	this.brand = brand;
@@ -43,15 +42,48 @@ public class BasicIngredient extends Ingredient {
 	this.weightPerUnit = weightPerUnit;
 	this.lossPercent = lossPercent;
 	this.taxes = taxes;
-	this.date = date;
+	this.notes = notes;
 	
 	this.pricePerWeight = pricePerUnit/weightPerUnit;
 	this.grossPrice = pricePerWeight/(1.0-(0.01*lossPercent));
 	this.netPrice = grossPrice * (1.0 + 0.01*taxes);
     }
     
-    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date) {
-	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date);
+    public BasicIngredient(BasicIngredient b){
+	super(b.getName(), b.getDate());
+	this.supplier = b.getSupplier();
+	this.brand = b.getBrand();
+	this.packaging = b.getPackaging();
+	this.pricePerUnit = b.getPricePerUnit();
+	this.weightPerUnit = b.getWeightPerUnit();
+	this.pricePerWeight = b.getPricePerWeight();
+	this.lossPercent = b.getLossPercent();
+	this.taxes = b.getTaxes();
+	this.pricePerWeight = b.getPricePerWeight();
+	this.grossPrice = b.getGrossPrice();
+	this.netPrice = b.getNetPrice();
+	this.notes = b.getNotes();
+    }
+    
+    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
+    }
+    
+    public void load(BasicIngredient b){
+	this.setName(b.getName());
+	this.setDate(b.getDate());
+	this.supplier = b.getSupplier();
+	this.brand = b.getBrand();
+	this.packaging = b.getPackaging();
+	this.pricePerUnit = b.getPricePerUnit();
+	this.weightPerUnit = b.getWeightPerUnit();
+	this.pricePerWeight = b.getPricePerWeight();
+	this.lossPercent = b.getLossPercent();
+	this.taxes = b.getTaxes();
+	this.pricePerWeight = b.getPricePerWeight();
+	this.grossPrice = b.getGrossPrice();
+	this.netPrice = b.getNetPrice();
+	this.notes = b.getNotes();
     }
 
     public String getTable_id() {
@@ -99,6 +131,10 @@ public class BasicIngredient extends Ingredient {
 	return netPrice;
     }
     
+    public String getNotes(){
+	return notes;
+    }
+    
     @Override
     public boolean create(){
 	return false;
@@ -106,7 +142,16 @@ public class BasicIngredient extends Ingredient {
     
     @Override
     public boolean update(){
-	return false;
+	return Database.driver().executeUpdate(table_id, getPrimaryKey(), getName(),  
+		"firma = \""+ supplier.getFirm() +"\", "
+		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
+		+ "merk = "+(brand.length()>0 ?"\""+brand +"\"":"NULL")+", "
+		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "
+		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"NULL")+", "
+		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"NULL")+", "
+		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"NULL")+", "
+		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
+		+ "opmerking = "+(notes.length()>0 ? "\""+notes +"\"":"NULL"));
     }
     
     @Override

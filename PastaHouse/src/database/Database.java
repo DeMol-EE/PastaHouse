@@ -10,12 +10,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -96,7 +94,8 @@ public class Database {
 		    rs.getDouble("verliespercentage"), 
 		    rs.getDouble("BTW"), 
 		    rs.getString("naam"), 
-		    rs.getString("datum")));
+		    rs.getString("datum"),
+		    rs.getString("opmerking")));
 	}
 	
 	System.out.println("Database driver:: loaded "+basicIngredients.size()+" basic ingredients!");
