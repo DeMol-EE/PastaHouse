@@ -183,7 +183,7 @@ public class Database {
      */
     public boolean executeInsert(String table, String values){
 	try{
-	    statement.executeUpdate("INSERT INTO "+table+" VALUES (null, "+values+")");
+	    statement.executeUpdate("INSERT INTO "+table+" VALUES ("+values+")");
 	    System.out.println("DatabaseDriver::Executed insert of ("+values+") into "+table);
 	    return true;
 	} catch (Exception e){

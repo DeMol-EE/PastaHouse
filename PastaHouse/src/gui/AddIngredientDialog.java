@@ -4,6 +4,9 @@
  */
 package gui;
 
+import database.Database;
+import java.text.DecimalFormat;
+
 /**
  *
  * @author Robin jr
@@ -18,8 +21,17 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 	initComponents();
 	
 	setLocationRelativeTo(null);
-	
 	setTitle("Ingrediënt toevoegen");
+	
+	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
+	taxesOutlet.setText(""+21.0);
+	taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(new Double(21.0))+" %");
+	lossOutlet.setText(""+0.0);
+	lossFormattedOutlet.setText(new DecimalFormat("0.00").format(new Double(0.0))+" %");
+	pricePerUnitOutlet.setText(""+0.0);
+	pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(new Double(0.0))+" euro/");
+	weightPerUnitOutlet.setText(""+0.0);
+	weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(new Double(0.0))+" kg/");
     }
 
     /**
@@ -32,19 +44,29 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        nameOutlet = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        brandOutlet = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        packagingOutlet = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        supplierOutlet = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        pricePerUnitOutlet = new javax.swing.JTextField();
+        pricePerUnitFormattedOutlet = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        weightPerUnitOutlet = new javax.swing.JTextField();
+        weightPerUnitFormattedOutlet = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        lossOutlet = new javax.swing.JTextField();
+        lossFormattedOutlet = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        taxesOutlet = new javax.swing.JTextField();
+        taxesFormattedOutlet = new javax.swing.JLabel();
         stretchableFields = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -55,50 +77,117 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(300, 227));
 
         fixedFields.setLayout(new java.awt.GridLayout(8, 2));
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("Naam");
+        jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
+        fixedFields.add(nameOutlet);
 
-        jTextField1.setText("jTextField1");
-        fixedFields.add(jTextField1);
-
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Merk");
+        jLabel2.setFocusable(false);
         fixedFields.add(jLabel2);
+        fixedFields.add(brandOutlet);
 
-        jTextField2.setText("jTextField2");
-        fixedFields.add(jTextField2);
-
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("Verpakking");
+        jLabel3.setFocusable(false);
         fixedFields.add(jLabel3);
 
-        jTextField3.setText("jTextField3");
-        fixedFields.add(jTextField3);
+        packagingOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                packagingOutletKeyReleased(evt);
+            }
+        });
+        fixedFields.add(packagingOutlet);
 
-        jLabel4.setText("jLabel4");
+        jLabel4.setText("Leverancier");
+        jLabel4.setFocusable(false);
         fixedFields.add(jLabel4);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        fixedFields.add(jComboBox1);
+        supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fixedFields.add(supplierOutlet);
 
-        jLabel5.setText("jLabel5");
+        jLabel5.setText("Prijs per verpakking (BTW excl)");
+        jLabel5.setFocusable(false);
         fixedFields.add(jLabel5);
 
-        jTextField4.setText("jTextField4");
-        fixedFields.add(jTextField4);
+        jPanel1.setLayout(new java.awt.GridLayout());
 
-        jLabel6.setText("jLabel6");
+        pricePerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pricePerUnitOutletKeyReleased(evt);
+            }
+        });
+        jPanel1.add(pricePerUnitOutlet);
+
+        pricePerUnitFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        pricePerUnitFormattedOutlet.setText("<pricePerUnitFormattedOutlet>");
+        pricePerUnitFormattedOutlet.setFocusable(false);
+        jPanel1.add(pricePerUnitFormattedOutlet);
+
+        fixedFields.add(jPanel1);
+
+        jLabel6.setText("Gewicht per verpakking");
+        jLabel6.setFocusable(false);
         fixedFields.add(jLabel6);
 
-        jTextField5.setText("jTextField5");
-        fixedFields.add(jTextField5);
+        jPanel2.setLayout(new java.awt.GridLayout());
 
-        jLabel7.setText("jLabel7");
+        weightPerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                weightPerUnitOutletKeyReleased(evt);
+            }
+        });
+        jPanel2.add(weightPerUnitOutlet);
+
+        weightPerUnitFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        weightPerUnitFormattedOutlet.setText("<weightPerUnitFormattedOutlet>");
+        weightPerUnitFormattedOutlet.setFocusable(false);
+        jPanel2.add(weightPerUnitFormattedOutlet);
+
+        fixedFields.add(jPanel2);
+
+        jLabel7.setText("Verliespercentage");
+        jLabel7.setFocusable(false);
         fixedFields.add(jLabel7);
 
-        jTextField6.setText("jTextField6");
-        fixedFields.add(jTextField6);
+        jPanel5.setLayout(new java.awt.GridLayout());
+
+        lossOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lossOutletKeyReleased(evt);
+            }
+        });
+        jPanel5.add(lossOutlet);
+
+        lossFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lossFormattedOutlet.setText("<lossFormattedOutlet>");
+        lossFormattedOutlet.setFocusable(false);
+        jPanel5.add(lossFormattedOutlet);
+
+        fixedFields.add(jPanel5);
+
+        jLabel11.setText("BTW");
+        jLabel11.setFocusable(false);
+        fixedFields.add(jLabel11);
+
+        jPanel6.setLayout(new java.awt.GridLayout());
+
+        taxesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                taxesOutletKeyReleased(evt);
+            }
+        });
+        jPanel6.add(taxesOutlet);
+
+        taxesFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        taxesFormattedOutlet.setText("<taxesFormattedOutlet>");
+        taxesFormattedOutlet.setFocusable(false);
+        jPanel6.add(taxesFormattedOutlet);
+
+        fixedFields.add(jPanel6);
 
         getContentPane().add(fixedFields, java.awt.BorderLayout.NORTH);
 
@@ -107,6 +196,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerkingen:"));
 
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -120,9 +210,11 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jPanel4.setLayout(new java.awt.GridLayout(1, 2));
 
         add.setText("Aanmaken");
+        add.setFocusable(false);
         jPanel4.add(add);
 
         cancel.setText("Terug");
+        cancel.setFocusable(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
@@ -141,31 +233,78 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
-    
+    private void taxesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxesOutletKeyReleased
+       try{
+	   taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(Double.parseDouble(taxesOutlet.getText())) +" %");
+       } catch(Exception e){
+	   System.err.println("Exception: "+e.getMessage());
+       }
+    }//GEN-LAST:event_taxesOutletKeyReleased
+
+    private void packagingOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_packagingOutletKeyReleased
+        String ppu = pricePerUnitFormattedOutlet.getText();
+	pricePerUnitFormattedOutlet.setText(ppu.substring(0, ppu.lastIndexOf("/")+1)+packagingOutlet.getText());
+	String wpu = weightPerUnitFormattedOutlet.getText();
+	weightPerUnitFormattedOutlet.setText(wpu.substring(0, wpu.lastIndexOf("/")+1)+packagingOutlet.getText());
+    }//GEN-LAST:event_packagingOutletKeyReleased
+
+    private void lossOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lossOutletKeyReleased
+        try{
+	   lossFormattedOutlet.setText(new DecimalFormat("0.00").format(Double.parseDouble(lossOutlet.getText())) +" %");
+       } catch(Exception e){
+	   System.err.println("Exception: "+e.getMessage());
+       }
+    }//GEN-LAST:event_lossOutletKeyReleased
+
+    private void weightPerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_weightPerUnitOutletKeyReleased
+        try{
+	   weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(weightPerUnitOutlet.getText())) +" kg/"+packagingOutlet.getText());
+       } catch(Exception e){
+	   System.err.println("Exception: "+e.getMessage());
+       }
+    }//GEN-LAST:event_weightPerUnitOutletKeyReleased
+
+    private void pricePerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pricePerUnitOutletKeyReleased
+        try{
+	   pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerUnitOutlet.getText())) +" euro/"+packagingOutlet.getText());
+       } catch(Exception e){
+	   System.err.println("Exception: "+e.getMessage());
+       }
+    }//GEN-LAST:event_pricePerUnitOutletKeyReleased
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JTextField brandOutlet;
     private javax.swing.JButton cancel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel lossFormattedOutlet;
+    private javax.swing.JTextField lossOutlet;
+    private javax.swing.JTextField nameOutlet;
+    private javax.swing.JTextField packagingOutlet;
+    private javax.swing.JLabel pricePerUnitFormattedOutlet;
+    private javax.swing.JTextField pricePerUnitOutlet;
     private javax.swing.JPanel stretchableFields;
+    private javax.swing.JComboBox supplierOutlet;
+    private javax.swing.JLabel taxesFormattedOutlet;
+    private javax.swing.JTextField taxesOutlet;
+    private javax.swing.JLabel weightPerUnitFormattedOutlet;
+    private javax.swing.JTextField weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
 }
