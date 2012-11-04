@@ -61,6 +61,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtGemeente">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtGemeenteKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>
