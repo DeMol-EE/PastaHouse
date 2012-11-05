@@ -4,8 +4,10 @@
  */
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.text.DecimalFormat;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -31,7 +33,6 @@ public class CellRendererFactory {
     public static TableCellRenderer createCapitalizedStringCellRenderer(){
 	return new CapitalizedStringCellRenderer();
     }
-    
     
     private static class DoubleCellRenderer extends JLabel implements TableCellRenderer{
 

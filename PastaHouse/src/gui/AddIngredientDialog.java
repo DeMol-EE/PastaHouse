@@ -11,7 +11,6 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.text.DateFormatter;
 
 /**
  *
@@ -87,7 +86,8 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(300, 227));
+        setMinimumSize(new java.awt.Dimension(430, 380));
+        setPreferredSize(new java.awt.Dimension(430, 480));
 
         fixedFields.setLayout(new java.awt.GridLayout(8, 2));
 
@@ -123,7 +123,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel5.setFocusable(false);
         fixedFields.add(jLabel5);
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         pricePerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -143,7 +143,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel6.setFocusable(false);
         fixedFields.add(jLabel6);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         weightPerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -163,7 +163,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel7.setFocusable(false);
         fixedFields.add(jLabel7);
 
-        jPanel5.setLayout(new java.awt.GridLayout());
+        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
 
         lossOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -183,7 +183,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel11.setFocusable(false);
         fixedFields.add(jLabel11);
 
-        jPanel6.setLayout(new java.awt.GridLayout());
+        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
 
         taxesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
