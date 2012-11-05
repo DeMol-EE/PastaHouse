@@ -4,7 +4,10 @@
  */
 package gui;
 
+import database.BasicIngredient;
 import database.Database;
+import database.Supplier;
+import java.awt.Color;
 import java.text.DecimalFormat;
 
 /**
@@ -13,12 +16,16 @@ import java.text.DecimalFormat;
  */
 public class AddIngredientDialog extends javax.swing.JDialog {
 
+    private final MasterDetailViewController delegate;
+    
     /**
      * Creates new form AddIngredientDialog
      */
-    public AddIngredientDialog(java.awt.Frame parent, boolean modal) {
+    public AddIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate) {
 	super(parent, modal);
 	initComponents();
+	
+	this.delegate = delegate;
 	
 	setLocationRelativeTo(null);
 	setTitle("Ingrediënt toevoegen");
@@ -69,7 +76,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         taxesFormattedOutlet = new javax.swing.JLabel();
         stretchableFields = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        notesOutlet = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
@@ -195,10 +202,10 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerkingen:"));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        notesOutlet.setColumns(20);
+        notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
+        notesOutlet.setRows(5);
+        jScrollPane1.setViewportView(notesOutlet);
 
         stretchableFields.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -211,6 +218,11 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         add.setText("Aanmaken");
         add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
         jPanel4.add(add);
 
         cancel.setText("Terug");
@@ -236,7 +248,12 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     private void taxesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxesOutletKeyReleased
        try{
 	   taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(Double.parseDouble(taxesOutlet.getText())) +" %");
+	   taxesFormattedOutlet.setForeground(Color.black);
+	   taxesOutlet.setForeground(Color.black);
        } catch(Exception e){
+	   taxesFormattedOutlet.setForeground(Color.red);
+	   taxesOutlet.setForeground(Color.red);
+	   taxesFormattedOutlet.setText("??? %");
 	   System.err.println("Exception: "+e.getMessage());
        }
     }//GEN-LAST:event_taxesOutletKeyReleased
@@ -251,7 +268,12 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     private void lossOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lossOutletKeyReleased
         try{
 	   lossFormattedOutlet.setText(new DecimalFormat("0.00").format(Double.parseDouble(lossOutlet.getText())) +" %");
+	   lossOutlet.setForeground(Color.black);
+	   lossFormattedOutlet.setForeground(Color.black);
        } catch(Exception e){
+	   lossFormattedOutlet.setForeground(Color.red);
+	   lossOutlet.setForeground(Color.red);
+	   lossFormattedOutlet.setText("??? %");
 	   System.err.println("Exception: "+e.getMessage());
        }
     }//GEN-LAST:event_lossOutletKeyReleased
@@ -259,7 +281,12 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     private void weightPerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_weightPerUnitOutletKeyReleased
         try{
 	   weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(weightPerUnitOutlet.getText())) +" kg/"+packagingOutlet.getText());
+	   weightPerUnitFormattedOutlet.setForeground(Color.black);
+	   weightPerUnitOutlet.setForeground(Color.black);
        } catch(Exception e){
+	   weightPerUnitFormattedOutlet.setText("??? kg/"+packagingOutlet.getText());
+	   weightPerUnitFormattedOutlet.setForeground(Color.red);
+	   weightPerUnitOutlet.setForeground(Color.red);
 	   System.err.println("Exception: "+e.getMessage());
        }
     }//GEN-LAST:event_weightPerUnitOutletKeyReleased
@@ -267,10 +294,23 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     private void pricePerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pricePerUnitOutletKeyReleased
         try{
 	   pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerUnitOutlet.getText())) +" euro/"+packagingOutlet.getText());
+	   pricePerUnitFormattedOutlet.setForeground(Color.black);
+	   pricePerUnitOutlet.setForeground(Color.black);
        } catch(Exception e){
+	   pricePerUnitFormattedOutlet.setForeground(Color.red);
+	   pricePerUnitOutlet.setForeground(Color.red);
+	   pricePerUnitFormattedOutlet.setText("??? euro/"+packagingOutlet.getText());
 	   System.err.println("Exception: "+e.getMessage());
        }
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        BasicIngredient b = BasicIngredient.loadWithValues((Supplier)supplierOutlet.getSelectedItem(), brandOutlet.getText(), packagingOutlet.getText(), Double.parseDouble(weightPerUnitOutlet.getText()), Double.parseDouble(pricePerUnitOutlet.getText()), Double.parseDouble(lossOutlet.getText()), Double.parseDouble(taxesOutlet.getText()), nameOutlet.getText(), "derp", notesOutlet.getText());
+	if (Database.driver().addIngredient(b)) {
+	    delegate.updateListAndSelect(b);
+	    this.dispose();
+	}
+    }//GEN-LAST:event_addActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
@@ -293,10 +333,10 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lossFormattedOutlet;
     private javax.swing.JTextField lossOutlet;
     private javax.swing.JTextField nameOutlet;
+    private javax.swing.JTextArea notesOutlet;
     private javax.swing.JTextField packagingOutlet;
     private javax.swing.JLabel pricePerUnitFormattedOutlet;
     private javax.swing.JTextField pricePerUnitOutlet;

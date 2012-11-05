@@ -181,6 +181,7 @@ public class BasicIngredient extends Ingredient {
 		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "
 		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"NULL")+", "
 		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"NULL")+", "
+		+ "verliespercentage = "+(lossPercent>0? "\""+lossPercent +"\"":"NULL")+", "
 		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"NULL")+", "
 		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
 		+ "opmerking = "+(notes.length()>0 ? "\""+notes +"\"":"NULL"));

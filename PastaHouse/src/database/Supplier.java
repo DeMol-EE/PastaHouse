@@ -198,4 +198,9 @@ public class Supplier implements Record{
     public String getPrimaryKey(){
 	return "firma";
     }
+    
+    @Override
+    public String getPrimaryKeyValue(){
+	return firm;
+    }
 }

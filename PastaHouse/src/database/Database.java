@@ -31,10 +31,10 @@ public class Database {
     
     private Database() {
 	try {
-	    suppliers = new TreeMap<String, Supplier>();
-	    basicIngredients = new TreeMap<String, BasicIngredient>();
-	    recipes = new TreeMap<String, Recipe>();
-	    municipales = new TreeMap<String, Integer>();
+	    suppliers = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
+	    basicIngredients = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
+	    recipes = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
+	    municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
 	    // connect to db
 	    Class.forName("org.sqlite.JDBC");
 	    connection = DriverManager.getConnection(Configuration.center().getDB_URL());
@@ -102,7 +102,23 @@ public class Database {
     }
     
     public boolean addIngredient(BasicIngredient ingredient){
-        return true;
+//	if (executeInsert(Configuration.center().getDB_TABLE_INGR(), 
+//		"firma = \""+ ingredient.getSupplier().getFirm() +"\", "
+//		+ "naam = "+(ingredient.getName().length()>0 ? "\""+ ingredient.getName() +"\"":"NULL")+", "
+//		+ "merk = "+(ingredient.getBrand().length()>0 ?"\""+ingredient.getBrand() +"\"":"NULL")+", "
+//		+ "verpakking = "+(ingredient.getPackaging().length()>0? "\""+ingredient.getPackaging() +"\"":"NULL")+", "
+//		+ "prijsPerVerpakking = "+(ingredient.getPricePerUnit()>0? "\""+ingredient.getPricePerUnit() +"\"":"NULL")+", "
+//		+ "gewichtPerVerpakking = "+(ingredient.getWeightPerUnit()>0? "\""+ingredient.getWeightPerUnit() +"\"":"NULL")+", "
+//		+ "verliespercentage = "+(ingredient.getLossPercent()>0? "\""+ingredient.getLossPercent() +"\"":"NULL")+", "
+//		+ "BTW = "+(ingredient.getTaxes()>0? "\""+ingredient.getTaxes() +"\"":"NULL")+", "
+//		+ "datum = "+(ingredient.getDate().length()>0? "\""+ingredient.getDate() +"\"":"NULL")+", "
+//		+ "opmerking = "+(ingredient.getNotes().length()>0 ? "\""+ingredient.getNotes() +"\"":"NULL"))) {
+//	    basicIngredients.put(ingredient.getPrimaryKeyValue(), ingredient);
+//	    return true;
+//	} else {
+//	    return false;
+//	}
+	return false;
     }
     
     private void loadRecipes() throws SQLException{
@@ -184,11 +200,16 @@ public class Database {
     public boolean executeInsert(String table, String values){
 	try{
 	    statement.executeUpdate("INSERT INTO "+table+" VALUES ("+values+")");
-	    System.out.println("DatabaseDriver::Executed insert of ("+values+") into "+table);
+	    System.out.println("DatabaseDriver::Executed command:\n"
+		    + "INSERT INTO "+table+" VALUES ("+values+")\n"
+		    + "SUCCES!\n");
 	    return true;
 	} catch (Exception e){
 	    // do logging
 	    // show error elsewhere (hence the return false!)
+	    System.err.println("DatabaseDriver::Executed command:\n"
+		    + "INSERT INTO "+table+" VALUES ("+values+")\n"
+		    + "FAILED:\n"+e.getMessage());
 	    
 	    return false;
 	}

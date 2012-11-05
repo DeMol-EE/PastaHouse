@@ -27,7 +27,7 @@ import pastahouse.Application;
  *
  * @author Warkst
  */
-public class IngredientViewController extends javax.swing.JPanel implements ViewController{
+public class IngredientViewController extends javax.swing.JPanel implements MasterDetailViewController{
 
     private Application application;
     
@@ -53,7 +53,11 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	listOutlet.setSelectedIndex(0);
     }
     
-    private void updateDetail(Object value){
+    @Override
+    public void updateDetail(Object value){
+	if(value==null) {
+	    return;
+	}
 	BasicIngredient bi = (BasicIngredient)value;
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
@@ -120,10 +124,15 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
     }
     
-    public void updateList(){
-	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+    @Override
+    public void updateListAndSelect(Object select){
+	DynamicListModel<BasicIngredient> dlm = (DynamicListModel)listOutlet.getModel();
 	dlm.update();
-	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+	listOutlet.setSelectedValue(select, true);
+    }
+    
+    public void addIngredient(BasicIngredient b){
+	
     }
 
     /** This method is called from within the constructor to
@@ -354,7 +363,7 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     }//GEN-LAST:event_editActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	new AddIngredientDialog(null, true).setVisible(true);
+	new AddIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -397,4 +406,11 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.JLabel taxesOutlet;
     private javax.swing.JLabel weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateList() {
+	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	dlm.update();
+	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+    }
 }

@@ -13,8 +13,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.DateFormatter;
 
@@ -26,14 +24,14 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
-    private IngredientViewController delegate;
+    private MasterDetailViewController delegate;
     
     private final DatePicker dp;
     
     /**
      * Creates new form EditIngredientDialog
      */
-    public EditIngredientDialog(java.awt.Frame parent, boolean modal, IngredientViewController delegate, BasicIngredient model) {
+    public EditIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate, BasicIngredient model) {
 	super(parent, modal);
 	initComponents();
 	
@@ -42,7 +40,6 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	this.defaultModel = new BasicIngredient(model);
 	
 	setLocationRelativeTo(null);
-	
 	setTitle("Ingrediënt wijzigen");
 	
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
