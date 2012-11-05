@@ -104,21 +104,20 @@ public class Database {
     public boolean addIngredient(BasicIngredient ingredient){
 	if (executeInsert(Configuration.center().getDB_TABLE_INGR(), 
 		"\""+ ingredient.getSupplier().getFirm() +"\", "
-		+ ""+(ingredient.getName().length()>0 ? "\""+ ingredient.getName() +"\"":"NULL")+", "
-		+ ""+(ingredient.getBrand().length()>0 ?"\""+ingredient.getBrand() +"\"":"NULL")+", "
-		+ ""+(ingredient.getPackaging().length()>0? "\""+ingredient.getPackaging() +"\"":"NULL")+", "
-		+ ""+(ingredient.getPricePerUnit()>0? "\""+ingredient.getPricePerUnit() +"\"":"NULL")+", "
-		+ ""+(ingredient.getWeightPerUnit()>0? "\""+ingredient.getWeightPerUnit() +"\"":"NULL")+", "
-		+ ""+(ingredient.getLossPercent()>0? "\""+ingredient.getLossPercent() +"\"":"NULL")+", "
-		+ ""+(ingredient.getTaxes()>0? "\""+ingredient.getTaxes() +"\"":"NULL")+", "
-		+ ""+(ingredient.getDate().length()>0? "\""+ingredient.getDate() +"\"":"NULL")+", "
-		+ ""+(ingredient.getNotes().length()>0 ? "\""+ingredient.getNotes() +"\"":"NULL"))) {
+		+(ingredient.getName().length()>0 ? "\""+ ingredient.getName() +"\"":"NULL")+", "
+		+(ingredient.getBrand().length()>0 ?"\""+ingredient.getBrand() +"\"":"NULL")+", "
+		+(ingredient.getPackaging().length()>0? "\""+ingredient.getPackaging() +"\"":"NULL")+", "
+		+(ingredient.getPricePerUnit()>0? "\""+ingredient.getPricePerUnit() +"\"":"NULL")+", "
+		+(ingredient.getWeightPerUnit()>0? "\""+ingredient.getWeightPerUnit() +"\"":"NULL")+", "
+		+(ingredient.getLossPercent()>0? "\""+ingredient.getLossPercent() +"\"":"NULL")+", "
+		+(ingredient.getTaxes()>0? "\""+ingredient.getTaxes() +"\"":"NULL")+", "
+		+(ingredient.getDate().length()>0? "\""+ingredient.getDate() +"\"":"NULL")+", "
+		+(ingredient.getNotes().length()>0 ? "\""+ingredient.getNotes() +"\"":"NULL"))) {
 	    basicIngredients.put(ingredient.getPrimaryKeyValue(), ingredient);
 	    return true;
 	} else {
 	    return false;
 	}
-//	return false;
     }
     
     private void loadRecipes() throws SQLException{

@@ -28,7 +28,7 @@ public class DynamicTableModel extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-	return 5;
+	return 4;
     }
 
     @Override
@@ -41,9 +41,11 @@ public class DynamicTableModel extends AbstractTableModel{
 	    case 2:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    case 3:
-		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight();
-	    case 4:
-		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight() * ((Component)data.values().toArray()[rowIndex]).getQuantity();
+		return ((Component)data.values().toArray()[rowIndex]).getPieces();
+//	    case 3:
+//		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight();
+//	    case 4:
+//		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight() * ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    default:
 		return "<empty>";
 	}
@@ -59,9 +61,11 @@ public class DynamicTableModel extends AbstractTableModel{
 	    case 2:
 		return "Hoeveelheid";
 	    case 3:
-		return "Prijs/kg";
-	    case 4:
-		return "Totaalprijs";
+		return "Stuks";
+//	    case 3:
+//		return "Prijs/kg";
+//	    case 4:
+//		return "Totaalprijs";
 	    default:
 		return "<ERROR>";
 	}
@@ -80,8 +84,8 @@ public class DynamicTableModel extends AbstractTableModel{
 		return Component.class;
 	    case 3:
 		return Double.class;
-	    case 4:
-		return Double.class;
+//	    case 4:
+//		return Double.class;
 	    default:
 		return Object.class;
 	}

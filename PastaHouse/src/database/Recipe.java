@@ -102,4 +102,9 @@ public class Recipe extends Ingredient {
     public String toString(){
 	return Utilities.capitalize(getName());
     }
+    
+    @Override
+    public double getWeightPerUnit(){
+	return netWeight;
+    }
 }

@@ -33,6 +33,10 @@ public class Component {
 	return quantity;
     }
     
+    public double getPieces() {
+	return quantity * ingredient.getWeightPerUnit();
+    }
+    
     public boolean isIngredient(){
 	return isIngredient;
     }

@@ -134,6 +134,7 @@ public class BasicIngredient extends Ingredient {
 	return pricePerUnit;
     }
 
+    @Override
     public double getWeightPerUnit() {
 	return weightPerUnit;
     }
