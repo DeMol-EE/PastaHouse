@@ -24,9 +24,14 @@ public class CellRendererFactory {
 	return new IngredientCellRenderer();
     }
     
+    public static TableCellRenderer createComponentCellRenderer(){
+	return new ComponentCellRenderer();
+    }
+    
     public static TableCellRenderer createCapitalizedStringCellRenderer(){
 	return new CapitalizedStringCellRenderer();
     }
+    
     
     private static class DoubleCellRenderer extends JLabel implements TableCellRenderer{
 
@@ -64,24 +69,27 @@ public class CellRendererFactory {
 	    setBackground(defaultComponent.getBackground());
 	    
 	    this.setText(value.toString());
-//	    this.setForeground(Color.BLUE);
-//	    this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//	    
-//	    final Object fv = value;
-//	    
-//	    addMouseListener(new MouseAdapter() {
-//
-//		@Override
-//		public void mouseEntered(MouseEvent e) {
-//		    setText("<html><u>"+fv.toString()+"</u></html>");
-//		}
-//
-//		@Override
-//		public void mouseExited(MouseEvent e) {
-//		    setText(fv.toString());
-//		}
-//		
-//	    });
+	    
+	    return this;
+	}
+	
+    }
+    
+    private static class ComponentCellRenderer extends JLabel implements TableCellRenderer{
+
+	public ComponentCellRenderer(){
+	    setOpaque(true);
+	}
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
+	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	    setBackground(defaultComponent.getBackground());
+	    
+	    DecimalFormat threeFormatter = new DecimalFormat("0.000");
+	    this.setText(threeFormatter.format(value));
+	    this.setHorizontalAlignment(JLabel.CENTER);
 	    
 	    return this;
 	}

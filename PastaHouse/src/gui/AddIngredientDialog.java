@@ -9,6 +9,9 @@ import database.Database;
 import database.Supplier;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.text.DateFormatter;
 
 /**
  *
@@ -260,9 +263,9 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
     private void packagingOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_packagingOutletKeyReleased
         String ppu = pricePerUnitFormattedOutlet.getText();
-	pricePerUnitFormattedOutlet.setText(ppu.substring(0, ppu.lastIndexOf("/")+1)+packagingOutlet.getText());
+	pricePerUnitFormattedOutlet.setText(ppu.substring(0, ppu.lastIndexOf("/")+1)+packagingOutlet.getText().toLowerCase());
 	String wpu = weightPerUnitFormattedOutlet.getText();
-	weightPerUnitFormattedOutlet.setText(wpu.substring(0, wpu.lastIndexOf("/")+1)+packagingOutlet.getText());
+	weightPerUnitFormattedOutlet.setText(wpu.substring(0, wpu.lastIndexOf("/")+1)+packagingOutlet.getText().toLowerCase());
     }//GEN-LAST:event_packagingOutletKeyReleased
 
     private void lossOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lossOutletKeyReleased
@@ -305,7 +308,17 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        BasicIngredient b = BasicIngredient.loadWithValues((Supplier)supplierOutlet.getSelectedItem(), brandOutlet.getText(), packagingOutlet.getText(), Double.parseDouble(weightPerUnitOutlet.getText()), Double.parseDouble(pricePerUnitOutlet.getText()), Double.parseDouble(lossOutlet.getText()), Double.parseDouble(taxesOutlet.getText()), nameOutlet.getText(), "derp", notesOutlet.getText());
+        BasicIngredient b = BasicIngredient.loadWithValues(
+		(Supplier)supplierOutlet.getSelectedItem(), 
+		brandOutlet.getText(), 
+		packagingOutlet.getText(), 
+		Double.parseDouble(weightPerUnitOutlet.getText()), 
+		Double.parseDouble(pricePerUnitOutlet.getText()), 
+		Double.parseDouble(lossOutlet.getText()), 
+		Double.parseDouble(taxesOutlet.getText()), 
+		nameOutlet.getText(), 
+		new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 
+		notesOutlet.getText());
 	if (Database.driver().addIngredient(b)) {
 	    delegate.updateListAndSelect(b);
 	    this.dispose();

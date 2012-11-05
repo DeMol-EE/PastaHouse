@@ -7,6 +7,7 @@ package gui;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
+import database.Component;
 import java.text.DecimalFormat;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -63,6 +64,7 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 	ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer());
 	ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createDoubleCellRenderer());
 	ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createIngredientCellRenderer());
+	ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createComponentCellRenderer());
 	
 	ingredientsOutlet.setModel(new DynamicTableModel(r.getIngredients()));
 	

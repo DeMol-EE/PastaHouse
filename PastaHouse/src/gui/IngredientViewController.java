@@ -129,6 +129,7 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	DynamicListModel<BasicIngredient> dlm = (DynamicListModel)listOutlet.getModel();
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
+	updateDetail(select);
     }
     
     public void addIngredient(BasicIngredient b){

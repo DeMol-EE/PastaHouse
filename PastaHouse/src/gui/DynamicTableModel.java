@@ -77,7 +77,7 @@ public class DynamicTableModel extends AbstractTableModel{
 	    case 1:
 		return Ingredient.class;
 	    case 2:
-		return Double.class;
+		return Component.class;
 	    case 3:
 		return Double.class;
 	    case 4:
