@@ -8,7 +8,6 @@ import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Recipe;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.JButton;
 
 /**
  *

@@ -145,7 +145,6 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        editOutlet = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         add = new javax.swing.JButton();
@@ -183,14 +182,6 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
-
-        editOutlet.setText("Edit");
-        editOutlet.setFocusable(false);
-        editOutlet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editOutletActionPerformed(evt);
-            }
-        });
 
         setLayout(new java.awt.BorderLayout());
 
@@ -355,10 +346,6 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void editOutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editOutletActionPerformed
-        
-    }//GEN-LAST:event_editOutletActionPerformed
-
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         new EditIngredientDialog(null, true, this, (BasicIngredient)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
@@ -373,7 +360,6 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
-    private javax.swing.JButton editOutlet;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
@@ -413,5 +399,15 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
 	dlm.update();
 	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+    }
+
+    @Override
+    public void add() {
+	addActionPerformed(null);
+    }
+
+    @Override
+    public void edit() {
+	editActionPerformed(null);
     }
 }

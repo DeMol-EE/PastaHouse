@@ -18,7 +18,7 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Warkst
  */
-public class RecipeViewController extends javax.swing.JPanel implements ViewController{
+public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController{
 
     /**
      * Creates new form RecipeViewController
@@ -48,7 +48,8 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
 	return this;
     }
     
-    private void updateDetail(Object value){
+    @Override
+    public void updateDetail(Object value){
 	Recipe r = (Recipe)value;
 	
 	nameOutlet.setText(Utilities.capitalize(r.getName()));
@@ -251,4 +252,24 @@ public class RecipeViewController extends javax.swing.JPanel implements ViewCont
     private javax.swing.JLabel pricePerWeightOutlet;
     private javax.swing.JList recipeListOutlet;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateList() {
+	System.err.println("Not implemented");
+    }
+
+    @Override
+    public void updateListAndSelect(Object select) {
+	System.err.println("Not implemented");
+    }
+
+    @Override
+    public void add() {
+	addActionPerformed(null);
+    }
+
+    @Override
+    public void edit() {
+	editActionPerformed(null);
+    }
 }

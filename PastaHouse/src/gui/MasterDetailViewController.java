@@ -12,4 +12,6 @@ public interface MasterDetailViewController extends ViewController {
     public void updateDetail(Object value);
     public void updateList();
     public void updateListAndSelect(Object select);
+    public void add();
+    public void edit();
 }

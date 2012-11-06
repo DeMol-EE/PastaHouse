@@ -13,36 +13,41 @@ package pastahouse;
 import database.Configuration;
 import database.Supplier;
 import gui.IngredientViewController;
+import gui.MasterDetailViewController;
 import gui.RecipeViewController;
 import gui.SupplierViewController;
+import java.util.HashMap;
 
 /**
  *
  * @author Warkst
  */
 public class Application extends javax.swing.JFrame {
+    
+    private final int supplierTabIndex = 0;
+    private final int ingredientTabIndex = 1;
+    private final int recipeTabIndex = 2;
 
-    private RecipeViewController rvc;
-    private IngredientViewController ivc;
-    private SupplierViewController svc;
+    private HashMap<Integer, MasterDetailViewController> tabs;
     
     /** Creates new form Application */
     public Application() {
 	initComponents();
-	
-	setTitle("Pasta House");
-	
+		setTitle("Pasta House");
+
 	setLocationRelativeTo(null);
 	
 	// load viewControllers
 	
-	rvc = new RecipeViewController();
-	ivc = new IngredientViewController(this);
-	svc = new SupplierViewController();
+	tabs = new HashMap<Integer, MasterDetailViewController>();
 	
-	recipeTab.add(rvc.view());
-	ingredientTab.add(ivc.view());
-	supplierTab.add(svc.view());
+	tabs.put(supplierTabIndex, new RecipeViewController());
+	tabs.put(ingredientTabIndex, new IngredientViewController(this));
+	tabs.put(recipeTabIndex, new SupplierViewController());
+	
+	recipeTab.add(tabs.get(recipeTabIndex).view());
+	ingredientTab.add(tabs.get(ingredientTabIndex).view());
+	supplierTab.add(tabs.get(supplierTabIndex).view());
     }
 
     /** This method is called from within the constructor to
@@ -83,7 +88,10 @@ public class Application extends javax.swing.JFrame {
         supplierTab = new javax.swing.JPanel();
         menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        close = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        add = new javax.swing.JMenuItem();
+        edit = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         recipeMenuItem = new javax.swing.JMenuItem();
         ingredientMenuItem = new javax.swing.JMenuItem();
@@ -178,9 +186,33 @@ public class Application extends javax.swing.JFrame {
         tabController.getAccessibleContext().setAccessibleName("tabController");
 
         jMenu1.setText("File");
+
+        close.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        close.setText("Close");
+        jMenu1.add(close);
+
         menu.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        add.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
+        add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        jMenu2.add(add);
+
+        edit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
+        edit.setText("Wijzigen...");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jMenu2.add(edit);
+
         menu.add(jMenu2);
 
         viewMenu.setText("View");
@@ -231,8 +263,16 @@ public class Application extends javax.swing.JFrame {
         tabController.setSelectedIndex(2);
     }//GEN-LAST:event_supplierMenuItemActionPerformed
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+	tabs.get(tabController.getSelectedIndex()).add();
+    }//GEN-LAST:event_addActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        tabs.get(tabController.getSelectedIndex()).edit();
+    }//GEN-LAST:event_editActionPerformed
+
     public void selectAndSwitchToSupplier(Supplier supplier){
-	svc.selectSupplier(supplier);
+	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
 	tabController.setSelectedIndex(2);
     }
     
@@ -275,6 +315,9 @@ public class Application extends javax.swing.JFrame {
 	System.out.println(Configuration.center().getDB_URL());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem add;
+    private javax.swing.JMenuItem close;
+    private javax.swing.JMenuItem edit;
     private javax.swing.JMenuItem ingredientMenuItem;
     private javax.swing.JPanel ingredientTab;
     private javax.swing.JButton jButton1;

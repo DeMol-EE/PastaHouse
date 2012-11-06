@@ -18,7 +18,7 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Warkst
  */
-public class SupplierViewController extends javax.swing.JPanel implements ViewController{
+public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController{
 
     /**
      * Creates new form SupplierViewController
@@ -41,7 +41,8 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
 	listOutlet.setSelectedIndex(0);
     }
     
-    private void updateDetail(Object value){
+    @Override
+    public void updateDetail(Object value){
 	Supplier s = (Supplier)value;
 	firmOutlet.setText(Utilities.capitalize(s.getFirm()));
 	contactOutlet.setText(Utilities.capitalizeEach(s.getContact()));
@@ -360,4 +361,19 @@ public class SupplierViewController extends javax.swing.JPanel implements ViewCo
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JLabel telephoneOutlet;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateListAndSelect(Object select) {
+	System.err.println("Not implemented");
+    }
+
+    @Override
+    public void add() {
+	addActionPerformed(null);
+    }
+
+    @Override
+    public void edit() {
+	editActionPerformed(null);
+    }
 }
