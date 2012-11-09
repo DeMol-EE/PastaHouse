@@ -41,9 +41,9 @@ public class Application extends javax.swing.JFrame {
 	
 	tabs = new HashMap<Integer, MasterDetailViewController>();
 	
-	tabs.put(supplierTabIndex, new RecipeViewController());
+	tabs.put(supplierTabIndex, new SupplierViewController());
 	tabs.put(ingredientTabIndex, new IngredientViewController(this));
-	tabs.put(recipeTabIndex, new SupplierViewController());
+	tabs.put(recipeTabIndex, new RecipeViewController());
 	
 	recipeTab.add(tabs.get(recipeTabIndex).view());
 	ingredientTab.add(tabs.get(ingredientTabIndex).view());

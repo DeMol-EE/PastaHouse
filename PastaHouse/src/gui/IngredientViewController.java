@@ -126,7 +126,7 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
     
     @Override
     public void updateListAndSelect(Object select){
-	DynamicListModel<BasicIngredient> dlm = (DynamicListModel)listOutlet.getModel();
+	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
 	updateDetail(select);
@@ -396,7 +396,7 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 
     @Override
     public void updateList() {
-	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
 	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
     }

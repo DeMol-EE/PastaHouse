@@ -5,9 +5,21 @@
 package gui;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
+import database.Database;
+import database.Ingredient;
 import database.Recipe;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DropMode;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
 
 /**
  *
@@ -30,10 +42,51 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	
 	this.model = model;
 	
+	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	this.ingredientsOutlet.setModel(new EditableTableModel(model.getIngredients()));
+	
+	final JComboBox icb = new JComboBox(Database.driver().getIngredients().values().toArray());
+	addPopupMouseListener(icb);
+	DefaultCellEditor ce = new DefaultCellEditor(icb);
+	ce.setClickCountToStart(2);
+	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
+	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+	
+	this.ingredientsOutlet.setDragEnabled(true);
+	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);
+	this.ingredientsOutlet.setTransferHandler(new TableRowTransferHandler(this.ingredientsOutlet)); 
 	
 	loadModel();
     }
+    
+    private void addPopupMouseListener(final JComboBox box) {  
+        try {  
+	    Field popupInBasicComboBoxUI = BasicComboBoxUI.class.getDeclaredField("popup");  
+	    popupInBasicComboBoxUI.setAccessible(true);  
+	    BasicComboPopup popup = (BasicComboPopup) popupInBasicComboBoxUI.get(box.getUI());  
+
+	    Field scrollerInBasicComboPopup = BasicComboPopup.class.getDeclaredField("scroller");  
+	    scrollerInBasicComboPopup.setAccessible(true);  
+	    JScrollPane scroller = (JScrollPane) scrollerInBasicComboPopup.get(popup);  
+
+	    scroller.getViewport().getView().addMouseListener(new MouseAdapter() {
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		    box.hidePopup();
+		    ingredientsOutlet.editingCanceled(null);
+		}
+		
+	    });  
+        }  
+        catch (NoSuchFieldException e) {  
+            System.err.println("No such field");
+        }  
+        catch (IllegalAccessException e) {  
+            System.err.println("Illegal access");
+        }  
+    }  
 
     private void loadModel(){
 	nameOutlet.setText(model.getName());
@@ -79,11 +132,13 @@ public class EditRecipeDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        ingredientsOutlet = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         addComponent = new javax.swing.JButton();
+        removeComponent = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(400, 600));
         setPreferredSize(new java.awt.Dimension(430, 400));
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
@@ -116,7 +171,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
         jLabel4.setText("Gewicht na bereiding");
         jPanel6.add(jLabel4);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         netWeightOutlet.setText("<netWeightOutlet>");
         netWeightOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -143,7 +198,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         save.setText("Opslaan");
         save.addActionListener(new java.awt.event.ActionListener() {
@@ -183,7 +238,6 @@ public class EditRecipeDialog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        ingredientsOutlet.setRowSelectionAllowed(false);
         ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
         jScrollPane4.setViewportView(ingredientsOutlet);
 
@@ -191,8 +245,25 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
         jPanel8.setLayout(new java.awt.BorderLayout());
 
-        addComponent.setText("Toevoegen...");
-        jPanel8.add(addComponent, java.awt.BorderLayout.EAST);
+        jPanel9.setLayout(new java.awt.GridLayout(1, 0));
+
+        addComponent.setText("Toevoegen");
+        addComponent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addComponentActionPerformed(evt);
+            }
+        });
+        jPanel9.add(addComponent);
+
+        removeComponent.setText("Verwijderen");
+        removeComponent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeComponentActionPerformed(evt);
+            }
+        });
+        jPanel9.add(removeComponent);
+
+        jPanel8.add(jPanel9, java.awt.BorderLayout.EAST);
 
         jPanel4.add(jPanel8, java.awt.BorderLayout.SOUTH);
 
@@ -215,12 +286,22 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	updatePricePerWeightOutlet();
     }//GEN-LAST:event_netWeightOutletKeyReleased
 
+    private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
+        if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
+	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
+	}
+    }//GEN-LAST:event_removeComponentActionPerformed
+
+    private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
+        ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
+    }//GEN-LAST:event_addComponentActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addComponent;
     private javax.swing.JButton cancel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel grossWeightOutlet;
-    private javax.swing.JTable ingredientsOutlet;
+    private final javax.swing.JTable ingredientsOutlet = new javax.swing.JTable();
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
@@ -232,6 +313,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField nameOutlet;
@@ -239,6 +321,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     private javax.swing.JTextField netWeightOutlet;
     private javax.swing.JTextArea preparationOutlet;
     private javax.swing.JLabel pricePerWeightOutlet;
+    private javax.swing.JButton removeComponent;
     private javax.swing.JButton save;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,7 +17,7 @@ import javax.swing.AbstractListModel;
  */
 public class ListModelFactory {
     public static AbstractListModel createBasicIngredientModel(final Map<String, BasicIngredient> data){
-	return new DynamicListModel<BasicIngredient>() {
+	return new EditableListModel<BasicIngredient>() {
 
 	    @Override
 	    public int getSize() {
@@ -38,7 +38,7 @@ public class ListModelFactory {
     }
     
     public static AbstractListModel createSupplierListModel(final Map<String, Supplier> data){
-	return new DynamicListModel<Supplier>() {
+	return new EditableListModel<Supplier>() {
 
 	    @Override
 	    public int getSize() {
@@ -59,7 +59,7 @@ public class ListModelFactory {
     }
     
     public static AbstractListModel createRecipeListModel(final Map<String, Recipe> data){
-	return new DynamicListModel<Recipe>() {
+	return new EditableListModel<Recipe>() {
 
 	    @Override
 	    public int getSize() {
@@ -80,7 +80,7 @@ public class ListModelFactory {
     }
     
     public static AbstractListModel createComponentListModel(final Map<Integer, Component> data){
-	return new DynamicListModel<Component>() {
+	return new EditableListModel<Component>() {
 
 	    @Override
 	    public int getSize() {

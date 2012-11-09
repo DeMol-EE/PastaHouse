@@ -10,7 +10,7 @@ import javax.swing.AbstractListModel;
  *
  * @author Robin jr
  */
-public abstract class DynamicListModel<Type> extends AbstractListModel {
+public abstract class EditableListModel<Type> extends AbstractListModel {
     public abstract void add(Type o);
     
     public void update(){

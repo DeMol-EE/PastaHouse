@@ -13,11 +13,11 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Warkst
  */
-public class DynamicTableModel extends AbstractTableModel{
+public class StaticTableModel extends AbstractTableModel{
 
     private final Map<Integer, Component> data;
     
-    public DynamicTableModel(Map<Integer, Component> data){
+    public StaticTableModel(Map<Integer, Component> data){
 	this.data = data;
     }
     
@@ -42,10 +42,6 @@ public class DynamicTableModel extends AbstractTableModel{
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    case 3:
 		return ((Component)data.values().toArray()[rowIndex]).getPieces();
-//	    case 3:
-//		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight();
-//	    case 4:
-//		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight() * ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    default:
 		return "<empty>";
 	}
@@ -62,10 +58,6 @@ public class DynamicTableModel extends AbstractTableModel{
 		return "Hoeveelheid";
 	    case 3:
 		return "Stuks";
-//	    case 3:
-//		return "Prijs/kg";
-//	    case 4:
-//		return "Totaalprijs";
 	    default:
 		return "<ERROR>";
 	}
@@ -84,17 +76,8 @@ public class DynamicTableModel extends AbstractTableModel{
 		return Component.class;
 	    case 3:
 		return Double.class;
-//	    case 4:
-//		return Double.class;
 	    default:
 		return Object.class;
 	}
     }
-
-    @Override
-    public void setValueAt(Object arg0, int arg1, int arg2) {
-	//
-    }
-    
-    
 }

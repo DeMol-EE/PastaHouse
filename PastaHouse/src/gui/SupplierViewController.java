@@ -62,13 +62,13 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }
     
     public void addSupplier(Supplier supplier){
-	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.add(supplier);
 	listOutlet.requestFocus();
     }
     
     public void updateList(){
-	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
 	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
     }

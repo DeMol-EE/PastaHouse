@@ -184,7 +184,12 @@ public class Database {
         return municipales;
     }
     
-    
+    public Map<String, Ingredient> getIngredients(){
+	Map<String, Ingredient> me = new TreeMap<String, Ingredient>();
+	me.putAll(basicIngredients);
+	me.putAll(recipes);
+	return me;
+    }
     
     public void executeStatement(String s){
 	

@@ -4,10 +4,10 @@
  */
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -18,25 +18,33 @@ import javax.swing.table.TableCellRenderer;
  * @author Warkst
  */
 public class CellRendererFactory {
-    public static TableCellRenderer createDoubleCellRenderer(){
-	return new DoubleCellRenderer();
+    public static TableCellRenderer createTwoDecimalDoubleCellRenderer(){
+	return new TwoDecimalDoubleCellRenderer();
     }
     
     public static TableCellRenderer createIngredientCellRenderer(){
 	return new IngredientCellRenderer();
     }
     
-    public static TableCellRenderer createComponentCellRenderer(){
-	return new ComponentCellRenderer();
+    public static TableCellRenderer createThreeDecimalDoubleCellRenderer(){
+	return new ThreeDecimalDoubleCellRenderer();
     }
     
     public static TableCellRenderer createCapitalizedStringCellRenderer(){
 	return new CapitalizedStringCellRenderer();
     }
     
-    private static class DoubleCellRenderer extends JLabel implements TableCellRenderer{
+    public static TableCellRenderer createComboBoxCellRenderer(){
+	return new ComboBoxCellRenderer();
+    }
+    
+    public static TableCellRenderer createButtonCellRenderer(){
+	return new ButtonCellRenderer();
+    }
+    
+    private static class TwoDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer{
 
-	public DoubleCellRenderer(){
+	public TwoDecimalDoubleCellRenderer(){
 	    setOpaque(true);
 	}
 	
@@ -76,9 +84,9 @@ public class CellRendererFactory {
 	
     }
     
-    private static class ComponentCellRenderer extends JLabel implements TableCellRenderer{
+    private static class ThreeDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer{
 
-	public ComponentCellRenderer(){
+	public ThreeDecimalDoubleCellRenderer(){
 	    setOpaque(true);
 	}
 	
@@ -108,8 +116,44 @@ public class CellRendererFactory {
 	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
-	    
+//	    this.setHorizontalAlignment(JLabel.CENTER);
 	    this.setText(" "+Utilities.capitalizeEach(value.toString()));
+	    return this;
+	}
+	
+    }
+    
+    private static class ComboBoxCellRenderer extends JComboBox implements TableCellRenderer{
+
+	public ComboBoxCellRenderer(){
+	    setOpaque(true);
+	}
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
+	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	    setBackground(defaultComponent.getBackground());
+	    
+	    return this;
+	}
+	
+    }
+    
+    private static class ButtonCellRenderer extends JButton implements TableCellRenderer{
+
+	public ButtonCellRenderer(){
+	    setOpaque(true);
+	}
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
+	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	    setBackground(defaultComponent.getBackground());
+	    
+	    setText("Verwijderen");
+	    
 	    return this;
 	}
 	
