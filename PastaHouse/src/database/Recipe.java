@@ -4,7 +4,8 @@
  */
 package database;
 
-import gui.Utilities;
+import utilities.Configuration;
+import utilities.Utilities;
 import java.util.Map;
 import java.util.TreeMap;
 

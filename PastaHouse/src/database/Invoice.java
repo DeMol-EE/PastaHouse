@@ -8,6 +8,6 @@ package database;
  *
  * @author Robin jr
  */
-public class Bill {
+public class Invoice {
     
 }

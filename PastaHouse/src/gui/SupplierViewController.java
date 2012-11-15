@@ -4,6 +4,7 @@
  */
 package gui;
 
+import utilities.Utilities;
 import database.Database;
 import database.Supplier;
 import java.awt.event.KeyEvent;

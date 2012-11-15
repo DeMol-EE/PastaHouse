@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import utilities.Utilities;
 
 /**
  *
@@ -40,7 +41,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	
 	recipeListOutlet.setSelectedIndex(0);
 	
-//	ingredientListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
     }
     
     @Override

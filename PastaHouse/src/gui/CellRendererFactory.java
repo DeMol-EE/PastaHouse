@@ -4,6 +4,7 @@
  */
 package gui;
 
+import utilities.Utilities;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import javax.swing.JButton;

@@ -10,13 +10,16 @@
  */
 package pastahouse;
 
-import database.Configuration;
+import utilities.Configuration;
 import database.Supplier;
 import gui.IngredientViewController;
 import gui.MasterDetailViewController;
 import gui.RecipeViewController;
 import gui.SupplierViewController;
+import utilities.Utilities;
+import java.awt.Font;
 import java.util.HashMap;
+import javax.swing.UIManager;
 
 /**
  *
@@ -303,6 +306,8 @@ public class Application extends javax.swing.JFrame {
 	}
 	//</editor-fold>
 
+	UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.PLAIN, Utilities.fontSize()));
+	
 	/* Create and display the form */
 	java.awt.EventQueue.invokeLater(new Runnable() {
 

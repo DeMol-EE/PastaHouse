@@ -10,6 +10,7 @@
  */
 package gui;
 
+import utilities.Utilities;
 import database.*;
 import java.awt.Color;
 import java.awt.Cursor;
