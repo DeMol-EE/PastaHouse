@@ -279,7 +279,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         String munie = comboGemeentes.getSelectedItem().toString();
         if (munies.containsKey(munie)) {
-            txtGemeente.setText(munies.get(comboGemeentes.getSelectedItem()).toString());
+            txtGemeente.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
         } else {
             txtGemeente.setText("");
         }

@@ -62,7 +62,7 @@ public class Database {
     private void loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
-	    suppliers.put(rs.getString("firma"),
+	    suppliers.put(rs.getString("firma").toLowerCase(),
 		    Supplier.loadWithValues(rs.getString("firma"), 
 		    rs.getString("adres"), 
 		    rs.getString("gemeente"), 
@@ -85,7 +85,7 @@ public class Database {
     private void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
-	    basicIngredients.put(rs.getString("naam"), 
+	    basicIngredients.put(rs.getString("naam").toLowerCase(), 
 		    BasicIngredient.loadWithValues(
 		    suppliers.get(rs.getString("firma")), 
 		    rs.getString("merk"), 
@@ -124,7 +124,7 @@ public class Database {
     private void loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
 	while (rs.next()) {	    
-	    recipes.put(rs.getString("naam"), 
+	    recipes.put(rs.getString("naam").toLowerCase(), 
 		    Recipe.createStub(
 		    rs.getString("naam"), 
 		    rs.getString("datum"), 
@@ -135,8 +135,8 @@ public class Database {
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
 	int ingrLinks = 0;
 	while(rs.next()){
-	    String recipeName = rs.getString("receptnaam");
-	    String ingredientName = rs.getString("ingredientnaam");
+	    String recipeName = rs.getString("receptnaam").toLowerCase();
+	    String ingredientName = rs.getString("ingredientnaam").toLowerCase();
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
 	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity, true);
@@ -145,8 +145,8 @@ public class Database {
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_REC());
 	int recLinks = 0;
 	while(rs.next()){
-	    String recipeName = rs.getString("receptnaam");
-	    String subrecipeName = rs.getString("deelreceptnaam");
+	    String recipeName = rs.getString("receptnaam").toLowerCase();
+	    String subrecipeName = rs.getString("deelreceptnaam").toLowerCase();
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
 	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity, false);
@@ -164,7 +164,7 @@ public class Database {
         ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_MUNI());
         while(rs.next()){
             int code = rs.getInt("code");
-            String name = rs.getString("name");
+            String name = rs.getString("name").toLowerCase();
             municipales.put(name, code);
         }
     }

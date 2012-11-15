@@ -12,14 +12,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.DefaultCellEditor;
+import java.util.List;
 import javax.swing.DropMode;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.table.TableCellEditor;
+import utilities.Utilities;
 
 /**
  *
@@ -42,13 +45,24 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	
 	this.model = model;
 	
+//	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
+	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize());
+	
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	this.ingredientsOutlet.setModel(new EditableTableModel(model.getIngredients()));
 	
-	final JComboBox icb = new JComboBox(Database.driver().getIngredients().values().toArray());
-	addPopupMouseListener(icb);
-	DefaultCellEditor ce = new DefaultCellEditor(icb);
-	ce.setClickCountToStart(2);
+//	final JComboBox icb = new JComboBox(Database.driver().getIngredients().values().toArray());
+//	addPopupMouseListener(icb);
+//	DefaultCellEditor ce = new DefaultCellEditor(icb);
+//	ce.setClickCountToStart(2);
+//	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
+//	
+	List suppliers = new ArrayList();
+	suppliers.add("<Kies ingrediënt>");
+	suppliers.addAll(Database.driver().getIngredients().values());
+//	AutocompleteCombobox supplierBox = new AutocompleteCombobox(suppliers);
+	
+	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(suppliers, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
@@ -60,34 +74,10 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	loadModel();
     }
     
-    private void addPopupMouseListener(final JComboBox box) {  
-        try {  
-	    Field popupInBasicComboBoxUI = BasicComboBoxUI.class.getDeclaredField("popup");  
-	    popupInBasicComboBoxUI.setAccessible(true);  
-	    BasicComboPopup popup = (BasicComboPopup) popupInBasicComboBoxUI.get(box.getUI());  
-
-	    Field scrollerInBasicComboPopup = BasicComboPopup.class.getDeclaredField("scroller");  
-	    scrollerInBasicComboPopup.setAccessible(true);  
-	    JScrollPane scroller = (JScrollPane) scrollerInBasicComboPopup.get(popup);  
-
-	    scroller.getViewport().getView().addMouseListener(new MouseAdapter() {
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-		    box.hidePopup();
-		    ingredientsOutlet.editingCanceled(null);
-		}
-		
-	    });  
-        }  
-        catch (NoSuchFieldException e) {  
-            System.err.println("No such field");
-        }  
-        catch (IllegalAccessException e) {  
-            System.err.println("Illegal access");
-        }  
-    }  
-
+    public void ingredientBoxCallback(){
+	ingredientsOutlet.editingStopped(null);
+    }
+    
     private void loadModel(){
 	nameOutlet.setText(model.getName());
 	netWeightOutlet.setText(""+model.getNetWeight());

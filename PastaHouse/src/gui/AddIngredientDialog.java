@@ -7,10 +7,13 @@ package gui;
 import database.BasicIngredient;
 import database.Database;
 import database.Supplier;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -33,6 +36,14 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 	setTitle("Ingrediënt toevoegen");
 	
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
+	
+	supplierParent.removeAll();
+	List suppliers = new ArrayList();
+	suppliers.add("");
+	suppliers.addAll(Database.driver().getSuppliers().values());
+	AutocompleteCombobox supplierBox = new AutocompleteCombobox(suppliers);
+	supplierParent.add(supplierBox, BorderLayout.CENTER);
+	
 	taxesOutlet.setText(""+21.0);
 	taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(new Double(21.0))+" %");
 	lossOutlet.setText(""+0.0);
@@ -59,6 +70,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         packagingOutlet = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        supplierParent = new javax.swing.JPanel();
         supplierOutlet = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -89,7 +101,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         setMinimumSize(new java.awt.Dimension(430, 380));
         setPreferredSize(new java.awt.Dimension(430, 480));
 
-        fixedFields.setLayout(new java.awt.GridLayout(8, 2));
+        fixedFields.setLayout(new java.awt.GridLayout(8, 2, -1, 0));
 
         jLabel1.setText("Naam");
         jLabel1.setFocusable(false);
@@ -116,8 +128,12 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel4.setFocusable(false);
         fixedFields.add(jLabel4);
 
+        supplierParent.setLayout(new java.awt.BorderLayout());
+
         supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        fixedFields.add(supplierOutlet);
+        supplierParent.add(supplierOutlet, java.awt.BorderLayout.CENTER);
+
+        fixedFields.add(supplierParent);
 
         jLabel5.setText("Prijs per verpakking (BTW excl)");
         jLabel5.setFocusable(false);
@@ -309,7 +325,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         BasicIngredient b = BasicIngredient.loadWithValues(
-		(Supplier)supplierOutlet.getSelectedItem(), 
+		(supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
 		brandOutlet.getText(), 
 		packagingOutlet.getText(), 
 		Double.parseDouble(weightPerUnitOutlet.getText()), 
@@ -355,6 +371,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     private javax.swing.JTextField pricePerUnitOutlet;
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JComboBox supplierOutlet;
+    private javax.swing.JPanel supplierParent;
     private javax.swing.JLabel taxesFormattedOutlet;
     private javax.swing.JTextField taxesOutlet;
     private javax.swing.JLabel weightPerUnitFormattedOutlet;

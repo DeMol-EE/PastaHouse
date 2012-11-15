@@ -89,7 +89,11 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
 	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
 	switch(col){
 	    case 0:
-		((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
+		if (value instanceof String) {
+		    ((Component)data.values().toArray()[row]).setIngredient(null);
+		} else {
+		    ((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
+		}
 		break;
 	    case 1:
 		((Component)data.values().toArray()[row]).setQuantity(Double.parseDouble(value.toString()));
@@ -131,7 +135,8 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
 	}
 	
 	c.setRank(key);
-	c.setIngredient((Ingredient)Database.driver().getIngredients().values().toArray()[0]);
+//	c.setIngredient((Ingredient)Database.driver().getIngredients().values().toArray()[0]);
+	c.setIngredient(null);
 	data.put(key, c);
 	
 	fireTableRowsInserted(0, data.size());

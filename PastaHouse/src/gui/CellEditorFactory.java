@@ -4,9 +4,13 @@
  */
 package gui;
 
+import database.Database;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -24,6 +28,10 @@ public class CellEditorFactory {
     
     public static TableCellEditor createDoubleEditor(){
 	return new DoubleEditor();
+    }
+    
+    public static TableCellEditor createComboBoxEditor(List components, EditRecipeDialog callback){
+	return new ComboBoxEditor(components, callback);
     }
     
     private static class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener{
@@ -74,6 +82,68 @@ public class CellEditorFactory {
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	    input.setText(value.toString());
 	    return input;
+	}	
+    }
+    
+    private static class ComboBoxEditor extends AbstractCellEditor implements TableCellEditor{
+
+	private AutocompleteCombobox acb;
+	
+	public ComboBoxEditor(List data, final EditRecipeDialog callback){
+	    this.acb = new AutocompleteCombobox(data);
+	    
+	    this.acb.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    callback.ingredientBoxCallback();
+		}
+	    });
+	    this.acb.addFocusListener(new FocusListener() {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+		    //
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+		    callback.ingredientBoxCallback();
+		}
+	    });
+	}
+	
+	@Override
+	public Object getCellEditorValue() {
+	    System.out.println("selected index: "+acb.getSelectedIndex());
+	    if (acb.getSelectedIndex() == 0) {
+		return null;
+	    } else {
+//		return acb.getDataList().toArray()[acb.getSelectedIndex()];
+//		return acb.getSelectedItem();
+		
+		Object sel = acb.getSelectedItem();
+		System.out.println("selected item: "+acb.getSelectedItem());
+		
+		if (sel instanceof String) {
+		    return Database.driver().getIngredients().get(((String)sel).toLowerCase());
+		} else {
+		    return sel;
+		}
+	    }
+	}
+
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+//	    input.setText(value.toString());
+	    if (value == null) {
+		acb.setSelectedIndex(0);
+	    } else {
+//		if (value instanceof Component) {
+		acb.setSelectedItem(value);
+//		}
+	    }
+	    return acb;
 	}	
     }
 }

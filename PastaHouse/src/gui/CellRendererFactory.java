@@ -117,8 +117,12 @@ public class CellRendererFactory {
 	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
-//	    this.setHorizontalAlignment(JLabel.CENTER);
-	    this.setText(" "+Utilities.capitalizeEach(value.toString()));
+//	    this.setHorizontalAlignment(JLabel.CENTER)
+	    if (value == null) {
+		setText("<Kies een item>");
+	    } else {
+		setText(" "+Utilities.capitalizeEach(value.toString()));
+	    }
 	    return this;
 	}
 	
