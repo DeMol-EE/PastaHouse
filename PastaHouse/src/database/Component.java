@@ -14,6 +14,10 @@ public class Component {
     private double quantity;
     private boolean isIngredient;
     
+    public Component(){
+	
+    }
+    
     public Component(Ingredient ingr, int rank, double quantity, boolean isIngredient) {
 	this.ingredient = ingr;
 	this.rank = rank;
@@ -31,6 +35,26 @@ public class Component {
 
     public double getQuantity() {
 	return quantity;
+    }
+    
+    public double getPieces() {
+	return quantity * ingredient.getWeightPerUnit();
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+	this.ingredient = ingredient;
+    }
+
+    public void setRank(int rank) {
+	this.rank = rank;
+    }
+
+    public void setQuantity(double quantity) {
+	this.quantity = quantity;
+    }
+
+    public void setIsIngredient(boolean isIngredient) {
+	this.isIngredient = isIngredient;
     }
     
     public boolean isIngredient(){

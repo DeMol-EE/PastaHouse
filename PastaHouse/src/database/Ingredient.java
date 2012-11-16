@@ -38,5 +38,12 @@ public abstract class Ingredient implements Record {
 	return "naam";
     }
     
+    @Override
+    public String getPrimaryKeyValue(){
+	return name;
+    }
+    
     public abstract double getPricePerWeight();
+    
+    public abstract double getWeightPerUnit();
 }

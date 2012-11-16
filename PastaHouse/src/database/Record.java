@@ -16,6 +16,8 @@ public interface Record {
      */
     public String getPrimaryKey();
     
+    public String getPrimaryKeyValue();
+    
     // save changes to the db
     public boolean create();
     

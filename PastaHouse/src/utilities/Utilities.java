@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package utilities;
 
 /**
  *
@@ -11,6 +11,9 @@ package gui;
 public class Utilities {
 
     public static String capitalize(String s) {
+	if(s==null){
+	    return "";
+	}
         if (s.length() > 1) {
             return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
         }
@@ -26,5 +29,9 @@ public class Utilities {
             }
         }
         return returnMe;
+    }
+    
+    public static int fontSize(){
+	return 16;
     }
 }

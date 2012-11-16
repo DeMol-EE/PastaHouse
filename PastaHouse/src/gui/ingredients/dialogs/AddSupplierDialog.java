@@ -8,17 +8,11 @@ import database.Database;
 import database.Supplier;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 
 /**
  *
@@ -285,7 +279,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         String munie = comboGemeentes.getSelectedItem().toString();
         if (munies.containsKey(munie)) {
-            txtGemeente.setText(munies.get(comboGemeentes.getSelectedItem()).toString());
+            txtGemeente.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
         } else {
             txtGemeente.setText("");
         }

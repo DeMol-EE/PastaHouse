@@ -10,39 +10,47 @@
  */
 package pastahouse;
 
-import database.Configuration;
+import utilities.Configuration;
 import database.Supplier;
 import gui.IngredientViewController;
+import gui.MasterDetailViewController;
 import gui.RecipeViewController;
 import gui.SupplierViewController;
+import utilities.Utilities;
+import java.awt.Font;
+import java.util.HashMap;
+import javax.swing.UIManager;
 
 /**
  *
  * @author Warkst
  */
 public class Application extends javax.swing.JFrame {
+    
+    private final int supplierTabIndex = 0;
+    private final int ingredientTabIndex = 1;
+    private final int recipeTabIndex = 2;
 
-    private RecipeViewController rvc;
-    private IngredientViewController ivc;
-    private SupplierViewController svc;
+    private HashMap<Integer, MasterDetailViewController> tabs;
     
     /** Creates new form Application */
     public Application() {
 	initComponents();
-	
-	setTitle("Pasta House");
-	
+		setTitle("Pasta House");
+
 	setLocationRelativeTo(null);
 	
 	// load viewControllers
 	
-	rvc = new RecipeViewController();
-	ivc = new IngredientViewController(this);
-	svc = new SupplierViewController();
+	tabs = new HashMap<Integer, MasterDetailViewController>();
 	
-	recipeTab.add(rvc.view());
-	ingredientTab.add(ivc.view());
-	supplierTab.add(svc.view());
+	tabs.put(supplierTabIndex, new SupplierViewController());
+	tabs.put(ingredientTabIndex, new IngredientViewController(this));
+	tabs.put(recipeTabIndex, new RecipeViewController());
+	
+	recipeTab.add(tabs.get(recipeTabIndex).view());
+	ingredientTab.add(tabs.get(ingredientTabIndex).view());
+	supplierTab.add(tabs.get(supplierTabIndex).view());
     }
 
     /** This method is called from within the constructor to
@@ -83,11 +91,14 @@ public class Application extends javax.swing.JFrame {
         supplierTab = new javax.swing.JPanel();
         menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        close = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        add = new javax.swing.JMenuItem();
+        edit = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
+        recipeMenuItem = new javax.swing.JMenuItem();
         ingredientMenuItem = new javax.swing.JMenuItem();
         supplierMenuItem = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
 
         jPanel2.setLayout(new java.awt.GridLayout(8, 2));
 
@@ -148,7 +159,7 @@ public class Application extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         jButton1.setText("jButton1");
         jPanel1.add(jButton1);
@@ -178,15 +189,48 @@ public class Application extends javax.swing.JFrame {
         tabController.getAccessibleContext().setAccessibleName("tabController");
 
         jMenu1.setText("File");
+
+        close.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        close.setText("Close");
+        jMenu1.add(close);
+
         menu.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        add.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
+        add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        jMenu2.add(add);
+
+        edit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
+        edit.setText("Wijzigen...");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jMenu2.add(edit);
+
         menu.add(jMenu2);
 
         viewMenu.setText("View");
 
-        ingredientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        ingredientMenuItem.setText("Recepten");
+        recipeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        recipeMenuItem.setText("Recepten");
+        recipeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recipeMenuItemActionPerformed(evt);
+            }
+        });
+        viewMenu.add(recipeMenuItem);
+
+        ingredientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        ingredientMenuItem.setText("Ingrediënten");
         ingredientMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ingredientMenuItemActionPerformed(evt);
@@ -194,23 +238,14 @@ public class Application extends javax.swing.JFrame {
         });
         viewMenu.add(ingredientMenuItem);
 
-        supplierMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        supplierMenuItem.setText("Ingrediënten");
+        supplierMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        supplierMenuItem.setText("Leveranciers");
         supplierMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supplierMenuItemActionPerformed(evt);
             }
         });
         viewMenu.add(supplierMenuItem);
-
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        jMenuItem3.setText("Leveranciers");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        viewMenu.add(jMenuItem3);
 
         menu.add(viewMenu);
 
@@ -219,20 +254,28 @@ public class Application extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ingredientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingredientMenuItemActionPerformed
+    private void recipeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipeMenuItemActionPerformed
         tabController.setSelectedIndex(0);
+    }//GEN-LAST:event_recipeMenuItemActionPerformed
+
+    private void ingredientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingredientMenuItemActionPerformed
+        tabController.setSelectedIndex(1);
     }//GEN-LAST:event_ingredientMenuItemActionPerformed
 
     private void supplierMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierMenuItemActionPerformed
-        tabController.setSelectedIndex(1);
+        tabController.setSelectedIndex(2);
     }//GEN-LAST:event_supplierMenuItemActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        tabController.setSelectedIndex(2);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+	tabs.get(tabController.getSelectedIndex()).add();
+    }//GEN-LAST:event_addActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        tabs.get(tabController.getSelectedIndex()).edit();
+    }//GEN-LAST:event_editActionPerformed
 
     public void selectAndSwitchToSupplier(Supplier supplier){
-	svc.selectSupplier(supplier);
+	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
 	tabController.setSelectedIndex(2);
     }
     
@@ -263,6 +306,8 @@ public class Application extends javax.swing.JFrame {
 	}
 	//</editor-fold>
 
+	UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.PLAIN, Utilities.fontSize()));
+	
 	/* Create and display the form */
 	java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -275,6 +320,9 @@ public class Application extends javax.swing.JFrame {
 	System.out.println(Configuration.center().getDB_URL());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem add;
+    private javax.swing.JMenuItem close;
+    private javax.swing.JMenuItem edit;
     private javax.swing.JMenuItem ingredientMenuItem;
     private javax.swing.JPanel ingredientTab;
     private javax.swing.JButton jButton1;
@@ -289,13 +337,13 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JMenuItem recipeMenuItem;
     private javax.swing.JPanel recipeTab;
     private javax.swing.JMenuItem supplierMenuItem;
     private javax.swing.JPanel supplierTab;

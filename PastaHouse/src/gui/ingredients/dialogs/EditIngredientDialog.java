@@ -7,9 +7,17 @@ package gui;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.BasicIngredient;
 import database.Database;
+import database.Supplier;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.text.DateFormatter;
 
 /**
  *
@@ -19,12 +27,15 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
-    private IngredientViewController delegate;
+    private MasterDetailViewController delegate;
+    
+    private final DatePicker dp;
+    private final AutocompleteCombobox supplierBox;
     
     /**
      * Creates new form EditIngredientDialog
      */
-    public EditIngredientDialog(java.awt.Frame parent, boolean modal, IngredientViewController delegate, BasicIngredient model) {
+    public EditIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate, BasicIngredient model) {
 	super(parent, modal);
 	initComponents();
 	
@@ -32,15 +43,20 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	this.model = model;
 	this.defaultModel = new BasicIngredient(model);
 	
-	setLocationRelativeTo(null);
+	supplierParent.removeAll();
+	List suppliers = new ArrayList();
+	suppliers.add("");
+	suppliers.addAll(Database.driver().getSuppliers().values());
+	supplierBox = new AutocompleteCombobox(suppliers);
+	supplierParent.add(supplierBox, BorderLayout.CENTER);
 	
+	setLocationRelativeTo(null);
 	setTitle("Ingrediënt wijzigen");
 	
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
 	
-	fixedFields.add(new DatePicker());
-	
-//	new DatePicker().
+	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
+	fixedFields.add(dp);
 	
 	loadModel();
     }
@@ -49,7 +65,10 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	nameOutlet.setText(model.getName());
 	brandOutlet.setText(model.getBrand());
 	packagingOutlet.setText(model.getPackaging());
-	supplierOutlet.setSelectedItem(model.getSupplier());
+//	supplierOutlet.setSelectedItem(model.getSupplier());
+	if(model.getSupplier()!=null){
+	    supplierBox.setSelectedItem(model.getSupplier());
+	}
 	
 	// compound fields
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
@@ -88,6 +107,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
         jLabel6 = new javax.swing.JLabel();
         packagingOutlet = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        supplierParent = new javax.swing.JPanel();
         supplierOutlet = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -132,7 +152,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
         detail.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(12, 3, 0, 5));
+        fixedFields.setLayout(new java.awt.GridLayout(12, 3));
 
         jLabel1.setText("Naam");
         jLabel1.setFocusable(false);
@@ -164,8 +184,12 @@ public class EditIngredientDialog extends javax.swing.JDialog{
         jLabel3.setFocusable(false);
         fixedFields.add(jLabel3);
 
+        supplierParent.setLayout(new java.awt.BorderLayout());
+
         supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        fixedFields.add(supplierOutlet);
+        supplierParent.add(supplierOutlet, java.awt.BorderLayout.CENTER);
+
+        fixedFields.add(supplierParent);
 
         jLabel10.setText("Prijs per verpakking (BTW excl)");
         jLabel10.setFocusable(false);
@@ -223,7 +247,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
         jLabel14.setFocusable(false);
         fixedFields.add(jLabel14);
 
-        jPanel6.setLayout(new java.awt.GridLayout());
+        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
 
         lossOutlet.setText("<lossOutlet>");
         lossOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -503,11 +527,27 @@ public class EditIngredientDialog extends javax.swing.JDialog{
     }
     
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        if(model.update()){
-	    delegate.updateList();
-	    this.dispose();
-	} else {
-	    JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+        try{
+	    model.setName(nameOutlet.getText());
+	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
+	    model.setNotes(notesOutlet.getText());
+	    model.setSupplier((Supplier)supplierOutlet.getSelectedItem());
+	    model.setBrand(brandOutlet.getText());
+	    model.setPackaging(packagingOutlet.getText());
+	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
+	    model.setPricePerUnit(Double.parseDouble(pricePerUnitOutlet.getText()));
+	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
+
+	    if(model.update()){
+		delegate.updateList();
+		this.dispose();
+	    } else {
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    }
+	} catch (ParseException ex) {
+	    System.err.println(ex.getMessage());
+	    JOptionPane.showMessageDialog(null, "Zorg ervoor dat alle velden geldig ingevoerd zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	}
     }//GEN-LAST:event_saveActionPerformed
 
@@ -571,6 +611,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
     private javax.swing.JButton save;
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JComboBox supplierOutlet;
+    private javax.swing.JPanel supplierParent;
     private javax.swing.JLabel taxesFormattedOutlet;
     private javax.swing.JTextField taxesOutlet;
     private javax.swing.JLabel weightPerUnitFormattedOutlet;

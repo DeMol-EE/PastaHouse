@@ -4,7 +4,8 @@
  */
 package database;
 
-import gui.Utilities;
+import utilities.Configuration;
+import utilities.Utilities;
 
 /**
  *
@@ -90,6 +91,34 @@ public class BasicIngredient extends Ingredient {
 	return table_id;
     }
 
+    public void setSupplier(Supplier supplier) {
+	this.supplier = supplier;
+    }
+
+    public void setBrand(String brand) {
+	this.brand = brand;
+    }
+
+    public void setPackaging(String packaging) {
+	this.packaging = packaging;
+    }
+
+    public void setPricePerUnit(double pricePerUnit) {
+	this.pricePerUnit = pricePerUnit;
+    }
+
+    public void setWeightPerUnit(double weightPerUnit) {
+	this.weightPerUnit = weightPerUnit;
+    }
+
+    public void setLossPercent(double lossPercent) {
+	this.lossPercent = lossPercent;
+    }
+
+    public void setTaxes(double taxes) {
+	this.taxes = taxes;
+    }
+
     public Supplier getSupplier() {
 	return supplier;
     }
@@ -106,6 +135,7 @@ public class BasicIngredient extends Ingredient {
 	return pricePerUnit;
     }
 
+    @Override
     public double getWeightPerUnit() {
 	return weightPerUnit;
     }
@@ -135,6 +165,10 @@ public class BasicIngredient extends Ingredient {
 	return notes;
     }
     
+    public void setNotes(String notes){
+	this.notes = notes;
+    }
+    
     @Override
     public boolean create(){
 	return false;
@@ -149,6 +183,7 @@ public class BasicIngredient extends Ingredient {
 		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "
 		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"NULL")+", "
 		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"NULL")+", "
+		+ "verliespercentage = "+(lossPercent>0? "\""+lossPercent +"\"":"NULL")+", "
 		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"NULL")+", "
 		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
 		+ "opmerking = "+(notes.length()>0 ? "\""+notes +"\"":"NULL"));

@@ -13,11 +13,11 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Warkst
  */
-public class DynamicTableModel extends AbstractTableModel{
+public class StaticTableModel extends AbstractTableModel{
 
     private final Map<Integer, Component> data;
     
-    public DynamicTableModel(Map<Integer, Component> data){
+    public StaticTableModel(Map<Integer, Component> data){
 	this.data = data;
     }
     
@@ -28,7 +28,7 @@ public class DynamicTableModel extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-	return 5;
+	return 4;
     }
 
     @Override
@@ -41,9 +41,7 @@ public class DynamicTableModel extends AbstractTableModel{
 	    case 2:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    case 3:
-		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight();
-	    case 4:
-		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPricePerWeight() * ((Component)data.values().toArray()[rowIndex]).getQuantity();
+		return ((Component)data.values().toArray()[rowIndex]).getPieces();
 	    default:
 		return "<empty>";
 	}
@@ -59,9 +57,7 @@ public class DynamicTableModel extends AbstractTableModel{
 	    case 2:
 		return "Hoeveelheid";
 	    case 3:
-		return "Prijs/kg";
-	    case 4:
-		return "Totaalprijs";
+		return "Stuks";
 	    default:
 		return "<ERROR>";
 	}
@@ -77,20 +73,11 @@ public class DynamicTableModel extends AbstractTableModel{
 	    case 1:
 		return Ingredient.class;
 	    case 2:
-		return Double.class;
+		return Component.class;
 	    case 3:
-		return Double.class;
-	    case 4:
 		return Double.class;
 	    default:
 		return Object.class;
 	}
     }
-
-    @Override
-    public void setValueAt(Object arg0, int arg1, int arg2) {
-	//
-    }
-    
-    
 }

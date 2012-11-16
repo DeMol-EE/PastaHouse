@@ -5,6 +5,7 @@
  */
 package database;
 
+import utilities.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,10 +32,10 @@ public class Database {
     
     private Database() {
 	try {
-	    suppliers = new TreeMap<String, Supplier>();
-	    basicIngredients = new TreeMap<String, BasicIngredient>();
-	    recipes = new TreeMap<String, Recipe>();
-	    municipales = new TreeMap<String, Integer>();
+	    suppliers = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
+	    basicIngredients = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
+	    recipes = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
+	    municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
 	    // connect to db
 	    Class.forName("org.sqlite.JDBC");
 	    connection = DriverManager.getConnection(Configuration.center().getDB_URL());
@@ -61,7 +62,7 @@ public class Database {
     private void loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
 	while (rs.next()) {	    
-	    suppliers.put(rs.getString("firma"),
+	    suppliers.put(rs.getString("firma").toLowerCase(),
 		    Supplier.loadWithValues(rs.getString("firma"), 
 		    rs.getString("adres"), 
 		    rs.getString("gemeente"), 
@@ -84,7 +85,7 @@ public class Database {
     private void loadBasicIngredients() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_INGR());
 	while (rs.next()) {	    
-	    basicIngredients.put(rs.getString("naam"), 
+	    basicIngredients.put(rs.getString("naam").toLowerCase(), 
 		    BasicIngredient.loadWithValues(
 		    suppliers.get(rs.getString("firma")), 
 		    rs.getString("merk"), 
@@ -102,13 +103,28 @@ public class Database {
     }
     
     public boolean addIngredient(BasicIngredient ingredient){
-        return true;
+	if (executeInsert(Configuration.center().getDB_TABLE_INGR(), 
+		"\""+ ingredient.getSupplier().getFirm() +"\", "
+		+(ingredient.getName().length()>0 ? "\""+ ingredient.getName() +"\"":"NULL")+", "
+		+(ingredient.getBrand().length()>0 ?"\""+ingredient.getBrand() +"\"":"NULL")+", "
+		+(ingredient.getPackaging().length()>0? "\""+ingredient.getPackaging() +"\"":"NULL")+", "
+		+(ingredient.getPricePerUnit()>0? "\""+ingredient.getPricePerUnit() +"\"":"NULL")+", "
+		+(ingredient.getWeightPerUnit()>0? "\""+ingredient.getWeightPerUnit() +"\"":"NULL")+", "
+		+(ingredient.getLossPercent()>0? "\""+ingredient.getLossPercent() +"\"":"NULL")+", "
+		+(ingredient.getTaxes()>0? "\""+ingredient.getTaxes() +"\"":"NULL")+", "
+		+(ingredient.getDate().length()>0? "\""+ingredient.getDate() +"\"":"NULL")+", "
+		+(ingredient.getNotes().length()>0 ? "\""+ingredient.getNotes() +"\"":"NULL"))) {
+	    basicIngredients.put(ingredient.getPrimaryKeyValue(), ingredient);
+	    return true;
+	} else {
+	    return false;
+	}
     }
     
     private void loadRecipes() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC());
 	while (rs.next()) {	    
-	    recipes.put(rs.getString("naam"), 
+	    recipes.put(rs.getString("naam").toLowerCase(), 
 		    Recipe.createStub(
 		    rs.getString("naam"), 
 		    rs.getString("datum"), 
@@ -119,8 +135,8 @@ public class Database {
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
 	int ingrLinks = 0;
 	while(rs.next()){
-	    String recipeName = rs.getString("receptnaam");
-	    String ingredientName = rs.getString("ingredientnaam");
+	    String recipeName = rs.getString("receptnaam").toLowerCase();
+	    String ingredientName = rs.getString("ingredientnaam").toLowerCase();
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
 	    recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity, true);
@@ -129,8 +145,8 @@ public class Database {
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_REC());
 	int recLinks = 0;
 	while(rs.next()){
-	    String recipeName = rs.getString("receptnaam");
-	    String subrecipeName = rs.getString("deelreceptnaam");
+	    String recipeName = rs.getString("receptnaam").toLowerCase();
+	    String subrecipeName = rs.getString("deelreceptnaam").toLowerCase();
 	    int rank = rs.getInt("rang");
 	    double quantity = rs.getDouble("quantiteit");
 	    recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity, false);
@@ -148,7 +164,7 @@ public class Database {
         ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_MUNI());
         while(rs.next()){
             int code = rs.getInt("code");
-            String name = rs.getString("name");
+            String name = rs.getString("name").toLowerCase();
             municipales.put(name, code);
         }
     }
@@ -169,7 +185,12 @@ public class Database {
         return municipales;
     }
     
-    
+    public Map<String, Ingredient> getIngredients(){
+	Map<String, Ingredient> me = new TreeMap<String, Ingredient>();
+	me.putAll(basicIngredients);
+	me.putAll(recipes);
+	return me;
+    }
     
     public void executeStatement(String s){
 	
@@ -183,12 +204,17 @@ public class Database {
      */
     public boolean executeInsert(String table, String values){
 	try{
-	    statement.executeUpdate("INSERT INTO "+table+" VALUES (null, "+values+")");
-	    System.out.println("DatabaseDriver::Executed insert of ("+values+") into "+table);
+	    statement.executeUpdate("INSERT INTO "+table+" VALUES ("+values+")");
+	    System.out.println("DatabaseDriver::Executed command:\n"
+		    + "INSERT INTO "+table+" VALUES ("+values+")\n"
+		    + "SUCCES!\n");
 	    return true;
 	} catch (Exception e){
 	    // do logging
 	    // show error elsewhere (hence the return false!)
+	    System.err.println("DatabaseDriver::Executed command:\n"
+		    + "INSERT INTO "+table+" VALUES ("+values+")\n"
+		    + "FAILED:\n"+e.getMessage());
 	    
 	    return false;
 	}

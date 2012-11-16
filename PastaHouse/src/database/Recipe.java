@@ -4,8 +4,8 @@
  */
 package database;
 
-import gui.Utilities;
-import java.sql.SQLException;
+import utilities.Configuration;
+import utilities.Utilities;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -102,5 +102,10 @@ public class Recipe extends Ingredient {
     @Override
     public String toString(){
 	return Utilities.capitalize(getName());
+    }
+    
+    @Override
+    public double getWeightPerUnit(){
+	return netWeight;
     }
 }

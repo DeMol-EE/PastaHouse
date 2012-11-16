@@ -10,6 +10,7 @@
  */
 package gui;
 
+import utilities.Utilities;
 import database.*;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -27,7 +28,7 @@ import pastahouse.Application;
  *
  * @author Warkst
  */
-public class IngredientViewController extends javax.swing.JPanel implements ViewController{
+public class IngredientViewController extends javax.swing.JPanel implements MasterDetailViewController{
 
     private Application application;
     
@@ -53,7 +54,11 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	listOutlet.setSelectedIndex(0);
     }
     
-    private void updateDetail(Object value){
+    @Override
+    public void updateDetail(Object value){
+	if(value==null) {
+	    return;
+	}
 	BasicIngredient bi = (BasicIngredient)value;
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
@@ -120,10 +125,16 @@ public class IngredientViewController extends javax.swing.JPanel implements View
 	supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
     }
     
-    public void updateList(){
-	DynamicListModel<Supplier> dlm = (DynamicListModel)listOutlet.getModel();
+    @Override
+    public void updateListAndSelect(Object select){
+	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
-	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+	listOutlet.setSelectedValue(select, true);
+	updateDetail(select);
+    }
+    
+    public void addIngredient(BasicIngredient b){
+	
     }
 
     /** This method is called from within the constructor to
@@ -135,7 +146,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        editOutlet = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         add = new javax.swing.JButton();
@@ -173,14 +183,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
-
-        editOutlet.setText("Edit");
-        editOutlet.setFocusable(false);
-        editOutlet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editOutletActionPerformed(evt);
-            }
-        });
 
         setLayout(new java.awt.BorderLayout());
 
@@ -345,16 +347,12 @@ public class IngredientViewController extends javax.swing.JPanel implements View
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void editOutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editOutletActionPerformed
-        
-    }//GEN-LAST:event_editOutletActionPerformed
-
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         new EditIngredientDialog(null, true, this, (BasicIngredient)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	new AddIngredientDialog(null, true).setVisible(true);
+	new AddIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -363,7 +361,6 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
-    private javax.swing.JButton editOutlet;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
@@ -397,4 +394,21 @@ public class IngredientViewController extends javax.swing.JPanel implements View
     private javax.swing.JLabel taxesOutlet;
     private javax.swing.JLabel weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateList() {
+	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.update();
+	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+    }
+
+    @Override
+    public void add() {
+	addActionPerformed(null);
+    }
+
+    @Override
+    public void edit() {
+	editActionPerformed(null);
+    }
 }

@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;

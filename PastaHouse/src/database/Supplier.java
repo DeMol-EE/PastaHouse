@@ -4,7 +4,8 @@
  */
 package database;
 
-import gui.Utilities;
+import utilities.Configuration;
+import utilities.Utilities;
 
 /**
  *
@@ -197,5 +198,10 @@ public class Supplier implements Record{
     @Override
     public String getPrimaryKey(){
 	return "firma";
+    }
+    
+    @Override
+    public String getPrimaryKeyValue(){
+	return firm;
     }
 }
