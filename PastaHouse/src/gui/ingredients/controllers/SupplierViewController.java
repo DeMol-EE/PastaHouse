@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.controllers;
 
+import gui.ingredients.dialogs.EditSupplierDialog;
+import gui.ingredients.dialogs.AddSupplierDialog;
+import gui.utilities.list.EditableListModel;
+import gui.utilities.list.ListModelFactory;
 import utilities.Utilities;
 import database.Database;
 import database.Supplier;

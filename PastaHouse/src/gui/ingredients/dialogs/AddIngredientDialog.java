@@ -2,11 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.dialogs;
 
+import gui.utilities.combobox.ComboBoxModelFactory;
+import gui.utilities.combobox.AutocompleteCombobox;
 import database.BasicIngredient;
 import database.Database;
 import database.Supplier;
+import gui.ingredients.controllers.MasterDetailViewController;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -99,7 +102,6 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(430, 380));
-        setPreferredSize(new java.awt.Dimension(430, 480));
 
         fixedFields.setLayout(new java.awt.GridLayout(8, 2, -1, 0));
 

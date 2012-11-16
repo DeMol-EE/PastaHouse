@@ -2,9 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.utilities.cell;
 
+import gui.utilities.combobox.AutocompleteCombobox;
 import database.Database;
+import gui.ingredients.dialogs.EditRecipeDialog;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

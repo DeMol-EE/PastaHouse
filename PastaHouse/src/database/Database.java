@@ -79,7 +79,12 @@ public class Database {
     }
     
     public boolean addSupplier(Supplier sup){
-        return false;
+        if (executeInsert(Configuration.center().getDB_TABLE_SUP(),
+                "\""+ sup.getFirm())){
+            return true;
+        } else {
+            return false;
+        }
     }
     
     private void loadBasicIngredients() throws SQLException{

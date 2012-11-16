@@ -1,4 +1,4 @@
-package gui;
+package gui.utilities.combobox;
 
 import java.awt.event.ItemEvent;
 import javax.swing.DefaultComboBoxModel;

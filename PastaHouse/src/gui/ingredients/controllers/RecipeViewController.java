@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.controllers;
 
+import gui.ingredients.dialogs.EditRecipeDialog;
+import gui.utilities.table.StaticTableModel;
+import gui.utilities.list.ListModelFactory;
+import gui.utilities.cell.CellRendererFactory;
 import database.Component;
 import database.Database;
 import database.Ingredient;

@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.dialogs;
 
+import gui.utilities.table.EditableTableModel;
+import gui.utilities.table.TableRowTransferHandler;
+import gui.utilities.cell.CellEditorFactory;
+import gui.utilities.cell.CellRendererFactory;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.Ingredient;
@@ -129,7 +133,6 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 600));
-        setPreferredSize(new java.awt.Dimension(430, 400));
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
