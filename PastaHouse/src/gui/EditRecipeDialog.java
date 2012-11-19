@@ -277,8 +277,14 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_netWeightOutletKeyReleased
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
-        if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
-	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
+        int selectedRow = ingredientsOutlet.getSelectedRow();
+	
+	if(selectedRow>-1 && selectedRow < ingredientsOutlet.getModel().getRowCount()){
+	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(selectedRow);
+	    
+	    selectedRow = (int)Math.max(0, Math.min(selectedRow, ((EditableTableModel)ingredientsOutlet.getModel()).getRowCount()-1));
+	    
+	    ingredientsOutlet.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
 	}
     }//GEN-LAST:event_removeComponentActionPerformed
 

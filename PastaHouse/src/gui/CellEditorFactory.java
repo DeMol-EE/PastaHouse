@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
@@ -22,30 +24,31 @@ import javax.swing.table.TableCellEditor;
  * @author Robin jr
  */
 public class CellEditorFactory {
-    public static TableCellEditor createButtonEditor(){
+
+    public static TableCellEditor createButtonEditor() {
 	return new ButtonEditor();
     }
-    
-    public static TableCellEditor createDoubleEditor(){
+
+    public static TableCellEditor createDoubleEditor() {
 	return new DoubleEditor();
     }
-    
-    public static TableCellEditor createComboBoxEditor(List components, EditRecipeDialog callback){
+
+    public static TableCellEditor createComboBoxEditor(List components, EditRecipeDialog callback) {
 	return new ComboBoxEditor(components, callback);
     }
-    
-    private static class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener{
+
+    private static class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
 
 	private JButton button;
 	private String title;
-	
+
 	@SuppressWarnings("LeakingThisInConstructor")
-	public ButtonEditor(){
+	public ButtonEditor() {
 	    button = new JButton();
 	    button.addActionListener(this);
 	    button.setBorderPainted(false);
 	}
-	
+
 	@Override
 	public Object getCellEditorValue() {
 	    return title;
@@ -61,18 +64,17 @@ public class CellEditorFactory {
 	public void actionPerformed(ActionEvent e) {
 	    fireEditingStopped();
 	}
-	
     }
-    
-    private static class DoubleEditor extends AbstractCellEditor implements TableCellEditor{
+
+    private static class DoubleEditor extends AbstractCellEditor implements TableCellEditor {
 
 	private JTextField input;
-	
-	public DoubleEditor(){
+
+	public DoubleEditor() {
 	    input = new JTextField();
 	    input.setHorizontalAlignment(JTextField.CENTER);
 	}
-	
+
 	@Override
 	public Object getCellEditorValue() {
 	    return input.getText();
@@ -82,25 +84,24 @@ public class CellEditorFactory {
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	    input.setText(value.toString());
 	    return input;
-	}	
+	}
     }
-    
-    private static class ComboBoxEditor extends AbstractCellEditor implements TableCellEditor{
+
+    private static class ComboBoxEditor extends AbstractCellEditor implements TableCellEditor {
 
 	private AutocompleteCombobox acb;
-	
-	public ComboBoxEditor(List data, final EditRecipeDialog callback){
-	    this.acb = new AutocompleteCombobox(data);
-	    
-	    this.acb.addActionListener(new ActionListener() {
+	private int clickCountToStart = 2;
 
+	public ComboBoxEditor(List data, final EditRecipeDialog callback) {
+	    this.acb = new AutocompleteCombobox(data);
+
+	    this.acb.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    callback.ingredientBoxCallback();
 		}
 	    });
 	    this.acb.addFocusListener(new FocusListener() {
-
 		@Override
 		public void focusGained(FocusEvent e) {
 		    //
@@ -112,21 +113,38 @@ public class CellEditorFactory {
 		}
 	    });
 	}
-	
+
+	@Override
+	public boolean isCellEditable(EventObject event) {
+	    if (event == null || !(event instanceof MouseEvent)
+		    || (((MouseEvent) event).getClickCount() >= getClickCountToStart())) {
+		return true;
+	    }
+	    return false;
+	} // isCellEditable()
+
+	public void setClickCountToStart(int count) {
+	    clickCountToStart = count;
+	}
+
+	public int getClickCountToStart() {
+	    return clickCountToStart;
+	}
+
 	@Override
 	public Object getCellEditorValue() {
-	    System.out.println("selected index: "+acb.getSelectedIndex());
+	    System.out.println("selected index: " + acb.getSelectedIndex());
 	    if (acb.getSelectedIndex() == 0) {
 		return null;
 	    } else {
 //		return acb.getDataList().toArray()[acb.getSelectedIndex()];
 //		return acb.getSelectedItem();
-		
+
 		Object sel = acb.getSelectedItem();
-		System.out.println("selected item: "+acb.getSelectedItem());
-		
+		System.out.println("selected item: " + acb.getSelectedItem());
+
 		if (sel instanceof String) {
-		    return Database.driver().getIngredients().get(((String)sel).toLowerCase());
+		    return Database.driver().getIngredients().get(((String) sel).toLowerCase());
 		} else {
 		    return sel;
 		}
@@ -144,6 +162,6 @@ public class CellEditorFactory {
 //		}
 	    }
 	    return acb;
-	}	
+	}
     }
 }
