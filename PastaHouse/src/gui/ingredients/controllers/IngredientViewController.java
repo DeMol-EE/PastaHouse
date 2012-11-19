@@ -8,8 +8,12 @@
  *
  * Created on Oct 24, 2012, 3:50:31 PM
  */
-package gui;
+package gui.ingredients.controllers;
 
+import gui.ingredients.dialogs.AddIngredientDialog;
+import gui.ingredients.dialogs.EditIngredientDialog;
+import gui.utilities.list.EditableListModel;
+import gui.utilities.list.ListModelFactory;
 import utilities.Utilities;
 import database.*;
 import java.awt.Color;

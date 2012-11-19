@@ -2,18 +2,29 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.dialogs;
 
+import gui.utilities.table.EditableTableModel;
+import gui.utilities.table.TableRowTransferHandler;
+import gui.utilities.cell.CellEditorFactory;
+import gui.utilities.cell.CellRendererFactory;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DropMode;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.TableCellEditor;
 import utilities.Utilities;
 
@@ -122,7 +133,6 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 600));
-        setPreferredSize(new java.awt.Dimension(430, 400));
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -270,14 +280,8 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_netWeightOutletKeyReleased
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
-        int selectedRow = ingredientsOutlet.getSelectedRow();
-	
-	if(selectedRow>-1 && selectedRow < ingredientsOutlet.getModel().getRowCount()){
-	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(selectedRow);
-	    
-	    selectedRow = (int)Math.max(0, Math.min(selectedRow, ((EditableTableModel)ingredientsOutlet.getModel()).getRowCount()-1));
-	    
-	    ingredientsOutlet.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+        if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
+	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
 	}
     }//GEN-LAST:event_removeComponentActionPerformed
 

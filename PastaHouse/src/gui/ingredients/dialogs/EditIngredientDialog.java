@@ -2,12 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.dialogs;
 
+import gui.utilities.combobox.ComboBoxModelFactory;
+import gui.utilities.combobox.AutocompleteCombobox;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.BasicIngredient;
 import database.Database;
 import database.Supplier;
+import gui.ingredients.controllers.MasterDetailViewController;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;

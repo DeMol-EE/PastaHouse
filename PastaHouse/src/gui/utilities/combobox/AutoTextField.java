@@ -1,5 +1,6 @@
-package gui;
+package gui.utilities.combobox;
 
+import gui.utilities.combobox.AutocompleteCombobox;
 import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.text.*;

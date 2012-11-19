@@ -12,10 +12,10 @@ package pastahouse;
 
 import utilities.Configuration;
 import database.Supplier;
-import gui.IngredientViewController;
-import gui.MasterDetailViewController;
-import gui.RecipeViewController;
-import gui.SupplierViewController;
+import gui.ingredients.controllers.IngredientViewController;
+import gui.ingredients.controllers.MasterDetailViewController;
+import gui.ingredients.controllers.RecipeViewController;
+import gui.ingredients.controllers.SupplierViewController;
 import utilities.Utilities;
 import java.awt.Font;
 import java.util.HashMap;

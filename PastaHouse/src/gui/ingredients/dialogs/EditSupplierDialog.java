@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.ingredients.dialogs;
 
 import database.Supplier;
+import gui.ingredients.controllers.SupplierViewController;
 import javax.swing.JOptionPane;
 
 /**
@@ -87,7 +88,6 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(528, 500));
 
         jPanel2.setLayout(new java.awt.GridLayout(9, 2));
 
