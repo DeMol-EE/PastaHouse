@@ -5,7 +5,7 @@
 package database;
 
 import utilities.Configuration;
-import utilities.Utilities;
+import utilities.StringTools;
 
 /**
  *
@@ -26,9 +26,6 @@ public class BasicIngredient extends Ingredient {
     private String notes;
     
     // derived variables
-    private double pricePerWeight;
-    private double grossPrice;
-    private double netPrice;
     
     public BasicIngredient(String name, String date){
 	super(name, date);
@@ -44,10 +41,6 @@ public class BasicIngredient extends Ingredient {
 	this.lossPercent = lossPercent;
 	this.taxes = taxes;
 	this.notes = notes;
-	
-	this.pricePerWeight = pricePerUnit/weightPerUnit;
-	this.grossPrice = pricePerWeight/(1.0-(0.01*lossPercent));
-	this.netPrice = grossPrice * (1.0 + 0.01*taxes);
     }
     
     public BasicIngredient(BasicIngredient b){
@@ -57,12 +50,8 @@ public class BasicIngredient extends Ingredient {
 	this.packaging = b.getPackaging();
 	this.pricePerUnit = b.getPricePerUnit();
 	this.weightPerUnit = b.getWeightPerUnit();
-	this.pricePerWeight = b.getPricePerWeight();
 	this.lossPercent = b.getLossPercent();
 	this.taxes = b.getTaxes();
-	this.pricePerWeight = b.getPricePerWeight();
-	this.grossPrice = b.getGrossPrice();
-	this.netPrice = b.getNetPrice();
 	this.notes = b.getNotes();
     }
     
@@ -78,12 +67,8 @@ public class BasicIngredient extends Ingredient {
 	this.packaging = b.getPackaging();
 	this.pricePerUnit = b.getPricePerUnit();
 	this.weightPerUnit = b.getWeightPerUnit();
-	this.pricePerWeight = b.getPricePerWeight();
 	this.lossPercent = b.getLossPercent();
 	this.taxes = b.getTaxes();
-	this.pricePerWeight = b.getPricePerWeight();
-	this.grossPrice = b.getGrossPrice();
-	this.netPrice = b.getNetPrice();
 	this.notes = b.getNotes();
     }
 
@@ -127,6 +112,7 @@ public class BasicIngredient extends Ingredient {
 	return brand;
     }
 
+    @Override
     public String getPackaging() {
 	return packaging;
     }
@@ -140,6 +126,7 @@ public class BasicIngredient extends Ingredient {
 	return weightPerUnit;
     }
 
+    @Override
     public double getLossPercent() {
 	return lossPercent;
     }
@@ -150,15 +137,15 @@ public class BasicIngredient extends Ingredient {
 
     @Override
     public double getPricePerWeight() {
-	return pricePerWeight;
+	return pricePerUnit/weightPerUnit;
     }
 
     public double getGrossPrice() {
-	return grossPrice;
+	return getPricePerWeight()/(1.0-(0.01*lossPercent));
     }
 
     public double getNetPrice() {
-	return netPrice;
+	return getGrossPrice() * (1.0 + 0.01*taxes);
     }
     
     public String getNotes(){
@@ -177,13 +164,13 @@ public class BasicIngredient extends Ingredient {
     @Override
     public boolean update(){
 	return Database.driver().executeUpdate(table_id, getPrimaryKey(), getName(),  
-		"firma = \""+ supplier.getFirm() +"\", "
+		"firma = \""+ (supplier == null ? "NULL" : supplier.getFirm()) +"\", "
 		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
 		+ "merk = "+(brand.length()>0 ?"\""+brand +"\"":"NULL")+", "
 		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "
 		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"NULL")+", "
 		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"NULL")+", "
-		+ "verliespercentage = "+(lossPercent>0? "\""+lossPercent +"\"":"NULL")+", "
+		+ "verliespercentage = "+(lossPercent>=0? "\""+lossPercent +"\"":"NULL")+", "
 		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"NULL")+", "
 		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
 		+ "opmerking = "+(notes.length()>0 ? "\""+notes +"\"":"NULL"));
@@ -199,6 +186,6 @@ public class BasicIngredient extends Ingredient {
 	/*
 	 * The default cell renderer knows how to display strings and icons and it displays Objects by invoking toString.
 	 */
-	return Utilities.capitalize(super.getName());
+	return StringTools.capitalize(super.getName());
     }
 }

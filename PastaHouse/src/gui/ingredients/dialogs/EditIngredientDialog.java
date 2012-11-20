@@ -4,13 +4,13 @@
  */
 package gui.ingredients.dialogs;
 
-import gui.utilities.combobox.ComboBoxModelFactory;
-import gui.utilities.combobox.AutocompleteCombobox;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.BasicIngredient;
 import database.Database;
 import database.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.combobox.AutocompleteCombobox;
+import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -534,7 +534,16 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	    model.setName(nameOutlet.getText());
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
 	    model.setNotes(notesOutlet.getText());
-	    model.setSupplier((Supplier)supplierOutlet.getSelectedItem());
+	    Supplier supp;
+	    if (supplierBox.getSelectedItem() instanceof Supplier) {
+		supp = (Supplier)supplierBox.getSelectedItem();
+	    } else if (supplierBox.getSelectedItem() instanceof String) {
+		String s = (String)supplierBox.getSelectedItem();
+		supp = Database.driver().getSuppliers().get(s.toLowerCase());
+	    } else {
+		supp = null;
+	    }
+	    model.setSupplier(supp);
 	    model.setBrand(brandOutlet.getText());
 	    model.setPackaging(packagingOutlet.getText());
 	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));

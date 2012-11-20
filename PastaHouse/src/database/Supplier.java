@@ -5,6 +5,7 @@
 package database;
 
 import utilities.Configuration;
+import utilities.StringTools;
 import utilities.Utilities;
 
 /**
@@ -151,7 +152,7 @@ public class Supplier implements Record{
     
     @Override
     public String toString(){
-	return Utilities.capitalize(firm);
+	return StringTools.capitalize(firm);
     }
 
     @Override

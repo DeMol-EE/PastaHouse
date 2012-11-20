@@ -4,10 +4,10 @@
  */
 package database;
 
-import utilities.Configuration;
-import utilities.Utilities;
 import java.util.Map;
 import java.util.TreeMap;
+import utilities.Configuration;
+import utilities.StringTools;
 
 /**
  *
@@ -52,7 +52,7 @@ public class Recipe extends Ingredient {
     }
     
     /**
-     * Lazily calculate and return the gross weight of the recipe's ingredients
+     * Lazily calculate and return the gross weight of the recipe as the sum of the quantities (= net weights) of all the ingredients.
      * 
      * @return 
      */
@@ -88,10 +88,12 @@ public class Recipe extends Ingredient {
     
     @Override
     public boolean update(){
-	return false;
+	System.err.println("TODO: set update in db!");
+	
 //	return Database.driver().executeUpdate(table_id, getName(), "bereiding = "+preparation);
 	// update recipes-recipes
 	// update recipes-ingredients
+	return false;
     }
     
     @Override
@@ -101,11 +103,21 @@ public class Recipe extends Ingredient {
     
     @Override
     public String toString(){
-	return Utilities.capitalize(getName());
+	return StringTools.capitalize(getName());
     }
     
     @Override
     public double getWeightPerUnit(){
 	return netWeight;
+    }
+
+    @Override
+    public String getPackaging() {
+	return ""; // geen packaging
+    }
+
+    @Override
+    public double getLossPercent() {
+	return netWeight/getGrossWeight();
     }
 }

@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import utilities.StringTools;
 import utilities.Utilities;
 
 /**
@@ -121,7 +122,7 @@ public class CellRendererFactory {
 	    if (value == null) {
 		setText("<Kies een item>");
 	    } else {
-		setText(" "+Utilities.capitalizeEach(value.toString()));
+		setText(" "+StringTools.capitalizeEach(value.toString()));
 	    }
 	    return this;
 	}

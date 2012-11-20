@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import utilities.StringTools;
 
 /**
  *
@@ -49,10 +50,10 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     @Override
     public void updateDetail(Object value){
 	Supplier s = (Supplier)value;
-	firmOutlet.setText(Utilities.capitalize(s.getFirm()));
-	contactOutlet.setText(Utilities.capitalizeEach(s.getContact()));
-	addressOutlet.setText(Utilities.capitalizeEach(s.getAddress()));
-	municipalityOutlet.setText(Utilities.capitalize(s.getMunicipality()));
+	firmOutlet.setText(StringTools.capitalize(s.getFirm()));
+	contactOutlet.setText(StringTools.capitalizeEach(s.getContact()));
+	addressOutlet.setText(StringTools.capitalizeEach(s.getAddress()));
+	municipalityOutlet.setText(StringTools.capitalize(s.getMunicipality()));
 	telephoneOutlet.setText(s.getTelephone());
 	cellphoneOutlet.setText(s.getCellphone());
 	faxOutlet.setText(s.getFax());

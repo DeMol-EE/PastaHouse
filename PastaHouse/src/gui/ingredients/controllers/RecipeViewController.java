@@ -9,6 +9,7 @@ import database.Database;
 import database.Ingredient;
 import database.Recipe;
 import gui.ingredients.dialogs.EditRecipeDialog;
+import gui.ingredients.dialogs.PrintDialog;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticTableModel;
@@ -19,15 +20,15 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import printer.PrintableRecipe;
-import printer.PrintableTest;
 import printer.Printer;
+import utilities.StringTools;
 import utilities.Utilities;
 
 /**
  *
  * @author Warkst
  */
-public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController{
+public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController, PrintDialogDelegate{
 
     /**
      * Creates new form RecipeViewController
@@ -61,7 +62,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     public void updateDetail(Object value){
 	Recipe r = (Recipe)value;
 	
-	nameOutlet.setText(Utilities.capitalize(r.getName()));
+	nameOutlet.setText(StringTools.capitalize(r.getName()));
 	dateOutlet.setText(r.getDate());
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
@@ -133,6 +134,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add.setText("Toevoegen...");
+        add.setFocusable(false);
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
@@ -195,6 +197,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         print.setText("Afdrukken...");
+        print.setFocusable(false);
         print.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printActionPerformed(evt);
@@ -203,6 +206,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel2.add(print);
 
         edit.setText("Wijzigen...");
+        edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);
@@ -250,18 +254,13 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_editActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-//        Printable pr = new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue());
-        Printable pr = new PrintableTest();
-	
-	Printer.driver().setPrintJob(pr);
-	Printer.driver().tryPrint();
-//	try {
-//	    ingredientsOutlet.print();
-//	} catch (PrinterException ex) {
-//	    Logger.getLogger(RecipeViewController.class.getName()).log(Level.SEVERE, null, ex);
-//	}
+	new PrintDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_printActionPerformed
 
+    public void printProxy(){
+	printActionPerformed(null);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JLabel dateOutlet;
@@ -309,5 +308,29 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     @Override
     public void edit() {
 	editActionPerformed(null);
+    }
+
+    @Override
+    public void printQuantity(double q) {
+	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), q));
+    }
+
+    @Override
+    public void printAmount(double a) {
+	Recipe r = (Recipe)recipeListOutlet.getSelectedValue();
+	// herreken het aantal stuks naar een gewicht
+	
+	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), a*r.getNetWeight(), a));
+    }
+    
+    private void print(Printable pr){
+//        Printable pr = new PrintableTest();
+	Printer.driver().setPrintJob(pr);
+	Printer.driver().tryPrint();
+//	try {
+//	    ingredientsOutlet.print();
+//	} catch (PrinterException ex) {
+//	    Logger.getLogger(RecipeViewController.class.getName()).log(Level.SEVERE, null, ex);
+//	}
     }
 }
