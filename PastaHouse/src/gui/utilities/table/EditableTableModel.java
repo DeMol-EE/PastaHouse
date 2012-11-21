@@ -5,7 +5,6 @@
 package gui.utilities.table;
 
 import database.Component;
-import database.Database;
 import database.Ingredient;
 import java.util.ArrayList;
 import java.util.Collections;

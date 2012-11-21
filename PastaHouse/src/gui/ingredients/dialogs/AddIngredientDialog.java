@@ -4,12 +4,12 @@
  */
 package gui.ingredients.dialogs;
 
-import gui.utilities.combobox.ComboBoxModelFactory;
-import gui.utilities.combobox.AutocompleteCombobox;
 import database.BasicIngredient;
 import database.Database;
 import database.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.combobox.AutocompleteCombobox;
+import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
+import utilities.Utilities;
 
 /**
  *
@@ -326,6 +328,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+
         BasicIngredient b = new BasicIngredient(
                 (supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
 		brandOutlet.getText(), 
@@ -340,6 +343,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 	if (Database.driver().addIngredient(b)) {
 	    delegate.updateListAndSelect(b);
 	    this.dispose();
+
 	}
     }//GEN-LAST:event_addActionPerformed
     

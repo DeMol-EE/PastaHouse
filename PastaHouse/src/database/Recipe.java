@@ -35,7 +35,7 @@ public class Recipe extends Ingredient {
     }
     
     public Recipe(String name, String date){
-	super(name, date);
+	this(name, date, "", 0.0);
     }
     
     private Recipe(String name, String date, String preparation, double netWeight){
@@ -78,6 +78,10 @@ public class Recipe extends Ingredient {
     public String getPreparation() {
 	return preparation;
     }
+
+    public void setIngredients(Map<Integer, Component> ingredients) {
+	this.ingredients = ingredients;
+    }
     
     /**
      * Lazily calculate and return the gross weight of the recipe as the sum of the quantities (= net weights) of all the ingredients.
@@ -108,7 +112,7 @@ public class Recipe extends Ingredient {
 	    }
 	}
 	
-	return returnMe/netWeight;
+	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
     }
     
     @Override
