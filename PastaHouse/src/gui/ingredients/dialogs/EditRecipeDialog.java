@@ -5,6 +5,7 @@
 package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
+import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
@@ -12,9 +13,11 @@ import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
 import gui.utilities.table.TableRowTransferHandler;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +31,8 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.table.TableCellEditor;
 import utilities.Utilities;
@@ -55,11 +60,21 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	this.model = model;
 	this.defaultModel = new Recipe(model);
 	
-//	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
-	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize());
-	
+	/*
+	 * Configure the ingredient list. Add a listener that when the table's data changes, the proper fields are updated.
+	 */
+	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
+//	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize());	
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	this.ingredientsOutlet.setModel(new EditableTableModel(model.getIngredients()));
+	this.ingredientsOutlet.getModel().addTableModelListener(new TableModelListener() {
+
+	    @Override
+	    public void tableChanged(TableModelEvent e) {
+		updateGrossWeightOutlet();
+		updatePricePerWeightOutlet();
+	    }
+	});
 	
 //	final JComboBox icb = new JComboBox(Database.driver().getIngredients().values().toArray());
 //	addPopupMouseListener(icb);
@@ -76,6 +91,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(suppliers, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
+	this.ingredientsOutlet.setDefaultEditor(Double.class, CellEditorFactory.createDoubleEditor());
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	
@@ -85,44 +101,12 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	
 	loadModel();
 	
-	// add accelerator to buttons
-	// setting the button to receive action when F3 is pressed
+	// add accelerator to "add" button
 	InputMap keyMap = new ComponentInputMap(addComponent);
 	keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "action");
 
 	ActionMap actionMap = new ActionMapUIResource();
-	actionMap.put("action", new Action() {
-
-	    @Override
-	    public Object getValue(String key) {
-		return null;
-	    }
-
-	    @Override
-	    public void putValue(String key, Object value) {
-		
-	    }
-
-	    @Override
-	    public void setEnabled(boolean b) {
-		
-	    }
-
-	    @Override
-	    public boolean isEnabled() {
-		return true;
-	    }
-
-	    @Override
-	    public void addPropertyChangeListener(PropertyChangeListener listener) {
-		//
-	    }
-
-	    @Override
-	    public void removePropertyChangeListener(PropertyChangeListener listener) {
-		//
-	    }
-
+	actionMap.put("action", new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		addComponentActionPerformed(e);
@@ -143,14 +127,15 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	netWeightOutlet.setText(""+model.getNetWeight());
 	
 	updateGrossWeightOutlet();
+	updatePricePerWeightOutlet();
     }
     
     private void updateGrossWeightOutlet(){
-	
+	grossWeightOutlet.setText(new DecimalFormat("0.000").format(model.getGrossWeight())+" kg");
     }
     
     private void updatePricePerWeightOutlet(){
-	
+	pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
     }
     
     /**
@@ -355,6 +340,40 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	ingredientsOutlet.transferFocus();
     }//GEN-LAST:event_addComponentActionPerformed
 
+    private abstract class KeyAction implements Action{
+
+	@Override
+	public Object getValue(String key) {
+	    return null;
+	}
+
+	@Override
+	public void putValue(String key, Object value) {
+	    //
+	}
+
+	@Override
+	public void setEnabled(boolean b) {
+	    //
+	}
+
+	@Override
+	public boolean isEnabled() {
+	    return true;
+	}
+
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+	    //
+	}
+
+	@Override
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+	    //
+	}
+
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addComponent;
     private javax.swing.JButton cancel;

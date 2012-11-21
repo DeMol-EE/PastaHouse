@@ -92,10 +92,12 @@ public class Recipe extends Ingredient {
 	double returnMe = 0.0;
 	
 	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
-	    returnMe += entry.getValue().getIngredient().getPricePerWeight();
+	    if (entry.getValue().getIngredient() != null) {
+		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getGrossQuantity();
+	    }
 	}
 	
-	return returnMe;
+	return returnMe/netWeight;
     }
     
     @Override

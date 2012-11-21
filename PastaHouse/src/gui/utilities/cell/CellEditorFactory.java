@@ -7,11 +7,14 @@ package gui.utilities.cell;
 import database.Database;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.utilities.combobox.AutocompleteCombobox;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 import java.util.List;
@@ -76,6 +79,33 @@ public class CellEditorFactory {
 	public DoubleEditor() {
 	    input = new JTextField();
 	    input.setHorizontalAlignment(JTextField.CENTER);
+	    input.setOpaque(true);
+	    input.addFocusListener(new FocusListener() {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+		    input.setSelectionStart(0);
+		    input.setSelectionEnd(input.getText().length());
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+		    //
+		}
+	    });
+	    input.addKeyListener(new KeyAdapter() {
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+		    try{
+			Double.parseDouble(input.getText());
+			input.setForeground(Color.BLACK);
+		    } catch (Exception ex){
+			input.setForeground(Color.red);
+		    }
+		}
+		
+	    });
 	}
 
 	@Override
@@ -86,7 +116,18 @@ public class CellEditorFactory {
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	    input.setText(value.toString());
+	    input.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, table.getSelectionBackground()));
+	    
 	    return input;
+	}
+	
+	@Override
+	public boolean isCellEditable(EventObject event) {
+	    if (event == null || !(event instanceof MouseEvent)
+		    || (((MouseEvent) event).getClickCount() >= 2)) {
+		return true;
+	    }
+	    return false;
 	}
     }
 

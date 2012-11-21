@@ -10,12 +10,11 @@
  */
 package gui.ingredients.controllers;
 
+import database.*;
 import gui.ingredients.dialogs.AddIngredientDialog;
 import gui.ingredients.dialogs.EditIngredientDialog;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
-import utilities.Utilities;
-import database.*;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -135,7 +134,7 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
-	updateDetail(select);
+//	updateDetail(select);
     }
     
     public void addIngredient(BasicIngredient b){
