@@ -59,6 +59,14 @@ public class Recipe extends Ingredient {
     public void addIngredient(Ingredient i, int rank, double quantity, boolean isIngredient){
 	ingredients.put(rank, new Component(i, rank, quantity, isIngredient));
     }
+
+    public void setNetWeight(double netWeight) {
+	this.netWeight = netWeight;
+    }
+
+    public void setPreparation(String preparation) {
+	this.preparation = preparation;
+    }
     
     public double getNetWeight() {
 	return netWeight;
@@ -107,11 +115,11 @@ public class Recipe extends Ingredient {
     
     @Override
     public boolean update(){
-	System.err.println("TODO: set update in db!");
-	
-//	return Database.driver().executeUpdate(table_id, getName(), "bereiding = "+preparation);
-	// update recipes-recipes
-	// update recipes-ingredients
+//	return Database.driver().executeUpdate(table_id, getPrimaryKey(), getName(),
+//		"naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
+//		+ "nettogewicht = "+(netWeight>0? "\""+netWeight +"\"":"NULL")+", "
+//		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
+//		+ "bereiding = "+(preparation.length()>0 ? "\""+preparation +"\"":"NULL"));
 	return false;
     }
     

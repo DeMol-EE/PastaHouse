@@ -105,7 +105,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Totaalgewicht ingredi&#xeb;nten"/>
+                <Property name="text" type="java.lang.String" value="  Totaalgewicht ingredi&#xeb;nten"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="grossWeightOutlet">
@@ -115,7 +115,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Gewicht na bereiding"/>
+                <Property name="text" type="java.lang.String" value="  Gewicht na bereiding"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -135,7 +135,6 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="netWeightFormattedOutlet">
                   <Properties>
-                    <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" value="&lt;netWeightFormattedOutlet&gt;"/>
                   </Properties>
                 </Component>
@@ -143,7 +142,7 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Kostprijs per kg (BTW excl)"/>
+                <Property name="text" type="java.lang.String" value="  Kostprijs per kg (BTW excl)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="pricePerWeightOutlet">

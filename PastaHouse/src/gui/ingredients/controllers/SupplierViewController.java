@@ -4,14 +4,12 @@
  */
 package gui.ingredients.controllers;
 
-import com.sun.nio.zipfs.ZipDirectoryStream;
-import gui.ingredients.dialogs.EditSupplierDialog;
-import gui.ingredients.dialogs.AddSupplierDialog;
-import gui.utilities.list.EditableListModel;
-import gui.utilities.list.ListModelFactory;
-import utilities.Utilities;
 import database.Database;
 import database.Supplier;
+import gui.ingredients.dialogs.AddSupplierDialog;
+import gui.ingredients.dialogs.EditSupplierDialog;
+import gui.utilities.list.EditableListModel;
+import gui.utilities.list.ListModelFactory;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
