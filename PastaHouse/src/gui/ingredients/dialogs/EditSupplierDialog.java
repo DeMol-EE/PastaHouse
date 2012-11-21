@@ -4,8 +4,16 @@
  */
 package gui.ingredients.dialogs;
 
+import database.Database;
 import database.Supplier;
 import gui.ingredients.controllers.SupplierViewController;
+import gui.utilities.combobox.AutocompleteCombobox;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.TreeMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,37 +25,77 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private SupplierViewController delegate;
     private final Supplier model;
     private final Supplier defaultModel;
-    
+
     /**
      * Creates new form EditSupplierDialog
      */
     public EditSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate, Supplier model) {
-	super(parent, modal);
-	initComponents();
-	
-	setTitle("Leverancier wijzigen");
-	
-	setModalityType(ModalityType.APPLICATION_MODAL);
-	setLocationRelativeTo(null);
-	
-	this.delegate = delegate;
-	this.model = model;
-	
-	this.defaultModel = new Supplier(model);
-	
-	loadModel();
+        super(parent, modal);
+        initComponents();
+
+        setTitle("Leverancier wijzigen");
+
+        setModalityType(ModalityType.APPLICATION_MODAL);
+        setLocationRelativeTo(null);
+
+        this.delegate = delegate;
+        this.model = model;
+
+        this.defaultModel = new Supplier(model);
+
+        loadModel();
+    }
+
+    private void loadModel() {
+        txtFirma.setText(model.getFirm());
+        txtContact.setText(model.getContact());
+        txtAdres.setText(model.getAddress());
+        // load municipale
+        txtTel.setText(model.getTelephone());
+        txtGSM.setText(model.getCellphone());
+        txtFax.setText(model.getFax());
+        txtEmail.setText(model.getEmail());
+        notesOutlet.setText(model.getNotes());
+        txtGemeente.setText(""+model.getZipcode());
+
+        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        ArrayList items = new ArrayList();
+        items.add("");
+        items.addAll(munies.keySet());
+        comboGemeentes = new AutocompleteCombobox(items);
+        comboGemeentes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setMunicipal();
+            }
+        });
+        comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                setMunicipal();
+            }
+        });
+
+        jPanel2.add(comboGemeentes, 9);
+        comboGemeentes.setSelectedItem(model.getMunicipality());
     }
     
-    private void loadModel(){
-	txtFirma.setText(model.getFirm());
-	txtContact.setText(model.getContact());
-	txtAdres.setText(model.getAddress());
-	// load municipale
-	txtTel.setText(model.getTelephone());
-	txtGSM.setText(model.getCellphone());
-	txtFax.setText(model.getFax());
-	txtEmail.setText(model.getEmail());
-	notesOutlet.setText(model.getNotes());
+    private void setMunicipal() {
+        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        String munie = comboGemeentes.getSelectedItem().toString();
+        if (munies.containsKey(munie)) {
+            txtGemeente.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
+        } else {
+            txtGemeente.setText("");
+        }
     }
 
     /**
@@ -69,9 +117,10 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtGemeente = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txttel2 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         txtGSM = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -89,7 +138,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setLayout(new java.awt.GridLayout(9, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(10, 2));
 
         jLabel11.setText("Firma");
         jLabel11.setFocusable(false);
@@ -109,19 +158,26 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jLabel1.setText("Postcode");
         jLabel1.setFocusable(false);
         jPanel2.add(jLabel1);
+
+        txtGemeente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtGemeenteKeyReleased(evt);
+            }
+        });
         jPanel2.add(txtGemeente);
 
         jLabel12.setText("Gemeente");
         jLabel12.setFocusable(false);
         jPanel2.add(jLabel12);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(jComboBox1);
-
         jLabel9.setText("Telefoon");
         jLabel9.setFocusable(false);
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
+
+        jLabel2.setText("Telefoon 2");
+        jPanel2.add(jLabel2);
+        jPanel2.add(txttel2);
 
         jLabel14.setText("GSM");
         jLabel14.setFocusable(false);
@@ -164,7 +220,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -205,33 +261,54 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         model.setFirm(txtFirma.getText());
         model.setContact(txtContact.getText());
         model.setAddress(txtAdres.getText());
-	// set municipale
+        model.setZipcode(Integer.parseInt(txtGemeente.getText()));
+        model.setMunicipality(comboGemeentes.getSelectedItem().toString());
         model.setTelephone(txtTel.getText());
+        model.setTelephone2(txttel2.getText());
         model.setCellphone(txtGSM.getText());
         model.setFax(txtFax.getText());
         model.setEmail(txtEmail.getText());
         model.setNotes(notesOutlet.getText());
-	
-	if(model.update()){
-	    delegate.updateList();
-	    this.dispose();
-	} else {
-	    JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
-	}
+
+        if (model.update()) {
+            delegate.updateList();
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // reset values to default
-	model.load(defaultModel);
-	
-	this.dispose();
+        model.load(defaultModel);
+
+        this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void txtGemeenteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGemeenteKeyReleased
+        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        ArrayList items = new ArrayList();
+        if (!txtGemeente.getText().isEmpty()) {
+            int code = Integer.parseInt(txtGemeente.getText());
+            if (munies.containsValue(code)) {
+                for (String munie : munies.keySet()) {
+                    if (munies.get(munie) == code) {
+                        items.add(munie);
+                    }
+                }
+            }
+
+        } else {
+            items.add("");
+            items.addAll(munies.keySet());
+        }
+        comboGemeentes.setDataList(items);
+    }//GEN-LAST:event_txtGemeenteKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -240,6 +317,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -255,5 +333,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtGSM;
     private javax.swing.JTextField txtGemeente;
     private javax.swing.JTextField txtTel;
+    private javax.swing.JTextField txttel2;
     // End of variables declaration//GEN-END:variables
+    private AutocompleteCombobox comboGemeentes;
 }

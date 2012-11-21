@@ -107,7 +107,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
 
-        jLabel2.setText("Telefoon");
+        jLabel2.setText("Telefoon 2");
         jPanel2.add(jLabel2);
         jPanel2.add(txtTel2);
 
@@ -186,7 +186,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
+        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), Integer.parseInt(txtGemeente.getText()), txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
         Database db = Database.driver();
         if (db.addSupplier(sup)) {
 //            db.getSuppliers().put(sup.getFirm(), sup);

@@ -4,6 +4,7 @@
  */
 package gui.ingredients.controllers;
 
+import com.sun.nio.zipfs.ZipDirectoryStream;
 import gui.ingredients.dialogs.EditSupplierDialog;
 import gui.ingredients.dialogs.AddSupplierDialog;
 import gui.utilities.list.EditableListModel;
@@ -24,64 +25,66 @@ import utilities.StringTools;
  *
  * @author Warkst
  */
-public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController{
+public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController {
 
     /**
      * Creates new form SupplierViewController
      */
     public SupplierViewController() {
-	initComponents();
-	
-	listOutlet.setModel(ListModelFactory.createSupplierListModel(Database.driver().getSuppliers()));
-	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	listOutlet.addListSelectionListener(new ListSelectionListener() {
-
-	    @Override
-	    public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-		    updateDetail(listOutlet.getSelectedValue());
-		}
-	    }
-	});
-	
-	listOutlet.setSelectedIndex(0);
+        initComponents();
+        
+        listOutlet.setModel(ListModelFactory.createSupplierListModel(Database.driver().getSuppliers()));
+        listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listOutlet.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    updateDetail(listOutlet.getSelectedValue());
+                }
+            }
+        });
+        
+        listOutlet.setSelectedIndex(0);
     }
     
     @Override
-    public void updateDetail(Object value){
-	Supplier s = (Supplier)value;
-	firmOutlet.setText(StringTools.capitalize(s.getFirm()));
-	contactOutlet.setText(StringTools.capitalizeEach(s.getContact()));
-	addressOutlet.setText(StringTools.capitalizeEach(s.getAddress()));
-	municipalityOutlet.setText(StringTools.capitalize(s.getMunicipality()));
-	telephoneOutlet.setText(s.getTelephone());
-	cellphoneOutlet.setText(s.getCellphone());
-	faxOutlet.setText(s.getFax());
-	emailOutlet.setText(s.getEmail());
-	
-	notesOutlet.setText(s.getNotes());
+    public void updateDetail(Object value) {
+        Supplier s = (Supplier) value;
+        firmOutlet.setText(StringTools.capitalize(s.getFirm()));
+        contactOutlet.setText(StringTools.capitalizeEach(s.getContact()));
+        addressOutlet.setText(StringTools.capitalizeEach(s.getAddress()));
+        municipalityOutlet.setText(StringTools.capitalize(s.getMunicipality()));
+        telephoneOutlet.setText(s.getTelephone());
+        cellphoneOutlet.setText(s.getCellphone());
+        faxOutlet.setText(s.getFax());
+        emailOutlet.setText(s.getEmail());
+        telephone2Outlet.setText(s.getTelephone2());
+        notesOutlet.setText(s.getNotes());
+        zipcodeOutlet.setText("" + s.getZipcode());
     }
     
-    public void selectSupplier(Supplier supplier){
+    public void selectSupplier(Supplier supplier) {
 //	System.out.println("SVC::select index stub called with index "+);
-	listOutlet.setSelectedValue(supplier, true);
+        listOutlet.setSelectedValue(supplier, true);
     }
     
-    public void addSupplier(Supplier supplier){
-	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.add(supplier);
-	listOutlet.requestFocus();
+    public void addSupplier(Supplier supplier) {
+        EditableListModel<Supplier> dlm = (EditableListModel) listOutlet.getModel();
+        dlm.add(supplier);
+//        updateDetail(supplier);
+        listOutlet.setSelectedValue(supplier, true);
+        listOutlet.requestFocus();
     }
     
-    public void updateList(){
-	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.update();
-	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
+    public void updateList() {
+        EditableListModel<Supplier> dlm = (EditableListModel) listOutlet.getModel();
+        dlm.update();
+        updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
     }
     
     @Override
-    public JPanel view(){
-	return this;
+    public JPanel view() {
+        return this;
     }
 
     /**
@@ -104,10 +107,14 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         contactOutlet = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         addressOutlet = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        zipcodeOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         municipalityOutlet = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         telephoneOutlet = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        telephone2Outlet = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cellphoneOutlet = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -147,7 +154,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         detail.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(8, 2, 0, 5));
+        fixedFields.setLayout(new java.awt.GridLayout(10, 2, 0, 5));
 
         jLabel1.setText("Firma");
         jLabel1.setFocusable(false);
@@ -173,6 +180,12 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         addressOutlet.setFocusable(false);
         fixedFields.add(addressOutlet);
 
+        jLabel10.setText("Postcode");
+        fixedFields.add(jLabel10);
+
+        zipcodeOutlet.setText("<zipcodeOutlet>");
+        fixedFields.add(zipcodeOutlet);
+
         jLabel3.setText("Gemeente");
         jLabel3.setFocusable(false);
         fixedFields.add(jLabel3);
@@ -188,6 +201,12 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         telephoneOutlet.setText("<telephoneOutlet>");
         telephoneOutlet.setFocusable(false);
         fixedFields.add(telephoneOutlet);
+
+        jLabel9.setText("Telefoon 2");
+        fixedFields.add(jLabel9);
+
+        telephone2Outlet.setText("<telephone2Outlet>");
+        fixedFields.add(telephone2Outlet);
 
         jLabel6.setText("GSM");
         jLabel6.setFocusable(false);
@@ -288,53 +307,52 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this);
+        AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this);
         dia.setVisible(true);
     }//GEN-LAST:event_addActionPerformed
-
+    
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
-        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F1) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F2) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F3)){
-	    evt.consume();
-	}
-	if(evt.getKeyCode() == KeyEvent.VK_TAB){
-	    evt.consume();
-	    listOutlet.requestFocus();
-	}
+        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
+                && !(evt.getKeyCode() == KeyEvent.VK_F1)
+                && !(evt.getKeyCode() == KeyEvent.VK_F2)
+                && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
+            evt.consume();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            evt.consume();
+            listOutlet.requestFocus();
+        }
     }//GEN-LAST:event_notesOutletKeyPressed
-
+    
     private void notesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyReleased
-        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F1) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F2) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F3)){
-	    evt.consume();
-	}
-	if(evt.getKeyCode() == KeyEvent.VK_TAB){
-	    evt.consume();
-	    listOutlet.requestFocus();
-	}
+        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
+                && !(evt.getKeyCode() == KeyEvent.VK_F1)
+                && !(evt.getKeyCode() == KeyEvent.VK_F2)
+                && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
+            evt.consume();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            evt.consume();
+            listOutlet.requestFocus();
+        }
     }//GEN-LAST:event_notesOutletKeyReleased
-
+    
     private void notesOutletKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyTyped
-        if(!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F1) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F2) 
-		&& !(evt.getKeyCode()==KeyEvent.VK_F3)){
-	    evt.consume();
-	}
-	if(evt.getKeyCode() == KeyEvent.VK_TAB){
-	    evt.consume();
-	    listOutlet.requestFocus();
-	}
+        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
+                && !(evt.getKeyCode() == KeyEvent.VK_F1)
+                && !(evt.getKeyCode() == KeyEvent.VK_F2)
+                && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
+            evt.consume();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            evt.consume();
+            listOutlet.requestFocus();
+        }
     }//GEN-LAST:event_notesOutletKeyTyped
-
+    
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditSupplierDialog(null, true, this, (Supplier)listOutlet.getSelectedValue()).setVisible(true);
+        new EditSupplierDialog(null, true, this, (Supplier) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JLabel addressOutlet;
@@ -347,6 +365,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel firmOutlet;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -354,6 +373,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -365,21 +385,23 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel municipalityOutlet;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JPanel stretchableFields;
+    private javax.swing.JLabel telephone2Outlet;
     private javax.swing.JLabel telephoneOutlet;
+    private javax.swing.JLabel zipcodeOutlet;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void updateListAndSelect(Object select) {
-	System.err.println("Not implemented");
+        System.err.println("Not implemented");
     }
-
+    
     @Override
     public void add() {
-	addActionPerformed(null);
+        addActionPerformed(null);
     }
-
+    
     @Override
     public void edit() {
-	editActionPerformed(null);
+        editActionPerformed(null);
     }
 }

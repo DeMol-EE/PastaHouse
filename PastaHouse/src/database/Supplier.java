@@ -4,6 +4,10 @@
  */
 package database;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utilities.Configuration;
 import utilities.StringTools;
 import utilities.Utilities;
@@ -25,10 +29,11 @@ public class Supplier implements Record{
     private String email;
     private String notes;
     private String contact;
+    private int zipcode;
     
     private boolean deleted;
 
-    private Supplier(String firm, String address, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
+    private Supplier(String firm, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
 	this.firm = firm;
 	this.address = address;
 	this.municipality = municipality;
@@ -40,6 +45,7 @@ public class Supplier implements Record{
 	this.contact = contact;
 	this.deleted = deleted;
         this.telephone2 = telephone2;
+        this.zipcode = zipcode;
     }
     
     public Supplier(Supplier s){
@@ -54,6 +60,7 @@ public class Supplier implements Record{
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
 	this.deleted = s.isDeleted();
+        this.zipcode = s.getZipcode();
     }
     
     public void load(Supplier s){
@@ -68,10 +75,11 @@ public class Supplier implements Record{
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
 	this.deleted = s.isDeleted();
+        this.zipcode = s.getZipcode();
     }
     
-    public static Supplier loadWithValues(String firm, String address, String municipality, String telephone,String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
-	return new Supplier(firm, address, municipality, telephone, telephone2, cellphone, fax, email, notes, contact, verwijderd);
+    public static Supplier loadWithValues(String firm, String address, String municipality, int zipcode, String telephone,String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
+	return new Supplier(firm, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, notes, contact, verwijderd);
     }
     
     public String getAddress() {
@@ -81,6 +89,16 @@ public class Supplier implements Record{
     public void setAddress(String address) {
 	this.address = address;
     }
+
+    public int getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
+    }
+    
+    
 
     public String getCellphone() {
 	return cellphone;
@@ -171,18 +189,29 @@ public class Supplier implements Record{
 
     @Override
     public boolean create() {
-	return Database.driver().executeInsert(table_id, 
-		"firma = "+ firm +", "
-		+ "adres = "+ address +", "
-		+ "gemeente = "+municipality +", "
-		+ "tel = "+telephone+", "
-                + "tel = "+telephone2+", "
-		+ "gsm = "+cellphone+", "
-		+ "fax = "+fax+", "
-		+ "email = "+email+", "
-		+ "opmerking = "+notes+", "
-		+ "contactpersoon = "+contact+", "
-		+ "verwijderd = 0");
+        try {
+            String insertTableSQL = "INSERT INTO suppliers"
+                    + "(firma, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd) VALUES"
+                    + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = Database.driver().getConnection().prepareStatement(insertTableSQL);
+            preparedStatement.setString(1, firm);
+            preparedStatement.setString(2, address);
+            preparedStatement.setString(3, municipality);
+            preparedStatement.setString(4, telephone);
+            preparedStatement.setString(5, telephone2);
+            preparedStatement.setString(6, cellphone);
+            preparedStatement.setString(7, email);
+            preparedStatement.setString(8, notes);
+            preparedStatement.setString(9, contact);
+            preparedStatement.setString(10, fax);
+            preparedStatement.setInt(11, zipcode);
+            preparedStatement.setInt(12, 0);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
     }
 
     /**

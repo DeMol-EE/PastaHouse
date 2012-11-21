@@ -79,7 +79,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="2"/>
-                <Property name="rows" type="int" value="8"/>
+                <Property name="rows" type="int" value="10"/>
                 <Property name="verticalGap" type="int" value="5"/>
               </Layout>
               <SubComponents>
@@ -119,6 +119,16 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JLabel" name="jLabel10">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Postcode"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="zipcodeOutlet">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="&lt;zipcodeOutlet&gt;"/>
+                  </Properties>
+                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Gemeente"/>
@@ -141,6 +151,16 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&lt;telephoneOutlet&gt;"/>
                     <Property name="focusable" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel9">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Telefoon 2"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="telephone2Outlet">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="&lt;telephone2Outlet&gt;"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel6">

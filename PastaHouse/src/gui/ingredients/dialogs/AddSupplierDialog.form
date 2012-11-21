@@ -79,7 +79,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Telefoon"/>
+            <Property name="text" type="java.lang.String" value="Telefoon 2"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTel2">
