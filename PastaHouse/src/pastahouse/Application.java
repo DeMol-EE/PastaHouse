@@ -76,29 +76,6 @@ public class Application extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        txtFirma = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        txtContact = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        txtAdres = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        txtGemeente = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        txtTel = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        txtGSM = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        txtFax = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        txtEmail = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         tabController = new javax.swing.JTabbedPane();
         recipeTab = new javax.swing.JPanel();
         ingredientTab = new javax.swing.JPanel();
@@ -114,73 +91,6 @@ public class Application extends javax.swing.JFrame {
         recipeMenuItem = new javax.swing.JMenuItem();
         ingredientMenuItem = new javax.swing.JMenuItem();
         supplierMenuItem = new javax.swing.JMenuItem();
-
-        jPanel2.setLayout(new java.awt.GridLayout(8, 2));
-
-        jLabel11.setText("Firma");
-        jPanel2.add(jLabel11);
-        jPanel2.add(txtFirma);
-
-        jLabel10.setText("Contactpersoon");
-        jPanel2.add(jLabel10);
-        jPanel2.add(txtContact);
-
-        jLabel13.setText("Adres");
-        jPanel2.add(jLabel13);
-        jPanel2.add(txtAdres);
-
-        jLabel12.setText("Gemeente");
-        jPanel2.add(jLabel12);
-        jPanel2.add(txtGemeente);
-
-        jLabel9.setText("Telefoon");
-        jPanel2.add(jLabel9);
-        jPanel2.add(txtTel);
-
-        jLabel14.setText("GSM");
-        jPanel2.add(jLabel14);
-        jPanel2.add(txtGSM);
-
-        jLabel15.setText("Fax");
-        jPanel2.add(jLabel15);
-        jPanel2.add(txtFax);
-
-        jLabel16.setText("Email");
-        jPanel2.add(jLabel16);
-        jPanel2.add(txtEmail);
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking"));
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
-        jScrollPane2.setName(""); // NOI18N
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
-
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
-
-        jButton1.setText("jButton1");
-        jPanel1.add(jButton1);
-
-        jButton2.setText("jButton2");
-        jPanel1.add(jButton2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -364,23 +274,8 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JMenuItem edit;
     private javax.swing.JMenuItem ingredientMenuItem;
     private javax.swing.JPanel ingredientTab;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem print;
     private javax.swing.JMenuItem recipeMenuItem;
@@ -388,14 +283,6 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JMenuItem supplierMenuItem;
     private javax.swing.JPanel supplierTab;
     private javax.swing.JTabbedPane tabController;
-    private javax.swing.JTextField txtAdres;
-    private javax.swing.JTextField txtContact;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtFax;
-    private javax.swing.JTextField txtFirma;
-    private javax.swing.JTextField txtGSM;
-    private javax.swing.JTextField txtGemeente;
-    private javax.swing.JTextField txtTel;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }

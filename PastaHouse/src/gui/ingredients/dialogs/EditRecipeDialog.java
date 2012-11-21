@@ -55,7 +55,8 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 //	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
 //	
 	List suppliers = new ArrayList();
-	suppliers.add("<Kies ingrediënt>");
+//	suppliers.add("<Kies ingrediënt>");
+	suppliers.add("");
 	suppliers.addAll(Database.driver().getIngredients().values());
 //	AutocompleteCombobox supplierBox = new AutocompleteCombobox(suppliers);
 	
@@ -276,10 +277,8 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
         int selected = ingredientsOutlet.getSelectedRow();
-	
 	if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
 	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
-	    
 	    int row = Math.max(0, Math.min(selected, ingredientsOutlet.getModel().getRowCount()-1));
 	    if (ingredientsOutlet.getModel().getRowCount() > 0) {
 		ingredientsOutlet.getSelectionModel().setSelectionInterval(row, row);
@@ -289,6 +288,10 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
         ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
+	int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
+	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+	ingredientsOutlet.editCellAt(lastIndex, 0);
+	ingredientsOutlet.transferFocus();
     }//GEN-LAST:event_addComponentActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

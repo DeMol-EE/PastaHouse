@@ -5,7 +5,6 @@
  */
 package database;
 
-import utilities.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.Configuration;
 
 /**
  *
