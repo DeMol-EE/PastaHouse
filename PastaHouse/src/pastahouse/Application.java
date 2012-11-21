@@ -16,7 +16,11 @@ import gui.ingredients.controllers.MasterDetailViewController;
 import gui.ingredients.controllers.RecipeViewController;
 import gui.ingredients.controllers.SupplierViewController;
 import java.awt.Font;
+import java.awt.Image;
+import java.io.File;
 import java.util.HashMap;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -45,7 +49,7 @@ public class Application extends javax.swing.JFrame {
 	// load viewControllers
 	
 	tabs = new HashMap<Integer, MasterDetailViewController>();
-	
+        
 	tabs.put(supplierTabIndex, new SupplierViewController());
 	tabs.put(ingredientTabIndex, new IngredientViewController(this));
 	tabs.put(recipeTabIndex, new RecipeViewController());
@@ -82,6 +86,8 @@ public class Application extends javax.swing.JFrame {
         supplierTab = new javax.swing.JPanel();
         menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         close = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         add = new javax.swing.JMenuItem();
@@ -114,6 +120,11 @@ public class Application extends javax.swing.JFrame {
         tabController.getAccessibleContext().setAccessibleName("tabController");
 
         jMenu1.setText("File");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
+        jMenuItem1.setText("Home");
+        jMenu1.add(jMenuItem1);
+        jMenu1.add(jSeparator1);
 
         close.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         close.setText("Close");
@@ -276,6 +287,8 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JPanel ingredientTab;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem print;
     private javax.swing.JMenuItem recipeMenuItem;
