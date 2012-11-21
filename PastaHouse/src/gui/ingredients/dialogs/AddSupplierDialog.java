@@ -57,6 +57,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtTel2 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         txtGSM = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -74,7 +76,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setLayout(new java.awt.GridLayout(9, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(10, 2));
 
         jLabel11.setText("Firma");
         jPanel2.add(jLabel11);
@@ -104,6 +106,10 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel9.setText("Telefoon");
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
+
+        jLabel2.setText("Telefoon 2");
+        jPanel2.add(jLabel2);
+        jPanel2.add(txtTel2);
 
         jLabel14.setText("GSM");
         jPanel2.add(jLabel14);
@@ -180,7 +186,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), txtGemeente.getText(), txtTel.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
+        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), Integer.parseInt(txtGemeente.getText()), txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
         Database db = Database.driver();
         if (db.addSupplier(sup)) {
 //            db.getSuppliers().put(sup.getFirm(), sup);
@@ -225,6 +231,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -239,6 +246,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtGSM;
     private javax.swing.JTextField txtGemeente;
     private javax.swing.JTextField txtTel;
+    private javax.swing.JTextField txtTel2;
     // End of variables declaration//GEN-END:variables
     private AutocompleteCombobox comboGemeentes;
 

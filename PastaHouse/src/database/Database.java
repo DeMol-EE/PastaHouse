@@ -58,6 +58,11 @@ public class Database {
 	}
 	return driver;
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
+    
     
     private void loadSuppliers() throws SQLException{
 	ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_SUP());
@@ -66,7 +71,9 @@ public class Database {
 		    Supplier.loadWithValues(rs.getString("firma"), 
 		    rs.getString("adres"), 
 		    rs.getString("gemeente"), 
-		    rs.getString("tel"), 
+                    rs.getInt("postcode"),
+		    rs.getString("tel"),
+                    rs.getString("tel2"),
 		    rs.getString("gsm"), 
 		    rs.getString("fax"), 
 		    rs.getString("email"), 
@@ -79,8 +86,7 @@ public class Database {
     }
     
     public boolean addSupplier(Supplier sup){
-        if (executeInsert(Configuration.center().getDB_TABLE_SUP(),
-                "\""+ sup.getFirm())){
+        if (sup.create()){
             return true;
         } else {
             return false;
@@ -169,7 +175,7 @@ public class Database {
         ResultSet rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_MUNI());
         while(rs.next()){
             int code = rs.getInt("code");
-            String name = rs.getString("name").toLowerCase();
+            String name = StringTools.capitalizeEach(rs.getString("name"));
             municipales.put(name, code);
         }
     }
