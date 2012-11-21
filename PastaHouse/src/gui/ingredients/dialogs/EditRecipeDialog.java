@@ -126,7 +126,8 @@ public class EditRecipeDialog extends javax.swing.JDialog {
         removeComponent = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(400, 600));
+        setMinimumSize(new java.awt.Dimension(400, 500));
+        setPreferredSize(new java.awt.Dimension(462, 500));
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -274,8 +275,15 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_netWeightOutletKeyReleased
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
-        if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
+        int selected = ingredientsOutlet.getSelectedRow();
+	
+	if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
 	    ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
+	    
+	    int row = Math.max(0, Math.min(selected, ingredientsOutlet.getModel().getRowCount()-1));
+	    if (ingredientsOutlet.getModel().getRowCount() > 0) {
+		ingredientsOutlet.getSelectionModel().setSelectionInterval(row, row);
+	    }	    
 	}
     }//GEN-LAST:event_removeComponentActionPerformed
 

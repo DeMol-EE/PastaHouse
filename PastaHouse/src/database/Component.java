@@ -37,8 +37,16 @@ public class Component {
 	return quantity;
     }
     
-    public double getPieces() {
-	return quantity * ingredient.getWeightPerUnit();
+    /**
+     * Returns the used amount of units of this ingredient, calculated using the
+     * gross needed weight of the ingredient to get the desired entered net
+     * amount, multiplied by the (gross) weight per unit.
+     * 
+     * @return The needed amount of units of this ingredient.
+     */
+    public double getUnits() {
+	double d = (quantity / (1.0 - 0.01 * ingredient.getLossPercent()) )* ingredient.getWeightPerUnit();
+	return d * Math.signum(d);
     }
 
     public void setIngredient(Ingredient ingredient) {

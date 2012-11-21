@@ -41,7 +41,7 @@ public class StaticTableModel extends AbstractTableModel{
 	    case 2:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    case 3:
-		return ((Component)data.values().toArray()[rowIndex]).getPieces();
+		return ((Component)data.values().toArray()[rowIndex]).getUnits();
 	    default:
 		return "<empty>";
 	}
