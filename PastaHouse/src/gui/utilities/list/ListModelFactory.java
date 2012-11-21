@@ -16,7 +16,7 @@ import javax.swing.AbstractListModel;
  * @author Warkst
  */
 public class ListModelFactory {
-    public static AbstractListModel createBasicIngredientModel(final Map<String, BasicIngredient> data){
+    public static AbstractListModel createBasicIngredientModel(final Map<Integer, BasicIngredient> data){
 	return new EditableListModel<BasicIngredient>() {
 
 	    @Override
@@ -31,13 +31,13 @@ public class ListModelFactory {
 	    
 	    @Override
 	    public void add(BasicIngredient o){
-		data.put(o.getName(), o);
+		data.put(o.getPrimaryKeyValue(), o);
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};
     }
     
-    public static AbstractListModel createSupplierListModel(final Map<String, Supplier> data){
+    public static AbstractListModel createSupplierListModel(final Map<Integer, Supplier> data){
 	return new EditableListModel<Supplier>() {
 
 	    @Override
@@ -52,13 +52,13 @@ public class ListModelFactory {
 	    
 	    @Override
 	    public void add(Supplier o){
-		data.put(o.getFirm(), o);
+		data.put(o.getPrimaryKeyValue(), o);
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};
     }
     
-    public static AbstractListModel createRecipeListModel(final Map<String, Recipe> data){
+    public static AbstractListModel createRecipeListModel(final Map<Integer, Recipe> data){
 	return new EditableListModel<Recipe>() {
 
 	    @Override
@@ -73,7 +73,7 @@ public class ListModelFactory {
 	    
 	    @Override
 	    public void add(Recipe o){
-		data.put(o.getName(), o);
+		data.put(o.getPrimaryKeyValue(), o);
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};

@@ -11,11 +11,22 @@ package database;
 public abstract class Ingredient implements Record {
     private String name;
     private String date;
+    private final int id;
+
+    public Ingredient(String name, String date, int id) {
+        this.name = name;
+        this.date = date;
+        this.id = id;
+    }
     
     public Ingredient(String name, String date){
-	this.name = name;
-	this.date = date;
+	this(name, date, -1);
     }
+
+    public int getId() {
+        return id;
+    }
+
 
     public String getName() {
 	return name;
@@ -39,8 +50,8 @@ public abstract class Ingredient implements Record {
     }
     
     @Override
-    public String getPrimaryKeyValue(){
-	return name;
+    public int getPrimaryKeyValue(){
+	return id;
     }
     
     public abstract double getPricePerWeight();

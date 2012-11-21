@@ -30,6 +30,7 @@ public class Supplier implements Record{
     private String notes;
     private String contact;
     private int zipcode;
+    private int id;
     
     private boolean deleted;
 
@@ -188,30 +189,9 @@ public class Supplier implements Record{
     
 
     @Override
-    public boolean create() {
-        try {
-            String insertTableSQL = "INSERT INTO suppliers"
-                    + "(firma, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd) VALUES"
-                    + "(?,?,?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement preparedStatement = Database.driver().getConnection().prepareStatement(insertTableSQL);
-            preparedStatement.setString(1, firm);
-            preparedStatement.setString(2, address);
-            preparedStatement.setString(3, municipality);
-            preparedStatement.setString(4, telephone);
-            preparedStatement.setString(5, telephone2);
-            preparedStatement.setString(6, cellphone);
-            preparedStatement.setString(7, email);
-            preparedStatement.setString(8, notes);
-            preparedStatement.setString(9, contact);
-            preparedStatement.setString(10, fax);
-            preparedStatement.setInt(11, zipcode);
-            preparedStatement.setInt(12, 0);
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-        return true;
+    public boolean create(){
+        return false;
+        
     }
 
     /**
@@ -247,7 +227,7 @@ public class Supplier implements Record{
     }
     
     @Override
-    public String getPrimaryKeyValue(){
-	return firm;
+    public int getPrimaryKeyValue(){
+	return id;
     }
 }

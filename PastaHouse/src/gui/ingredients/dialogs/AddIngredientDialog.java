@@ -326,8 +326,8 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        BasicIngredient b = BasicIngredient.loadWithValues(
-		(supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
+        BasicIngredient b = new BasicIngredient(
+                (supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
 		brandOutlet.getText(), 
 		packagingOutlet.getText(), 
 		Double.parseDouble(weightPerUnitOutlet.getText()), 

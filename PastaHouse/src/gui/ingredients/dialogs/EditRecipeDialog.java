@@ -92,7 +92,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	List suppliers = new ArrayList();
 //	suppliers.add("<Kies ingrediënt>");
 	suppliers.add("");
-	suppliers.addAll(Database.driver().getIngredients().values());
+	suppliers.addAll(Database.driver().getIngredients());
 //	AutocompleteCombobox supplierBox = new AutocompleteCombobox(suppliers);
 	
 	@SuppressWarnings("LeakingThisInConstructor")

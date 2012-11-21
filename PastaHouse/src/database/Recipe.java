@@ -4,8 +4,11 @@
  */
 package database;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utilities.Configuration;
 import utilities.StringTools;
 
@@ -24,7 +27,7 @@ public class Recipe extends Ingredient {
     // derived variables
     
     public Recipe(Recipe r){
-	super(r.getName(), r.getDate());
+	super(r.getName(), r.getDate(), r.getId());
 	netWeight = r.netWeight;
 	preparation = r.preparation;
 	ingredients = new TreeMap<Integer, Component>();
@@ -115,12 +118,12 @@ public class Recipe extends Ingredient {
     
     @Override
     public boolean update(){
-//	return Database.driver().executeUpdate(table_id, getPrimaryKey(), getName(),
-//		"naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
-//		+ "nettogewicht = "+(netWeight>0? "\""+netWeight +"\"":"NULL")+", "
-//		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
-//		+ "bereiding = "+(preparation.length()>0 ? "\""+preparation +"\"":"NULL"));
-	return false;
+        try {
+            return Database.driver().updateRecipe(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(Recipe.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     
     @Override
