@@ -12,12 +12,23 @@ import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
 import gui.utilities.table.TableRowTransferHandler;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.ComponentInputMap;
 import javax.swing.DropMode;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.table.TableCellEditor;
 import utilities.Utilities;
 
@@ -28,6 +39,7 @@ import utilities.Utilities;
 public class EditRecipeDialog extends javax.swing.JDialog {
 
     private final Recipe model;
+    private final Recipe defaultModel;
     /**
      * Creates new form EditRecipeDialog
      */
@@ -41,6 +53,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	setLocationRelativeTo(null);
 	
 	this.model = model;
+	this.defaultModel = new Recipe(model);
 	
 //	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize());
@@ -71,6 +84,54 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	this.ingredientsOutlet.setTransferHandler(new TableRowTransferHandler(this.ingredientsOutlet)); 
 	
 	loadModel();
+	
+	// add accelerator to buttons
+	// setting the button to receive action when F3 is pressed
+	InputMap keyMap = new ComponentInputMap(addComponent);
+	keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "action");
+
+	ActionMap actionMap = new ActionMapUIResource();
+	actionMap.put("action", new Action() {
+
+	    @Override
+	    public Object getValue(String key) {
+		return null;
+	    }
+
+	    @Override
+	    public void putValue(String key, Object value) {
+		
+	    }
+
+	    @Override
+	    public void setEnabled(boolean b) {
+		
+	    }
+
+	    @Override
+	    public boolean isEnabled() {
+		return true;
+	    }
+
+	    @Override
+	    public void addPropertyChangeListener(PropertyChangeListener listener) {
+		//
+	    }
+
+	    @Override
+	    public void removePropertyChangeListener(PropertyChangeListener listener) {
+		//
+	    }
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		addComponentActionPerformed(e);
+	    }
+	});
+
+	SwingUtilities.replaceUIActionMap(addComponent, actionMap);
+	SwingUtilities.replaceUIInputMap(addComponent, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
+	// setting done
     }
     
     public void ingredientBoxCallback(){
@@ -262,7 +323,9 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        this.dispose();
+        // revert the model to the default (undo all changes)
+	model.copy(defaultModel);
+	this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -270,9 +333,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_saveActionPerformed
 
     private void netWeightOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_netWeightOutletKeyReleased
-        //
-	
-	updatePricePerWeightOutlet();
+        updatePricePerWeightOutlet();
     }//GEN-LAST:event_netWeightOutletKeyReleased
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed

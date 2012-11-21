@@ -41,7 +41,7 @@ public class Database {
 	    connection = DriverManager.getConnection(Configuration.center().getDB_URL());
 	    statement = connection.createStatement();
 	     
-	    // load data
+	    // copy data
 	    loadSuppliers();
 	    loadBasicIngredients();
 	    loadRecipes();
@@ -136,7 +136,7 @@ public class Database {
 		    rs.getString("bereiding"), 
 		    rs.getDouble("nettogewicht")));
 	}
-	// also load all linked ingredients and recipes
+	// also copy all linked ingredients and recipes
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
 	int ingrLinks = 0;
 	while(rs.next()){

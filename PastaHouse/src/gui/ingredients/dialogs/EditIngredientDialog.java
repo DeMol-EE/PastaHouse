@@ -370,7 +370,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        model.load(defaultModel);
+        model.copy(defaultModel);
 	this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 

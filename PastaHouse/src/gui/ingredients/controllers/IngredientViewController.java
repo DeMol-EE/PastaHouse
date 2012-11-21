@@ -54,7 +54,7 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	    }
 	});
 
-	// load from the db
+	// copy from the db
 	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredients()));
 	listOutlet.setSelectedIndex(0);
     }

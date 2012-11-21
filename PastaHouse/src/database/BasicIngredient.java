@@ -59,7 +59,7 @@ public class BasicIngredient extends Ingredient {
 	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
     }
     
-    public void load(BasicIngredient b){
+    public void copy(BasicIngredient b){
 	this.setName(b.getName());
 	this.setDate(b.getDate());
 	this.supplier = b.getSupplier();
