@@ -5,7 +5,6 @@
  */
 package database;
 
-import utilities.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,7 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utilities.StringTools;
+import utilities.Configuration;
 
 /**
  *
@@ -42,7 +41,7 @@ public class Database {
 	    connection = DriverManager.getConnection(Configuration.center().getDB_URL());
 	    statement = connection.createStatement();
 	     
-	    // load data
+	    // copy data
 	    loadSuppliers();
 	    loadBasicIngredients();
 	    loadRecipes();
@@ -143,7 +142,7 @@ public class Database {
 		    rs.getString("bereiding"), 
 		    rs.getDouble("nettogewicht")));
 	}
-	// also load all linked ingredients and recipes
+	// also copy all linked ingredients and recipes
 	rs = statement.executeQuery("SELECT * FROM "+Configuration.center().getDB_TABLE_REC_INGR());
 	int ingrLinks = 0;
 	while(rs.next()){

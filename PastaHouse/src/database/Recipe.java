@@ -23,6 +23,14 @@ public class Recipe extends Ingredient {
     
     // derived variables
     
+    public Recipe(Recipe r){
+	super(r.getName(), r.getDate());
+	netWeight = r.netWeight;
+	preparation = r.preparation;
+	ingredients = new TreeMap<Integer, Component>();
+	ingredients.putAll(r.ingredients);
+    }
+    
     public Recipe(String name, String date){
 	super(name, date);
     }
@@ -37,6 +45,15 @@ public class Recipe extends Ingredient {
     
     public static Recipe createStub(String name, String date, String preparation, double netWeight){
 	return new Recipe(name, date, preparation, netWeight);
+    }
+    
+    public void copy(Recipe r){
+	setName(r.getName());
+	setDate(r.getDate());
+	netWeight = r.netWeight;
+	preparation = r.preparation;
+	ingredients = new TreeMap<Integer, Component>();
+	ingredients.putAll(r.ingredients);
     }
     
     public void addIngredient(Ingredient i, int rank, double quantity, boolean isIngredient){
@@ -75,10 +92,12 @@ public class Recipe extends Ingredient {
 	double returnMe = 0.0;
 	
 	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
-	    returnMe += entry.getValue().getIngredient().getPricePerWeight();
+	    if (entry.getValue().getIngredient() != null) {
+		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getGrossQuantity();
+	    }
 	}
 	
-	return returnMe;
+	return returnMe/netWeight;
     }
     
     @Override

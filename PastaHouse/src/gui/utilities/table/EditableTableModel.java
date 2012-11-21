@@ -87,25 +87,29 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
     @Override
     public void setValueAt(Object value, int row, int col) {
 	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
-	switch(col){
-	    case 0:
-		if (value instanceof String) {
-		    ((Component)data.values().toArray()[row]).setIngredient(null);
-		} else {
-		    ((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
-		}
-		break;
-	    case 1:
-		((Component)data.values().toArray()[row]).setQuantity(Double.parseDouble(value.toString()));
-		break;
-//	    case 2:
-//		// nothing
-//		break;
-	    default:
-		break;
-	}
+	try{
+	    switch(col){
+		case 0:
+		    if (value instanceof String) {
+			((Component)data.values().toArray()[row]).setIngredient(null);
+		    } else {
+			((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
+		    }
+		    break;
+		case 1:
+		    ((Component)data.values().toArray()[row]).setQuantity(Double.parseDouble(value.toString()));
+		    break;
+    //	    case 2:
+    //		// nothing
+    //		break;
+		default:
+		    break;
+	    }
 
-	fireTableCellUpdated(row, col);
+	    fireTableCellUpdated(row, col);
+	} catch (Exception e){
+	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());
+	}
     }
     
     public void removeRow(int row){

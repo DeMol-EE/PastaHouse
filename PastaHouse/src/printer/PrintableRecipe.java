@@ -136,7 +136,7 @@ public class PrintableRecipe implements Printable{
 //	    graphics.drawString(StringTools.capitalize(StringTools.padClip(component.getIngredient().getName(), '.', ingrNameLength-1)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), x+tabs[1], y);
-	    graphics.drawString(two.format(component.getPieces()), x+tabs[2], y);
+	    graphics.drawString(two.format(component.getUnits()*toMakeToNet), x+tabs[2], y);
 	    graphics.drawString(three.format(component.getGrossQuantity()*toMakeToNet), x+tabs[3], y);
 	    
 	    y+=lineHeight;
