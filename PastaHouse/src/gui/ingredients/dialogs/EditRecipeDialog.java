@@ -5,6 +5,7 @@
 package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
+import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
@@ -22,8 +23,10 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -73,6 +76,9 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	 */
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//	Map<Integer, Component> m = model.getIngredients();
+//	if (m.remove.) {
+//	}
 	this.ingredientsOutlet.setModel(new EditableTableModel(model.getIngredients()));
 	this.ingredientsOutlet.getModel().addTableModelListener(new TableModelListener() {
 
@@ -85,7 +91,12 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	
 	List ingredients = new ArrayList();
 	ingredients.add("");
-	ingredients.addAll(Database.driver().getIngredients().values());
+//	ingredients.addAll(Database.driver().getIngredients().values());
+	Collection<Ingredient> c = Database.driver().getIngredients().values();
+	if (c.contains(model)) {
+	    c.remove(model);
+	}
+	ingredients.addAll(c);
 	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(ingredients, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
@@ -295,7 +306,11 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
+        ingredientsOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ingredientsOutletKeyReleased(evt);
+            }
+        });
         jScrollPane4.setViewportView(ingredientsOutlet);
 
         jPanel4.add(jScrollPane4, java.awt.BorderLayout.CENTER);
@@ -377,6 +392,13 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	ingredientsOutlet.editCellAt(lastIndex, 0);
 	ingredientsOutlet.transferFocus();
     }//GEN-LAST:event_addComponentActionPerformed
+
+    private void ingredientsOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ingredientsOutletKeyReleased
+        int r = ingredientsOutlet.getSelectedRow();
+        int c = ingredientsOutlet.getSelectedColumn();
+	ingredientsOutlet.editCellAt(r, c);
+	ingredientsOutlet.transferFocus();
+    }//GEN-LAST:event_ingredientsOutletKeyReleased
 
     private abstract class KeyAction implements Action{
 
