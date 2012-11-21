@@ -5,7 +5,7 @@
 package gui.utilities.cell;
 
 import database.Database;
-import gui.ingredients.dialogs.EditRecipeDialog;
+import gui.ingredients.controllers.ComboCoxCallback;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.Color;
 import java.awt.Component;
@@ -39,7 +39,7 @@ public class CellEditorFactory {
 	return new DoubleEditor();
     }
 
-    public static TableCellEditor createComboBoxEditor(List components, EditRecipeDialog callback) {
+    public static TableCellEditor createComboBoxEditor(List components, ComboCoxCallback callback) {
 	return new ComboBoxEditor(components, callback);
     }
 
@@ -135,10 +135,10 @@ public class CellEditorFactory {
 
 	private AutocompleteCombobox acb;
 
-	public ComboBoxEditor(List data, final EditRecipeDialog callback) {
+	public ComboBoxEditor(List data, final ComboCoxCallback callback) {
 	    this.acb = new AutocompleteCombobox(data);
 	    this.acb.setOpaque(true);
-//	    this.acb.setBorder(BorderFactory.createEmptyBorder());
+	    this.acb.setBorder(BorderFactory.createEmptyBorder());
 
 	    this.acb.addActionListener(new ActionListener() {
 		@Override
@@ -146,10 +146,13 @@ public class CellEditorFactory {
 		    callback.ingredientBoxCallback();
 		}
 	    });
+	    final FocusListener[] fl = acb.getFocusListeners();
 	    this.acb.addFocusListener(new FocusListener() {
 		@Override
 		public void focusGained(FocusEvent e) {
-		    //
+		    if (fl.length>0) {
+			fl[0].focusGained(e);
+		    }
 		}
 
 		@Override

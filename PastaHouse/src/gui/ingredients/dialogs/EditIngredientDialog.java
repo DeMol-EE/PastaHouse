@@ -14,13 +14,13 @@ import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.text.DateFormatter;
+import utilities.Utilities;
 
 /**
  *
@@ -557,9 +557,9 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
-	} catch (ParseException ex) {
+	} catch (Exception ex) {
 	    System.err.println(ex.getMessage());
-	    JOptionPane.showMessageDialog(null, "Zorg ervoor dat alle velden geldig ingevoerd zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
 	}
     }//GEN-LAST:event_saveActionPerformed
 

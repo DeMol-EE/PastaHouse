@@ -4,12 +4,12 @@
  */
 package gui.ingredients.dialogs;
 
-import gui.utilities.combobox.ComboBoxModelFactory;
-import gui.utilities.combobox.AutocompleteCombobox;
 import database.BasicIngredient;
 import database.Database;
 import database.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.combobox.AutocompleteCombobox;
+import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
+import utilities.Utilities;
 
 /**
  *
@@ -326,20 +328,25 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        BasicIngredient b = BasicIngredient.loadWithValues(
-		(supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
-		brandOutlet.getText(), 
-		packagingOutlet.getText(), 
-		Double.parseDouble(weightPerUnitOutlet.getText()), 
-		Double.parseDouble(pricePerUnitOutlet.getText()), 
-		Double.parseDouble(lossOutlet.getText()), 
-		Double.parseDouble(taxesOutlet.getText()), 
-		nameOutlet.getText(), 
-		new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 
-		notesOutlet.getText());
-	if (Database.driver().addIngredient(b)) {
-	    delegate.updateListAndSelect(b);
-	    this.dispose();
+        try{
+	    BasicIngredient b = BasicIngredient.loadWithValues(
+		    (supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
+		    brandOutlet.getText(), 
+		    packagingOutlet.getText(), 
+		    Double.parseDouble(weightPerUnitOutlet.getText()), 
+		    Double.parseDouble(pricePerUnitOutlet.getText()), 
+		    Double.parseDouble(lossOutlet.getText()), 
+		    Double.parseDouble(taxesOutlet.getText()), 
+		    nameOutlet.getText(), 
+		    new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 
+		    notesOutlet.getText());
+	    if (Database.driver().addIngredient(b)) {
+		delegate.updateListAndSelect(b);
+		this.dispose();
+	    }
+	} catch (Exception e){
+	    System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
 	}
     }//GEN-LAST:event_addActionPerformed
     

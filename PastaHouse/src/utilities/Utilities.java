@@ -10,6 +10,8 @@ package utilities;
  */
 public class Utilities {
     
+    public static final String incorrectFormMessage = "Zorg ervoor dat alle velden correct ingevuld zijn.";
+    
     public static int fontSize(){
 	return 16;
     }

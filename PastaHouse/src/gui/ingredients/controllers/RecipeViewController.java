@@ -9,6 +9,7 @@ import database.Database;
 import database.Ingredient;
 import database.Recipe;
 import database.Supplier;
+import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.PrintDialog;
 import gui.utilities.cell.CellRendererFactory;
@@ -248,7 +249,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
+	new AddRecipeDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
