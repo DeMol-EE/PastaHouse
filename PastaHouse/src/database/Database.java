@@ -66,7 +66,8 @@ public class Database {
 		    Supplier.loadWithValues(rs.getString("firma"), 
 		    rs.getString("adres"), 
 		    rs.getString("gemeente"), 
-		    rs.getString("tel"), 
+		    rs.getString("tel"),
+                    rs.getString("tel2"),
 		    rs.getString("gsm"), 
 		    rs.getString("fax"), 
 		    rs.getString("email"), 
@@ -79,8 +80,7 @@ public class Database {
     }
     
     public boolean addSupplier(Supplier sup){
-        if (executeInsert(Configuration.center().getDB_TABLE_SUP(),
-                "\""+ sup.getFirm())){
+        if (sup.create()){
             return true;
         } else {
             return false;

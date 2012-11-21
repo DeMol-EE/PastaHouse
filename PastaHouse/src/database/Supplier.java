@@ -18,6 +18,7 @@ public class Supplier implements Record{
     private String address;
     private String municipality;
     private String telephone;
+    private String telephone2;
     private String cellphone;
     private String fax;
     private String email;
@@ -26,7 +27,7 @@ public class Supplier implements Record{
     
     private boolean deleted;
 
-    private Supplier(String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
+    private Supplier(String firm, String address, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
 	this.firm = firm;
 	this.address = address;
 	this.municipality = municipality;
@@ -37,6 +38,7 @@ public class Supplier implements Record{
 	this.notes = notes;
 	this.contact = contact;
 	this.deleted = deleted;
+        this.telephone2 = telephone2;
     }
     
     public Supplier(Supplier s){
@@ -44,6 +46,7 @@ public class Supplier implements Record{
 	this.address = s.getAddress();
 	this.municipality = s.getMunicipality();
 	this.telephone = s.getTelephone();
+        this.telephone2 = s.getTelephone2();
 	this.cellphone = s.getCellphone();
 	this.fax = s.getFax();
 	this.email = s.getEmail();
@@ -57,6 +60,7 @@ public class Supplier implements Record{
 	this.address = s.getAddress();
 	this.municipality = s.getMunicipality();
 	this.telephone = s.getTelephone();
+        this.telephone2 = s.getTelephone2();
 	this.cellphone = s.getCellphone();
 	this.fax = s.getFax();
 	this.email = s.getEmail();
@@ -65,8 +69,8 @@ public class Supplier implements Record{
 	this.deleted = s.isDeleted();
     }
     
-    public static Supplier loadWithValues(String firm, String address, String municipality, String telephone, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
-	return new Supplier(firm, address, municipality, telephone, cellphone, fax, email, notes, contact, verwijderd);
+    public static Supplier loadWithValues(String firm, String address, String municipality, String telephone,String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
+	return new Supplier(firm, address, municipality, telephone, telephone2, cellphone, fax, email, notes, contact, verwijderd);
     }
     
     public String getAddress() {
@@ -154,6 +158,16 @@ public class Supplier implements Record{
 	return Utilities.capitalize(firm);
     }
 
+    public String getTelephone2() {
+        return telephone2;
+    }
+
+    public void setTelephone2(String telephone2) {
+        this.telephone2 = telephone2;
+    }
+    
+    
+
     @Override
     public boolean create() {
 	return Database.driver().executeInsert(table_id, 
@@ -161,6 +175,7 @@ public class Supplier implements Record{
 		+ "adres = "+ address +", "
 		+ "gemeente = "+municipality +", "
 		+ "tel = "+telephone+", "
+                + "tel = "+telephone2+", "
 		+ "gsm = "+cellphone+", "
 		+ "fax = "+fax+", "
 		+ "email = "+email+", "
@@ -182,6 +197,7 @@ public class Supplier implements Record{
 		+ "adres = "+(address.length()>0 ? "\""+ address +"\"":"NULL")+", "
 		+ "gemeente = "+(municipality.length()>0 ?"\""+municipality +"\"":"NULL")+", "
 		+ "tel = "+(telephone.length()>0? "\""+telephone +"\"":"NULL")+", "
+                + "tel2 = "+(telephone2.length()>0? "\""+telephone2 +"\"":"NULL")+", "
 		+ "gsm = "+(cellphone.length()>0? "\""+cellphone +"\"":"NULL")+", "
 		+ "fax = "+(fax.length()>0? "\""+fax +"\"":"NULL")+", "
 		+ "email = "+(email.length()>0? "\""+email +"\"":"NULL")+", "
