@@ -30,7 +30,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
-    private MasterDetailViewController delegate;
+    private final MasterDetailViewController delegate;
     
     private final DatePicker dp;
     private final AutocompleteCombobox supplierBox;

@@ -8,9 +8,11 @@ import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
+import database.Supplier;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.PrintDialog;
 import gui.utilities.cell.CellRendererFactory;
+import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticTableModel;
 import java.awt.print.Printable;
@@ -250,7 +252,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue()).setVisible(true);
+        new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue(), this).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
@@ -292,7 +294,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
     @Override
     public void updateList() {
-	System.err.println("Not implemented");
+	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
+	dlm.update();
+	updateDetail(dlm.getElementAt(recipeListOutlet.getSelectedIndex()));
     }
 
     @Override

@@ -5,10 +5,10 @@
 package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
-import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
+import gui.ingredients.controllers.MasterDetailViewController;
 import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +29,7 @@ import javax.swing.ComponentInputMap;
 import javax.swing.DropMode;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -35,6 +37,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.table.TableCellEditor;
+import javax.swing.text.DateFormatter;
 import utilities.Utilities;
 
 /**
@@ -45,18 +48,22 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
     private final Recipe model;
     private final Recipe defaultModel;
+    private final DatePicker dp;
+    private final MasterDetailViewController delegate;
     /**
      * Creates new form EditRecipeDialog
      */
-    public EditRecipeDialog(java.awt.Frame parent, boolean modal, Recipe model) {
+    public EditRecipeDialog(java.awt.Frame parent, boolean modal, Recipe model, MasterDetailViewController delegate) {
 	super(parent, modal);
 	initComponents();
 	
-	jPanel5.add(new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy")));
+	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
+	jPanel5.add(dp);
 	
 	setTitle("Recept wijzigen");
 	setLocationRelativeTo(null);
 	
+	this.delegate = delegate;
 	this.model = model;
 	this.defaultModel = new Recipe(model);
 	
@@ -102,20 +109,29 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	loadModel();
 	
 	// add accelerator to "add" button
-	InputMap keyMap = new ComponentInputMap(addComponent);
-	keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "action");
-
-	ActionMap actionMap = new ActionMapUIResource();
-	actionMap.put("action", new KeyAction() {
+	addAccelerator(addComponent, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		addComponentActionPerformed(e);
 	    }
 	});
+	addAccelerator(removeComponent, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		removeComponentActionPerformed(e);
+	    }
+	});
+    }
+    
+    private void addAccelerator(JComponent comp, KeyStroke ks, Action a){
+	InputMap keyMap = new ComponentInputMap(comp);
+	keyMap.put(ks, "action");
 
-	SwingUtilities.replaceUIActionMap(addComponent, actionMap);
-	SwingUtilities.replaceUIInputMap(addComponent, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
-	// setting done
+	ActionMap actionMap = new ActionMapUIResource();
+	actionMap.put("action", a);
+
+	SwingUtilities.replaceUIActionMap(comp, actionMap);
+	SwingUtilities.replaceUIInputMap(comp, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
     }
     
     public void ingredientBoxCallback(){
@@ -128,6 +144,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	
 	updateGrossWeightOutlet();
 	updatePricePerWeightOutlet();
+	updateNetWeightFormattedOutlet();
     }
     
     private void updateGrossWeightOutlet(){
@@ -136,6 +153,19 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     
     private void updatePricePerWeightOutlet(){
 	pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
+    }
+    
+    private void updateNetWeightFormattedOutlet(){
+	try {
+	    double d = Double.parseDouble(netWeightOutlet.getText());
+	    netWeightFormattedOutlet.setText(new DecimalFormat("0.00").format(d)+" kg");
+	    netWeightFormattedOutlet.setForeground(Color.black);
+	    netWeightOutlet.setForeground(Color.black);
+	} catch (Exception e){
+	    netWeightFormattedOutlet.setForeground(Color.red);
+	    netWeightFormattedOutlet.setText("???");
+	    netWeightOutlet.setForeground(Color.red);
+	}
     }
     
     /**
@@ -197,13 +227,13 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 
         jPanel6.setLayout(new java.awt.GridLayout(3, 2));
 
-        jLabel2.setText("Totaalgewicht ingrediënten");
+        jLabel2.setText("  Totaalgewicht ingrediënten");
         jPanel6.add(jLabel2);
 
         grossWeightOutlet.setText("<grossWeightOutlet>");
         jPanel6.add(grossWeightOutlet);
 
-        jLabel4.setText("Gewicht na bereiding");
+        jLabel4.setText("  Gewicht na bereiding");
         jPanel6.add(jLabel4);
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
@@ -216,13 +246,12 @@ public class EditRecipeDialog extends javax.swing.JDialog {
         });
         jPanel3.add(netWeightOutlet);
 
-        netWeightFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         netWeightFormattedOutlet.setText("<netWeightFormattedOutlet>");
         jPanel3.add(netWeightFormattedOutlet);
 
         jPanel6.add(jPanel3);
 
-        jLabel7.setText("Kostprijs per kg (BTW excl)");
+        jLabel7.setText("  Kostprijs per kg (BTW excl)");
         jPanel6.add(jLabel7);
 
         pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
@@ -314,11 +343,26 @@ public class EditRecipeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        // TODO add your handling code here:
+	try {
+	    model.setName(nameOutlet.getText());
+	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
+	    model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
+	    model.setPreparation(preparationOutlet.getText());
+	    
+	    if(model.update()){
+		delegate.updateList();
+		this.dispose();
+	    } else {
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    }
+	} catch (ParseException ex) {
+	    System.err.println(ex.getMessage());
+	    JOptionPane.showMessageDialog(null, "Zorg ervoor dat alle velden geldig ingevoerd zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	}
     }//GEN-LAST:event_saveActionPerformed
 
     private void netWeightOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_netWeightOutletKeyReleased
-        updatePricePerWeightOutlet();
+	updateNetWeightFormattedOutlet();
     }//GEN-LAST:event_netWeightOutletKeyReleased
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
