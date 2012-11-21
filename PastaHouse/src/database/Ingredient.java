@@ -46,4 +46,8 @@ public abstract class Ingredient implements Record {
     public abstract double getPricePerWeight();
     
     public abstract double getWeightPerUnit();
+    
+    public abstract String getPackaging();
+    
+    public abstract double getLossPercent();
 }

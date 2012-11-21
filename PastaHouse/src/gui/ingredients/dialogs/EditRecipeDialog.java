@@ -4,27 +4,20 @@
  */
 package gui.ingredients.dialogs;
 
-import gui.utilities.table.EditableTableModel;
-import gui.utilities.table.TableRowTransferHandler;
-import gui.utilities.cell.CellEditorFactory;
-import gui.utilities.cell.CellRendererFactory;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.Field;
+import gui.utilities.cell.CellEditorFactory;
+import gui.utilities.cell.CellRendererFactory;
+import gui.utilities.table.EditableTableModel;
+import gui.utilities.table.TableRowTransferHandler;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DropMode;
-import javax.swing.JComboBox;
-import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.TableCellEditor;
 import utilities.Utilities;
 
@@ -66,6 +59,7 @@ public class EditRecipeDialog extends javax.swing.JDialog {
 	suppliers.addAll(Database.driver().getIngredients().values());
 //	AutocompleteCombobox supplierBox = new AutocompleteCombobox(suppliers);
 	
+	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(suppliers, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());

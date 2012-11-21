@@ -57,6 +57,11 @@ public class Component {
 	this.isIngredient = isIngredient;
     }
     
+    public double getGrossQuantity(){
+	double q = quantity / (1.0 - 0.01 * ingredient.getLossPercent());
+	return q * Math.signum(q);
+    }
+    
     public boolean isIngredient(){
 	return isIngredient;
     }

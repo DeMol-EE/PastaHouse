@@ -4,7 +4,6 @@
  */
 package gui.utilities.cell;
 
-import utilities.Utilities;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import javax.swing.JButton;
@@ -13,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import utilities.StringTools;
+import utilities.Utilities;
 
 /**
  *
@@ -47,6 +48,7 @@ public class CellRendererFactory {
 
 	public TwoDecimalDoubleCellRenderer(){
 	    setOpaque(true);
+	    setHorizontalAlignment(JLabel.CENTER);
 	}
 	
 	@Override
@@ -59,8 +61,7 @@ public class CellRendererFactory {
 	    setBackground(defaultComponent.getBackground());
 	    
 	    DecimalFormat twoFormatter = new DecimalFormat("0.00");
-	    this.setText(twoFormatter.format(value));
-	    this.setHorizontalAlignment(JLabel.CENTER);
+	    if(value!=null) this.setText(twoFormatter.format(value));
 	    return this;
 	}
 	
@@ -78,7 +79,7 @@ public class CellRendererFactory {
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
 	    
-	    this.setText(value.toString());
+	    if(value!=null) this.setText(value.toString());
 	    
 	    return this;
 	}
@@ -89,6 +90,7 @@ public class CellRendererFactory {
 
 	public ThreeDecimalDoubleCellRenderer(){
 	    setOpaque(true);
+	    setHorizontalAlignment(JLabel.CENTER);
 	}
 	
 	@Override
@@ -98,8 +100,7 @@ public class CellRendererFactory {
 	    setBackground(defaultComponent.getBackground());
 	    
 	    DecimalFormat threeFormatter = new DecimalFormat("0.000");
-	    this.setText(threeFormatter.format(value));
-	    this.setHorizontalAlignment(JLabel.CENTER);
+	    if(value!=null) this.setText(threeFormatter.format(value));
 	    
 	    return this;
 	}
@@ -121,7 +122,7 @@ public class CellRendererFactory {
 	    if (value == null) {
 		setText("<Kies een item>");
 	    } else {
-		setText(" "+Utilities.capitalizeEach(value.toString()));
+		setText(" "+StringTools.capitalizeEach(value.toString()));
 	    }
 	    return this;
 	}

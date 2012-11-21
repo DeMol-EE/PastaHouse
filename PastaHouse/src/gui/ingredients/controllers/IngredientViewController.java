@@ -27,6 +27,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import pastahouse.Application;
+import utilities.StringTools;
 
 /**
  *
@@ -68,7 +69,7 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	DecimalFormat twoFormatter = new DecimalFormat("0.00");
 	
-	supplierOutlet.setText(Utilities.capitalize(bi.getSupplier().getFirm()));
+	supplierOutlet.setText(StringTools.capitalize(bi.getSupplier().getFirm()));
 	if(bi.getSupplier().isDeleted()){
 	    supplierOutlet.setForeground(Color.RED);
 	    supplierOutlet.setCursor(Cursor.getDefaultCursor());
@@ -95,9 +96,9 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	}
 	
 	//€-sign?
-	nameOutlet.setText(Utilities.capitalize(bi.getName()));
-	brandOutlet.setText(Utilities.capitalize(bi.getBrand()));
-	packagingOutlet.setText(Utilities.capitalize(bi.getPackaging()));
+	nameOutlet.setText(StringTools.capitalize(bi.getName()));
+	brandOutlet.setText(StringTools.capitalize(bi.getBrand()));
+	packagingOutlet.setText(StringTools.capitalize(bi.getPackaging()));
 	pricePerUnitOutlet.setText(""+threeFormatter.format(bi.getPricePerUnit())+" euro / "+bi.getPackaging());
 	weightPerUnitOutlet.setText(""+threeFormatter.format(bi.getWeightPerUnit())+" kg / "+bi.getPackaging());
 	pricePerWeightOutlet.setText(""+threeFormatter.format(bi.getPricePerWeight())+" euro / kg");

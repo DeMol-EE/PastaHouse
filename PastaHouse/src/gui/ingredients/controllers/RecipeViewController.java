@@ -4,26 +4,31 @@
  */
 package gui.ingredients.controllers;
 
-import gui.ingredients.dialogs.EditRecipeDialog;
-import gui.utilities.table.StaticTableModel;
-import gui.utilities.list.ListModelFactory;
-import gui.utilities.cell.CellRendererFactory;
 import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
+import gui.ingredients.dialogs.EditRecipeDialog;
+import gui.ingredients.dialogs.PrintDialog;
+import gui.utilities.cell.CellRendererFactory;
+import gui.utilities.list.ListModelFactory;
+import gui.utilities.table.StaticTableModel;
+import java.awt.print.Printable;
 import java.text.DecimalFormat;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import printer.PrintableRecipe;
+import printer.Printer;
+import utilities.StringTools;
 import utilities.Utilities;
 
 /**
  *
  * @author Warkst
  */
-public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController{
+public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController, PrintDialogDelegate{
 
     /**
      * Creates new form RecipeViewController
@@ -57,7 +62,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     public void updateDetail(Object value){
 	Recipe r = (Recipe)value;
 	
-	nameOutlet.setText(Utilities.capitalize(r.getName()));
+	nameOutlet.setText(StringTools.capitalize(r.getName()));
 	dateOutlet.setText(r.getDate());
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
@@ -107,6 +112,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         pricePerWeightOutlet = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jPanel2 = new javax.swing.JPanel();
+        print = new javax.swing.JButton();
         edit = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         ingredientsOutlet = new javax.swing.JTable();
@@ -127,6 +134,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add.setText("Toevoegen...");
+        add.setFocusable(false);
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
@@ -186,13 +194,27 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+
+        print.setText("Afdrukken...");
+        print.setFocusable(false);
+        print.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printActionPerformed(evt);
+            }
+        });
+        jPanel2.add(print);
+
         edit.setText("Wijzigen...");
+        edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);
             }
         });
-        jPanel1.add(edit, java.awt.BorderLayout.EAST);
+        jPanel2.add(edit);
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
@@ -231,6 +253,14 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
+    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
+	new PrintDialog(null, true, this).setVisible(true);
+    }//GEN-LAST:event_printActionPerformed
+
+    public void printProxy(){
+	printActionPerformed(null);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JLabel dateOutlet;
@@ -243,6 +273,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -255,6 +286,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JLabel netWeightOutlet;
     private javax.swing.JTextArea preparationOutlet;
     private javax.swing.JLabel pricePerWeightOutlet;
+    private javax.swing.JButton print;
     private javax.swing.JList recipeListOutlet;
     // End of variables declaration//GEN-END:variables
 
@@ -276,5 +308,29 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     @Override
     public void edit() {
 	editActionPerformed(null);
+    }
+
+    @Override
+    public void printQuantity(double q) {
+	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), q));
+    }
+
+    @Override
+    public void printAmount(double a) {
+	Recipe r = (Recipe)recipeListOutlet.getSelectedValue();
+	// herreken het aantal stuks naar een gewicht
+	
+	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), a*r.getNetWeight(), a));
+    }
+    
+    private void print(Printable pr){
+//        Printable pr = new PrintableTest();
+	Printer.driver().setPrintJob(pr);
+	Printer.driver().tryPrint();
+//	try {
+//	    ingredientsOutlet.print();
+//	} catch (PrinterException ex) {
+//	    Logger.getLogger(RecipeViewController.class.getName()).log(Level.SEVERE, null, ex);
+//	}
     }
 }
