@@ -39,7 +39,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 
     private final MasterDetailViewController delegate;
     private final Recipe model;
-    private final Map<Integer, Component> ingredients;
+    private final Map<Integer, Component> components;
     
     /**
      * Creates new form AddRecipeDialog
@@ -54,10 +54,10 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	setTitle("Recept toevoegen");
 	setLocationRelativeTo(null);
 	
-	this.ingredients = new TreeMap<Integer, Component>();
+	this.components = new TreeMap<Integer, Component>();
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	this.ingredientsOutlet.setModel(new EditableTableModel(ingredients));
+	this.ingredientsOutlet.setModel(new EditableTableModel(components));
 	this.ingredientsOutlet.getModel().addTableModelListener(new TableModelListener() {
 
 	    @Override
@@ -325,7 +325,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
             model.setName(nameOutlet.getText());
             model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
             model.setPreparation(preparationOutlet.getText());
-	    model.setIngredients(ingredients);
+	    model.setIngredients(components);
 
             if(model.create()){
                 delegate.updateListAndSelect(model);

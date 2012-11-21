@@ -146,13 +146,11 @@ public class CellEditorFactory {
 		    callback.ingredientBoxCallback();
 		}
 	    });
-	    final FocusListener[] fl = acb.getFocusListeners();
-	    this.acb.addFocusListener(new FocusListener() {
+
+	    this.acb.getEditor().getEditorComponent().addFocusListener(new FocusListener() {
 		@Override
 		public void focusGained(FocusEvent e) {
-		    if (fl.length>0) {
-			fl[0].focusGained(e);
-		    }
+		    //
 		}
 
 		@Override
