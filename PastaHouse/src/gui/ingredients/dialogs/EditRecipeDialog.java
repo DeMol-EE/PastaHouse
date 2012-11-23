@@ -5,7 +5,6 @@
 package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
-import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
@@ -144,6 +142,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
     private void loadModel(){
 	nameOutlet.setText(model.getName());
 	netWeightOutlet.setText(""+model.getNetWeight());
+	preparationOutlet.setText(model.getPreparation());
 	
 	updateGrossWeightOutlet();
 	updatePricePerWeightOutlet();
@@ -224,7 +223,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 
         preparationOutlet.setColumns(20);
         preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        preparationOutlet.setRows(5);
+        preparationOutlet.setRows(3);
         jScrollPane3.setViewportView(preparationOutlet);
 
         jPanel7.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -388,6 +387,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
         ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
 	int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
+	ingredientsOutlet.scrollRectToVisible(ingredientsOutlet.getCellRect(ingredientsOutlet.getRowCount()-1, 0, true));
 	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
 	ingredientsOutlet.editCellAt(lastIndex, 0);
 	ingredientsOutlet.transferFocus();

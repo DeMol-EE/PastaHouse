@@ -201,7 +201,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
         jLabel4.setText("  Gewicht na bereiding");
         jPanel6.add(jLabel4);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         netWeightOutlet.setText("<netWeightOutlet>");
         netWeightOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -227,7 +227,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         save.setText("Opslaan");
         save.setFocusable(false);
@@ -270,8 +270,6 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        ingredientsOutlet.setRowSelectionAllowed(true);
-        ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
         ingredientsOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 ingredientsOutletKeyReleased(evt);
@@ -283,7 +281,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 
         jPanel8.setLayout(new java.awt.BorderLayout());
 
-        jPanel9.setLayout(new java.awt.GridLayout());
+        jPanel9.setLayout(new java.awt.GridLayout(1, 0));
 
         addComponent.setText("Toevoegen");
         addComponent.setFocusable(false);
@@ -349,10 +347,14 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
         ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
         int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
 //        ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-	ingredientsOutlet.setRowSelectionInterval(lastIndex, lastIndex);
+	ingredientsOutlet.scrollRectToVisible(ingredientsOutlet.getCellRect(ingredientsOutlet.getRowCount()-1, 0, true));
+//	ingredientsOutlet.setRowSelectionInterval(lastIndex, lastIndex);
 //	ingredientsOutlet.setColumnSelectionInterval(0, 0);
-        ingredientsOutlet.editCellAt(lastIndex, 0);
-        ingredientsOutlet.transferFocus();
+//        ingredientsOutlet.editCellAt(lastIndex, 0);
+//        ingredientsOutlet.transferFocus();
+	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+	ingredientsOutlet.editCellAt(lastIndex, 0);
+	ingredientsOutlet.transferFocus();
     }//GEN-LAST:event_addComponentActionPerformed
 
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
@@ -367,26 +369,30 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     }//GEN-LAST:event_removeComponentActionPerformed
 
     private void ingredientsOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ingredientsOutletKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
-	    int r = ingredientsOutlet.getSelectedRow();
-	    int c = ingredientsOutlet.getSelectedColumn();
-	    int rCount = ingredientsOutlet.getModel().getRowCount();
-	    int cCount = ingredientsOutlet.getModel().getColumnCount();
-
-	    ingredientsOutlet.editCellAt(r, c);
-	    
-	    System.out.println("r="+r+"\tc="+c);
-//	    if (c==0) {
-//		ingredientsOutlet.editCellAt(r, 1);
-//	    }
-	    
-//	    if(r==rCount-1 && c==cCount-1){
-//		netWeightOutlet.requestFocus();
-//	    } else {
-//		ingredientsOutlet.editCellAt(r, c);
-//		ingredientsOutlet.transferFocus();
-//	    }
-	}	
+//        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+//	    int r = ingredientsOutlet.getSelectedRow();
+//	    int c = ingredientsOutlet.getSelectedColumn();
+//	    int rCount = ingredientsOutlet.getModel().getRowCount();
+//	    int cCount = ingredientsOutlet.getModel().getColumnCount();
+//
+//	    ingredientsOutlet.editCellAt(r, c);
+//	    
+//	    System.out.println("r="+r+"\tc="+c);
+////	    if (c==0) {
+////		ingredientsOutlet.editCellAt(r, 1);
+////	    }
+//	    
+////	    if(r==rCount-1 && c==cCount-1){
+////		netWeightOutlet.requestFocus();
+////	    } else {
+////		ingredientsOutlet.editCellAt(r, c);
+////		ingredientsOutlet.transferFocus();
+////	    }
+//	}	
+	int r = ingredientsOutlet.getSelectedRow();
+        int c = ingredientsOutlet.getSelectedColumn();
+	ingredientsOutlet.editCellAt(r, c);
+	ingredientsOutlet.transferFocus();
     }//GEN-LAST:event_ingredientsOutletKeyReleased
 
     private void nameOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameOutletKeyReleased

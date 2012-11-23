@@ -8,7 +8,6 @@ import database.Component;
 import database.Database;
 import database.Ingredient;
 import database.Recipe;
-import database.Supplier;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.PrintDialog;
@@ -325,7 +324,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	Recipe r = (Recipe)recipeListOutlet.getSelectedValue();
 	// herreken het aantal stuks naar een gewicht
 	
-	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), a*r.getNetWeight(), a));
+	print(new PrintableRecipe(r, a*r.getNetWeight(), a));
     }
     
     private void print(Printable pr){

@@ -275,8 +275,6 @@
                     <Column editable="true" title="Title 4" type="java.lang.Object"/>
                   </Table>
                 </Property>
-                <Property name="rowSelectionAllowed" type="boolean" value="true"/>
-                <Property name="surrendersFocusOnKeystroke" type="boolean" value="true"/>
               </Properties>
               <Events>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ingredientsOutletKeyReleased"/>

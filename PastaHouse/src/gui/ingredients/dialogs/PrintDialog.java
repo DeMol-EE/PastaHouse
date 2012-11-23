@@ -107,6 +107,10 @@ public class PrintDialog extends javax.swing.JDialog {
         try{
 	    final double q = Double.parseDouble(quantityOutlet.getText());
 	    
+	    if (q<=0) {
+		throw new RuntimeException("Entered value makes no sense");
+	    }
+	    
 	    if (pieces.isSelected()){
 		new Thread(new Runnable() {
 
@@ -127,6 +131,7 @@ public class PrintDialog extends javax.swing.JDialog {
 
 	    this.dispose();
 	} catch (Exception e){
+	    System.err.println("Error:\n"+e.getMessage());
 	    JOptionPane.showMessageDialog(null, "Geef een geldige waarde in!", "Error", JOptionPane.ERROR_MESSAGE);
 	    quantityOutlet.setSelectionStart(0);
 	    quantityOutlet.setSelectionEnd(quantityOutlet.getText().length());
