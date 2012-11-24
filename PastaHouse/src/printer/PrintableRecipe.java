@@ -235,27 +235,6 @@ public class PrintableRecipe implements Printable{
 		}
 	    }
 	    
-//	    for (String word : words) {
-//		int length = metrics.charsWidth(word.toCharArray(), 0, word.length());
-//		
-//		if (length > imageableWidth) {
-//		    // split long word into 2 pieces, one which fits and one that is to be handled next
-//		    // ^ requires words[] to be of type stack...
-//		}
-//		
-//		System.out.println("PrintableRecipe::\t Handling word: "+word+", l="+length);
-//		
-//		if (xOffset + length <= imageableWidth) {
-//		    builder.append(word).append(" ");
-//		    xOffset += length+charWidth;
-//		} else {
-//		    graphics.drawString(builder.toString(), x, y);
-//		    y+=lineHeight;
-//		    builder = new StringBuilder(word+" ");
-//		    xOffset = length+charWidth;
-//		    System.out.println("PrintableRecipe:: NEW LINE!");
-//		}
-//	    }
 	    // empty the buffer
 	    graphics.drawString(builder.toString(), x, y);
 	    y+=lineHeight; // new line
