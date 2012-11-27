@@ -4,8 +4,8 @@
  */
 package printer;
 
-import database.Component;
-import database.Recipe;
+import database.extra.Component;
+import database.tables.Recipe;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;

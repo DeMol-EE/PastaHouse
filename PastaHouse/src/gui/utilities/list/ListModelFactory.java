@@ -4,19 +4,21 @@
  */
 package gui.utilities.list;
 
-import database.BasicIngredient;
-import database.Component;
-import database.Recipe;
-import database.Supplier;
+import database.extra.Component;
+import database.tables.BasicIngredient;
+import database.tables.Recipe;
+import database.tables.Supplier;
 import java.util.Map;
 import javax.swing.AbstractListModel;
 
 /**
+ * 
+ * @TODO: ALTER MODELS TO SORT ALPHABETICALLY!
  *
  * @author Warkst
  */
 public class ListModelFactory {
-    public static AbstractListModel createBasicIngredientModel(final Map<Integer, BasicIngredient> data){
+    public static AbstractListModel createBasicIngredientModel(final Map<String, BasicIngredient> data){
 	return new EditableListModel<BasicIngredient>() {
 
 	    @Override
@@ -31,13 +33,22 @@ public class ListModelFactory {
 	    
 	    @Override
 	    public void add(BasicIngredient o){
-		data.put(o.getPrimaryKeyValue(), o);
+		data.put(o.getName(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+
+	    @Override
+	    public void edit(BasicIngredient newObj, BasicIngredient oldObj) {
+		if (data.get(oldObj.getName()) != null) {
+		    data.remove(oldObj.getName());
+		    data.put(newObj.getName(), newObj);
+		}
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};
     }
     
-    public static AbstractListModel createSupplierListModel(final Map<Integer, Supplier> data){
+    public static AbstractListModel createSupplierListModel(final Map<String, Supplier> data){
 	return new EditableListModel<Supplier>() {
 
 	    @Override
@@ -52,13 +63,22 @@ public class ListModelFactory {
 	    
 	    @Override
 	    public void add(Supplier o){
-		data.put(o.getPrimaryKeyValue(), o);
+		data.put(o.getFirm(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+
+	    @Override
+	    public void edit(Supplier newObj, Supplier oldObj) {
+		if (data.get(oldObj.getFirm())!=null) {
+		    data.remove(oldObj.getFirm());
+		    data.put(newObj.getFirm(), newObj);
+		}
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};
     }
     
-    public static AbstractListModel createRecipeListModel(final Map<Integer, Recipe> data){
+    public static AbstractListModel createRecipeListModel(final Map<String, Recipe> data){
 	return new EditableListModel<Recipe>() {
 
 	    @Override
@@ -73,7 +93,16 @@ public class ListModelFactory {
 	    
 	    @Override
 	    public void add(Recipe o){
-		data.put(o.getPrimaryKeyValue(), o);
+		data.put(o.getName(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+
+	    @Override
+	    public void edit(Recipe newObj, Recipe oldObj) {
+		if (data.get(oldObj.getName())!=null) {
+		    data.remove(oldObj.getName());
+		    data.put(newObj.getName(), newObj);
+		}
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};
@@ -95,6 +124,15 @@ public class ListModelFactory {
 	    @Override
 	    public void add(Component o){
 		data.put(o.getRank(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+
+	    @Override
+	    public void edit(Component newObj, Component oldObj) {
+		if (data.get(oldObj.getRank())!=null) {
+		    data.remove(oldObj.getRank());
+		    data.put(newObj.getRank(), newObj);
+		}
 		fireContentsChanged(this, 0, getSize());
 	    }
 	};

@@ -5,6 +5,14 @@
  */
 package database;
 
+import database.extra.Ingredient;
+import database.extra.Component;
+import database.models.BasicIngredientModel;
+import database.models.RecipeModel;
+import database.models.SupplierModel;
+import database.tables.Supplier;
+import database.tables.Recipe;
+import database.tables.BasicIngredient;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,16 +38,23 @@ public class Database {
     private static Database driver;
     private Connection connection;
     private Statement statement;
-    private Map<Integer, Supplier> suppliers;
-    private Map<Integer, BasicIngredient> basicIngredients;
-    private Map<Integer, Recipe> recipes;
+    private Map<Integer, Supplier> suppliersById;
+    private Map<Integer, BasicIngredient> basicIngredientsById;
+    private Map<Integer, Recipe> recipesById;
+    private Map<String, Supplier> suppliersByFirm;
+    private Map<String, BasicIngredient> basicIngredientsByName;
+    private Map<String, Recipe> recipesByName;
     private Map<String, Integer> municipales;
 
     private Database() {
         try {
-            suppliers = new TreeMap<Integer, Supplier>();
-            basicIngredients = new TreeMap<Integer, BasicIngredient>();
-            recipes = new TreeMap<Integer, Recipe>();
+            suppliersById = new TreeMap<Integer, Supplier>();
+            basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
+            recipesById = new TreeMap<Integer, Recipe>();
+	    suppliersByFirm = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
+	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
+	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
+	    
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
             // connect to db
             Class.forName("org.sqlite.JDBC");
@@ -70,8 +86,9 @@ public class Database {
     private void loadSuppliers() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_SUP());
         while (rs.next()) {
-            suppliers.put(rs.getInt("id"),
-                    Supplier.loadWithValues(rs.getString("firma"),
+	    Supplier s = Supplier.loadWithValues(
+		    rs.getInt("id"),
+		    rs.getString("firma"),
                     rs.getString("adres"),
                     rs.getString("gemeente"),
                     rs.getInt("postcode"),
@@ -82,20 +99,22 @@ public class Database {
                     rs.getString("email"),
                     rs.getString("opmerking"),
                     rs.getString("contactpersoon"),
-                    rs.getBoolean("verwijderd")));
+                    rs.getBoolean("verwijderd"));
+            suppliersById.put(s.getPrimaryKeyValue(), s);
+            suppliersByFirm.put(s.getFirm(), s);
         }
 
-        System.out.println("Database driver:: loaded " + suppliers.size() + " suppliers!");
+        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
     }
 
-    public boolean addSupplier(Supplier sup) throws SQLException {
-        boolean flag = true;
+    public FunctionResult<Supplier> addSupplier(SupplierModel sup) throws SQLException {
+        int code = 0;
+	Supplier newSup = null;
         String insertTableSQL = "INSERT INTO suppliers"
                 + "(firma, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd) VALUES"
                 + "(?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
-
             preparedStatement.setString(1, sup.getFirm());
             preparedStatement.setString(2, sup.getAddress());
             preparedStatement.setString(3, sup.getMunicipality());
@@ -109,22 +128,30 @@ public class Database {
             preparedStatement.setInt(11, sup.getZipcode());
             preparedStatement.setInt(12, 0);
             preparedStatement.executeUpdate();
+	    
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_SUP()+" WHERE firma=\""+sup.getFirm()+"\"");
+	    if (rs.next()) {
+		newSup = Supplier.createFromModel(rs.getInt("id"), sup);
+		suppliersById.put(newSup.getPrimaryKeyValue(), newSup);
+		suppliersByFirm.put(newSup.getFirm(), newSup);
+	    } else {
+		code = 2;
+	    }
         } catch (SQLException ex) {
             Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
-            flag = false;
+	    code = 1;
         } finally {
             preparedStatement.close();
         }
-        return flag;
+        return new FunctionResult<Supplier>(code, newSup);
     }
 
     private void loadBasicIngredients() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INGR());
         while (rs.next()) {
-            basicIngredients.put(rs.getInt("id"),
-                    BasicIngredient.loadWithValues(
-                    suppliers.get(
-                    rs.getString("firma")),
+	    BasicIngredient b = BasicIngredient.loadWithValues(
+		    rs.getInt("id"),
+                    suppliersById.get(rs.getInt("firmaid")),
                     rs.getString("merk"),
                     rs.getString("verpakking"),
                     rs.getDouble("prijsPerVerpakking"),
@@ -133,70 +160,92 @@ public class Database {
                     rs.getDouble("BTW"),
                     rs.getString("naam"),
                     rs.getString("datum"),
-                    rs.getString("opmerking"),
-                    rs.getInt("id")));
+                    rs.getString("opmerking"));
+            basicIngredientsById.put(b.getPrimaryKeyValue(), b);
+            basicIngredientsByName.put(b.getName(), b);
         }
 
-        System.out.println("Database driver:: loaded " + basicIngredients.size() + " basic ingredients!");
+        System.out.println("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!");
     }
 
-    public boolean addIngredient(BasicIngredient ingredient) {
-        if (executeInsert(Configuration.center().getDB_TABLE_INGR(),
-                "NULL, "
-                + "\"" + ingredient.getSupplier().getFirm() + "\", "
-                + (ingredient.getName().length() > 0 ? "\"" + ingredient.getName() + "\"" : "NULL") + ", "
-                + (ingredient.getBrand().length() > 0 ? "\"" + ingredient.getBrand() + "\"" : "NULL") + ", "
-                + (ingredient.getPackaging().length() > 0 ? "\"" + ingredient.getPackaging() + "\"" : "NULL") + ", "
-                + (ingredient.getPricePerUnit() > 0 ? "\"" + ingredient.getPricePerUnit() + "\"" : "NULL") + ", "
-                + (ingredient.getWeightPerUnit() > 0 ? "\"" + ingredient.getWeightPerUnit() + "\"" : "NULL") + ", "
-                + (ingredient.getLossPercent() > 0 ? "\"" + ingredient.getLossPercent() + "\"" : "NULL") + ", "
-                + (ingredient.getTaxes() > 0 ? "\"" + ingredient.getTaxes() + "\"" : "NULL") + ", "
-                + (ingredient.getDate().length() > 0 ? "\"" + ingredient.getDate() + "\"" : "NULL") + ", "
-                + (ingredient.getNotes().length() > 0 ? "\"" + ingredient.getNotes() + "\"" : "NULL"))) {
-            basicIngredients.put(ingredient.getPrimaryKeyValue(), ingredient);
-            return true;
-        } else {
-            return false;
+    public FunctionResult<BasicIngredient> addBasicIngredient(BasicIngredientModel ingredient) throws SQLException {
+	int code = 0;
+	BasicIngredient newBI = null;
+        String insertTableSQL = "INSERT INTO ingredients"
+                + "(firmaid, naam, merk, verpakking, prijsPerVerpakking, gewichtPerVerpakking, verliespercentage, BTW, datum, opmerking) VALUES"
+                + "(?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
+        try {
+            preparedStatement.setInt(1, ingredient.getSupplier().getPrimaryKeyValue());
+            preparedStatement.setString(2, ingredient.getName());
+            preparedStatement.setString(3, ingredient.getBrand());
+            preparedStatement.setString(4, ingredient.getPackaging());
+            preparedStatement.setDouble(5, ingredient.getPricePerUnit());
+            preparedStatement.setDouble(6, ingredient.getWeightPerUnit());
+            preparedStatement.setDouble(7, ingredient.getLossPercent());
+            preparedStatement.setDouble(8, ingredient.getTaxes());
+            preparedStatement.setString(9, ingredient.getDate());
+            preparedStatement.setString(10, ingredient.getNotes());
+            preparedStatement.executeUpdate();
+	    
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_INGR()+" WHERE naam=\""+ingredient.getName()+"\"");
+	    if (rs.next()) {
+		newBI = BasicIngredient.createFromModel(rs.getInt("id"), ingredient);
+		basicIngredientsById.put(newBI.getPrimaryKeyValue(), newBI);
+		basicIngredientsByName.put(newBI.getName(), newBI);
+	    } else {
+		code = 2;
+	    }
+        } catch (SQLException ex) {
+            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+	    code = 1;
+        } finally {
+            preparedStatement.close();
         }
+        return new FunctionResult<BasicIngredient>(code, newBI);
     }
 
     private void loadRecipes() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_REC());
         while (rs.next()) {
-            recipes.put(rs.getInt("id"),
-                    Recipe.createStub(
+	    Recipe r = Recipe.createStub(
+		    rs.getInt("id"),
                     rs.getString("naam"),
                     rs.getString("datum"),
                     rs.getString("bereiding"),
-                    rs.getDouble("nettogewicht")));
+                    rs.getDouble("nettogewicht"));
+            recipesById.put(r.getPrimaryKeyValue(), r);
+            recipesByName.put(r.getName(), r);
         }
         // also copy all linked ingredients and recipes
         rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_REC_INGR());
         int ingrLinks = 0;
         while (rs.next()) {
-            String recipeName = rs.getString("receptnaam").toLowerCase();
-            String ingredientName = rs.getString("ingredientnaam").toLowerCase();
+            int recipeName = rs.getInt("receptid");
+            int ingredientName = rs.getInt("ingredientid");
             int rank = rs.getInt("rang");
             double quantity = rs.getDouble("quantiteit");
-            recipes.get(recipeName).addIngredient(basicIngredients.get(ingredientName), rank, quantity, true);
+            recipesById.get(recipeName).addIngredient(basicIngredientsById.get(ingredientName), rank, quantity, true);
             ingrLinks++;
         }
         rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_REC_REC());
         int recLinks = 0;
         while (rs.next()) {
-            String recipeName = rs.getString("receptnaam").toLowerCase();
-            String subrecipeName = rs.getString("deelreceptnaam").toLowerCase();
+            int recipeName = rs.getInt("receptid");
+            int subrecipeName = rs.getInt("deelreceptid");
             int rank = rs.getInt("rang");
             double quantity = rs.getDouble("quantiteit");
-            recipes.get(recipeName).addIngredient(recipes.get(subrecipeName), rank, quantity, false);
+            recipesById.get(recipeName).addIngredient(recipesById.get(subrecipeName), rank, quantity, false);
             recLinks++;
         }
 
-        System.out.println("Database driver:: loaded " + recipes.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!");
+        System.out.println("Database driver:: loaded " + recipesById.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!");
     }
 
-    public boolean addRecipe(Recipe recipe) throws SQLException {
-        boolean flag = true;
+    public FunctionResult<Recipe> addRecipe(RecipeModel recipe) throws SQLException {
+	boolean autoComm = connection.getAutoCommit();
+	int code = 0;
+	Recipe newRec = null;
         PreparedStatement stmt = null;
         try {
             connection.setAutoCommit(false);
@@ -230,20 +279,32 @@ public class Database {
                 stmt.executeUpdate();
             }
             connection.commit();
+	    
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
+	    if (rs.next()) {
+		newRec = Recipe.createFromModel(rs.getInt("id"), recipe);
+		recipesById.put(newRec.getPrimaryKeyValue(), newRec);
+		recipesByName.put(newRec.getName(), newRec);
+	    } else {
+		code = 2;
+	    }
+	    
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             connection.rollback();
-            flag = false;
+	    code = 1;
         } finally {
+	    connection.setAutoCommit(autoComm);
             if (stmt != null) {
                 stmt.close();
             }
         }
-        return flag;
+        return new FunctionResult<Recipe>(code, newRec);
     }
 
     public boolean updateRecipe(Recipe recipe) throws SQLException {
-        boolean flag = true;
+        boolean autoComm = connection.getAutoCommit();
+	boolean flag = true;
         String insertrecrec = "INSERT INTO recipesrecipes"
                 + "(receptnaam, deelreceptnaam, rang, quantiteit) VALUES"
                 + "(?,?,?,?)";
@@ -286,6 +347,7 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             flag = false;
         } finally {
+	    connection.setAutoCommit(autoComm);
             if (stmt != null) {
                 stmt.close();
             }
@@ -303,15 +365,27 @@ public class Database {
     }
 
     public Map<Integer, Supplier> getSuppliers() {
-        return suppliers;
+        return suppliersById;
+    }
+    
+    public Map<String, Supplier> getSuppliersAlphabetically() {
+	return suppliersByFirm;
     }
 
     public Map<Integer, BasicIngredient> getBasicIngredients() {
-        return basicIngredients;
+        return basicIngredientsById;
+    }
+    
+    public Map<String, BasicIngredient> getBasicIngredientsAlphabetically() {
+        return basicIngredientsByName;
     }
 
     public Map<Integer, Recipe> getRecipes() {
-        return recipes;
+        return recipesById;
+    }
+    
+    public Map<String, Recipe> getRecipesAlphabetically() {
+        return recipesByName;
     }
 
     public Map<String, Integer> getMunicipales() {
@@ -320,36 +394,9 @@ public class Database {
 
     public List<Ingredient> getIngredients() {
         ArrayList<Ingredient> me = new ArrayList<Ingredient>();
-        me.addAll(basicIngredients.values());
-        me.addAll(recipes.values());
+        me.addAll(basicIngredientsByName.values());
+        me.addAll(recipesByName.values());
         return me;
-    }
-
-    public void executeStatement(String s) {
-    }
-
-    /**
-     *
-     * @param table
-     * @param values
-     * @throws SQLException
-     */
-    public boolean executeInsert(String table, String values) {
-        try {
-            statement.executeUpdate("INSERT INTO " + table + " VALUES (" + values + ")");
-            System.out.println("DatabaseDriver::Executed command:\n"
-                    + "INSERT INTO " + table + " VALUES (" + values + ")\n"
-                    + "SUCCES!\n");
-            return true;
-        } catch (Exception e) {
-            // do logging
-            // show error elsewhere (hence the return false!)
-            System.err.println("DatabaseDriver::Executed command:\n"
-                    + "INSERT INTO " + table + " VALUES (" + values + ")\n"
-                    + "FAILED:\n" + e.getMessage());
-
-            return false;
-        }
     }
 
     /**
@@ -363,7 +410,7 @@ public class Database {
      * @param values
      * @return
      */
-    public boolean executeUpdate(String table, String primaryKey, String primaryKeyValue, String values) {
+    public boolean executeUpdate(String table, String primaryKey, int primaryKeyValue, String values) {
         try {
             statement.executeUpdate("UPDATE " + table + " SET " + values + " WHERE " + primaryKey + " = \"" + primaryKeyValue + "\"");
             System.out.println("DatabaseDriver::Executed update:\n"
@@ -377,9 +424,25 @@ public class Database {
             return false;
         }
     }
-
-    public boolean executeDelete(String table, int id) {
-        return false;
+    
+    /**
+     * TODO: MAKE FAILSAFE so two calls can't generate the same id!
+     * 
+     * 
+     * @param table
+     * @return
+     * @throws Exception 
+     */
+    public int generateIdForTable(String table) throws SQLException{
+	if (table.equalsIgnoreCase(Configuration.center().getDB_TABLE_SUP())) {
+	    return Collections.max(suppliersById.keySet())+1;
+	} else if (table.equalsIgnoreCase(Configuration.center().getDB_TABLE_REC())) {
+	    return Collections.max(recipesById.keySet())+1;
+	} else if (table.equalsIgnoreCase(Configuration.center().getDB_TABLE_INGR())) {
+	    return Collections.max(basicIngredientsById.keySet())+1;
+	} else {
+	    throw new SQLException("DatabaseDriver::Table '"+table+"' is not a database table and a valid PK could not be generated!");
+	}
     }
 
     /**

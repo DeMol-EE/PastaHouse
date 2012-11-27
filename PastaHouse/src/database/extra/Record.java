@@ -2,28 +2,40 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package database.extra;
+
+import database.FunctionResult;
 
 /**
  *
  * @author Robin jr
  */
-public interface Record {
+public abstract class Record {
     
-    /**
-     * Returns the primary key of this database proxy-object.
-     * @return The primary key of the object.
-     */
-    public String getPrimaryKey();
+    private final String table;
+    private final int primaryKey;
     
-    public int getPrimaryKeyValue();
+    public Record(int primaryKey, String table){
+	this.primaryKey = primaryKey;
+	this.table = table;
+    }
+    
+    // return the column name for the primary key
+    public String getPrimaryKey(){
+	return "id";
+    }
+    
+    public int getPrimaryKeyValue(){
+	return primaryKey;
+    }
+    
+    public String getTableName(){
+	return table;
+    }
     
     // save changes to the db
-    public boolean create();
+    public abstract boolean update();
     
     // save changes to the db
-    public boolean update();
-    
-    // save changes to the db
-    public boolean delete();
+    public abstract boolean delete();
 }

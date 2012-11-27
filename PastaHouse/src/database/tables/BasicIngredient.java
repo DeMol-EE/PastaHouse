@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package database.tables;
 
+import database.Database;
+import database.extra.Ingredient;
+import database.models.BasicIngredientModel;
+import java.sql.SQLException;
 import utilities.Configuration;
 import utilities.StringTools;
 
@@ -11,12 +15,9 @@ import utilities.StringTools;
  *
  * @author Warkst
  */
-public class BasicIngredient extends Ingredient {
-    private final String table_id = Configuration.center().getDB_TABLE_INGR();
-    
+public class BasicIngredient extends Ingredient {    
     // database columns
-    private Supplier supplier;
-    
+    private Supplier supplier; // Foreign key, references Suppliers
     private String brand;
     private String packaging;
     private double pricePerUnit;
@@ -27,12 +28,8 @@ public class BasicIngredient extends Ingredient {
     
     // derived variables
     
-    public BasicIngredient(String name, String date, int id){
-	super(name, date, id);
-    }
-
-    public BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
-	super(name, date, -1);
+    private BasicIngredient(int id, Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+	super(name, date, id, Configuration.center().getDB_TABLE_INGR());
 	this.supplier = supplier;
 	this.brand = brand;
 	this.packaging = packaging;
@@ -43,20 +40,8 @@ public class BasicIngredient extends Ingredient {
 	this.notes = notes;
     }
     
-    private BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes, int id) {
-	super(name, date, id);
-	this.supplier = supplier;
-	this.brand = brand;
-	this.packaging = packaging;
-	this.pricePerUnit = pricePerUnit;
-	this.weightPerUnit = weightPerUnit;
-	this.lossPercent = lossPercent;
-	this.taxes = taxes;
-	this.notes = notes;
-    }
-    
-    public BasicIngredient(BasicIngredient b){
-        super(b.getName(), b.getDate(), b.getId());
+    private BasicIngredient(int id, BasicIngredientModel b){
+        super(b.getName(), b.getDate(), id, Configuration.center().getDB_TABLE_INGR());
 	this.supplier = b.getSupplier();
 	this.brand = b.getBrand();
 	this.packaging = b.getPackaging();
@@ -67,8 +52,24 @@ public class BasicIngredient extends Ingredient {
 	this.notes = b.getNotes();
     }
     
-    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes, int id) {
-	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes, id);
+    public BasicIngredient(BasicIngredient b){
+        super(b.getName(), b.getDate(), b.getPrimaryKeyValue(), b.getTableName());
+	this.supplier = b.getSupplier();
+	this.brand = b.getBrand();
+	this.packaging = b.getPackaging();
+	this.pricePerUnit = b.getPricePerUnit();
+	this.weightPerUnit = b.getWeightPerUnit();
+	this.lossPercent = b.getLossPercent();
+	this.taxes = b.getTaxes();
+	this.notes = b.getNotes();
+    }
+    
+    public static BasicIngredient loadWithValues(int id, Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+	return new BasicIngredient(id, supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
+    }
+    
+    public static BasicIngredient createFromModel(int id, BasicIngredientModel model) throws SQLException{
+	return new BasicIngredient(id, model);
     }
     
     public void copy(BasicIngredient b){
@@ -82,10 +83,6 @@ public class BasicIngredient extends Ingredient {
 	this.lossPercent = b.getLossPercent();
 	this.taxes = b.getTaxes();
 	this.notes = b.getNotes();
-    }
-
-    public String getTable_id() {
-	return table_id;
     }
 
     public void setSupplier(Supplier supplier) {
@@ -169,13 +166,8 @@ public class BasicIngredient extends Ingredient {
     }
     
     @Override
-    public boolean create(){
-	return false;
-    }
-    
-    @Override
     public boolean update(){
-	return Database.driver().executeUpdate(table_id, getPrimaryKey(), getName(),  
+	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
 		"firma = \""+ (supplier == null ? "NULL" : supplier.getFirm()) +"\", "
 		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
 		+ "merk = "+(brand.length()>0 ?"\""+brand +"\"":"NULL")+", "

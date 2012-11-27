@@ -4,10 +4,12 @@
  */
 package gui.ingredients.dialogs;
 
-import database.Component;
 import database.Database;
-import database.Ingredient;
-import database.Recipe;
+import database.FunctionResult;
+import database.extra.Component;
+import database.extra.Ingredient;
+import database.models.RecipeModel;
+import database.tables.Recipe;
 import gui.ingredients.controllers.ComboCoxCallback;
 import gui.ingredients.controllers.MasterDetailViewController;
 import gui.utilities.cell.CellEditorFactory;
@@ -15,7 +17,6 @@ import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
 import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
-import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import utilities.Utilities;
 public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCallback{
 
     private final MasterDetailViewController delegate;
-    private final Recipe model;
+    private final RecipeModel model;
     private final Map<Integer, Component> components;
     
     /**
@@ -49,7 +50,9 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	initComponents();
 	
 	this.delegate = delegate;
-	this.model = new Recipe("", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+//	this.model = new Recipe("", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+//	this.model = new Recipe("", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+	this.model = new RecipeModel();
 	
 	setTitle("Recept toevoegen");
 	setLocationRelativeTo(null);
@@ -68,7 +71,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	});
 	List ingredients = new ArrayList();
 	ingredients.add("");
-	ingredients.addAll(Database.driver().getIngredients().values());
+	ingredients.addAll(Database.driver().getIngredients());
 	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(ingredients, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
@@ -318,15 +321,17 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try {
 	    if (nameOutlet.getText().isEmpty()) {
-		throw new RuntimeException("Name is empty - primary keys can't be empty!");
+		throw new RuntimeException("Name may not be empty!");
 	    }
             model.setName(nameOutlet.getText());
+	    model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
             model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
             model.setPreparation(preparationOutlet.getText());
 	    model.setIngredients(components);
 
-            if(model.create()){
-                delegate.updateListAndSelect(model);
+            FunctionResult<Recipe> res = model.create();
+	    if (res.getCode() == 0 && res.getObj() != null) {
+		delegate.addAndSelect(res.getObj());
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het aanmaken van dit recept in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);

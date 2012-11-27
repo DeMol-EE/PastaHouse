@@ -2,31 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package database.extra;
 
 /**
+ * An extension to the base class Record by adding a name and date.
+ * Represents both Recipes and Basic Ingredients. Offers the functionality
+ * to get a couple of attributes needed for both, such as a loss %, price
+ * per weight, weight per unit and packaging.
  *
  * @author Warkst
  */
-public abstract class Ingredient implements Record {
+public abstract class Ingredient extends Record {
     private String name;
     private String date;
-    private final int id;
 
-    public Ingredient(String name, String date, int id) {
+    public Ingredient(String name, String date, int id, String table) {
+	super(id, table);
         this.name = name;
         this.date = date;
-        this.id = id;
     }
-    
-    public Ingredient(String name, String date){
-	this(name, date, -1);
-    }
-
-    public int getId() {
-        return id;
-    }
-
 
     public String getName() {
 	return name;
@@ -43,17 +37,7 @@ public abstract class Ingredient implements Record {
     public void setDate(String date){
 	this.date = date;
     }
-    
-    @Override
-    public String getPrimaryKey(){
-	return "naam";
-    }
-    
-    @Override
-    public int getPrimaryKeyValue(){
-	return id;
-    }
-    
+
     public abstract double getPricePerWeight();
     
     public abstract double getWeightPerUnit();

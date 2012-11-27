@@ -10,7 +10,7 @@
  */
 package pastahouse;
 
-import database.Supplier;
+import database.tables.Supplier;
 import gui.ingredients.controllers.IngredientViewController;
 import gui.ingredients.controllers.MasterDetailViewController;
 import gui.ingredients.controllers.RecipeViewController;

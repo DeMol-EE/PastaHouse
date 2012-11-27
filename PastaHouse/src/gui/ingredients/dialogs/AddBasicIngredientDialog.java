@@ -4,12 +4,14 @@
  */
 package gui.ingredients.dialogs;
 
-import database.BasicIngredient;
 import database.Database;
-import database.Supplier;
+import database.FunctionResult;
+import database.models.BasicIngredientModel;
+import database.tables.BasicIngredient;
+import database.tables.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.combobox.AutocompleteCombobox;
-import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -18,35 +20,38 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
-import utilities.Utilities;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Robin jr
  */
-public class AddIngredientDialog extends javax.swing.JDialog {
+public class AddBasicIngredientDialog extends javax.swing.JDialog {
 
     private final MasterDetailViewController delegate;
+    private final BasicIngredientModel model;
+    private final AutocompleteCombobox supplierBox;
     
     /**
-     * Creates new form AddIngredientDialog
+     * Creates new form AddBasicIngredientDialog
      */
-    public AddIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate) {
+    public AddBasicIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate) {
 	super(parent, modal);
 	initComponents();
 	
 	this.delegate = delegate;
+	this.model = new BasicIngredientModel();
 	
 	setLocationRelativeTo(null);
 	setTitle("Ingrediënt toevoegen");
 	
-	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
+//	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
 	
 	supplierParent.removeAll();
 	List suppliers = new ArrayList();
 	suppliers.add("");
-	suppliers.addAll(Database.driver().getSuppliers().values());
-	AutocompleteCombobox supplierBox = new AutocompleteCombobox(suppliers);
+	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
+	supplierBox = new AutocompleteCombobox(suppliers);
 	supplierParent.add(supplierBox, BorderLayout.CENTER);
 	
 	taxesOutlet.setText(""+21.0);
@@ -57,6 +62,11 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 	pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(new Double(0.0))+" euro/");
 	weightPerUnitOutlet.setText(""+0.0);
 	weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(new Double(0.0))+" kg/");
+	
+	TextFieldAutoHighlighter.installHighlighter(taxesOutlet);
+	TextFieldAutoHighlighter.installHighlighter(lossOutlet);
+	TextFieldAutoHighlighter.installHighlighter(pricePerUnitOutlet);
+	TextFieldAutoHighlighter.installHighlighter(weightPerUnitOutlet);
     }
 
     /**
@@ -104,6 +114,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(430, 380));
+        setPreferredSize(new java.awt.Dimension(500, 361));
 
         fixedFields.setLayout(new java.awt.GridLayout(8, 2, -1, 0));
 
@@ -132,6 +143,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel4.setFocusable(false);
         fixedFields.add(jLabel4);
 
+        supplierParent.setFocusable(false);
         supplierParent.setLayout(new java.awt.BorderLayout());
 
         supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -143,6 +155,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
         jLabel5.setFocusable(false);
         fixedFields.add(jLabel5);
 
+        jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         pricePerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -221,9 +234,11 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         getContentPane().add(fixedFields, java.awt.BorderLayout.NORTH);
 
+        stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerkingen:"));
+        jScrollPane1.setFocusable(false);
 
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
@@ -234,9 +249,13 @@ public class AddIngredientDialog extends javax.swing.JDialog {
 
         getContentPane().add(stretchableFields, java.awt.BorderLayout.CENTER);
 
+        jPanel3.setFocusable(false);
         jPanel3.setLayout(new java.awt.BorderLayout());
+
+        filler1.setFocusable(false);
         jPanel3.add(filler1, java.awt.BorderLayout.CENTER);
 
+        jPanel4.setFocusable(false);
         jPanel4.setLayout(new java.awt.GridLayout(1, 2));
 
         add.setText("Aanmaken");
@@ -265,7 +284,7 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        this.dispose();
+        disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void taxesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxesOutletKeyReleased
@@ -328,24 +347,52 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
-        BasicIngredient b = new BasicIngredient(
-                (supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
-		brandOutlet.getText(), 
-		packagingOutlet.getText(), 
-		Double.parseDouble(weightPerUnitOutlet.getText()), 
-		Double.parseDouble(pricePerUnitOutlet.getText()), 
-		Double.parseDouble(lossOutlet.getText()), 
-		Double.parseDouble(taxesOutlet.getText()), 
-		nameOutlet.getText(), 
-		new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 
-		notesOutlet.getText());
-	if (Database.driver().addIngredient(b)) {
-	    delegate.updateListAndSelect(b);
-	    this.dispose();
-
+	try{
+	    // set values on the model
+	    model.setName(nameOutlet.getText());
+	    model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+	    model.setBrand(brandOutlet.getText());
+	    model.setPackaging(packagingOutlet.getText());
+	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
+	    model.setPricePerUnit(Double.parseDouble(pricePerUnitOutlet.getText()));
+	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
+	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+	    model.setNotes(notesOutlet.getText());
+	    
+	    Supplier s = null;
+	    if (supplierBox.getSelectedItem() instanceof Supplier) {
+		s = (Supplier)supplierBox.getSelectedItem();
+	    } else if(supplierBox.getSelectedItem() instanceof String){
+		s = Database.driver().getSuppliersAlphabetically().get((String)supplierBox.getSelectedItem());
+	    }
+	    model.setSupplier(s);
+	    
+	    if (model.getName().isEmpty() || model.getSupplier() == null) {
+		throw new RuntimeException("Invalid form");
+	    }
+	    
+	    FunctionResult<BasicIngredient> res = model.create();
+	    if (res.getCode() == 0 && res.getObj() != null) {
+		delegate.addAndSelect(res.getObj());
+		disposeLater();
+	    } else {
+		// switch case error code
+	    }
+	} catch (Exception e){
+	    Object o = supplierBox.getSelectedItem();
+	    System.err.println("Error: \n"+e.getMessage());
+	    JOptionPane.showMessageDialog(null, utilities.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 	}
     }//GEN-LAST:event_addActionPerformed
+    
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;

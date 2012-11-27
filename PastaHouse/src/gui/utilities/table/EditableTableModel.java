@@ -4,8 +4,8 @@
  */
 package gui.utilities.table;
 
-import database.Component;
-import database.Ingredient;
+import database.extra.Component;
+import database.extra.Ingredient;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;

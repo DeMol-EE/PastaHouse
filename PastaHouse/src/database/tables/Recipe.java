@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package database.tables;
 
+import database.Database;
+import database.extra.Component;
+import database.extra.Ingredient;
+import database.models.RecipeModel;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,7 +21,7 @@ import utilities.StringTools;
  * @author Warkst
  */
 public class Recipe extends Ingredient {
-    private final String table_id = Configuration.center().getDB_TABLE_REC();
+//    private final String table_id = Configuration.center().getDB_TABLE_REC();
     
     // database variables
     private double netWeight;
@@ -26,28 +30,45 @@ public class Recipe extends Ingredient {
     
     // derived variables
     
+    private Recipe(int id, RecipeModel r){
+	super(r.getName(), r.getDate(), id, Configuration.center().getDB_TABLE_REC());
+	netWeight = r.getNetWeight();
+	preparation = r.getPreparation();
+	ingredients = new TreeMap<Integer, Component>();
+	ingredients.putAll(r.getIngredients());
+    }
+    
+    /**
+     * Copy constructor.
+     * 
+     * @param r 
+     */
     public Recipe(Recipe r){
-	super(r.getName(), r.getDate(), r.getId());
+	super(r.getName(), r.getDate(), r.getPrimaryKeyValue(), r.getTableName());
 	netWeight = r.netWeight;
 	preparation = r.preparation;
 	ingredients = new TreeMap<Integer, Component>();
 	ingredients.putAll(r.ingredients);
     }
     
-    public Recipe(String name, String date){
-	this(name, date, "", 0.0);
+    public Recipe(int id, String name, String date){
+	this(id, name, date, "", 0.0);
     }
     
-    private Recipe(String name, String date, String preparation, double netWeight){
-	super(name, date);
+    private Recipe(int id, String name, String date, String preparation, double netWeight){
+	super(name, date, id, Configuration.center().getDB_TABLE_REC());
 	this.preparation = preparation;
 	this.netWeight = netWeight;
 	
 	ingredients = new TreeMap<Integer, Component>();
     }
     
-    public static Recipe createStub(String name, String date, String preparation, double netWeight){
-	return new Recipe(name, date, preparation, netWeight);
+    public static Recipe createStub(int id, String name, String date, String preparation, double netWeight){
+	return new Recipe(id, name, date, preparation, netWeight);
+    }
+    
+    public static Recipe createFromModel(int id, RecipeModel model){
+	return new Recipe(id, model);
     }
     
     public void copy(Recipe r){
@@ -113,11 +134,6 @@ public class Recipe extends Ingredient {
 	}
 	
 	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
-    }
-    
-    @Override
-    public boolean create(){
-	return Database.driver().executeInsert(table_id, "bereiding = "+preparation);
     }
     
     @Override

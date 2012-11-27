@@ -10,9 +10,10 @@
  */
 package gui.ingredients.controllers;
 
+import database.tables.BasicIngredient;
 import database.*;
-import gui.ingredients.dialogs.AddIngredientDialog;
-import gui.ingredients.dialogs.EditIngredientDialog;
+import gui.ingredients.dialogs.AddBasicIngredientDialog;
+import gui.ingredients.dialogs.EditBasicIngredientDialog;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.Color;
@@ -32,7 +33,7 @@ import utilities.StringTools;
  *
  * @author Warkst
  */
-public class IngredientViewController extends javax.swing.JPanel implements MasterDetailViewController{
+public class IngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>{
 
     private Application application;
     
@@ -48,22 +49,21 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-		    updateDetail(listOutlet.getSelectedValue());
+		    updateDetail((BasicIngredient)listOutlet.getSelectedValue());
 		}
 	    }
 	});
 
 	// copy from the db
-	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredients()));
+	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
 	listOutlet.setSelectedIndex(0);
     }
     
     @Override
-    public void updateDetail(Object value){
-	if(value==null) {
+    public void updateDetail(BasicIngredient bi){
+	if(bi==null) {
 	    return;
 	}
-	BasicIngredient bi = (BasicIngredient)value;
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	DecimalFormat twoFormatter = new DecimalFormat("0.00");
@@ -130,15 +130,19 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
     }
     
     @Override
-    public void updateListAndSelect(Object select){
+    public void addAndSelect(BasicIngredient select){
 	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
-//	updateDetail(select);
+	updateDetail(select);
     }
     
-    public void addIngredient(BasicIngredient b){
-	
+    @Override
+    public void editAndSelect(BasicIngredient n, BasicIngredient o){
+	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.edit(n, o);
+	listOutlet.setSelectedValue(n, true);
+	updateDetail(n);
     }
 
     /** This method is called from within the constructor to
@@ -352,11 +356,11 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
     }// </editor-fold>//GEN-END:initComponents
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditIngredientDialog(null, true, this, (BasicIngredient)listOutlet.getSelectedValue()).setVisible(true);
+        new EditBasicIngredientDialog(null, true, this, (BasicIngredient)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	new AddIngredientDialog(null, true, this).setVisible(true);
+	new AddBasicIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -398,13 +402,6 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
     private javax.swing.JLabel taxesOutlet;
     private javax.swing.JLabel weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void updateList() {
-	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.update();
-	updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
-    }
 
     @Override
     public void add() {

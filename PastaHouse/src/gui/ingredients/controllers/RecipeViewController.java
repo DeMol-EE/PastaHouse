@@ -4,10 +4,10 @@
  */
 package gui.ingredients.controllers;
 
-import database.Component;
 import database.Database;
-import database.Ingredient;
-import database.Recipe;
+import database.extra.Component;
+import database.extra.Ingredient;
+import database.tables.Recipe;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.PrintDialog;
@@ -30,7 +30,7 @@ import utilities.Utilities;
  *
  * @author Warkst
  */
-public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController, PrintDialogDelegate{
+public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>, PrintDialogDelegate{
 
     /**
      * Creates new form RecipeViewController
@@ -38,14 +38,14 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     public RecipeViewController() {
 	initComponents();
 	
-	recipeListOutlet.setModel(ListModelFactory.createRecipeListModel(Database.driver().getRecipes()));
+	recipeListOutlet.setModel(ListModelFactory.createRecipeListModel(Database.driver().getRecipesAlphabetically()));
 	recipeListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	recipeListOutlet.addListSelectionListener(new ListSelectionListener() {
 
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-		    updateDetail(recipeListOutlet.getSelectedValue());
+		    updateDetail((Recipe)recipeListOutlet.getSelectedValue());
 		}
 	    }
 	});
@@ -61,8 +61,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }
     
     @Override
-    public void updateDetail(Object value){
-	Recipe r = (Recipe)value;
+    public void updateDetail(Recipe r){
 	
 	nameOutlet.setText(StringTools.capitalize(r.getName()));
 	dateOutlet.setText(r.getDate());
@@ -293,15 +292,19 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void updateList() {
+    public void addAndSelect(Recipe select) {
 	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
 	dlm.update();
-	updateDetail(dlm.getElementAt(recipeListOutlet.getSelectedIndex()));
+	recipeListOutlet.setSelectedValue(select, true);
+	updateDetail(select);
     }
-
+    
     @Override
-    public void updateListAndSelect(Object select) {
-	System.err.println("Not implemented");
+    public void editAndSelect(Recipe n, Recipe o){
+	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
+	dlm.edit(n, o);
+	recipeListOutlet.setSelectedValue(n, true);
+	updateDetail(n);
     }
 
     @Override

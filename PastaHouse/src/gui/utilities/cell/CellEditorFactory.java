@@ -5,6 +5,7 @@
 package gui.utilities.cell;
 
 import database.Database;
+import database.extra.Ingredient;
 import gui.ingredients.controllers.ComboCoxCallback;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.Color;

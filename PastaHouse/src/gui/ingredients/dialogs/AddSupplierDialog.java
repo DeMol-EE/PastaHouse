@@ -4,19 +4,18 @@
  */
 package gui.ingredients.dialogs;
 
-import gui.utilities.combobox.AutocompleteCombobox;
 import database.Database;
-import database.Supplier;
+import database.FunctionResult;
+import database.models.SupplierModel;
+import database.tables.Supplier;
 import gui.ingredients.controllers.SupplierViewController;
+import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,6 +25,7 @@ import javax.swing.JOptionPane;
 public class AddSupplierDialog extends javax.swing.JDialog {
 
     private SupplierViewController delegate;
+    private final SupplierModel model;
 
     /**
      * Creates new form AddSupplierDialog
@@ -36,6 +36,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         setTitle("Leverancier toevoegen");
         this.setLocationRelativeTo(null);
         this.delegate = delegate;
+	this.model = new SupplierModel();
         loadModel();
     }
 
@@ -71,7 +72,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         txtEmail = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        NotesOutlet = new javax.swing.JTextArea();
+        notesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
@@ -136,9 +137,9 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
         jScrollPane2.setName(""); // NOI18N
 
-        NotesOutlet.setColumns(20);
-        NotesOutlet.setRows(5);
-        jScrollPane2.setViewportView(NotesOutlet);
+        notesOutlet.setColumns(20);
+        notesOutlet.setRows(5);
+        jScrollPane2.setViewportView(notesOutlet);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -146,7 +147,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 516, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 524, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -166,6 +167,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
 
         btnOK.setText("OK");
+        btnOK.setFocusable(false);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -174,6 +176,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel4.add(btnOK);
 
         btnCancel.setText("Cancel");
+        btnCancel.setFocusable(false);
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -193,26 +196,31 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        try{
-            
-        } catch(Exception e) {
-            
-        }
-        
-        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), txtPostcode.getText().length()>0 ? Integer.parseInt(txtPostcode.getText()): 0, txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
-        Database db = Database.driver();
         try {
-            if (db.addSupplier(sup)) {
-    //            db.getSuppliers().put(sup.getFirm(), sup);
-
-                delegate.addSupplier(sup);
-
-                this.dispose();
+//	    FunctionResult<Supplier> result = new SupplierModel(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), txtPostcode.getText().length()>0 ? Integer.parseInt(txtPostcode.getText()): 0, txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText()).create();
+	    
+	    model.setFirm(txtFirma.getText());
+	    model.setAddress(txtAdres.getText());
+	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
+	    model.setZipcode(Integer.parseInt(txtPostcode.getText()));
+	    model.setTelephone(txtTel.getText());
+	    model.setTelephone2(txtTel2.getText());
+	    model.setFax(txtFax.getText());
+	    model.setCellphone(txtGSM.getText());
+	    model.setEmail(txtEmail.getText());
+	    model.setContact(txtContact.getText());
+	    model.setNotes(notesOutlet.getText());
+	    
+	    FunctionResult<Supplier> result = model.create();
+            if (result.getCode() == 0 && result.getObj() != null) {
+		delegate.addAndSelect(result.getObj());
+		this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
+                // switch case the return code
+		System.err.println("Database driver returned with code: "+result.getCode());
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddSupplierDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+	    JOptionPane.showMessageDialog(null, utilities.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnOKActionPerformed
 
@@ -237,7 +245,6 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtPostcodeKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HolderGemeentes;
-    private javax.swing.JTextArea NotesOutlet;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
     private javax.swing.Box.Filler filler1;
@@ -256,6 +263,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea notesOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;

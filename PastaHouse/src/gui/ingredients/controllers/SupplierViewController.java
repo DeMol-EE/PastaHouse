@@ -5,7 +5,7 @@
 package gui.ingredients.controllers;
 
 import database.Database;
-import database.Supplier;
+import database.tables.Supplier;
 import gui.ingredients.dialogs.AddSupplierDialog;
 import gui.ingredients.dialogs.EditSupplierDialog;
 import gui.utilities.list.EditableListModel;
@@ -23,7 +23,7 @@ import utilities.StringTools;
  *
  * @author Warkst
  */
-public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController {
+public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController<Supplier> {
 
     /**
      * Creates new form SupplierViewController
@@ -31,13 +31,13 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     public SupplierViewController() {
         initComponents();
         
-        listOutlet.setModel(ListModelFactory.createSupplierListModel(Database.driver().getSuppliers()));
+        listOutlet.setModel(ListModelFactory.createSupplierListModel(Database.driver().getSuppliersAlphabetically()));
         listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listOutlet.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    updateDetail(listOutlet.getSelectedValue());
+                    updateDetail((Supplier)listOutlet.getSelectedValue());
                 }
             }
         });
@@ -46,8 +46,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }
     
     @Override
-    public void updateDetail(Object value) {
-        Supplier s = (Supplier) value;
+    public void updateDetail(Supplier s) {
         firmOutlet.setText(StringTools.capitalize(s.getFirm()));
         contactOutlet.setText(StringTools.capitalizeEach(s.getContact()));
         addressOutlet.setText(StringTools.capitalizeEach(s.getAddress()));
@@ -62,22 +61,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }
     
     public void selectSupplier(Supplier supplier) {
-//	System.out.println("SVC::select index stub called with index "+);
         listOutlet.setSelectedValue(supplier, true);
-    }
-    
-    public void addSupplier(Supplier supplier) {
-        EditableListModel<Supplier> dlm = (EditableListModel) listOutlet.getModel();
-        dlm.add(supplier);
-//        updateDetail(supplier);
-        listOutlet.setSelectedValue(supplier, true);
-        listOutlet.requestFocus();
-    }
-    
-    public void updateList() {
-        EditableListModel<Supplier> dlm = (EditableListModel) listOutlet.getModel();
-        dlm.update();
-        updateDetail(dlm.getElementAt(listOutlet.getSelectedIndex()));
     }
     
     @Override
@@ -305,8 +289,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        AddSupplierDialog dia = new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this);
-        dia.setVisible(true);
+        new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
     
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
@@ -389,8 +372,19 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void updateListAndSelect(Object select) {
-        System.err.println("Not implemented");
+    public void editAndSelect(Supplier newObj, Supplier oldObj){
+	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.edit(newObj, oldObj);
+	listOutlet.setSelectedValue(newObj, true);
+	updateDetail(newObj);
+    }
+    
+    @Override
+    public void addAndSelect(Supplier newObj) {
+        EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.update();
+	listOutlet.setSelectedValue(newObj, true);
+	updateDetail(newObj);
     }
     
     @Override

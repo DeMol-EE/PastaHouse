@@ -6,8 +6,8 @@ package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
-import database.Ingredient;
-import database.Recipe;
+import database.extra.Ingredient;
+import database.tables.Recipe;
 import gui.ingredients.controllers.ComboCoxCallback;
 import gui.ingredients.controllers.MasterDetailViewController;
 import gui.utilities.cell.CellEditorFactory;
@@ -358,7 +358,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	    model.setPreparation(preparationOutlet.getText());
 	    
 	    if(model.update()){
-		delegate.updateList();
+		delegate.editAndSelect(model, defaultModel);
 		this.dispose();
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);

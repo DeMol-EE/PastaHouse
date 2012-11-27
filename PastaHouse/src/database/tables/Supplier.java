@@ -2,23 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package database.tables;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import database.Database;
+import database.extra.Record;
+import database.models.SupplierModel;
 import utilities.Configuration;
 import utilities.StringTools;
-import utilities.Utilities;
 
 /**
  *
  * @author Warkst
  */
-public class Supplier implements Record{
-    private final String table_id = Configuration.center().getDB_TABLE_SUP();
-    
+public class Supplier extends Record{
     private String firm;
     private String address;
     private String municipality;
@@ -30,11 +26,11 @@ public class Supplier implements Record{
     private String notes;
     private String contact;
     private int zipcode;
-    private int id;
     
     private boolean deleted;
 
-    private Supplier(String firm, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
+    private Supplier(int id, String firm, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
+	super(id, Configuration.center().getDB_TABLE_SUP());
 	this.firm = firm;
 	this.address = address;
 	this.municipality = municipality;
@@ -49,7 +45,43 @@ public class Supplier implements Record{
         this.zipcode = zipcode;
     }
     
+    private Supplier(int id, SupplierModel s){
+	super(id, Configuration.center().getDB_TABLE_SUP());
+	this.firm = s.getFirm();
+	this.address = s.getAddress();
+	this.municipality = s.getMunicipality();
+	this.telephone = s.getTelephone();
+        this.telephone2 = s.getTelephone2();
+	this.cellphone = s.getCellphone();
+	this.fax = s.getFax();
+	this.email = s.getEmail();
+	this.notes = s.getNotes();
+	this.contact = s.getContact();
+	this.deleted = false;
+        this.zipcode = s.getZipcode();
+    }
+    
+    /**
+     * Copy constructor.
+     * @param s 
+     */
     public Supplier(Supplier s){
+	super(s.getPrimaryKeyValue(), s.getTableName());
+	this.firm = s.getFirm();
+	this.address = s.getAddress();
+	this.municipality = s.getMunicipality();
+	this.telephone = s.getTelephone();
+        this.telephone2 = s.getTelephone2();
+	this.cellphone = s.getCellphone();
+	this.fax = s.getFax();
+	this.email = s.getEmail();
+	this.notes = s.getNotes();
+	this.contact = s.getContact();
+	this.deleted = false;
+        this.zipcode = s.getZipcode();
+    }
+    
+    public void copy(Supplier s){
 	this.firm = s.getFirm();
 	this.address = s.getAddress();
 	this.municipality = s.getMunicipality();
@@ -64,23 +96,37 @@ public class Supplier implements Record{
         this.zipcode = s.getZipcode();
     }
     
-    public void load(Supplier s){
-	this.firm = s.getFirm();
-	this.address = s.getAddress();
-	this.municipality = s.getMunicipality();
-	this.telephone = s.getTelephone();
-        this.telephone2 = s.getTelephone2();
-	this.cellphone = s.getCellphone();
-	this.fax = s.getFax();
-	this.email = s.getEmail();
-	this.notes = s.getNotes();
-	this.contact = s.getContact();
-	this.deleted = s.isDeleted();
-        this.zipcode = s.getZipcode();
+    /**
+     * Creates a Supplier object mirroring a database record.
+     * 
+     * @param id
+     * @param firm
+     * @param address
+     * @param municipality
+     * @param zipcode
+     * @param telephone
+     * @param telephone2
+     * @param cellphone
+     * @param fax
+     * @param email
+     * @param notes
+     * @param contact
+     * @param verwijderd
+     * @return 
+     */
+    public static Supplier loadWithValues(int id, String firm, String address, String municipality, int zipcode, String telephone,String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
+	return new Supplier(id, firm, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, notes, contact, verwijderd);
     }
     
-    public static Supplier loadWithValues(String firm, String address, String municipality, int zipcode, String telephone,String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean verwijderd) {
-	return new Supplier(firm, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, notes, contact, verwijderd);
+    /**
+     * Creates a Supplier object mirroring a database record from a SupplierModel.
+     * 
+     * @param id
+     * @param s
+     * @return 
+     */
+    public static Supplier createFromModel(int id, SupplierModel s){
+	return new Supplier(id, s);
     }
     
     public String getAddress() {
@@ -98,8 +144,6 @@ public class Supplier implements Record{
     public void setZipcode(int zipcode) {
         this.zipcode = zipcode;
     }
-    
-    
 
     public String getCellphone() {
 	return cellphone;
@@ -185,26 +229,20 @@ public class Supplier implements Record{
     public void setTelephone2(String telephone2) {
         this.telephone2 = telephone2;
     }
-    
-    
-
-    @Override
-    public boolean create(){
-        return false;
-        
-    }
 
     /**
      * Tells the database object proxy to synchronize the database with the actual values. This will
      * cause an UPDATE command saving the current values to the database.
      * 
-     * @return <code>true</code> if the UPDATE was succesful, <code>false</code> if it failed.
+     * @return <code>true</code> if the UPDATE was successful, <code>false</code> if it failed.
      */
     @Override
     public boolean update() {
-	return Database.driver().executeUpdate(table_id, getPrimaryKey(), firm,  
+	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
 		"firma = \""+ firm +"\", "
+//		"firma = "+(firm.length()>0 ? "\""+ firm +"\"":"NULL")+", "
 		+ "adres = "+(address.length()>0 ? "\""+ address +"\"":"NULL")+", "
+		+ "postcode = "+ zipcode +", "
 		+ "gemeente = "+(municipality.length()>0 ?"\""+municipality +"\"":"NULL")+", "
 		+ "tel = "+(telephone.length()>0? "\""+telephone +"\"":"NULL")+", "
                 + "tel2 = "+(telephone2.length()>0? "\""+telephone2 +"\"":"NULL")+", "
@@ -219,15 +257,5 @@ public class Supplier implements Record{
     @Override
     public boolean delete() {
 	return false;
-    }
-    
-    @Override
-    public String getPrimaryKey(){
-	return "firma";
-    }
-    
-    @Override
-    public int getPrimaryKeyValue(){
-	return id;
     }
 }

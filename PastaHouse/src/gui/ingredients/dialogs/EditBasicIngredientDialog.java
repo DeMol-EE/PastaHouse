@@ -5,9 +5,9 @@
 package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
-import database.BasicIngredient;
 import database.Database;
-import database.Supplier;
+import database.tables.BasicIngredient;
+import database.tables.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.combobox.ComboBoxModelFactory;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.DateFormatter;
 import utilities.Utilities;
 
@@ -26,7 +27,7 @@ import utilities.Utilities;
  *
  * @author Robin jr
  */
-public class EditIngredientDialog extends javax.swing.JDialog{
+public class EditBasicIngredientDialog extends javax.swing.JDialog{
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
@@ -36,9 +37,9 @@ public class EditIngredientDialog extends javax.swing.JDialog{
     private final AutocompleteCombobox supplierBox;
     
     /**
-     * Creates new form EditIngredientDialog
+     * Creates new form EditBasicIngredientDialog
      */
-    public EditIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate, BasicIngredient model) {
+    public EditBasicIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate, BasicIngredient model) {
 	super(parent, modal);
 	initComponents();
 	
@@ -59,7 +60,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
 	
 	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
-//	fixedFields.add(dp);
+	fixedFields.add(dp);
 	
 	loadModel();
     }
@@ -151,6 +152,8 @@ public class EditIngredientDialog extends javax.swing.JDialog{
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(400, 412));
+        setPreferredSize(new java.awt.Dimension(500, 600));
 
         detail.setLayout(new java.awt.BorderLayout());
 
@@ -369,9 +372,18 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	updatePricePerWeightOutlet();
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         model.copy(defaultModel);
-	this.dispose();
+	disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void updatePricePerWeightOutlet(){
@@ -539,7 +551,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 		supp = (Supplier)supplierBox.getSelectedItem();
 	    } else if (supplierBox.getSelectedItem() instanceof String) {
 		String s = (String)supplierBox.getSelectedItem();
-		supp = Database.driver().getSuppliers().get(s.toLowerCase());
+		supp = Database.driver().getSuppliersAlphabetically().get(s.toLowerCase());
 	    } else {
 		supp = null;
 	    }
@@ -552,8 +564,8 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
 
 	    if(model.update()){
-		delegate.updateList();
-		this.dispose();
+		delegate.editAndSelect(model, defaultModel);
+		disposeLater();
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }

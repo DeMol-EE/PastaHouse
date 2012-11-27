@@ -13,6 +13,8 @@ import javax.swing.AbstractListModel;
 public abstract class EditableListModel<Type> extends AbstractListModel {
     public abstract void add(Type o);
     
+    public abstract void edit(Type newObj, Type oldObj);
+    
     public void update(){
 	fireContentsChanged(this, 0, getSize());
     }

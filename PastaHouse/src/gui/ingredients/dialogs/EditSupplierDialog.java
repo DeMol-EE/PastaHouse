@@ -5,9 +5,10 @@
 package gui.ingredients.dialogs;
 
 import database.Database;
-import database.Supplier;
+import database.tables.Supplier;
 import gui.ingredients.controllers.SupplierViewController;
 import gui.utilities.combobox.AutocompleteCombobox;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,8 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import utilities.Utilities;
 
 /**
  *
@@ -50,7 +53,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         txtFirma.setText(model.getFirm());
         txtContact.setText(model.getContact());
         txtAdres.setText(model.getAddress());
-        // load municipale
+        // copy municipale
         txtTel.setText(model.getTelephone());
         txtGSM.setText(model.getCellphone());
         txtFax.setText(model.getFax());
@@ -84,7 +87,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             }
         });
 
-        jPanel2.add(comboGemeentes, 9);
+//        jPanel2.add(comboGemeentes, 9);
+	muniParent.add(comboGemeentes, BorderLayout.CENTER);
         comboGemeentes.setSelectedItem(model.getMunicipality());
     }
     
@@ -117,6 +121,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtGemeente = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        muniParent = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -170,6 +175,9 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jLabel12.setFocusable(false);
         jPanel2.add(jLabel12);
 
+        muniParent.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(muniParent);
+
         jLabel9.setText("Telefoon");
         jLabel9.setFocusable(false);
         jPanel2.add(jLabel9);
@@ -213,14 +221,14 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 508, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 516, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -258,33 +266,46 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        model.setFirm(txtFirma.getText());
-        model.setContact(txtContact.getText());
-        model.setAddress(txtAdres.getText());
-        model.setZipcode(Integer.parseInt(txtGemeente.getText()));
-        model.setMunicipality(comboGemeentes.getSelectedItem().toString());
-        model.setTelephone(txtTel.getText());
-        model.setTelephone2(txttel2.getText());
-        model.setCellphone(txtGSM.getText());
-        model.setFax(txtFax.getText());
-        model.setEmail(txtEmail.getText());
-        model.setNotes(notesOutlet.getText());
+        try{
+	    model.setFirm(txtFirma.getText());
+	    model.setContact(txtContact.getText());
+	    model.setAddress(txtAdres.getText());
+	    model.setZipcode(Integer.parseInt(txtGemeente.getText()));
+	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
+	    model.setTelephone(txtTel.getText());
+	    model.setTelephone2(txttel2.getText());
+	    model.setCellphone(txtGSM.getText());
+	    model.setFax(txtFax.getText());
+	    model.setEmail(txtEmail.getText());
+	    model.setNotes(notesOutlet.getText());
 
-        if (model.update()) {
-            delegate.updateList();
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
-        }
+	    if (model.update()) {
+		delegate.editAndSelect(model, defaultModel);
+		disposeLater();
+	    } else {
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    }
+	} catch (Exception e){
+	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
+	}
+        
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // reset values to default
-        model.load(defaultModel);
-
-        this.dispose();
+        model.copy(defaultModel);
+	disposeLater();
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
     private void txtGemeenteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGemeenteKeyReleased
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
@@ -324,6 +345,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel muniParent;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;

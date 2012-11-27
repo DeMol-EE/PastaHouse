@@ -8,10 +8,10 @@ package gui.ingredients.controllers;
  *
  * @author Robin jr
  */
-public interface MasterDetailViewController extends ViewController {
-    public void updateDetail(Object value);
-    public void updateList();
-    public void updateListAndSelect(Object select);
+public interface MasterDetailViewController<Type> extends ViewController {
+    public void updateDetail(Type value);
+    public void addAndSelect(Type newObj);
+    public void editAndSelect(Type newObj, Type oldObj);
     public void add();
     public void edit();
 }

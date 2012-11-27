@@ -55,6 +55,6 @@ public class StringTools {
 		returnMe += capitalize(string) + " ";
 	    }
 	}
-	return returnMe.substring(0, returnMe.length()-1);
+	return returnMe.length() > 0 ? returnMe.substring(0, returnMe.length()-1) : "";
     }
 }
