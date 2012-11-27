@@ -10,6 +10,8 @@ import database.extra.Ingredient;
 import database.tables.Recipe;
 import gui.ingredients.controllers.ComboCoxCallback;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.AcceleratorAdder;
+import gui.utilities.KeyAction;
 import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
@@ -17,7 +19,6 @@ import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,19 +26,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.ComponentInputMap;
 import javax.swing.DropMode;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.DateFormatter;
 import utilities.Utilities;
@@ -110,29 +104,18 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	loadModel();
 	
 	// add accelerator to "add" button
-	addAccelerator(addComponent, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), new KeyAction() {
+	AcceleratorAdder.addAccelerator(addComponent, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		addComponentActionPerformed(e);
 	    }
 	});
-	addAccelerator(removeComponent, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), new KeyAction() {
+	AcceleratorAdder.addAccelerator(removeComponent, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		removeComponentActionPerformed(e);
 	    }
 	});
-    }
-    
-    private void addAccelerator(JComponent comp, KeyStroke ks, Action a){
-	InputMap keyMap = new ComponentInputMap(comp);
-	keyMap.put(ks, "action");
-
-	ActionMap actionMap = new ActionMapUIResource();
-	actionMap.put("action", a);
-
-	SwingUtilities.replaceUIActionMap(comp, actionMap);
-	SwingUtilities.replaceUIInputMap(comp, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
     }
     
     @Override
@@ -395,45 +378,13 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
     }//GEN-LAST:event_addComponentActionPerformed
 
     private void ingredientsOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ingredientsOutletKeyReleased
-        int r = ingredientsOutlet.getSelectedRow();
-        int c = ingredientsOutlet.getSelectedColumn();
-	ingredientsOutlet.editCellAt(r, c);
-	ingredientsOutlet.transferFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+	    int r = ingredientsOutlet.getSelectedRow();
+	    int c = ingredientsOutlet.getSelectedColumn();
+	    ingredientsOutlet.editCellAt(r, c);
+	    ingredientsOutlet.transferFocus();
+	}
     }//GEN-LAST:event_ingredientsOutletKeyReleased
-
-    private abstract class KeyAction implements Action{
-
-	@Override
-	public Object getValue(String key) {
-	    return null;
-	}
-
-	@Override
-	public void putValue(String key, Object value) {
-	    //
-	}
-
-	@Override
-	public void setEnabled(boolean b) {
-	    //
-	}
-
-	@Override
-	public boolean isEnabled() {
-	    return true;
-	}
-
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-	    //
-	}
-
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-	    //
-	}
-
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addComponent;

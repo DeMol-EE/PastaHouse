@@ -80,8 +80,8 @@ public class Recipe extends Ingredient {
 	ingredients.putAll(r.ingredients);
     }
     
-    public void addIngredient(Ingredient i, int rank, double quantity, boolean isIngredient){
-	ingredients.put(rank, new Component(i, rank, quantity, isIngredient));
+    public void addIngredient(Ingredient i, int rank, double quantity){
+	ingredients.put(rank, new Component(i, rank, quantity));
     }
 
     public void setNetWeight(double netWeight) {
@@ -169,5 +169,10 @@ public class Recipe extends Ingredient {
     @Override
     public double getLossPercent() {
 	return netWeight/getGrossWeight();
+    }
+    
+    @Override
+    public boolean isBasicIngredient(){
+	return false;
     }
 }

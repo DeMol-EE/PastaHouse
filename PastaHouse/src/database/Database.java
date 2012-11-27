@@ -225,7 +225,7 @@ public class Database {
             int ingredientName = rs.getInt("ingredientid");
             int rank = rs.getInt("rang");
             double quantity = rs.getDouble("quantiteit");
-            recipesById.get(recipeName).addIngredient(basicIngredientsById.get(ingredientName), rank, quantity, true);
+            recipesById.get(recipeName).addIngredient(basicIngredientsById.get(ingredientName), rank, quantity);
             ingrLinks++;
         }
         rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_REC_REC());
@@ -235,7 +235,7 @@ public class Database {
             int subrecipeName = rs.getInt("deelreceptid");
             int rank = rs.getInt("rang");
             double quantity = rs.getDouble("quantiteit");
-            recipesById.get(recipeName).addIngredient(recipesById.get(subrecipeName), rank, quantity, false);
+            recipesById.get(recipeName).addIngredient(recipesById.get(subrecipeName), rank, quantity);
             recLinks++;
         }
 
@@ -278,15 +278,15 @@ public class Database {
             Map<Integer, Component> ings = recipe.getIngredients();
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
-                if (comp.isBasicIngredient()) {
+                if (comp.getIngredient().isBasicIngredient()) {
                     stmt = connection.prepareStatement(insertrecing);
                 } else {
                     stmt = connection.prepareStatement(insertrecrec);
                 }
-                stmt.setInt(0, newRec.getPrimaryKeyValue());
-                stmt.setInt(1, comp.getIngredient().getPrimaryKeyValue());
-                stmt.setInt(2, comp.getRank());
-                stmt.setDouble(3, comp.getQuantity());
+                stmt.setInt(1, newRec.getPrimaryKeyValue());
+                stmt.setInt(2, comp.getIngredient().getPrimaryKeyValue());
+                stmt.setInt(3, comp.getRank());
+                stmt.setDouble(4, comp.getQuantity());
                 stmt.executeUpdate();
             }
             connection.commit();
@@ -333,15 +333,15 @@ public class Database {
 
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
-                if (comp.isBasicIngredient()) {
+                if (comp.getIngredient().isBasicIngredient()) {
                     stmt = connection.prepareStatement(insertrecing);
                 } else {
                     stmt = connection.prepareStatement(insertrecrec);
                 }
-                stmt.setInt(0, recipe.getPrimaryKeyValue());
-                stmt.setInt(1, comp.getIngredient().getPrimaryKeyValue());
-                stmt.setInt(2, comp.getRank());
-                stmt.setDouble(3, comp.getQuantity());
+                stmt.setInt(1, recipe.getPrimaryKeyValue());
+                stmt.setInt(2, comp.getIngredient().getPrimaryKeyValue());
+                stmt.setInt(3, comp.getRank());
+                stmt.setDouble(4, comp.getQuantity());
                 stmt.executeUpdate();
             }
             connection.commit();
@@ -395,9 +395,11 @@ public class Database {
     }
 
     public List<Ingredient> getIngredients() {
+	Map<String, Ingredient> sorted = new TreeMap<String, Ingredient>(String.CASE_INSENSITIVE_ORDER);
+	sorted.putAll(basicIngredientsByName);
+	sorted.putAll(recipesByName);
         ArrayList<Ingredient> me = new ArrayList<Ingredient>();
-        me.addAll(basicIngredientsByName.values());
-        me.addAll(recipesByName.values());
+	me.addAll(sorted.values());
         return me;
     }
 

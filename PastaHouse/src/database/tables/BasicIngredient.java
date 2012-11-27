@@ -192,4 +192,9 @@ public class BasicIngredient extends Ingredient {
 	 */
 	return StringTools.capitalize(super.getName());
     }
+    
+    @Override
+    public boolean isBasicIngredient(){
+	return true;
+    }
 }

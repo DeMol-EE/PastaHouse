@@ -45,4 +45,6 @@ public abstract class Ingredient extends Record {
     public abstract String getPackaging();
     
     public abstract double getLossPercent();
+    
+    public abstract boolean isBasicIngredient();
 }

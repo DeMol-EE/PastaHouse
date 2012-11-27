@@ -167,7 +167,7 @@ public class CellEditorFactory {
             String naam = acb.getSelectedItem().toString().toLowerCase();
             ArrayList<Ingredient> ingrs = (ArrayList<Ingredient>) Database.driver().getIngredients();
             for(Ingredient ingr : ingrs){
-                if(naam.equals(ingr.getName())) {
+                if(naam.equals(ingr.getName().toLowerCase())) {
                     return ingr;
                 }
             }

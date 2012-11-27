@@ -63,6 +63,13 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 	fixedFields.add(dp);
 	
 	loadModel();
+	
+	/*
+	 * Hide the unformatted fields
+	 */
+	pricePerWeightOutlet.setVisible(false);
+	grossPriceOutlet.setVisible(false);
+	netPriceOutlet.setVisible(false);
     }
     
     private void loadModel(){

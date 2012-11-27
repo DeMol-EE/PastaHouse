@@ -17,6 +17,7 @@ import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
 import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,8 +51,6 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	initComponents();
 	
 	this.delegate = delegate;
-//	this.model = new Recipe("", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-//	this.model = new Recipe("", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 	this.model = new RecipeModel();
 	
 	setTitle("Recept toevoegen");
@@ -72,6 +71,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	List ingredients = new ArrayList();
 	ingredients.add("");
 	ingredients.addAll(Database.driver().getIngredients());
+	this.model.setIngredients(components);
 	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(ingredients, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
@@ -97,6 +97,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     @Override
     public void ingredientBoxCallback(){
 	ingredientsOutlet.editingStopped(null);
+	updateGrossWeightOutlet();
     }
     
     private void updateGrossWeightOutlet(){
@@ -104,7 +105,14 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     }
     
     private void updatePricePerWeightOutlet(){
-	pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
+	try{
+	    double d = Double.parseDouble(netWeightOutlet.getText());
+	    pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
+	    pricePerWeightOutlet.setForeground(Color.black);
+	} catch (Exception e){
+	    pricePerWeightOutlet.setText("???");
+	    pricePerWeightOutlet.setForeground(Color.red);
+	}
     }
     
     private void updateNetWeightFormattedOutlet(){
@@ -343,20 +351,13 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     }//GEN-LAST:event_saveActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        // revert the model to the default (undo all changes)
-//        model.copy(defaultModel);
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
         ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
         int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
-//        ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
 	ingredientsOutlet.scrollRectToVisible(ingredientsOutlet.getCellRect(ingredientsOutlet.getRowCount()-1, 0, true));
-//	ingredientsOutlet.setRowSelectionInterval(lastIndex, lastIndex);
-//	ingredientsOutlet.setColumnSelectionInterval(0, 0);
-//        ingredientsOutlet.editCellAt(lastIndex, 0);
-//        ingredientsOutlet.transferFocus();
 	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
 	ingredientsOutlet.editCellAt(lastIndex, 0);
 	ingredientsOutlet.transferFocus();
@@ -374,30 +375,12 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     }//GEN-LAST:event_removeComponentActionPerformed
 
     private void ingredientsOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ingredientsOutletKeyReleased
-//        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
-//	    int r = ingredientsOutlet.getSelectedRow();
-//	    int c = ingredientsOutlet.getSelectedColumn();
-//	    int rCount = ingredientsOutlet.getModel().getRowCount();
-//	    int cCount = ingredientsOutlet.getModel().getColumnCount();
-//
-//	    ingredientsOutlet.editCellAt(r, c);
-//	    
-//	    System.out.println("r="+r+"\tc="+c);
-////	    if (c==0) {
-////		ingredientsOutlet.editCellAt(r, 1);
-////	    }
-//	    
-////	    if(r==rCount-1 && c==cCount-1){
-////		netWeightOutlet.requestFocus();
-////	    } else {
-////		ingredientsOutlet.editCellAt(r, c);
-////		ingredientsOutlet.transferFocus();
-////	    }
-//	}	
-	int r = ingredientsOutlet.getSelectedRow();
-        int c = ingredientsOutlet.getSelectedColumn();
-	ingredientsOutlet.editCellAt(r, c);
-	ingredientsOutlet.transferFocus();
+	if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+	    int r = ingredientsOutlet.getSelectedRow();
+	    int c = ingredientsOutlet.getSelectedColumn();
+	    ingredientsOutlet.editCellAt(r, c);
+	    ingredientsOutlet.transferFocus();
+	}
     }//GEN-LAST:event_ingredientsOutletKeyReleased
 
     private void nameOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameOutletKeyReleased

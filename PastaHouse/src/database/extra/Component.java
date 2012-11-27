@@ -12,17 +12,15 @@ public class Component {
     private Ingredient ingredient;
     private int rank;
     private double quantity;
-    private boolean isIngredient;
     
     public Component(){
 	
     }
     
-    public Component(Ingredient ingr, int rank, double quantity, boolean isIngredient) {
+    public Component(Ingredient ingr, int rank, double quantity) {
 	this.ingredient = ingr;
 	this.rank = rank;
 	this.quantity = quantity;
-	this.isIngredient = isIngredient;
     }
 
     public Ingredient getIngredient() {
@@ -61,20 +59,12 @@ public class Component {
 	this.quantity = quantity;
     }
 
-    public void setIsIngredient(boolean isIngredient) {
-	this.isIngredient = isIngredient;
-    }
-    
     public double getGrossQuantity(){
 	double q = quantity / (1.0 - 0.01 * ingredient.getLossPercent());
 	return q * Math.signum(q);
     }
     
-    public boolean isBasicIngredient(){
-	return isIngredient;
-    }
-    
     public String isIngredientType(){
-	return isIngredient? "Basisingrediënt" : "Recept";
+	return ingredient.isBasicIngredient()? "Basisingrediënt" : "Recept";
     }
 }
