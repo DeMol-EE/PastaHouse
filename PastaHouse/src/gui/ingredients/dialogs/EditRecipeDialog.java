@@ -87,10 +87,11 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	    }
 	});
 	
+
 	List ingredients = new ArrayList();
 	ingredients.add("");
 //	ingredients.addAll(Database.driver().getIngredients().values());
-	Collection<Ingredient> c = Database.driver().getIngredients().values();
+	Collection<Ingredient> c = Database.driver().getIngredients();
 	if (c.contains(model)) {
 	    c.remove(model);
 	}

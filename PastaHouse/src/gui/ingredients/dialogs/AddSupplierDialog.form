@@ -60,9 +60,9 @@
             <Property name="text" type="java.lang.String" value="Postcode"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtGemeente">
+        <Component class="javax.swing.JTextField" name="txtPostcode">
           <Events>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtGemeenteKeyReleased"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPostcodeKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
@@ -70,6 +70,10 @@
             <Property name="text" type="java.lang.String" value="Gemeente"/>
           </Properties>
         </Component>
+        <Container class="javax.swing.JPanel" name="HolderGemeentes">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+        </Container>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
             <Property name="text" type="java.lang.String" value="Telefoon"/>

@@ -27,12 +27,24 @@ public class BasicIngredient extends Ingredient {
     
     // derived variables
     
-    public BasicIngredient(String name, String date){
-	super(name, date);
+    public BasicIngredient(String name, String date, int id){
+	super(name, date, id);
     }
 
-    private BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
-	super(name, date);
+    public BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+	super(name, date, -1);
+	this.supplier = supplier;
+	this.brand = brand;
+	this.packaging = packaging;
+	this.pricePerUnit = pricePerUnit;
+	this.weightPerUnit = weightPerUnit;
+	this.lossPercent = lossPercent;
+	this.taxes = taxes;
+	this.notes = notes;
+    }
+    
+    private BasicIngredient(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes, int id) {
+	super(name, date, id);
 	this.supplier = supplier;
 	this.brand = brand;
 	this.packaging = packaging;
@@ -44,7 +56,7 @@ public class BasicIngredient extends Ingredient {
     }
     
     public BasicIngredient(BasicIngredient b){
-	super(b.getName(), b.getDate());
+        super(b.getName(), b.getDate(), b.getId());
 	this.supplier = b.getSupplier();
 	this.brand = b.getBrand();
 	this.packaging = b.getPackaging();
@@ -55,8 +67,8 @@ public class BasicIngredient extends Ingredient {
 	this.notes = b.getNotes();
     }
     
-    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
-	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
+    public static BasicIngredient loadWithValues(Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes, int id) {
+	return new BasicIngredient(supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes, id);
     }
     
     public void copy(BasicIngredient b){

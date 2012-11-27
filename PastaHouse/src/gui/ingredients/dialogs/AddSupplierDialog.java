@@ -12,8 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -53,8 +56,9 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel13 = new javax.swing.JLabel();
         txtAdres = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        txtGemeente = new javax.swing.JTextField();
+        txtPostcode = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        HolderGemeentes = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -93,15 +97,18 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel1.setText("Postcode");
         jPanel2.add(jLabel1);
 
-        txtGemeente.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtPostcode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtGemeenteKeyReleased(evt);
+                txtPostcodeKeyReleased(evt);
             }
         });
-        jPanel2.add(txtGemeente);
+        jPanel2.add(txtPostcode);
 
         jLabel12.setText("Gemeente");
         jPanel2.add(jLabel12);
+
+        HolderGemeentes.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(HolderGemeentes);
 
         jLabel9.setText("Telefoon");
         jPanel2.add(jLabel9);
@@ -186,24 +193,34 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), Integer.parseInt(txtGemeente.getText()), txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
+        try{
+            
+        } catch(Exception e) {
+            
+        }
+        
+        Supplier sup = Supplier.loadWithValues(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), txtPostcode.getText().length()>0 ? Integer.parseInt(txtPostcode.getText()): 0, txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText(), false);
         Database db = Database.driver();
-        if (db.addSupplier(sup)) {
-//            db.getSuppliers().put(sup.getFirm(), sup);
+        try {
+            if (db.addSupplier(sup)) {
+    //            db.getSuppliers().put(sup.getFirm(), sup);
 
-            delegate.addSupplier(sup);
+                delegate.addSupplier(sup);
 
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Gelieve een geldige naam in te vullen.", "Fout!", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AddSupplierDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnOKActionPerformed
 
-    private void txtGemeenteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGemeenteKeyReleased
+    private void txtPostcodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPostcodeKeyReleased
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
-        if (!txtGemeente.getText().isEmpty()) {
-            int code = Integer.parseInt(txtGemeente.getText());
+        if (!txtPostcode.getText().isEmpty()) {
+            int code = Integer.parseInt(txtPostcode.getText());
             if (munies.containsValue(code)) {
                 for (String munie : munies.keySet()) {
                     if (munies.get(munie) == code) {
@@ -217,8 +234,9 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             items.addAll(munies.keySet());
         }
         comboGemeentes.setDataList(items);
-    }//GEN-LAST:event_txtGemeenteKeyReleased
+    }//GEN-LAST:event_txtPostcodeKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel HolderGemeentes;
     private javax.swing.JTextArea NotesOutlet;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
@@ -244,7 +262,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtFax;
     private javax.swing.JTextField txtFirma;
     private javax.swing.JTextField txtGSM;
-    private javax.swing.JTextField txtGemeente;
+    private javax.swing.JTextField txtPostcode;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txtTel2;
     // End of variables declaration//GEN-END:variables
@@ -281,7 +299,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             }
         });
 
-        jPanel2.add(comboGemeentes, 9);
+        HolderGemeentes.add(comboGemeentes);
 
     }
 
@@ -289,9 +307,9 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         String munie = comboGemeentes.getSelectedItem().toString();
         if (munies.containsKey(munie)) {
-            txtGemeente.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
+            txtPostcode.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
         } else {
-            txtGemeente.setText("");
+            txtPostcode.setText("");
         }
     }
 }

@@ -59,7 +59,7 @@ public class EditIngredientDialog extends javax.swing.JDialog{
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
 	
 	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
-	fixedFields.add(dp);
+//	fixedFields.add(dp);
 	
 	loadModel();
     }

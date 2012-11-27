@@ -70,7 +70,7 @@ public class Component {
 	return q * Math.signum(q);
     }
     
-    public boolean isIngredient(){
+    public boolean isBasicIngredient(){
 	return isIngredient;
     }
     

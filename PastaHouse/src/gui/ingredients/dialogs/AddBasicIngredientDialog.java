@@ -328,25 +328,22 @@ public class AddIngredientDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        try{
-	    BasicIngredient b = BasicIngredient.loadWithValues(
-		    (supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
-		    brandOutlet.getText(), 
-		    packagingOutlet.getText(), 
-		    Double.parseDouble(weightPerUnitOutlet.getText()), 
-		    Double.parseDouble(pricePerUnitOutlet.getText()), 
-		    Double.parseDouble(lossOutlet.getText()), 
-		    Double.parseDouble(taxesOutlet.getText()), 
-		    nameOutlet.getText(), 
-		    new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 
-		    notesOutlet.getText());
-	    if (Database.driver().addIngredient(b)) {
-		delegate.updateListAndSelect(b);
-		this.dispose();
-	    }
-	} catch (Exception e){
-	    System.err.println(e.getMessage());
-            JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
+
+        BasicIngredient b = new BasicIngredient(
+                (supplierOutlet.getSelectedItem() instanceof Supplier)? (Supplier)supplierOutlet.getSelectedItem(): null, 
+		brandOutlet.getText(), 
+		packagingOutlet.getText(), 
+		Double.parseDouble(weightPerUnitOutlet.getText()), 
+		Double.parseDouble(pricePerUnitOutlet.getText()), 
+		Double.parseDouble(lossOutlet.getText()), 
+		Double.parseDouble(taxesOutlet.getText()), 
+		nameOutlet.getText(), 
+		new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 
+		notesOutlet.getText());
+	if (Database.driver().addIngredient(b)) {
+	    delegate.updateListAndSelect(b);
+	    this.dispose();
+
 	}
     }//GEN-LAST:event_addActionPerformed
     

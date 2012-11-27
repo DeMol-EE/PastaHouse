@@ -16,6 +16,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
@@ -162,22 +163,14 @@ public class CellEditorFactory {
 
 	@Override
 	public Object getCellEditorValue() {
-	    System.out.println("selected index: " + acb.getSelectedIndex());
-	    if (acb.getSelectedIndex() == 0) {
-		return null;
-	    } else {
-//		return acb.getDataList().toArray()[acb.getSelectedIndex()];
-//		return acb.getSelectedItem();
-
-		Object sel = acb.getSelectedItem();
-		System.out.println("selected item: " + acb.getSelectedItem());
-
-		if (sel instanceof String) {
-		    return Database.driver().getIngredients().get(((String) sel).toLowerCase());
-		} else {
-		    return sel;
-		}
-	    }
+            String naam = acb.getSelectedItem().toString().toLowerCase();
+            ArrayList<Ingredient> ingrs = (ArrayList<Ingredient>) Database.driver().getIngredients();
+            for(Ingredient ingr : ingrs){
+                if(naam.equals(ingr.getName())) {
+                    return ingr;
+                }
+            }
+            return null;
 	}
 
 	@Override
