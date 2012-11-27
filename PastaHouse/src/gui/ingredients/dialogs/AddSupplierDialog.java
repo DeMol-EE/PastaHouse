@@ -80,6 +80,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(536, 600));
 
         jPanel2.setLayout(new java.awt.GridLayout(10, 2));
 

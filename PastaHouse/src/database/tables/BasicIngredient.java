@@ -168,7 +168,7 @@ public class BasicIngredient extends Ingredient {
     @Override
     public boolean update(){
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
-		"firma = \""+ (supplier == null ? "NULL" : supplier.getFirm()) +"\", "
+		"firmaid = "+ (supplier == null ? "NULL" : supplier.getPrimaryKeyValue()) +", "
 		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
 		+ "merk = "+(brand.length()>0 ?"\""+brand +"\"":"NULL")+", "
 		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "

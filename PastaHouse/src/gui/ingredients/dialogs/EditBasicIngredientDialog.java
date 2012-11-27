@@ -50,7 +50,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 	supplierParent.removeAll();
 	List suppliers = new ArrayList();
 	suppliers.add("");
-	suppliers.addAll(Database.driver().getSuppliers().values());
+	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
 	supplierBox = new AutocompleteCombobox(suppliers);
 	supplierParent.add(supplierBox, BorderLayout.CENTER);
 	

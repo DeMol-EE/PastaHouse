@@ -5,14 +5,14 @@
  */
 package database;
 
-import database.extra.Ingredient;
 import database.extra.Component;
+import database.extra.Ingredient;
 import database.models.BasicIngredientModel;
 import database.models.RecipeModel;
 import database.models.SupplierModel;
-import database.tables.Supplier;
-import database.tables.Recipe;
 import database.tables.BasicIngredient;
+import database.tables.Recipe;
+import database.tables.Supplier;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -253,10 +253,10 @@ public class Database {
                     + "(naam, bereiding, datum, nettogewicht) VALUES"
                     + "(?,?,?,?)";
             String insertrecrec = "INSERT INTO recipesrecipes"
-                    + "(receptnaam, deelreceptnaam, rang, quantiteit) VALUES"
+                    + "(receptid, deelreceptid, rang, quantiteit) VALUES"
                     + "(?,?,?,?)";
             String insertrecing = "INSERT INTO recipesingredients"
-                    + "(receptnaam, ingredientnaam, rang, quantiteit) VALUES"
+                    + "(receptid, ingredientid, rang, quantiteit) VALUES"
                     + "(?,?,?,?)";
             stmt = connection.prepareStatement(insertrecipe);
             stmt.setString(1, recipe.getName());
@@ -264,6 +264,17 @@ public class Database {
             stmt.setString(3, recipe.getDate());
             stmt.setDouble(4, recipe.getNetWeight());
             stmt.executeUpdate();
+//	    connection.commit();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
+	    if (rs.next()) {
+		newRec = Recipe.createFromModel(rs.getInt("id"), recipe);
+		recipesById.put(newRec.getPrimaryKeyValue(), newRec);
+		recipesByName.put(newRec.getName(), newRec);
+	    } else {
+		code = 2;
+	    }
+	    
             Map<Integer, Component> ings = recipe.getIngredients();
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
@@ -272,22 +283,13 @@ public class Database {
                 } else {
                     stmt = connection.prepareStatement(insertrecrec);
                 }
-                stmt.setString(0, recipe.getName());
-                stmt.setString(1, comp.getIngredient().getName());
+                stmt.setInt(0, newRec.getPrimaryKeyValue());
+                stmt.setInt(1, comp.getIngredient().getPrimaryKeyValue());
                 stmt.setInt(2, comp.getRank());
                 stmt.setDouble(3, comp.getQuantity());
                 stmt.executeUpdate();
             }
             connection.commit();
-	    
-	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
-	    if (rs.next()) {
-		newRec = Recipe.createFromModel(rs.getInt("id"), recipe);
-		recipesById.put(newRec.getPrimaryKeyValue(), newRec);
-		recipesByName.put(newRec.getName(), newRec);
-	    } else {
-		code = 2;
-	    }
 	    
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,26 +308,26 @@ public class Database {
         boolean autoComm = connection.getAutoCommit();
 	boolean flag = true;
         String insertrecrec = "INSERT INTO recipesrecipes"
-                + "(receptnaam, deelreceptnaam, rang, quantiteit) VALUES"
+                + "(receptid, deelreceptid, rang, quantiteit) VALUES"
                 + "(?,?,?,?)";
         String insertrecing = "INSERT INTO recipesingredients"
-                + "(receptnaam, ingredientnaam, rang, quantiteit) VALUES"
+                + "(receptid, ingredientid, rang, quantiteit) VALUES"
                 + "(?,?,?,?)";
         PreparedStatement stmt = null;
         try {
             connection.setAutoCommit(false);
-            String sql = "update recipes set naam=?, bereiding=?, datum=?, nettogewicht=? where naam=?";
+            String sql = "update recipes set naam=?, bereiding=?, datum=?, nettogewicht=? where id=?";
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, recipe.getName());
             stmt.setString(2, recipe.getPreparation());
             stmt.setString(3, recipe.getDate());
             stmt.setDouble(4, recipe.getNetWeight());
-            stmt.setString(5, recipe.getName());
+            stmt.setInt(5, recipe.getPrimaryKeyValue());
             stmt.executeUpdate();
             Statement st = connection.createStatement();
-            sql = "DELETE FROM recipesrecipes WHERE receptnaam = " + recipe.getName();
+            sql = "DELETE FROM recipesrecipes WHERE receptid = " + recipe.getPrimaryKeyValue();
             st.executeUpdate(sql);
-            sql = "DELETE FROM recipesingredients WHERE receptnaam = " + recipe.getName();
+            sql = "DELETE FROM recipesingredients WHERE receptid = " + recipe.getPrimaryKeyValue();
             st.executeUpdate(sql);
             Map<Integer, Component> ings = recipe.getIngredients();
 
@@ -336,8 +338,8 @@ public class Database {
                 } else {
                     stmt = connection.prepareStatement(insertrecrec);
                 }
-                stmt.setString(0, recipe.getName());
-                stmt.setString(1, comp.getIngredient().getName());
+                stmt.setInt(0, recipe.getPrimaryKeyValue());
+                stmt.setInt(1, comp.getIngredient().getPrimaryKeyValue());
                 stmt.setInt(2, comp.getRank());
                 stmt.setDouble(3, comp.getQuantity());
                 stmt.executeUpdate();
