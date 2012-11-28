@@ -4,7 +4,7 @@
  */
 
 /*
- * IngredientViewController.java
+ * BasicIngredientViewController.java
  *
  * Created on Oct 24, 2012, 3:50:31 PM
  */
@@ -16,13 +16,17 @@ import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -33,12 +37,12 @@ import utilities.StringTools;
  *
  * @author Warkst
  */
-public class IngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>{
+public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>{
 
     private Application application;
     
-    /** Creates new form IngredientViewController */
-    public IngredientViewController(Application application) {
+    /** Creates new form BasicIngredientViewController */
+    public BasicIngredientViewController(Application application) {
 	this.application = application;
 	
 	initComponents();
@@ -53,10 +57,24 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 		}
 	    }
 	});
-
+	
 	// copy from the db
 	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
 	listOutlet.setSelectedIndex(0);
+
+	/*
+	 * If there are no ingredients, hide the ugly right detail view
+	 */
+//	if (Database.driver().getBasicIngredientsAlphabetically().isEmpty()) {
+//	    jSplitPane1.remove(detail);
+//	    
+//	    JPanel p = new JPanel(new BorderLayout());
+//	    JLabel l = new JLabel("Klik op \"Toevoegen\" om te beginnen.");
+//	    l.setForeground(Color.darkGray);
+//	    l.setFont(new Font(l.getFont().getName(), Font.ITALIC, l.getFont().getSize()));
+//	    p.add(l, BorderLayout.CENTER);
+//	    jSplitPane1.add(p, JSplitPane.RIGHT);
+//	}
     }
     
     @Override
@@ -135,6 +153,8 @@ public class IngredientViewController extends javax.swing.JPanel implements Mast
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
 	updateDetail(select);
+	
+	
     }
     
     @Override

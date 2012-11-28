@@ -11,7 +11,7 @@
 package pastahouse;
 
 import database.tables.Supplier;
-import gui.ingredients.controllers.IngredientViewController;
+import gui.ingredients.controllers.BasicIngredientViewController;
 import gui.ingredients.controllers.MasterDetailViewController;
 import gui.ingredients.controllers.RecipeViewController;
 import gui.ingredients.controllers.SupplierViewController;
@@ -51,7 +51,7 @@ public class Application extends javax.swing.JFrame {
 	tabs = new HashMap<Integer, MasterDetailViewController>();
         
 	tabs.put(supplierTabIndex, new SupplierViewController());
-	tabs.put(ingredientTabIndex, new IngredientViewController(this));
+	tabs.put(ingredientTabIndex, new BasicIngredientViewController(this));
 	tabs.put(recipeTabIndex, new RecipeViewController());
 	
 	recipeTab.add(tabs.get(recipeTabIndex).view());
