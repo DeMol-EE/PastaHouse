@@ -12,6 +12,7 @@ package gui.ingredients.controllers;
 
 import database.*;
 import database.tables.BasicIngredient;
+import gui.ingredients.RecipeTabbedViewController;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
 import gui.utilities.list.EditableListModel;
@@ -26,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import pastahouse.Application;
 import utilities.StringTools;
 
 /**
@@ -35,10 +35,10 @@ import utilities.StringTools;
  */
 public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>{
 
-    private Application application;
+    private RecipeTabbedViewController application;
     
     /** Creates new form BasicIngredientViewController */
-    public BasicIngredientViewController(Application application) {
+    public BasicIngredientViewController(RecipeTabbedViewController application) {
 	this.application = application;
 	
 	initComponents();
