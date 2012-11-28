@@ -10,16 +10,21 @@ import database.models.BasicIngredientModel;
 import database.tables.BasicIngredient;
 import database.tables.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.AcceleratorAdder;
+import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 /**
@@ -67,6 +72,20 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
 	TextFieldAutoHighlighter.installHighlighter(lossOutlet);
 	TextFieldAutoHighlighter.installHighlighter(pricePerUnitOutlet);
 	TextFieldAutoHighlighter.installHighlighter(weightPerUnitOutlet);
+	
+	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		addActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
     }
 
     /**

@@ -14,9 +14,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 import utilities.StringTools;
 
@@ -77,7 +74,7 @@ public class PrintableRecipe implements Printable{
 	int charWidth = 7;
 
 	int ingrNameLength = 30;
-	int[] tabs = new int[]{5,ingrNameLength*charWidth,50*charWidth,65*charWidth};
+	int[] tabs = new int[]{5,ingrNameLength*charWidth,50*charWidth,68*charWidth};
 	int x = (int)pageFormat.getImageableX();
 	int y = (int)pageFormat.getImageableY();
 	DecimalFormat three = new DecimalFormat("0.000");
@@ -139,7 +136,7 @@ public class PrintableRecipe implements Printable{
 	graphics.drawString("Ingrediënt", x+tabs[0], y);
 	graphics.drawString("Verpakking", x+tabs[1], y);
 	graphics.drawString("Stuks", x+tabs[2], y);
-	graphics.drawString("Kg", x+tabs[3]+charWidth*2, y);
+	graphics.drawString("Kg", x+tabs[3], y);
 	y+=lineHeight;
 	
 	graphics.drawLine(x, y, x+imageableWidth, y);
@@ -152,17 +149,24 @@ public class PrintableRecipe implements Printable{
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), x+tabs[1], y);
 	    graphics.drawString(two.format(component.getUnits()*toMakeToNet), x+tabs[2], y);
-	    graphics.drawString(three.format(component.getGrossQuantity()*toMakeToNet), x+tabs[3], y);
+//	    double quantity = component.getGrossQuantity()*toMakeToNet;
+	    double quantity = component.getQuantity()*toMakeToNet;
+	    String s = three.format(quantity);
+	    int chars = s.substring(0, s.indexOf(".")).length();
+	    
+	    graphics.drawString(three.format(quantity), x+tabs[3]-chars*charWidth, y);
 	    
 	    y+=lineHeight;
 	    
-	    sum+=component.getGrossQuantity()*toMakeToNet;
+	    sum+=quantity;
 	}
 	/*
 	 * Print total gross weight
 	 */
-	graphics.drawLine(x+tabs[3], y-10, x+tabs[3]+charWidth*6, y-10);
-	graphics.drawString(three.format(sum), x+tabs[3], y);
+	String s = three.format(sum);
+	int chars = s.substring(0, s.indexOf(".")).length();
+	graphics.drawLine(x+tabs[3]-chars*charWidth, y-10, x+tabs[3]+charWidth*4, y-10);
+	graphics.drawString(three.format(sum), x+tabs[3]-chars*charWidth, y);
 	y+=lineHeight;
 	
 	/*
@@ -179,7 +183,7 @@ public class PrintableRecipe implements Printable{
 	 * Split into paragraphs, separated by '\n'
 	 */
 	String[] paragraphs = recipe.getPreparation().split("\n");
-	System.out.println("PrintableRecipe:: Split into "+paragraphs.length+" lines!");
+	System.out.println("PrintableRecipe:: Split into "+paragraphs.length+" paragraphs!");
 	
 	for (String paragraph : paragraphs) {
 	    String[] words = paragraph.split(" ");

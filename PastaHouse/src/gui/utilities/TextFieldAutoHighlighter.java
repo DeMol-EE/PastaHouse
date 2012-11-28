@@ -7,6 +7,7 @@ package gui.utilities;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -18,8 +19,13 @@ public class TextFieldAutoHighlighter {
 
 	    @Override
 	    public void focusGained(FocusEvent e) {
-		f.setSelectionStart(0);
-		f.setSelectionEnd(f.getText().length());
+		SwingUtilities.invokeLater(new Runnable() {
+
+		    @Override
+		    public void run() {
+			f.selectAll();
+		    }
+		});
 	    }
 
 	    @Override

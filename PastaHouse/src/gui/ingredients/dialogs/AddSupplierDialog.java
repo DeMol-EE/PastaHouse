@@ -9,6 +9,8 @@ import database.FunctionResult;
 import database.models.SupplierModel;
 import database.tables.Supplier;
 import gui.ingredients.controllers.SupplierViewController;
+import gui.utilities.AcceleratorAdder;
+import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -38,6 +41,20 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         this.delegate = delegate;
 	this.model = new SupplierModel();
         loadModel();
+	
+	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		addActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
     }
 
     /**
@@ -76,8 +93,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
-        btnOK = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        add = new javax.swing.JButton();
+        cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(536, 600));
@@ -167,23 +184,23 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 30));
         jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
 
-        btnOK.setText("OK");
-        btnOK.setFocusable(false);
-        btnOK.addActionListener(new java.awt.event.ActionListener() {
+        add.setText("OK");
+        add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOKActionPerformed(evt);
+                addActionPerformed(evt);
             }
         });
-        jPanel4.add(btnOK);
+        jPanel4.add(add);
 
-        btnCancel.setText("Cancel");
-        btnCancel.setFocusable(false);
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+        cancel.setText("Cancel");
+        cancel.setFocusable(false);
+        cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
+                cancelActionPerformed(evt);
             }
         });
-        jPanel4.add(btnCancel);
+        jPanel4.add(cancel);
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.EAST);
 
@@ -192,11 +209,11 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_cancelActionPerformed
 
-    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         try {
 //	    FunctionResult<Supplier> result = new SupplierModel(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), txtPostcode.getText().length()>0 ? Integer.parseInt(txtPostcode.getText()): 0, txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText()).create();
 	    
@@ -223,7 +240,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         } catch (Exception ex) {
 	    JOptionPane.showMessageDialog(null, utilities.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_btnOKActionPerformed
+    }//GEN-LAST:event_addActionPerformed
 
     private void txtPostcodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPostcodeKeyReleased
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
@@ -246,8 +263,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtPostcodeKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HolderGemeentes;
-    private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnOK;
+    private javax.swing.JButton add;
+    private javax.swing.JButton cancel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

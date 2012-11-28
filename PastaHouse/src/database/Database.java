@@ -266,7 +266,7 @@ public class Database {
             stmt.executeUpdate();
 //	    connection.commit();
 	    
-	    ResultSet rs = stmt.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
 	    if (rs.next()) {
 		newRec = Recipe.createFromModel(rs.getInt("id"), recipe);
 		recipesById.put(newRec.getPrimaryKeyValue(), newRec);
