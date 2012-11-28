@@ -55,6 +55,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         txtAdres.setText(model.getAddress());
         // copy municipale
         txtTel.setText(model.getTelephone());
+	txttel2.setText(model.getTelephone2());
         txtGSM.setText(model.getCellphone());
         txtFax.setText(model.getFax());
         txtEmail.setText(model.getEmail());
