@@ -10,23 +10,19 @@
  */
 package gui.ingredients.controllers;
 
-import database.tables.BasicIngredient;
 import database.*;
+import database.tables.BasicIngredient;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
