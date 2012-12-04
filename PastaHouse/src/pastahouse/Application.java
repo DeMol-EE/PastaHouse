@@ -20,6 +20,7 @@ import java.util.HashMap;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import logging.MyLogger;
 import utilities.Configuration;
 import utilities.Utilities;
 
@@ -273,7 +274,9 @@ public class Application extends javax.swing.JFrame {
 	    }
 	});
 	
-	System.out.println(Configuration.center().getDB_URL());
+//	System.out.println(Configuration.center().getDB_URL());
+	MyLogger.setLogLevel(MyLogger.OFF);
+	MyLogger.log(Configuration.center().getDB_URL());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem add;
