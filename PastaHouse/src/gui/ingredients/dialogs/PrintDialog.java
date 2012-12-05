@@ -4,10 +4,20 @@
  */
 package gui.ingredients.dialogs;
 
+import database.extra.Component;
 import gui.ingredients.controllers.PrintDialogDelegate;
+import gui.utilities.cell.CellRendererFactory;
+import gui.utilities.table.PrintableTableModel;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.JOptionPane;
+import printer.PrintableRecipe;
+import printer.Printer;
+import utilities.StringTools;
+import utilities.Utilities;
 
 /**
  *
@@ -16,11 +26,14 @@ import javax.swing.JOptionPane;
 public class PrintDialog extends javax.swing.JDialog {
 
     private final PrintDialogDelegate delegate;
+    private final PrintableRecipe model;
+    private final PrintableTableModel tableModel;
+    private final Map<Integer, Component> originalComponents;
     
     /**
      * Creates new form PrintDialog
      */
-    public PrintDialog(java.awt.Frame parent, boolean modal, PrintDialogDelegate delegate) {
+    public PrintDialog(java.awt.Frame parent, boolean modal, PrintDialogDelegate delegate, PrintableRecipe model) {
 	super(parent, modal);
 	initComponents();
 	
@@ -32,9 +45,33 @@ public class PrintDialog extends javax.swing.JDialog {
 	
 	buttonGroup1.add(pieces);
 	buttonGroup1.add(weight);
-	weight.setSelected(true);
+	pieces.setSelected(true);
 	
 	this.delegate = delegate;
+	this.model = model;
+	this.originalComponents = new TreeMap<Integer, Component>();
+	for (Map.Entry<Integer, Component> entry : model.getRecipe().getComponents().entrySet()) {
+	    originalComponents.put(entry.getKey(), new Component(entry.getValue().getIngredient(), entry.getValue().getRank(), entry.getValue().getQuantity()));
+	}
+	
+	this.tableModel = new PrintableTableModel(model.getRecipe().getComponents());
+	
+	loadModel();
+	
+	quantityOutlet.selectAll();
+    }
+    
+    private void loadModel(){
+	quantityOutlet.setText(""+model.getToMake());
+	nameOutlet.setText(StringTools.capitalizeEach(model.getRecipe().getName()));
+	componentsOutlet.setModel(tableModel);
+	componentsOutlet.setRowHeight(componentsOutlet.getRowHeight()+Utilities.fontSize()-10);
+	componentsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer());
+	componentsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+	componentsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+	netPerUnitOutlet.setText(""+new DecimalFormat("0.00").format(model.getRecipe().getNetWeight())+" kg");
+	grossTotalOutlet.setText(""+new DecimalFormat("0.000").format(model.getRecipe().getGrossWeight())+ " kg");
+	priceTotalOutlet.setText(""+new DecimalFormat("0.000").format(model.getRecipe().getPricePerWeight() * model.getRecipe().getGrossWeight())+ " euro");
     }
 
     /**
@@ -47,47 +84,32 @@ public class PrintDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        quantityOutlet = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        print = new javax.swing.JButton();
+        back = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         weight = new javax.swing.JRadioButton();
         pieces = new javax.swing.JRadioButton();
-        jPanel3 = new javax.swing.JPanel();
-        back = new javax.swing.JButton();
-        print = new javax.swing.JButton();
+        quantityOutlet = new javax.swing.JTextField();
+        qLabel = new javax.swing.JLabel();
+        nameOutlet = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        componentsOutlet = new javax.swing.JTable();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        netPerUnitOutlet = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        grossTotalOutlet = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        priceTotalOutlet = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        quantityOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                quantityOutletKeyReleased(evt);
-            }
-        });
-        getContentPane().add(quantityOutlet, java.awt.BorderLayout.NORTH);
-
-        jPanel2.setFocusable(false);
-        jPanel2.setLayout(new java.awt.GridLayout(2, 1));
-
-        weight.setText("Kg");
-        weight.setFocusable(false);
-        jPanel2.add(weight);
-
-        pieces.setText("Stuks");
-        pieces.setFocusable(false);
-        jPanel2.add(pieces);
-
-        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
-
         jPanel3.setFocusable(false);
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        back.setText("Terug");
-        back.setFocusable(false);
-        back.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backActionPerformed(evt);
-            }
-        });
-        jPanel3.add(back, java.awt.BorderLayout.WEST);
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         print.setText("Printen");
         print.setFocusable(false);
@@ -96,9 +118,114 @@ public class PrintDialog extends javax.swing.JDialog {
                 printActionPerformed(evt);
             }
         });
-        jPanel3.add(print, java.awt.BorderLayout.EAST);
+        jPanel3.add(print);
+
+        back.setText("Terug");
+        back.setFocusable(false);
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+        jPanel3.add(back);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 5));
+        jPanel2.setFocusable(false);
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+
+        weight.setText("Kg");
+        weight.setFocusable(false);
+        weight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                weightActionPerformed(evt);
+            }
+        });
+        jPanel2.add(weight);
+
+        pieces.setText("Stuks");
+        pieces.setFocusable(false);
+        pieces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                piecesActionPerformed(evt);
+            }
+        });
+        jPanel2.add(pieces);
+
+        jPanel5.add(jPanel2, java.awt.BorderLayout.EAST);
+
+        quantityOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                quantityOutletKeyReleased(evt);
+            }
+        });
+        jPanel5.add(quantityOutlet, java.awt.BorderLayout.CENTER);
+
+        qLabel.setText("Hoeveelheid:");
+        qLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 1));
+        jPanel5.add(qLabel, java.awt.BorderLayout.WEST);
+
+        jPanel4.add(jPanel5, java.awt.BorderLayout.CENTER);
+
+        nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 1, 1));
+        jPanel4.add(nameOutlet, java.awt.BorderLayout.NORTH);
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.NORTH);
+
+        componentsOutlet.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        componentsOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        componentsOutlet.setFocusable(false);
+        componentsOutlet.setRowSelectionAllowed(false);
+        componentsOutlet.setShowVerticalLines(false);
+        componentsOutlet.setSurrendersFocusOnKeystroke(true);
+        jScrollPane1.setViewportView(componentsOutlet);
+
+        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel7.setLayout(new java.awt.GridLayout(3, 2, 0, 5));
+
+        jLabel1.setText("Netto gewicht voor 1 eenheid");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jPanel7.add(jLabel1);
+
+        netPerUnitOutlet.setText("<netPerUnitOutlet>");
+        jPanel7.add(netPerUnitOutlet);
+
+        jLabel2.setText("Bruto gewicht voor totaal");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jPanel7.add(jLabel2);
+
+        grossTotalOutlet.setText("<grossTotalOutlet>");
+        jPanel7.add(grossTotalOutlet);
+
+        jLabel4.setText("Bruto inkoopprijs voor totaal");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jPanel7.add(jLabel4);
+
+        priceTotalOutlet.setText("<priceTotalOutlet>");
+        jPanel7.add(priceTotalOutlet);
+
+        jPanel1.add(jPanel7, java.awt.BorderLayout.PAGE_END);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -111,23 +238,31 @@ public class PrintDialog extends javax.swing.JDialog {
 		throw new RuntimeException("Entered value makes no sense");
 	    }
 	    
-	    if (pieces.isSelected()){
-		new Thread(new Runnable() {
+//	    if (pieces.isSelected()){
+//		new Thread(new Runnable() {
+//
+//		    @Override
+//		    public void run() {
+//			delegate.printAmount(q);
+//		    }
+//		}).start();
+//	    } else {
+//		new Thread(new Runnable() {
+//
+//		    @Override
+//		    public void run() {
+//			delegate.printQuantity(q);
+//		    }
+//		}).start();
+//	    }
+	    new Thread(new Runnable() {
 
-		    @Override
-		    public void run() {
-			delegate.printAmount(q);
-		    }
-		}).start();
-	    } else {
-		new Thread(new Runnable() {
-
-		    @Override
-		    public void run() {
-			delegate.printQuantity(q);
-		    }
-		}).start();
-	    }
+		@Override
+		public void run() {
+		    Printer.driver().setPrintJob(model);
+		    Printer.driver().tryPrint();
+		}
+	    }).start();
 
 	    this.dispose();
 	} catch (Exception e){
@@ -147,11 +282,16 @@ public class PrintDialog extends javax.swing.JDialog {
 
     private void quantityOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityOutletKeyReleased
         try{
-	    Double.parseDouble(quantityOutlet.getText());
+	    double toMake = Double.parseDouble(quantityOutlet.getText());
 	    quantityOutlet.setForeground(Color.black);
+	    qLabel.setForeground(Color.black);
+	    model.setToMake(toMake);
 	} catch (Exception e){
 	    quantityOutlet.setForeground(Color.red);
+	    qLabel.setForeground(Color.red);
+	    model.setToMake(0.0);
 	}
+	updateTable();
 	if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 	    printActionPerformed(null);
 	} else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE){
@@ -159,13 +299,47 @@ public class PrintDialog extends javax.swing.JDialog {
 	}
     }//GEN-LAST:event_quantityOutletKeyReleased
 
+    private void weightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightActionPerformed
+        model.setIsWeight(true);
+	updateTable();
+    }//GEN-LAST:event_weightActionPerformed
+
+    private void piecesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_piecesActionPerformed
+        model.setIsWeight(false);
+	updateTable();
+    }//GEN-LAST:event_piecesActionPerformed
+
+    private void updateTable(){
+	for (Map.Entry<Integer, Component> entry : model.getRecipe().getComponents().entrySet()) {
+	    entry.getValue().setQuantity(model.getToMakeToNet() * originalComponents.get(entry.getKey()).getQuantity());
+	}
+	grossTotalOutlet.setText(""+new DecimalFormat("0.000").format(model.getRecipe().getGrossWeight())+" kg");
+	priceTotalOutlet.setText(""+new DecimalFormat("0.000").format(model.getRecipe().getPricePerWeight() * model.getRecipe().getGrossWeight())+ " euro");
+	
+	tableModel.update();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTable componentsOutlet;
+    private javax.swing.JLabel grossTotalOutlet;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel nameOutlet;
+    private javax.swing.JLabel netPerUnitOutlet;
     private javax.swing.JRadioButton pieces;
+    private javax.swing.JLabel priceTotalOutlet;
     private javax.swing.JButton print;
+    private javax.swing.JLabel qLabel;
     private javax.swing.JTextField quantityOutlet;
     private javax.swing.JRadioButton weight;
     // End of variables declaration//GEN-END:variables

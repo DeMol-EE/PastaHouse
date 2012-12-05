@@ -24,21 +24,41 @@ import utilities.StringTools;
 public class PrintableRecipe implements Printable{
 
     private final Recipe recipe;
-    private final double toMake;
-    private double platters;
-    private final boolean weight;
+    private double toMake;
+    private boolean isWeight;
     
-    public PrintableRecipe(Recipe recipe, double quantity){
-	this.recipe = recipe;
-	this.toMake = quantity;
-	this.weight = true;
+    public PrintableRecipe(Recipe recipe){
+	this(recipe, 1.0, false);
     }
     
-    public PrintableRecipe(Recipe recipe, double quantity, double amount){
-	this.recipe = recipe;
-	this.toMake = quantity;
-	this.platters = amount;
-	this.weight = false;
+    public PrintableRecipe(Recipe recipe, double toMake, boolean isWeight){
+	this.recipe = new Recipe(recipe);
+	this.toMake = toMake;
+	this.isWeight = isWeight;
+    }
+
+    public Recipe getRecipe() {
+	return recipe;
+    }
+
+    public double getToMake() {
+	return toMake;
+    }
+
+    public void setToMake(double toMake) {
+	this.toMake = toMake;
+    }
+
+    public boolean isWeight() {
+	return isWeight;
+    }
+
+    public void setIsWeight(boolean isWeight) {
+	this.isWeight = isWeight;
+    }
+    
+    public double getToMakeToNet(){
+	return isWeight? toMake/recipe.getNetWeight() : toMake;
     }
     
     @Override
@@ -53,12 +73,11 @@ public class PrintableRecipe implements Printable{
 	/*
 	 * Calculate how much we need to make in total and for each ingredient
 	 */
-	double grossToNet = recipe.getGrossWeight()/recipe.getNetWeight();
-	double grossToMake = grossToNet * toMake;
+//	double grossToNet = recipe.getGrossWeight()/recipe.getNetWeight();
+//	double grossToMake = grossToNet * toMake;
+//	double grossToMakeToNet = grossToMake/recipe.getNetWeight();
 	
 	double toMakeToNet = toMake/recipe.getNetWeight();
-	
-	double grossToMakeToNet = grossToMake/recipe.getNetWeight();
 	
 	// The recipe should fit on one page
 	if (pageIndex > 0) {
@@ -122,9 +141,9 @@ public class PrintableRecipe implements Printable{
 	y+=lineHeight;
 	y+=lineHeight;
 	
-	graphics.drawString(weight?"Om "+two.format(toMake)+" kg te bereiden heeft u de volgende hoeveelheden nodig:" : 
-		"Om "+platters+" "
-		+ (platters==1? "eenheid":"eenheden")
+	graphics.drawString(isWeight?"Om "+two.format(toMake)+" kg te bereiden heeft u de volgende hoeveelheden nodig:" : 
+		"Om "+toMakeToNet+" "
+		+ (toMakeToNet==1? "eenheid":"eenheden")
 		+" te maken heeft u de volgende hoeveelheden nodig: ", x, y);
 	y+=lineHeight;
 	y+=lineHeight;
@@ -144,7 +163,7 @@ public class PrintableRecipe implements Printable{
 	
 	double sum = 0.0;
 	
-	for (Component component : recipe.getIngredients().values()) {
+	for (Component component : recipe.getComponents().values()) {
 //	    graphics.drawString(StringTools.capitalize(StringTools.padClip(component.getIngredient().getName(), '.', ingrNameLength-1)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), x+tabs[1], y);

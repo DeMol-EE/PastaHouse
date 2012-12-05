@@ -60,7 +60,7 @@ public class RecipeModel implements Model{
 	this.preparation = preparation;
     }
 
-    public Map<Integer, Component> getIngredients() {
+    public Map<Integer, Component> getComponents() {
 	return ingredients;
     }
 

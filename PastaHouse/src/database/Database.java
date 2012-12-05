@@ -281,7 +281,7 @@ public class Database {
 		code = 2;
 	    }
 	    
-            Map<Integer, Component> ings = recipe.getIngredients();
+            Map<Integer, Component> ings = recipe.getComponents();
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
                 if (comp.getIngredient().isBasicIngredient()) {
@@ -335,7 +335,7 @@ public class Database {
             st.executeUpdate(sql);
             sql = "DELETE FROM recipesingredients WHERE receptid = " + recipe.getPrimaryKeyValue();
             st.executeUpdate(sql);
-            Map<Integer, Component> ings = recipe.getIngredients();
+            Map<Integer, Component> ings = recipe.getComponents();
 
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);

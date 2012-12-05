@@ -69,10 +69,10 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	 */
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//	Map<Integer, Component> m = model.getIngredients();
+//	Map<Integer, Component> m = model.getComponents();
 //	if (m.remove.) {
 //	}
-	this.ingredientsOutlet.setModel(new EditableTableModel(model.getIngredients()));
+	this.ingredientsOutlet.setModel(new EditableTableModel(model.getComponents()));
 	this.ingredientsOutlet.getModel().addTableModelListener(new TableModelListener() {
 
 	    @Override
@@ -85,7 +85,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 
 	List ingredients = new ArrayList();
 	ingredients.add("");
-//	ingredients.addAll(Database.driver().getIngredients().values());
+//	ingredients.addAll(Database.driver().getComponents().values());
 	Collection<Ingredient> c = Database.driver().getIngredients();
 	if (c.contains(model)) {
 	    c.remove(model);

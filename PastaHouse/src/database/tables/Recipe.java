@@ -26,7 +26,7 @@ public class Recipe extends Ingredient {
     // database variables
     private double netWeight;
     private String preparation;
-    private Map<Integer, Component> ingredients;
+    private Map<Integer, Component> components;
     
     // derived variables
     
@@ -34,8 +34,8 @@ public class Recipe extends Ingredient {
 	super(r.getName(), r.getDate(), id, Configuration.center().getDB_TABLE_REC());
 	netWeight = r.getNetWeight();
 	preparation = r.getPreparation();
-	ingredients = new TreeMap<Integer, Component>();
-	ingredients.putAll(r.getIngredients());
+	components = new TreeMap<Integer, Component>();
+	components.putAll(r.getComponents());
     }
     
     /**
@@ -47,8 +47,13 @@ public class Recipe extends Ingredient {
 	super(r.getName(), r.getDate(), r.getPrimaryKeyValue(), r.getTableName());
 	netWeight = r.netWeight;
 	preparation = r.preparation;
-	ingredients = new TreeMap<Integer, Component>();
-	ingredients.putAll(r.ingredients);
+	components = new TreeMap<Integer, Component>();
+	/*
+	 * Deep copy
+	 */
+	for (Map.Entry<Integer, Component> entry : r.getComponents().entrySet()) {
+	    components.put(entry.getKey(), new Component(entry.getValue().getIngredient(), entry.getValue().getRank(), entry.getValue().getQuantity()));
+	}
     }
     
     public Recipe(int id, String name, String date){
@@ -60,7 +65,7 @@ public class Recipe extends Ingredient {
 	this.preparation = preparation;
 	this.netWeight = netWeight;
 	
-	ingredients = new TreeMap<Integer, Component>();
+	components = new TreeMap<Integer, Component>();
     }
     
     public static Recipe createStub(int id, String name, String date, String preparation, double netWeight){
@@ -76,12 +81,12 @@ public class Recipe extends Ingredient {
 	setDate(r.getDate());
 	netWeight = r.netWeight;
 	preparation = r.preparation;
-	ingredients = new TreeMap<Integer, Component>();
-	ingredients.putAll(r.ingredients);
+	components = new TreeMap<Integer, Component>();
+	components.putAll(r.components);
     }
     
     public void addIngredient(Ingredient i, int rank, double quantity){
-	ingredients.put(rank, new Component(i, rank, quantity));
+	components.put(rank, new Component(i, rank, quantity));
     }
 
     public void setNetWeight(double netWeight) {
@@ -100,8 +105,8 @@ public class Recipe extends Ingredient {
 	return preparation;
     }
 
-    public void setIngredients(Map<Integer, Component> ingredients) {
-	this.ingredients = ingredients;
+    public void setComponents(Map<Integer, Component> components) {
+	this.components = components;
     }
     
     /**
@@ -112,24 +117,25 @@ public class Recipe extends Ingredient {
     public double getGrossWeight(){
 	double returnMe = 0.0;
 	
-	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
+	for (Map.Entry<Integer, Component> entry : components.entrySet()) {
 	    returnMe += entry.getValue().getQuantity();
 	}
 	
 	return returnMe;
     }
     
-    public Map<Integer, Component> getIngredients(){
-	return ingredients;
+    public Map<Integer, Component> getComponents(){
+	return components;
     }
     
     @Override
     public double getPricePerWeight(){
 	double returnMe = 0.0;
 	
-	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
+	for (Map.Entry<Integer, Component> entry : components.entrySet()) {
 	    if (entry.getValue().getIngredient() != null) {
-		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getGrossQuantity();
+//		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getGrossQuantity();
+		returnMe += entry.getValue().getIngredient().getPricePerWeight();
 	    }
 	}
 	
