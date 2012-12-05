@@ -12,6 +12,8 @@ import gui.ingredients.controllers.RecipeViewController;
 import gui.ingredients.controllers.SupplierViewController;
 import java.util.HashMap;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -40,6 +42,14 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 	ingredientTab.add(tabs.get(ingredientTabIndex).view());
 	supplierTab.add(tabs.get(supplierTabIndex).view());
 	
+	tabController.addChangeListener(new ChangeListener() {
+
+	    @Override
+	    public void stateChanged(ChangeEvent e) {
+		tabs.get(tabController.getSelectedIndex()).electFirstResponder();
+	    }
+	});
+	
 //	tabController.addChangeListener(new ChangeListener() {
 //
 //	    @Override
@@ -53,9 +63,13 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 //	});
     }
     
+    public void electFirstResponder(){
+	tabs.get(tabController.getSelectedIndex()).electFirstResponder();
+    }
+    
     public void selectAndSwitchToSupplier(Supplier supplier){
 	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
-	tabController.setSelectedIndex(2);
+	tabController.setSelectedIndex(supplierTabIndex);
     }
     
     @Override
@@ -77,6 +91,7 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
         ingredientTab = new javax.swing.JPanel();
         supplierTab = new javax.swing.JPanel();
 
+        setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
         tabController.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);

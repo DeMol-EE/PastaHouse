@@ -5,7 +5,6 @@
 package gui.ingredients.dialogs;
 
 import database.extra.Component;
-import gui.ingredients.controllers.PrintDialogDelegate;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.PrintableTableModel;
 import java.awt.Color;
@@ -23,17 +22,18 @@ import utilities.Utilities;
  *
  * @author Warkst
  */
-public class PrintDialog extends javax.swing.JDialog {
+public class RecipePrintDialog extends javax.swing.JDialog {
 
-    private final PrintDialogDelegate delegate;
-    private final PrintableRecipe model;
-    private final PrintableTableModel tableModel;
-    private final Map<Integer, Component> originalComponents;
+    private static RecipePrintDialog reused;
+    
+    private PrintableRecipe model;
+    private PrintableTableModel tableModel;
+    private Map<Integer, Component> originalComponents;
     
     /**
-     * Creates new form PrintDialog
+     * Creates new form RecipePrintDialog
      */
-    public PrintDialog(java.awt.Frame parent, boolean modal, PrintDialogDelegate delegate, PrintableRecipe model) {
+    private RecipePrintDialog(java.awt.Frame parent, boolean modal) {
 	super(parent, modal);
 	initComponents();
 	
@@ -46,8 +46,9 @@ public class PrintDialog extends javax.swing.JDialog {
 	buttonGroup1.add(pieces);
 	buttonGroup1.add(weight);
 	pieces.setSelected(true);
-	
-	this.delegate = delegate;
+    }
+    
+    private void setModel(PrintableRecipe model){
 	this.model = model;
 	this.originalComponents = new TreeMap<Integer, Component>();
 	for (Map.Entry<Integer, Component> entry : model.getRecipe().getComponents().entrySet()) {
@@ -59,6 +60,18 @@ public class PrintDialog extends javax.swing.JDialog {
 	loadModel();
 	
 	quantityOutlet.selectAll();
+    }
+    
+    public static RecipePrintDialog getInstance(){
+	if (reused == null) {
+	    reused = new RecipePrintDialog(null, true);
+	} 
+	return reused;
+    }
+    
+    public void showDialog(PrintableRecipe model){
+	setModel(model);
+	setVisible(true);
     }
     
     private void loadModel(){
@@ -89,18 +102,19 @@ public class PrintDialog extends javax.swing.JDialog {
         back = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
+        nameOutlet = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         weight = new javax.swing.JRadioButton();
         pieces = new javax.swing.JRadioButton();
         quantityOutlet = new javax.swing.JTextField();
         qLabel = new javax.swing.JLabel();
-        nameOutlet = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        netPerUnitOutlet = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         componentsOutlet = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        netPerUnitOutlet = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         grossTotalOutlet = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -135,6 +149,10 @@ public class PrintDialog extends javax.swing.JDialog {
 
         jPanel4.setLayout(new java.awt.BorderLayout());
 
+        nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 1, 1));
+        jPanel4.add(nameOutlet, java.awt.BorderLayout.NORTH);
+
         jPanel5.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 5));
@@ -168,17 +186,26 @@ public class PrintDialog extends javax.swing.JDialog {
         });
         jPanel5.add(quantityOutlet, java.awt.BorderLayout.CENTER);
 
-        qLabel.setText("Hoeveelheid:");
+        qLabel.setText("Hoeveelheid om klaar te maken:");
         qLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 1));
         jPanel5.add(qLabel, java.awt.BorderLayout.WEST);
 
-        jPanel4.add(jPanel5, java.awt.BorderLayout.CENTER);
+        jPanel4.add(jPanel5, java.awt.BorderLayout.SOUTH);
 
-        nameOutlet.setText("<nameOutlet>");
-        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 1, 1));
-        jPanel4.add(nameOutlet, java.awt.BorderLayout.NORTH);
+        jPanel6.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel1.setText("Netto gewicht voor 1 eenheid");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jPanel6.add(jLabel1);
+
+        netPerUnitOutlet.setText("<netPerUnitOutlet>");
+        jPanel6.add(netPerUnitOutlet);
+
+        jPanel4.add(jPanel6, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.NORTH);
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
 
         componentsOutlet.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         componentsOutlet.setModel(new javax.swing.table.DefaultTableModel(
@@ -200,14 +227,7 @@ public class PrintDialog extends javax.swing.JDialog {
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel7.setLayout(new java.awt.GridLayout(3, 2, 0, 5));
-
-        jLabel1.setText("Netto gewicht voor 1 eenheid");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jPanel7.add(jLabel1);
-
-        netPerUnitOutlet.setText("<netPerUnitOutlet>");
-        jPanel7.add(netPerUnitOutlet);
+        jPanel7.setLayout(new java.awt.GridLayout(2, 2, 0, 5));
 
         jLabel2.setText("Bruto gewicht voor totaal");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
@@ -264,7 +284,7 @@ public class PrintDialog extends javax.swing.JDialog {
 		}
 	    }).start();
 
-	    this.dispose();
+	    setVisible(false);
 	} catch (Exception e){
 	    System.err.println("Error:\n"+e.getMessage());
 	    JOptionPane.showMessageDialog(null, "Geef een geldige waarde in!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -277,7 +297,7 @@ public class PrintDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_printActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        this.dispose();
+        setVisible(false);
     }//GEN-LAST:event_backActionPerformed
 
     private void quantityOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityOutletKeyReleased
@@ -332,6 +352,7 @@ public class PrintDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel nameOutlet;

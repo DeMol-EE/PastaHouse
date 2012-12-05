@@ -79,7 +79,10 @@ public class ApplicationInvoices extends javax.swing.JFrame {
             }
         });
 
+        buttonPanel.setFocusable(false);
         buttonPanel.setLayout(new java.awt.GridBagLayout());
+
+        fillerWest.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -88,6 +91,8 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.4;
         gridBagConstraints.weighty = 1.0;
         buttonPanel.add(fillerWest, gridBagConstraints);
+
+        fillerEast.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -96,6 +101,8 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.4;
         gridBagConstraints.weighty = 1.0;
         buttonPanel.add(fillerEast, gridBagConstraints);
+
+        fillerNorth.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -105,6 +112,8 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.5;
         buttonPanel.add(fillerNorth, gridBagConstraints);
+
+        fillerSouth.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -115,6 +124,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.5;
         buttonPanel.add(fillerSouth, gridBagConstraints);
 
+        jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.GridLayout(3, 1, 0, 10));
 
         btnRecipes.setText("Recepten");
@@ -179,7 +189,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         getContentPane().removeAll();
         getContentPane().add(rtvc);
         validate();
-        repaint();
+        rtvc.electFirstResponder();
     }//GEN-LAST:event_btnRecipesActionPerformed
 
     private void ResizeHandler(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ResizeHandler

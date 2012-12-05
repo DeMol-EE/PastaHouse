@@ -105,7 +105,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             }
         });
 
-//        jPanel2.add(comboGemeentes, 9);
+//        jPanel2.addProxy(comboGemeentes, 9);
 	muniParent.add(comboGemeentes, BorderLayout.CENTER);
         comboGemeentes.setSelectedItem(model.getMunicipality());
     }
@@ -163,22 +163,26 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(10, 2));
 
-        jLabel11.setText("Firma");
+        jLabel11.setText("Firma *");
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel11.setFocusable(false);
         jPanel2.add(jLabel11);
         jPanel2.add(txtFirma);
 
         jLabel10.setText("Contactpersoon");
+        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel10.setFocusable(false);
         jPanel2.add(jLabel10);
         jPanel2.add(txtContact);
 
         jLabel13.setText("Adres");
+        jLabel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel13.setFocusable(false);
         jPanel2.add(jLabel13);
         jPanel2.add(txtAdres);
 
         jLabel1.setText("Postcode");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel1.setFocusable(false);
         jPanel2.add(jLabel1);
 
@@ -190,6 +194,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jPanel2.add(txtGemeente);
 
         jLabel12.setText("Gemeente");
+        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel12.setFocusable(false);
         jPanel2.add(jLabel12);
 
@@ -197,25 +202,30 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jPanel2.add(muniParent);
 
         jLabel9.setText("Telefoon");
+        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel9.setFocusable(false);
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
 
         jLabel2.setText("Telefoon 2");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jPanel2.add(jLabel2);
         jPanel2.add(txttel2);
 
         jLabel14.setText("GSM");
+        jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel14.setFocusable(false);
         jPanel2.add(jLabel14);
         jPanel2.add(txtGSM);
 
         jLabel15.setText("Fax");
+        jLabel15.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel15.setFocusable(false);
         jPanel2.add(jLabel15);
         jPanel2.add(txtFax);
 
         jLabel16.setText("Email");
+        jLabel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel16.setFocusable(false);
         jPanel2.add(jLabel16);
         jPanel2.add(txtEmail);
@@ -285,6 +295,11 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try{
+	    if (txtFirma.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
 	    model.setFirm(txtFirma.getText());
 	    model.setContact(txtContact.getText());
 	    model.setAddress(txtAdres.getText());

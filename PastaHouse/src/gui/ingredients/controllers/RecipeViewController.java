@@ -10,19 +10,18 @@ import database.extra.Ingredient;
 import database.tables.Recipe;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
-import gui.ingredients.dialogs.PrintDialog;
+import gui.ingredients.dialogs.RecipePrintDialog;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticTableModel;
-import java.awt.print.Printable;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import printer.PrintableRecipe;
-import printer.Printer;
 import utilities.StringTools;
 import utilities.Utilities;
 
@@ -30,7 +29,7 @@ import utilities.Utilities;
  *
  * @author Warkst
  */
-public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>, PrintDialogDelegate{
+public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>{
 
     /**
      * Creates new form RecipeViewController
@@ -119,11 +118,16 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jScrollPane4 = new javax.swing.JScrollPane();
         ingredientsOutlet = new javax.swing.JTable();
 
+        setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setFocusable(false);
 
+        master.setFocusable(false);
         master.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setFocusable(false);
 
         recipeListOutlet.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -145,56 +149,97 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
         jSplitPane1.setLeftComponent(master);
 
+        detail.setFocusable(false);
         detail.setLayout(new java.awt.BorderLayout());
 
+        jPanel5.setFocusable(false);
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
         nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 0));
+        nameOutlet.setFocusable(false);
         jPanel5.add(nameOutlet);
 
         dateOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         dateOutlet.setText("<dateOutlet>");
+        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        dateOutlet.setFocusable(false);
         jPanel5.add(dateOutlet);
 
         detail.add(jPanel5, java.awt.BorderLayout.NORTH);
 
+        jPanel7.setFocusable(false);
         jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
         jPanel7.setLayout(new java.awt.BorderLayout());
 
         jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Bereiding:"));
+        jScrollPane3.setFocusable(false);
 
         preparationOutlet.setColumns(20);
         preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         preparationOutlet.setRows(5);
+        preparationOutlet.setFocusable(false);
+        preparationOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                preparationOutletKeyTyped(evt);
+            }
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                preparationOutletKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                preparationOutletKeyReleased(evt);
+            }
+        });
         jScrollPane3.setViewportView(preparationOutlet);
 
         jPanel7.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
+        jPanel6.setFocusable(false);
         jPanel6.setLayout(new java.awt.GridLayout(3, 2));
 
         jLabel2.setText("Totaalgewicht ingrediënten");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel2.setFocusable(false);
         jPanel6.add(jLabel2);
 
         grossWeightOutlet.setText("<grossWeightOutlet>");
+        grossWeightOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        grossWeightOutlet.setFocusable(false);
         jPanel6.add(grossWeightOutlet);
 
+        jLabel4.setBackground(new java.awt.Color(239, 239, 239));
         jLabel4.setText("Gewicht na bereiding");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel4.setFocusable(false);
+        jLabel4.setOpaque(true);
         jPanel6.add(jLabel4);
 
+        netWeightOutlet.setBackground(new java.awt.Color(239, 239, 239));
         netWeightOutlet.setText("<netWeightOutlet>");
+        netWeightOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        netWeightOutlet.setFocusable(false);
+        netWeightOutlet.setOpaque(true);
         jPanel6.add(netWeightOutlet);
 
         jLabel7.setText("Kostprijs per kg (BTW excl)");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel7.setFocusable(false);
         jPanel6.add(jLabel7);
 
         pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
+        pricePerWeightOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        pricePerWeightOutlet.setFocusable(false);
         jPanel6.add(pricePerWeightOutlet);
 
         jPanel7.add(jPanel6, java.awt.BorderLayout.NORTH);
 
+        jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
+
+        filler1.setFocusable(false);
         jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
+        jPanel2.setFocusable(false);
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         print.setText("Afdrukken...");
@@ -222,6 +267,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         detail.add(jPanel7, java.awt.BorderLayout.SOUTH);
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
+        jScrollPane4.setFocusable(false);
 
         ingredientsOutlet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
         ingredientsOutlet.setModel(new javax.swing.table.DefaultTableModel(
@@ -235,6 +281,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        ingredientsOutlet.setFocusable(false);
         ingredientsOutlet.setRowSelectionAllowed(false);
         ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
         jScrollPane4.setViewportView(ingredientsOutlet);
@@ -255,8 +302,21 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_editActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-	new PrintDialog(null, true, this, new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue())).setVisible(true);
+//	new RecipePrintDialog(null, true, this, new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue())).setVisible(true);
+	RecipePrintDialog.getInstance().showDialog(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue()));
     }//GEN-LAST:event_printActionPerformed
+
+    private void preparationOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_preparationOutletKeyPressed
+        notesKeyEvent(evt);
+    }//GEN-LAST:event_preparationOutletKeyPressed
+
+    private void preparationOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_preparationOutletKeyReleased
+        notesKeyEvent(evt);
+    }//GEN-LAST:event_preparationOutletKeyReleased
+
+    private void preparationOutletKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_preparationOutletKeyTyped
+        notesKeyEvent(evt);
+    }//GEN-LAST:event_preparationOutletKeyTyped
 
     public void printProxy(){
 	printActionPerformed(null);
@@ -308,36 +368,30 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }
 
     @Override
-    public void add() {
+    public void addProxy() {
 	addActionPerformed(null);
     }
 
     @Override
-    public void edit() {
+    public void editProxy() {
 	editActionPerformed(null);
     }
 
     @Override
-    public void printQuantity(double q) {
-//	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), q));
-    }
-
-    @Override
-    public void printAmount(double a) {
-	Recipe r = (Recipe)recipeListOutlet.getSelectedValue();
-	// herreken het aantal stuks naar een gewicht
-	
-//	print(new PrintableRecipe(r, a*r.getNetWeight(), a));
+    public void electFirstResponder() {
+	recipeListOutlet.requestFocus();
     }
     
-    private void print(Printable pr){
-//        Printable pr = new PrintableTest();
-	Printer.driver().setPrintJob(pr);
-	Printer.driver().tryPrint();
-//	try {
-//	    ingredientsOutlet.print();
-//	} catch (PrinterException ex) {
-//	    Logger.getLogger(RecipeViewController.class.getName()).log(Level.SEVERE, null, ex);
-//	}
+    private void notesKeyEvent(KeyEvent evt){
+	if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
+                && !(evt.getKeyCode() == KeyEvent.VK_F1)
+                && !(evt.getKeyCode() == KeyEvent.VK_F2)
+                && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
+            evt.consume();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            evt.consume();
+            recipeListOutlet.requestFocus();
+        }
     }
 }

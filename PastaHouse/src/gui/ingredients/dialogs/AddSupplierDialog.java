@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -101,7 +102,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(10, 2));
 
-        jLabel11.setText("Firma");
+        jLabel11.setText("Firma *");
         jPanel2.add(jLabel11);
         jPanel2.add(txtFirma);
 
@@ -210,12 +211,25 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        this.dispose();
+        disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         try {
-//	    FunctionResult<Supplier> result = new SupplierModel(txtFirma.getText(), txtAdres.getText(), comboGemeentes.getSelectedItem().toString(), txtPostcode.getText().length()>0 ? Integer.parseInt(txtPostcode.getText()): 0, txtTel.getText(),txtTel2.getText(), txtGSM.getText(), txtFax.getText(), txtEmail.getText(), NotesOutlet.getText(), txtContact.getText()).create();
+	    if (txtFirma.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
 	    
 	    model.setFirm(txtFirma.getText());
 	    model.setAddress(txtAdres.getText());
@@ -232,7 +246,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 	    FunctionResult<Supplier> result = model.create();
             if (result.getCode() == 0 && result.getObj() != null) {
 		delegate.addAndSelect(result.getObj());
-		this.dispose();
+		disposeLater();
             } else {
                 // switch case the return code
 		System.err.println("Database driver returned with code: "+result.getCode());

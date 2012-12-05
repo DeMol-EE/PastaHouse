@@ -39,7 +39,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Firma"/>
+            <Property name="text" type="java.lang.String" value="Firma *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFirma">

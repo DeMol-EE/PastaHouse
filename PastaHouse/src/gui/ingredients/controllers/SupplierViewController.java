@@ -136,82 +136,122 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         detail.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(10, 2, 0, 5));
+        fixedFields.setLayout(new java.awt.GridLayout(10, 2));
 
         jLabel1.setText("Firma");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
 
         firmOutlet.setText("<firmOutlet>");
+        firmOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         firmOutlet.setFocusable(false);
         fixedFields.add(firmOutlet);
 
+        jLabel4.setBackground(new java.awt.Color(239, 239, 239));
         jLabel4.setText("Contactpersoon");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel4.setFocusable(false);
+        jLabel4.setOpaque(true);
         fixedFields.add(jLabel4);
 
+        contactOutlet.setBackground(new java.awt.Color(239, 239, 239));
         contactOutlet.setText("<contactOutlet>");
+        contactOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         contactOutlet.setFocusable(false);
+        contactOutlet.setOpaque(true);
         fixedFields.add(contactOutlet);
 
         jLabel2.setText("Adres");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel2.setFocusable(false);
         fixedFields.add(jLabel2);
 
         addressOutlet.setText("<addressOutlet>");
+        addressOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         addressOutlet.setFocusable(false);
         fixedFields.add(addressOutlet);
 
+        jLabel10.setBackground(new java.awt.Color(239, 239, 239));
         jLabel10.setText("Postcode");
+        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel10.setOpaque(true);
         fixedFields.add(jLabel10);
 
+        zipcodeOutlet.setBackground(new java.awt.Color(239, 239, 239));
         zipcodeOutlet.setText("<zipcodeOutlet>");
+        zipcodeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        zipcodeOutlet.setOpaque(true);
         fixedFields.add(zipcodeOutlet);
 
         jLabel3.setText("Gemeente");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel3.setFocusable(false);
         fixedFields.add(jLabel3);
 
         municipalityOutlet.setText("<municipalityOutlet>");
+        municipalityOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         municipalityOutlet.setFocusable(false);
         fixedFields.add(municipalityOutlet);
 
+        jLabel5.setBackground(new java.awt.Color(239, 239, 239));
         jLabel5.setText("Telefoon");
+        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel5.setFocusable(false);
+        jLabel5.setOpaque(true);
         fixedFields.add(jLabel5);
 
+        telephoneOutlet.setBackground(new java.awt.Color(239, 239, 239));
         telephoneOutlet.setText("<telephoneOutlet>");
+        telephoneOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         telephoneOutlet.setFocusable(false);
+        telephoneOutlet.setOpaque(true);
         fixedFields.add(telephoneOutlet);
 
         jLabel9.setText("Telefoon 2");
+        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         fixedFields.add(jLabel9);
 
         telephone2Outlet.setText("<telephone2Outlet>");
+        telephone2Outlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         fixedFields.add(telephone2Outlet);
 
+        jLabel6.setBackground(new java.awt.Color(239, 239, 239));
         jLabel6.setText("GSM");
+        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel6.setFocusable(false);
+        jLabel6.setOpaque(true);
         fixedFields.add(jLabel6);
 
+        cellphoneOutlet.setBackground(new java.awt.Color(239, 239, 239));
         cellphoneOutlet.setText("<cellphoneOutlet>");
+        cellphoneOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         cellphoneOutlet.setFocusable(false);
+        cellphoneOutlet.setOpaque(true);
         fixedFields.add(cellphoneOutlet);
 
         jLabel7.setText("Fax");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel7.setFocusable(false);
         fixedFields.add(jLabel7);
 
         faxOutlet.setText("<faxOutlet>");
+        faxOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         faxOutlet.setFocusable(false);
         fixedFields.add(faxOutlet);
 
+        jLabel8.setBackground(new java.awt.Color(239, 239, 239));
         jLabel8.setText("Email");
+        jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel8.setFocusable(false);
+        jLabel8.setOpaque(true);
         fixedFields.add(jLabel8);
 
+        emailOutlet.setBackground(new java.awt.Color(239, 239, 239));
         emailOutlet.setText("<emailOutlet>");
+        emailOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         emailOutlet.setFocusable(false);
+        emailOutlet.setOpaque(true);
         fixedFields.add(emailOutlet);
 
         detail.add(fixedFields, java.awt.BorderLayout.NORTH);
@@ -292,8 +332,8 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
     
-    private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
-        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
+    private void notesKeyEvent(KeyEvent evt){
+	if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
                 && !(evt.getKeyCode() == KeyEvent.VK_F1)
                 && !(evt.getKeyCode() == KeyEvent.VK_F2)
                 && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
@@ -303,32 +343,18 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
             evt.consume();
             listOutlet.requestFocus();
         }
+    }
+    
+    private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
+        notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyPressed
     
     private void notesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyReleased
-        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
-                && !(evt.getKeyCode() == KeyEvent.VK_F1)
-                && !(evt.getKeyCode() == KeyEvent.VK_F2)
-                && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
-            evt.consume();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
-            evt.consume();
-            listOutlet.requestFocus();
-        }
+        notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyReleased
     
     private void notesOutletKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyTyped
-        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
-                && !(evt.getKeyCode() == KeyEvent.VK_F1)
-                && !(evt.getKeyCode() == KeyEvent.VK_F2)
-                && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
-            evt.consume();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
-            evt.consume();
-            listOutlet.requestFocus();
-        }
+        notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyTyped
     
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -388,12 +414,17 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }
     
     @Override
-    public void add() {
+    public void addProxy() {
         addActionPerformed(null);
     }
     
     @Override
-    public void edit() {
+    public void editProxy() {
         editActionPerformed(null);
+    }
+    
+    @Override
+    public void electFirstResponder() {
+	listOutlet.requestFocus();
     }
 }

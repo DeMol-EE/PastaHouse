@@ -186,7 +186,8 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 3));
 
-        jLabel1.setText("Naam");
+        jLabel1.setText("Naam *");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
 
@@ -194,6 +195,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(nameOutlet);
 
         jLabel2.setText("Merk");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel2.setFocusable(false);
         fixedFields.add(jLabel2);
 
@@ -201,6 +203,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(brandOutlet);
 
         jLabel6.setText("Verpakking");
+        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel6.setFocusable(false);
         fixedFields.add(jLabel6);
 
@@ -213,6 +216,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(packagingOutlet);
 
         jLabel3.setText("Leverancier");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel3.setFocusable(false);
         fixedFields.add(jLabel3);
 
@@ -223,7 +227,8 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 
         fixedFields.add(supplierParent);
 
-        jLabel10.setText("Prijs per verpakking (BTW excl)");
+        jLabel10.setText("Prijs per verpakking (BTW excl) *");
+        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel10.setFocusable(false);
         fixedFields.add(jLabel10);
 
@@ -242,7 +247,8 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 
         fixedFields.add(jPanel1);
 
-        jLabel8.setText("Gewicht per verpakking");
+        jLabel8.setText("Gewicht per verpakking *");
+        jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel8.setFocusable(false);
         fixedFields.add(jLabel8);
 
@@ -262,6 +268,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(jPanel2);
 
         jLabel12.setText("Prijs per kg (BTW excl)");
+        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel12.setFocusable(false);
         fixedFields.add(jLabel12);
 
@@ -275,7 +282,8 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 
         fixedFields.add(jPanel5);
 
-        jLabel14.setText("Verliespercentage");
+        jLabel14.setText("Verliespercentage *");
+        jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel14.setFocusable(false);
         fixedFields.add(jLabel14);
 
@@ -295,6 +303,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(jPanel6);
 
         jLabel16.setText("Totaalprijs (BTW excl)");
+        jLabel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel16.setFocusable(false);
         fixedFields.add(jLabel16);
 
@@ -308,7 +317,8 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 
         fixedFields.add(jPanel7);
 
-        jLabel18.setText("BTW");
+        jLabel18.setText("BTW *");
+        jLabel18.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel18.setFocusable(false);
         fixedFields.add(jLabel18);
 
@@ -328,6 +338,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(jPanel8);
 
         jLabel20.setText("Totaalprijs");
+        jLabel20.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel20.setFocusable(false);
         fixedFields.add(jLabel20);
 
@@ -342,6 +353,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         fixedFields.add(jPanel9);
 
         jLabel22.setText("Datum");
+        jLabel22.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel22.setFocusable(false);
         fixedFields.add(jLabel22);
 
@@ -569,6 +581,16 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
     
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try{
+	    
+	    if (nameOutlet.getText().isEmpty()
+		    || weightPerUnitOutlet.getText().isEmpty()
+		    || pricePerUnitOutlet.getText().isEmpty()
+		    || taxesOutlet.getText().isEmpty()
+		    || lossOutlet.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
 	    model.setName(nameOutlet.getText());
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
 	    model.setNotes(notesOutlet.getText());

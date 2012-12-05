@@ -137,17 +137,20 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
 
         fixedFields.setLayout(new java.awt.GridLayout(8, 2, -1, 0));
 
-        jLabel1.setText("Naam");
+        jLabel1.setText("Naam *");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
         fixedFields.add(nameOutlet);
 
         jLabel2.setText("Merk");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel2.setFocusable(false);
         fixedFields.add(jLabel2);
         fixedFields.add(brandOutlet);
 
         jLabel3.setText("Verpakking");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel3.setFocusable(false);
         fixedFields.add(jLabel3);
 
@@ -159,6 +162,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
         fixedFields.add(packagingOutlet);
 
         jLabel4.setText("Leverancier");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel4.setFocusable(false);
         fixedFields.add(jLabel4);
 
@@ -170,7 +174,8 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
 
         fixedFields.add(supplierParent);
 
-        jLabel5.setText("Prijs per verpakking (BTW excl)");
+        jLabel5.setText("Prijs per verpakking (BTW excl) *");
+        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel5.setFocusable(false);
         fixedFields.add(jLabel5);
 
@@ -184,14 +189,15 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
         });
         jPanel1.add(pricePerUnitOutlet);
 
-        pricePerUnitFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         pricePerUnitFormattedOutlet.setText("<pricePerUnitFormattedOutlet>");
+        pricePerUnitFormattedOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         pricePerUnitFormattedOutlet.setFocusable(false);
         jPanel1.add(pricePerUnitFormattedOutlet);
 
         fixedFields.add(jPanel1);
 
-        jLabel6.setText("Gewicht per verpakking");
+        jLabel6.setText("Gewicht per verpakking *");
+        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel6.setFocusable(false);
         fixedFields.add(jLabel6);
 
@@ -204,14 +210,15 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
         });
         jPanel2.add(weightPerUnitOutlet);
 
-        weightPerUnitFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         weightPerUnitFormattedOutlet.setText("<weightPerUnitFormattedOutlet>");
+        weightPerUnitFormattedOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         weightPerUnitFormattedOutlet.setFocusable(false);
         jPanel2.add(weightPerUnitFormattedOutlet);
 
         fixedFields.add(jPanel2);
 
-        jLabel7.setText("Verliespercentage");
+        jLabel7.setText("Verliespercentage *");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel7.setFocusable(false);
         fixedFields.add(jLabel7);
 
@@ -224,14 +231,15 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
         });
         jPanel5.add(lossOutlet);
 
-        lossFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         lossFormattedOutlet.setText("<lossFormattedOutlet>");
+        lossFormattedOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         lossFormattedOutlet.setFocusable(false);
         jPanel5.add(lossFormattedOutlet);
 
         fixedFields.add(jPanel5);
 
-        jLabel11.setText("BTW");
+        jLabel11.setText("BTW *");
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel11.setFocusable(false);
         fixedFields.add(jLabel11);
 
@@ -244,8 +252,8 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
         });
         jPanel6.add(taxesOutlet);
 
-        taxesFormattedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         taxesFormattedOutlet.setText("<taxesFormattedOutlet>");
+        taxesFormattedOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         taxesFormattedOutlet.setFocusable(false);
         jPanel6.add(taxesFormattedOutlet);
 
@@ -367,7 +375,18 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 	try{
-	    // set values on the model
+	    if (nameOutlet.getText().isEmpty()
+		    || weightPerUnitOutlet.getText().isEmpty()
+		    || pricePerUnitOutlet.getText().isEmpty()
+		    || taxesOutlet.getText().isEmpty()
+		    || lossOutlet.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
+	    /*
+	     * Set values on the model
+	     */
 	    model.setName(nameOutlet.getText());
 	    model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 	    model.setBrand(brandOutlet.getText());

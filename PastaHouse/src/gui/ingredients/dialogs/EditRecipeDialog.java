@@ -104,7 +104,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	
 	loadModel();
 	
-	// add accelerator to "add" button
+	// addProxy accelerator to "addProxy" button
 	AcceleratorAdder.addAccelerator(addComponent, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
@@ -245,7 +245,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
         grossWeightOutlet.setText("<grossWeightOutlet>");
         jPanel6.add(grossWeightOutlet);
 
-        jLabel4.setText("  Gewicht na bereiding");
+        jLabel4.setText("  Gewicht na bereiding *");
         jPanel6.add(jLabel4);
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
@@ -360,6 +360,12 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
 	try {
+	    if (nameOutlet.getText().isEmpty()
+		    || netWeightOutlet.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
 	    model.setName(nameOutlet.getText());
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
 	    model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));

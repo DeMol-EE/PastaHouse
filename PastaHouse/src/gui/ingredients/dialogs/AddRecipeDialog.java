@@ -32,6 +32,7 @@ import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
@@ -192,7 +193,8 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 
         jPanel10.setLayout(new java.awt.GridLayout(1, 2));
 
-        nameLabel.setText("  Naam");
+        nameLabel.setText("Naam *");
+        nameLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
         jPanel10.add(nameLabel);
 
         nameOutlet.setText("<nameOutlet>");
@@ -221,13 +223,15 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 
         jPanel6.setLayout(new java.awt.GridLayout(3, 2));
 
-        jLabel2.setText("  Totaalgewicht ingrediënten");
+        jLabel2.setText("Totaalgewicht ingrediënten");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
         jPanel6.add(jLabel2);
 
         grossWeightOutlet.setText("<grossWeightOutlet>");
         jPanel6.add(grossWeightOutlet);
 
-        jLabel4.setText("  Gewicht na bereiding");
+        jLabel4.setText("Gewicht na bereiding *");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
         jPanel6.add(jLabel4);
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
@@ -241,11 +245,13 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
         jPanel3.add(netWeightOutlet);
 
         netWeightFormattedOutlet.setText("<netWeightFormattedOutlet>");
+        netWeightFormattedOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jPanel3.add(netWeightFormattedOutlet);
 
         jPanel6.add(jPanel3);
 
-        jLabel7.setText("  Kostprijs per kg (BTW excl)");
+        jLabel7.setText("Kostprijs per kg (BTW excl)");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
         jPanel6.add(jLabel7);
 
         pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
@@ -346,8 +352,10 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try {
-	    if (nameOutlet.getText().isEmpty()) {
-		throw new RuntimeException("Name may not be empty!");
+	    if (nameOutlet.getText().isEmpty()
+		    || netWeightOutlet.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
 	    }
             model.setName(nameOutlet.getText());
 	    model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
@@ -358,7 +366,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
             FunctionResult<Recipe> res = model.create();
 	    if (res.getCode() == 0 && res.getObj() != null) {
 		delegate.addAndSelect(res.getObj());
-                this.dispose();
+                disposeLater();
             } else {
                 JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het aanmaken van dit recept in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
             }
@@ -369,9 +377,19 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     }//GEN-LAST:event_saveActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        this.dispose();
+        disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
         ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
         int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
