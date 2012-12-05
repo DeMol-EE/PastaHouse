@@ -7,7 +7,9 @@ package pastahouse;
 import gui.contacts.ContactsTabbedViewController;
 import gui.ingredients.RecipeTabbedViewController;
 import gui.invoices.InvoiceTabbedViewController;
+import java.awt.BorderLayout;
 import java.awt.Font;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import utilities.Configuration;
 import utilities.Utilities;
@@ -37,13 +39,15 @@ public class ApplicationInvoices extends javax.swing.JFrame {
 
 
         getContentPane().removeAll();
-        getContentPane().add(rtvc);
-        getContentPane().add(itvc);
-        getContentPane().add(ctvc);
+        getContentPane().add(rtvc, BorderLayout.CENTER);
+        getContentPane().removeAll();
+	getContentPane().add(itvc, BorderLayout.CENTER);
+        getContentPane().removeAll();
+	getContentPane().add(ctvc, BorderLayout.CENTER);
         validate();
 
         getContentPane().removeAll();
-        getContentPane().add(buttonPanel);
+        getContentPane().add(buttonPanel, BorderLayout.CENTER);
         validate();
     }
 
@@ -185,10 +189,15 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnRecipesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecipesActionPerformed
-        getContentPane().removeAll();
-        getContentPane().add(rtvc);
+    private void setContent(JPanel content){
+	getContentPane().removeAll();
+        getContentPane().add(content);
         validate();
+	repaint();
+    }
+    
+    private void btnRecipesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecipesActionPerformed
+        setContent(rtvc);
         rtvc.electFirstResponder();
     }//GEN-LAST:event_btnRecipesActionPerformed
 
@@ -196,24 +205,15 @@ public class ApplicationInvoices extends javax.swing.JFrame {
     }//GEN-LAST:event_ResizeHandler
 
     private void btnInvoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoicesActionPerformed
-        getContentPane().removeAll();
-        getContentPane().add(itvc);
-        validate();
-        repaint();
+        setContent(itvc);
     }//GEN-LAST:event_btnInvoicesActionPerformed
 
     private void btnContactsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactsActionPerformed
-        getContentPane().removeAll();
-        getContentPane().add(ctvc);
-        validate();
-        repaint();
+        setContent(ctvc);
     }//GEN-LAST:event_btnContactsActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        getContentPane().removeAll();
-        getContentPane().add(buttonPanel);
-        validate();
-        repaint();
+        setContent(buttonPanel);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**

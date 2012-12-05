@@ -15,7 +15,7 @@ import utilities.StringTools;
  *
  * @author Warkst
  */
-public class BasicIngredient extends Ingredient {    
+public class BasicIngredient extends Ingredient {
     // database columns
     private Supplier supplier; // Foreign key, references Suppliers
     private String brand;

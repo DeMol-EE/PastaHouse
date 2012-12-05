@@ -22,7 +22,7 @@ public class Component {
 	this.rank = rank;
 	this.quantity = quantity;
     }
-
+    
     public Ingredient getIngredient() {
 	return ingredient;
     }
@@ -57,11 +57,6 @@ public class Component {
 
     public void setQuantity(double quantity) {
 	this.quantity = quantity;
-    }
-
-    public double getGrossQuantity(){
-	double q = quantity / (1.0 - 0.01 * ingredient.getLossPercent());
-	return q * Math.signum(q);
     }
     
     public String isIngredientType(){

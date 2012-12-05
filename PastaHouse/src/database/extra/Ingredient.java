@@ -12,7 +12,7 @@ package database.extra;
  *
  * @author Warkst
  */
-public abstract class Ingredient extends Record {
+public abstract class Ingredient extends Record implements Comparable<Ingredient> {
     private String name;
     private String date;
 
@@ -38,6 +38,11 @@ public abstract class Ingredient extends Record {
 	this.date = date;
     }
 
+    @Override
+    public int compareTo(Ingredient o) {
+	return name.toUpperCase().compareTo(o.getName().toUpperCase());
+    }
+    
     public abstract double getPricePerWeight();
     
     public abstract double getWeightPerUnit();

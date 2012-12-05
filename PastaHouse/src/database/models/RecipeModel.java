@@ -88,11 +88,12 @@ public class RecipeModel implements Model{
 	
 	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
 	    if (entry.getValue().getIngredient() != null) {
-		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getGrossQuantity();
+		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getQuantity();
 	    }
 	}
 	
-	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
+//	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
+	return getGrossWeight()==0 ? 0 : returnMe/getGrossWeight();
     }
     
     @Override

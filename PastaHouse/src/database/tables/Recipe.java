@@ -135,11 +135,13 @@ public class Recipe extends Ingredient {
 	for (Map.Entry<Integer, Component> entry : components.entrySet()) {
 	    if (entry.getValue().getIngredient() != null) {
 //		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getGrossQuantity();
-		returnMe += entry.getValue().getIngredient().getPricePerWeight();
+//		returnMe += entry.getValue().getIngredient().getPricePerWeight();
+		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getQuantity();
 	    }
 	}
 	
-	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
+//	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
+	return getGrossWeight()==0 ? 0 : returnMe/getGrossWeight();
     }
     
     @Override
@@ -180,5 +182,22 @@ public class Recipe extends Ingredient {
     @Override
     public boolean isBasicIngredient(){
 	return false;
+    }
+
+    public boolean containsRecipe(Recipe r) {
+	if (this == r) {
+	    return true;
+	} else {
+	    boolean result = false;
+	    for (Component component : components.values()) {
+		if (!component.getIngredient().isBasicIngredient()) {
+		    result |= ((Recipe)component.getIngredient()).containsRecipe(r);
+		    if (result) {
+			return true;
+		    }
+		}
+	    }
+	    return result;
+	}
     }
 }

@@ -25,8 +25,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -86,12 +88,19 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 
 	List ingredients = new ArrayList();
 	ingredients.add("");
-//	ingredients.addAll(Database.driver().getComponents().values());
-	Collection<Ingredient> c = Database.driver().getIngredients();
-	if (c.contains(model)) {
-	    c.remove(model);
+	/*
+	 * Add all ingredients and recipes that are not and do not contain the model to prevent loops in recipes
+	 */
+	Collection<Ingredient> c = new TreeSet<Ingredient>();
+	for (Ingredient ingredient : Database.driver().getIngredients()) {
+	    if (ingredient.isBasicIngredient() ||
+		    (!ingredient.isBasicIngredient() && !((Recipe)ingredient).containsRecipe(model))) {
+		c.add(ingredient);
+	    }
 	}
+	
 	ingredients.addAll(c);
+	
 	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(ingredients, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);

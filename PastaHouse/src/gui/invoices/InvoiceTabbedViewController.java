@@ -16,8 +16,10 @@ import javax.swing.JPanel;
  */
 public class InvoiceTabbedViewController extends javax.swing.JPanel implements TabbedViewController{
 
-    private final int articlesTabIndex = 0;
-    private final int clientsTabIndex = 1;
+    private final int invoicesTabIndex = 0;
+    private final int articlesTabIndex = 1;
+    private final int clientsTabIndex = 2;
+    
     private HashMap<Integer, MasterDetailViewController> tabs;
     
     /**
@@ -47,8 +49,30 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        invoiceTab = new javax.swing.JPanel();
+        articleTab = new javax.swing.JPanel();
+        clientTab = new javax.swing.JPanel();
+
         setLayout(new java.awt.BorderLayout());
+
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+
+        invoiceTab.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Facturen", invoiceTab);
+
+        articleTab.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Artikels", articleTab);
+
+        clientTab.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Klanten", clientTab);
+
+        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel articleTab;
+    private javax.swing.JPanel clientTab;
+    private javax.swing.JPanel invoiceTab;
+    private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
