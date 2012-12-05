@@ -11,7 +11,7 @@ import database.extra.Ingredient;
 import database.models.RecipeModel;
 import database.tables.Recipe;
 import gui.ingredients.controllers.ComboCoxCallback;
-import gui.ingredients.controllers.MasterDetailViewController;
+import gui.MasterDetailViewController;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.cell.CellEditorFactory;

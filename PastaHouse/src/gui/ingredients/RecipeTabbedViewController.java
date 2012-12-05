@@ -7,7 +7,7 @@ package gui.ingredients;
 import database.tables.Supplier;
 import gui.TabbedViewController;
 import gui.ingredients.controllers.BasicIngredientViewController;
-import gui.ingredients.controllers.MasterDetailViewController;
+import gui.MasterDetailViewController;
 import gui.ingredients.controllers.RecipeViewController;
 import gui.ingredients.controllers.SupplierViewController;
 import java.util.HashMap;

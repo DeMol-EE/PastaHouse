@@ -6,9 +6,14 @@ package gui.invoices;
 
 import database.tables.Supplier;
 import gui.TabbedViewController;
-import gui.ingredients.controllers.MasterDetailViewController;
+import gui.MasterDetailViewController;
+import gui.invoices.controllers.ArticleViewController;
+import gui.invoices.controllers.ClientViewController;
+import gui.invoices.controllers.InvoiceViewController;
 import java.util.HashMap;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -29,6 +34,22 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
         initComponents();
         
         tabs = new HashMap<Integer, MasterDetailViewController>();
+	
+	tabs.put(invoicesTabIndex, new InvoiceViewController());
+	tabs.put(articlesTabIndex, new ArticleViewController());
+	tabs.put(clientsTabIndex, new ClientViewController());
+	
+	invoiceTab.add(tabs.get(invoicesTabIndex).view());
+	articleTab.add(tabs.get(articlesTabIndex).view());
+	clientTab.add(tabs.get(clientsTabIndex).view());
+	
+	tabController.addChangeListener(new ChangeListener() {
+
+	    @Override
+	    public void stateChanged(ChangeEvent e) {
+		tabs.get(tabController.getSelectedIndex()).electFirstResponder();
+	    }
+	});
         
     }
     
@@ -49,30 +70,35 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabController = new javax.swing.JTabbedPane();
         invoiceTab = new javax.swing.JPanel();
         articleTab = new javax.swing.JPanel();
         clientTab = new javax.swing.JPanel();
 
+        setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        tabController.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        tabController.setFocusable(false);
 
+        invoiceTab.setFocusable(false);
         invoiceTab.setLayout(new java.awt.BorderLayout());
-        jTabbedPane1.addTab("Facturen", invoiceTab);
+        tabController.addTab("Facturen", invoiceTab);
 
+        articleTab.setFocusable(false);
         articleTab.setLayout(new java.awt.BorderLayout());
-        jTabbedPane1.addTab("Artikels", articleTab);
+        tabController.addTab("Artikels", articleTab);
 
+        clientTab.setFocusable(false);
         clientTab.setLayout(new java.awt.BorderLayout());
-        jTabbedPane1.addTab("Klanten", clientTab);
+        tabController.addTab("Klanten", clientTab);
 
-        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        add(tabController, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel articleTab;
     private javax.swing.JPanel clientTab;
     private javax.swing.JPanel invoiceTab;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane tabController;
     // End of variables declaration//GEN-END:variables
 }

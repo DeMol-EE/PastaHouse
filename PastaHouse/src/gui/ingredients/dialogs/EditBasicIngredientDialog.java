@@ -8,7 +8,7 @@ import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.tables.BasicIngredient;
 import database.tables.Supplier;
-import gui.ingredients.controllers.MasterDetailViewController;
+import gui.MasterDetailViewController;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;

@@ -12,6 +12,7 @@ package gui.ingredients.controllers;
 
 import database.*;
 import database.tables.BasicIngredient;
+import gui.MasterDetailViewController;
 import gui.ingredients.RecipeTabbedViewController;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;

@@ -4,6 +4,7 @@
  */
 package gui.ingredients.controllers;
 
+import gui.MasterDetailViewController;
 import database.Database;
 import database.extra.Component;
 import database.extra.Ingredient;

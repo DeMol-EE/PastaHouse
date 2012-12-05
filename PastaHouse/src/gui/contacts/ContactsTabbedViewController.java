@@ -6,7 +6,7 @@ package gui.contacts;
 
 import database.tables.Supplier;
 import gui.TabbedViewController;
-import gui.ingredients.controllers.MasterDetailViewController;
+import gui.MasterDetailViewController;
 import java.util.HashMap;
 import javax.swing.JPanel;
 
