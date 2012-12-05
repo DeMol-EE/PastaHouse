@@ -9,16 +9,21 @@ import database.Database;
 import database.tables.BasicIngredient;
 import database.tables.Supplier;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.AcceleratorAdder;
+import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DateFormatter;
 import utilities.Utilities;
@@ -61,6 +66,20 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 	
 	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
 	fixedFields.add(dp);
+	
+	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		saveActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
 	
 	loadModel();
 	

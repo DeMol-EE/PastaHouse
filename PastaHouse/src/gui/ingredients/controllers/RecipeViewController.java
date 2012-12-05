@@ -78,9 +78,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createIngredientCellRenderer());
 	ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	
-	ingredientsOutlet.setModel(new StaticTableModel(r.getIngredients()));
+	ingredientsOutlet.setModel(new StaticTableModel(r.getComponents()));
 	
-//	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getIngredients()));
+//	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getComponents()));
     }
 
     /**
@@ -255,7 +255,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_editActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-	new PrintDialog(null, true, this).setVisible(true);
+	new PrintDialog(null, true, this, new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue())).setVisible(true);
     }//GEN-LAST:event_printActionPerformed
 
     public void printProxy(){
@@ -319,7 +319,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
     @Override
     public void printQuantity(double q) {
-	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), q));
+//	print(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue(), q));
     }
 
     @Override
@@ -327,7 +327,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	Recipe r = (Recipe)recipeListOutlet.getSelectedValue();
 	// herreken het aantal stuks naar een gewicht
 	
-	print(new PrintableRecipe(r, a*r.getNetWeight(), a));
+//	print(new PrintableRecipe(r, a*r.getNetWeight(), a));
     }
     
     private void print(Printable pr){

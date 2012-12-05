@@ -7,6 +7,8 @@ package gui.ingredients.dialogs;
 import database.Database;
 import database.tables.Supplier;
 import gui.ingredients.controllers.SupplierViewController;
+import gui.utilities.AcceleratorAdder;
+import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import utilities.Utilities;
 
@@ -47,6 +50,20 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         this.defaultModel = new Supplier(model);
 
         loadModel();
+	
+	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		saveActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
     }
 
     private void loadModel() {
@@ -139,8 +156,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
-        btnOK = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        save = new javax.swing.JButton();
+        cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -241,23 +258,23 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 30));
         jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
 
-        btnOK.setText("Opslaan");
-        btnOK.setFocusable(false);
-        btnOK.addActionListener(new java.awt.event.ActionListener() {
+        save.setText("Opslaan");
+        save.setFocusable(false);
+        save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOKActionPerformed(evt);
+                saveActionPerformed(evt);
             }
         });
-        jPanel4.add(btnOK);
+        jPanel4.add(save);
 
-        btnCancel.setText("Cancel");
-        btnCancel.setFocusable(false);
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+        cancel.setText("Cancel");
+        cancel.setFocusable(false);
+        cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
+                cancelActionPerformed(evt);
             }
         });
-        jPanel4.add(btnCancel);
+        jPanel4.add(cancel);
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.EAST);
 
@@ -266,7 +283,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try{
 	    model.setFirm(txtFirma.getText());
 	    model.setContact(txtContact.getText());
@@ -290,13 +307,13 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
 	}
         
-    }//GEN-LAST:event_btnOKActionPerformed
+    }//GEN-LAST:event_saveActionPerformed
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // reset values to default
         model.copy(defaultModel);
 	disposeLater();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_cancelActionPerformed
 
     private void disposeLater(){
 	SwingUtilities.invokeLater(new Runnable() {
@@ -328,8 +345,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtGemeenteKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnOK;
+    private javax.swing.JButton cancel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -348,6 +364,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel muniParent;
     private javax.swing.JTextArea notesOutlet;
+    private javax.swing.JButton save;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;

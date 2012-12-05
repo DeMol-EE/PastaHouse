@@ -12,11 +12,14 @@ import database.models.RecipeModel;
 import database.tables.Recipe;
 import gui.ingredients.controllers.ComboCoxCallback;
 import gui.ingredients.controllers.MasterDetailViewController;
+import gui.utilities.AcceleratorAdder;
+import gui.utilities.KeyAction;
 import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableTableModel;
 import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -27,6 +30,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -92,6 +96,20 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	updateNetWeightFormattedOutlet();
 	
 	nameOutlet.requestFocus();
+	
+	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		saveActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
     }
     
     @Override

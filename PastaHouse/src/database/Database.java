@@ -24,8 +24,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import logging.MyLogger;
 import utilities.Configuration;
 import utilities.StringTools;
 
@@ -69,6 +71,7 @@ public class Database {
 
         } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+	    MyLogger.log(ex.getMessage());
         }
     }
 
@@ -104,7 +107,8 @@ public class Database {
             suppliersByFirm.put(s.getFirm(), s);
         }
 
-        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
+//        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
+	MyLogger.log("Database driver:: loaded " + suppliersById.size() + " suppliers!", MyLogger.LOW);
     }
 
     public FunctionResult<Supplier> addSupplier(SupplierModel sup) throws SQLException {
@@ -165,7 +169,8 @@ public class Database {
             basicIngredientsByName.put(b.getName(), b);
         }
 
-        System.out.println("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!");
+//        System.out.println("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!");
+	MyLogger.log("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!", MyLogger.LOW);
     }
 
     public FunctionResult<BasicIngredient> addBasicIngredient(BasicIngredientModel ingredient) throws SQLException {
@@ -239,7 +244,8 @@ public class Database {
             recLinks++;
         }
 
-        System.out.println("Database driver:: loaded " + recipesById.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!");
+//        System.out.println("Database driver:: loaded " + recipesById.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!");
+	MyLogger.log("Database driver:: loaded " + recipesById.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!", MyLogger.LOW);
     }
 
     public FunctionResult<Recipe> addRecipe(RecipeModel recipe) throws SQLException {
@@ -266,7 +272,7 @@ public class Database {
             stmt.executeUpdate();
 //	    connection.commit();
 	    
-	    ResultSet rs = stmt.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_REC()+" WHERE naam=\""+recipe.getName()+"\"");
 	    if (rs.next()) {
 		newRec = Recipe.createFromModel(rs.getInt("id"), recipe);
 		recipesById.put(newRec.getPrimaryKeyValue(), newRec);
@@ -275,7 +281,7 @@ public class Database {
 		code = 2;
 	    }
 	    
-            Map<Integer, Component> ings = recipe.getIngredients();
+            Map<Integer, Component> ings = recipe.getComponents();
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
                 if (comp.getIngredient().isBasicIngredient()) {
@@ -329,7 +335,7 @@ public class Database {
             st.executeUpdate(sql);
             sql = "DELETE FROM recipesingredients WHERE receptid = " + recipe.getPrimaryKeyValue();
             st.executeUpdate(sql);
-            Map<Integer, Component> ings = recipe.getIngredients();
+            Map<Integer, Component> ings = recipe.getComponents();
 
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);

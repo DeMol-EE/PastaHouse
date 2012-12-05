@@ -58,7 +58,11 @@ public class CellRendererFactory {
 	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
-	    
+	    if (isSelected) {
+		setForeground(table.getSelectionForeground());
+	    } else {
+		setForeground(table.getForeground());
+	    }
 	    DecimalFormat twoFormatter = new DecimalFormat("0.00");
 	    if(value!=null) this.setText(twoFormatter.format(value));
 	    return this;
@@ -77,7 +81,11 @@ public class CellRendererFactory {
 	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
-	    
+	    if (isSelected) {
+		setForeground(table.getSelectionForeground());
+	    } else {
+		setForeground(table.getForeground());
+	    }
 	    if(value!=null) this.setText(value.toString());
 	    
 	    return this;
@@ -97,7 +105,11 @@ public class CellRendererFactory {
 	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
-	    
+	    if (isSelected) {
+		setForeground(table.getSelectionForeground());
+	    } else {
+		setForeground(table.getForeground());
+	    }
 	    DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	    if(value!=null) this.setText(threeFormatter.format(value));
 	    
@@ -118,6 +130,13 @@ public class CellRendererFactory {
 	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    setBackground(defaultComponent.getBackground());
 //	    this.setHorizontalAlignment(JLabel.CENTER)
+	    
+	    if (isSelected) {
+		setForeground(table.getSelectionForeground());
+	    } else {
+		setForeground(table.getForeground());
+	    }
+	    
 	    if (value == null) {
 		setText("<Kies een item>");
 	    } else {
