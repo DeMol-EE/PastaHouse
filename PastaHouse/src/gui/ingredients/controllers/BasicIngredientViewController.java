@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import utilities.StringTools;
+import tools.StringTools;
 
 /**
  *

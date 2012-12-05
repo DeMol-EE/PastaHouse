@@ -11,8 +11,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import utilities.Configuration;
-import utilities.Utilities;
+import tools.Configuration;
+import tools.Utilities;
 
 /**
  *

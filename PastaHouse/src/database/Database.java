@@ -28,8 +28,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import logging.MyLogger;
-import utilities.Configuration;
-import utilities.StringTools;
+import tools.Configuration;
+import tools.StringTools;
 
 /**
  *

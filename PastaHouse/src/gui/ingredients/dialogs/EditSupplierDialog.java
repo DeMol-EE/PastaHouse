@@ -20,7 +20,7 @@ import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import utilities.Utilities;
+import tools.Utilities;
 
 /**
  *
@@ -296,7 +296,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try{
 	    if (txtFirma.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    

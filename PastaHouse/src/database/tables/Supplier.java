@@ -7,8 +7,8 @@ package database.tables;
 import database.Database;
 import database.extra.Record;
 import database.models.SupplierModel;
-import utilities.Configuration;
-import utilities.StringTools;
+import tools.Configuration;
+import tools.StringTools;
 
 /**
  *

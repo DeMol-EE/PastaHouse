@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import utilities.StringTools;
+import tools.StringTools;
 
 /**
  *

@@ -38,7 +38,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.DateFormatter;
-import utilities.Utilities;
+import tools.Utilities;
 
 /**
  *
@@ -373,7 +373,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	try {
 	    if (nameOutlet.getText().isEmpty()
 		    || netWeightOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    

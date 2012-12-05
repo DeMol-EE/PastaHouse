@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DateFormatter;
-import utilities.Utilities;
+import tools.Utilities;
 
 /**
  *
@@ -587,7 +587,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 		    || pricePerUnitOutlet.getText().isEmpty()
 		    || taxesOutlet.getText().isEmpty()
 		    || lossOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    

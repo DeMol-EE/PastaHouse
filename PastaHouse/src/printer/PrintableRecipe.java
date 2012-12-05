@@ -15,7 +15,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.util.Stack;
-import utilities.StringTools;
+import tools.StringTools;
 
 /**
  *
@@ -77,7 +77,7 @@ public class PrintableRecipe implements Printable{
 //	double grossToMake = grossToNet * toMake;
 //	double grossToMakeToNet = grossToMake/recipe.getNetWeight();
 	
-	double toMakeToNet = toMake/recipe.getNetWeight();
+	double toMakeToNet = getToMakeToNet();
 	
 	// The recipe should fit on one page
 	if (pageIndex > 0) {
@@ -167,9 +167,9 @@ public class PrintableRecipe implements Printable{
 //	    graphics.drawString(StringTools.capitalize(StringTools.padClip(component.getIngredient().getName(), '.', ingrNameLength-1)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), x+tabs[1], y);
-	    graphics.drawString(two.format(component.getUnits()*toMakeToNet), x+tabs[2], y);
+	    graphics.drawString(two.format(component.getUnits()), x+tabs[2], y);
 //	    double quantity = component.getGrossQuantity()*toMakeToNet;
-	    double quantity = component.getQuantity()*toMakeToNet;
+	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
 	    int chars = s.substring(0, s.indexOf(".")).length();
 	    

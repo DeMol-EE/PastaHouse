@@ -15,8 +15,8 @@ import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import printer.PrintableRecipe;
 import printer.Printer;
-import utilities.StringTools;
-import utilities.Utilities;
+import tools.StringTools;
+import tools.Utilities;
 
 /**
  *
@@ -46,7 +46,28 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	buttonGroup1.add(pieces);
 	buttonGroup1.add(weight);
 	pieces.setSelected(true);
+	
+	componentsOutlet.setRowHeight(componentsOutlet.getRowHeight()+Utilities.fontSize()-10);
+	componentsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer());
+	componentsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+	componentsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
     }
+    
+    public static RecipePrintDialog getInstance(){
+	if (reused == null) {
+	    reused = new RecipePrintDialog(null, true);
+	} 
+	return reused;
+    }
+    
+    public void showDialog(PrintableRecipe model){
+	setModel(model);
+	setVisible(true);
+    }
+    
+    /*
+     * Private methods follow
+     */
     
     private void setModel(PrintableRecipe model){
 	this.model = model;
@@ -62,26 +83,10 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	quantityOutlet.selectAll();
     }
     
-    public static RecipePrintDialog getInstance(){
-	if (reused == null) {
-	    reused = new RecipePrintDialog(null, true);
-	} 
-	return reused;
-    }
-    
-    public void showDialog(PrintableRecipe model){
-	setModel(model);
-	setVisible(true);
-    }
-    
     private void loadModel(){
 	quantityOutlet.setText(""+model.getToMake());
 	nameOutlet.setText(StringTools.capitalizeEach(model.getRecipe().getName()));
 	componentsOutlet.setModel(tableModel);
-	componentsOutlet.setRowHeight(componentsOutlet.getRowHeight()+Utilities.fontSize()-10);
-	componentsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer());
-	componentsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
-	componentsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	netPerUnitOutlet.setText(""+new DecimalFormat("0.00").format(model.getRecipe().getNetWeight())+" kg");
 	grossTotalOutlet.setText(""+new DecimalFormat("0.000").format(model.getRecipe().getGrossWeight())+ " kg");
 	priceTotalOutlet.setText(""+new DecimalFormat("0.000").format(model.getRecipe().getPricePerWeight() * model.getRecipe().getGrossWeight())+ " euro");
@@ -102,7 +107,6 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         back = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        nameOutlet = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         weight = new javax.swing.JRadioButton();
@@ -112,6 +116,9 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         netPerUnitOutlet = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        nameOutlet = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         componentsOutlet = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
@@ -121,6 +128,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         priceTotalOutlet = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(462, 370));
 
         jPanel3.setFocusable(false);
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
@@ -148,10 +156,6 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setLayout(new java.awt.BorderLayout());
-
-        nameOutlet.setText("<nameOutlet>");
-        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 1, 1));
-        jPanel4.add(nameOutlet, java.awt.BorderLayout.NORTH);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
@@ -192,6 +196,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 
         jPanel4.add(jPanel5, java.awt.BorderLayout.SOUTH);
 
+        jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         jPanel6.setLayout(new java.awt.GridLayout(1, 2));
 
         jLabel1.setText("Netto gewicht voor 1 eenheid");
@@ -202,6 +207,15 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         jPanel6.add(netPerUnitOutlet);
 
         jPanel4.add(jPanel6, java.awt.BorderLayout.CENTER);
+
+        jPanel8.setLayout(new java.awt.BorderLayout());
+
+        nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 1));
+        jPanel8.add(nameOutlet, java.awt.BorderLayout.CENTER);
+        jPanel8.add(jSeparator1, java.awt.BorderLayout.SOUTH);
+
+        jPanel4.add(jPanel8, java.awt.BorderLayout.NORTH);
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.NORTH);
 
@@ -354,7 +368,9 @@ public class RecipePrintDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel nameOutlet;
     private javax.swing.JLabel netPerUnitOutlet;
     private javax.swing.JRadioButton pieces;

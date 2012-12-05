@@ -36,7 +36,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
-import utilities.Utilities;
+import tools.Utilities;
 
 /**
  *
@@ -126,7 +126,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     
     private void updatePricePerWeightOutlet(){
 	try{
-	    double d = Double.parseDouble(netWeightOutlet.getText());
+	    Double.parseDouble(netWeightOutlet.getText());
 	    pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
 	    pricePerWeightOutlet.setForeground(Color.black);
 	} catch (Exception e){
@@ -355,7 +355,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
         try {
 	    if (nameOutlet.getText().isEmpty()
 		    || netWeightOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
             model.setName(nameOutlet.getText());

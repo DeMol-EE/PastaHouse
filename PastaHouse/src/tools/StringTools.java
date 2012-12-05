@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package utilities;
+package tools;
 
 /**
  *
@@ -42,7 +42,8 @@ public class StringTools {
 	    return "";
 	}
 	if (s.length() > 1) {
-	    return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+//	    return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+	    return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 	return s;
     }

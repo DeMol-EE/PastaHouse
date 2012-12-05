@@ -227,7 +227,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         try {
 	    if (txtFirma.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    
@@ -252,7 +252,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 		System.err.println("Database driver returned with code: "+result.getCode());
             }
         } catch (Exception ex) {
-	    JOptionPane.showMessageDialog(null, utilities.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_addActionPerformed
 

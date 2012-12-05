@@ -8,8 +8,8 @@ import database.Database;
 import database.extra.Ingredient;
 import database.models.BasicIngredientModel;
 import java.sql.SQLException;
-import utilities.Configuration;
-import utilities.StringTools;
+import tools.Configuration;
+import tools.StringTools;
 
 /**
  *

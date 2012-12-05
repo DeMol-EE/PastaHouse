@@ -380,7 +380,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
 		    || pricePerUnitOutlet.getText().isEmpty()
 		    || taxesOutlet.getText().isEmpty()
 		    || lossOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, utilities.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    
@@ -419,7 +419,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog {
 	} catch (Exception e){
 	    Object o = supplierBox.getSelectedItem();
 	    System.err.println("Error: \n"+e.getMessage());
-	    JOptionPane.showMessageDialog(null, utilities.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 	}
     }//GEN-LAST:event_addActionPerformed
     
