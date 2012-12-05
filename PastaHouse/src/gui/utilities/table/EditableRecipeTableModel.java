@@ -16,11 +16,11 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Robin jr
  */
-public class EditableTableModel extends AbstractTableModel implements Reorderable {
+public class EditableRecipeTableModel extends AbstractTableModel implements Reorderable {
 
     private Map<Integer, Component> data;
     
-    public EditableTableModel(Map<Integer, Component> data){
+    public EditableRecipeTableModel(Map<Integer, Component> data){
 	this.data = data;
     }
     
@@ -31,7 +31,7 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
 
     @Override
     public int getColumnCount() {
-	return 2;
+	return 3;
     }
 
     @Override
@@ -41,8 +41,8 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
 		return ((Component)data.values().toArray()[rowIndex]).getIngredient();
 	    case 1:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
-//	    case 2:
-//		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getName();
+	    case 2:
+		return ((Component)data.values().toArray()[rowIndex]).getPieces();
 	    default:
 		return "<ERROR>";
 	}
@@ -55,8 +55,8 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
 		return "Ingredient";
 	    case 1:
 		return "Hoeveelheid";
-//	    case 2:
-//		return "Verwijderen";
+	    case 2:
+		return "Stuks";
 	    default:
 		return "<ERROR>";
 	}
@@ -71,8 +71,8 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
 		return Ingredient.class;
 	    case 1:
 		return Double.class;
-//	    case 2:
-//		return JButton.class;
+	    case 2:
+		return Component.class;
 	    default:
 		return Object.class;
 	}
@@ -80,7 +80,7 @@ public class EditableTableModel extends AbstractTableModel implements Reorderabl
     
     @Override
     public boolean isCellEditable(int row, int col) {
-	return true;
+	return col!=2;
     }
     
     @Override

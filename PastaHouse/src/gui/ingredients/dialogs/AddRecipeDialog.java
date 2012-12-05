@@ -16,7 +16,7 @@ import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
-import gui.utilities.table.EditableTableModel;
+import gui.utilities.table.EditableRecipeTableModel;
 import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -64,7 +64,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	this.components = new TreeMap<Integer, Component>();
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	this.ingredientsOutlet.setModel(new EditableTableModel(components));
+	this.ingredientsOutlet.setModel(new EditableRecipeTableModel(components));
 	this.ingredientsOutlet.getModel().addTableModelListener(new TableModelListener() {
 
 	    @Override
@@ -83,6 +83,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 	this.ingredientsOutlet.setDefaultEditor(Double.class, CellEditorFactory.createDoubleEditor());
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
 	
 	this.ingredientsOutlet.setDragEnabled(true);
 	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);
@@ -391,7 +392,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     }
     
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
-        ((EditableTableModel)ingredientsOutlet.getModel()).addRow();
+        ((EditableRecipeTableModel)ingredientsOutlet.getModel()).addRow();
         int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
 	ingredientsOutlet.scrollRectToVisible(ingredientsOutlet.getCellRect(ingredientsOutlet.getRowCount()-1, 0, true));
 	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
@@ -402,7 +403,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
         int selected = ingredientsOutlet.getSelectedRow();
         if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
-            ((EditableTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
+            ((EditableRecipeTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
             int row = Math.max(0, Math.min(selected, ingredientsOutlet.getModel().getRowCount()-1));
             if (ingredientsOutlet.getModel().getRowCount() > 0) {
                 ingredientsOutlet.getSelectionModel().setSelectionInterval(row, row);

@@ -67,4 +67,8 @@ public class Component {
     public String isIngredientType(){
 	return ingredient.isBasicIngredient()? "Basisingrediënt" : "Recept";
     }
+    
+    public double getPieces(){
+	return ingredient == null? 0.0 : quantity/ingredient.getWeightPerUnit();
+    }
 }
