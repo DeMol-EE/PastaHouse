@@ -7,10 +7,12 @@ package gui.invoices.controllers;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
 import gui.utilities.table.InvoiceTableModel;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
-import javax.swing.RowFilter.Entry;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import tools.Utilities;
 
@@ -20,8 +22,9 @@ import tools.Utilities;
  */
 public class InvoiceViewController extends javax.swing.JPanel implements MasterDetailViewController<Invoice> {
 
+    private Map<String, RowFilter<Object, Object>> filters;
+    
     private TableRowSorter<InvoiceTableModel> sorter;
-    private RowFilter<InvoiceTableModel, Object> filter;
     
     /**
      * Creates new form InvoiceViewController
@@ -33,8 +36,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	
 	tableOutlet.setModel(model);
 	
+	filters = new HashMap<String, RowFilter<Object, Object>>();
 	sorter = new TableRowSorter<InvoiceTableModel>(model);
-	filter = null;
 	
 	tableOutlet.setRowSorter(sorter);
 	tableOutlet.setRowHeight(tableOutlet.getRowHeight()+Utilities.fontSize()-10);
@@ -53,8 +56,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         tableOutlet = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        datefilter = new javax.swing.JTextField();
-        clientfilter = new javax.swing.JTextField();
+        dateFilterOutlet = new javax.swing.JTextField();
+        clientFilterOutlet = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -79,19 +82,19 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         jPanel2.setLayout(new java.awt.GridLayout(2, 2));
 
-        datefilter.addKeyListener(new java.awt.event.KeyAdapter() {
+        dateFilterOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                datefilterKeyReleased(evt);
+                dateFilterOutletKeyReleased(evt);
             }
         });
-        jPanel2.add(datefilter);
+        jPanel2.add(dateFilterOutlet);
 
-        clientfilter.addKeyListener(new java.awt.event.KeyAdapter() {
+        clientFilterOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                clientfilterKeyReleased(evt);
+                clientFilterOutletKeyReleased(evt);
             }
         });
-        jPanel2.add(clientfilter);
+        jPanel2.add(clientFilterOutlet);
 
         jLabel1.setText("Datum");
         jPanel2.add(jLabel1);
@@ -104,27 +107,42 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void datefilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_datefilterKeyReleased
-        if (!datefilter.getText().isEmpty()) {
-	    filter = RowFilter.regexFilter(datefilter.getText(), 0);
-	} else {
-	    filter = null;
+    private void updateFilter(){
+	List<RowFilter<Object, Object>> filters_ = new ArrayList<RowFilter<Object, Object>>();
+	
+	for (RowFilter<Object, Object> rowFilter : filters.values()) {
+	    if (rowFilter!=null) {
+		filters_.add(rowFilter);
+	    }
 	}
-	sorter.setRowFilter(filter);
-    }//GEN-LAST:event_datefilterKeyReleased
+	
+	sorter.setRowFilter(RowFilter.andFilter(filters_));
+    }
+    
+    private void dateFilterOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateFilterOutletKeyReleased
+        if (!dateFilterOutlet.getText().isEmpty()) {
+	    filters.put("date", RowFilter.regexFilter(dateFilterOutlet.getText(), 0));
+	} else {
+	    filters.put("date", null);
+	}
+	
+	updateFilter();
+	
+    }//GEN-LAST:event_dateFilterOutletKeyReleased
 
-    private void clientfilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clientfilterKeyReleased
-        if (!clientfilter.getText().isEmpty()) {
-	    filter = RowFilter.regexFilter(clientfilter.getText(), 1);
+    private void clientFilterOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clientFilterOutletKeyReleased
+        if (!clientFilterOutlet.getText().isEmpty()) {
+	    filters.put("client", RowFilter.regexFilter(clientFilterOutlet.getText(), 1));
 	} else {
-	    filter = null;
+	    filters.put("client", RowFilter.regexFilter(clientFilterOutlet.getText(), 1));
 	}
-	sorter.setRowFilter(filter);
-    }//GEN-LAST:event_clientfilterKeyReleased
+	
+	updateFilter();
+    }//GEN-LAST:event_clientFilterOutletKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField clientfilter;
-    private javax.swing.JTextField datefilter;
+    private javax.swing.JTextField clientFilterOutlet;
+    private javax.swing.JTextField dateFilterOutlet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
