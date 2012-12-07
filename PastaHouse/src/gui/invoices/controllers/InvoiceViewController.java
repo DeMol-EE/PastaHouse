@@ -30,18 +30,29 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
-        );
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableOutlet = new javax.swing.JTable();
+
+        setLayout(new java.awt.BorderLayout());
+
+        tableOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tableOutlet);
+
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableOutlet;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -71,7 +82,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void electFirstResponder() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	tableOutlet.requestFocus();
     }
 
     @Override

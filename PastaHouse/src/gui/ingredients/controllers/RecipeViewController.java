@@ -15,7 +15,7 @@ import gui.ingredients.dialogs.RecipePrintDialog;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
-import gui.utilities.table.StaticTableModel;
+import gui.utilities.table.StaticRecipeTableModel;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JPanel;
@@ -78,7 +78,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createIngredientCellRenderer());
 	ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	
-	ingredientsOutlet.setModel(new StaticTableModel(r.getComponents()));
+	ingredientsOutlet.setModel(new StaticRecipeTableModel(r.getComponents()));
 	
 //	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getComponents()));
     }

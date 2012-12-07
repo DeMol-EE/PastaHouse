@@ -13,11 +13,11 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Warkst
  */
-public class StaticTableModel extends AbstractTableModel{
+public class StaticRecipeTableModel extends AbstractTableModel{
 
     private final Map<Integer, Component> data;
     
-    public StaticTableModel(Map<Integer, Component> data){
+    public StaticRecipeTableModel(Map<Integer, Component> data){
 	this.data = data;
     }
     
