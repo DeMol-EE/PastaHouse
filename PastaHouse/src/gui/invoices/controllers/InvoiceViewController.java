@@ -6,7 +6,13 @@ package gui.invoices.controllers;
 
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
+import gui.utilities.table.InvoiceTableModel;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
+import javax.swing.RowFilter.Entry;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import tools.Utilities;
 
 /**
  *
@@ -14,11 +20,24 @@ import javax.swing.JPanel;
  */
 public class InvoiceViewController extends javax.swing.JPanel implements MasterDetailViewController<Invoice> {
 
+    private TableRowSorter<InvoiceTableModel> sorter;
+    private RowFilter<InvoiceTableModel, Object> filter;
+    
     /**
      * Creates new form InvoiceViewController
      */
     public InvoiceViewController() {
 	initComponents();
+	
+	InvoiceTableModel model = new InvoiceTableModel();
+	
+	tableOutlet.setModel(model);
+	
+	sorter = new TableRowSorter<InvoiceTableModel>(model);
+	filter = null;
+	
+	tableOutlet.setRowSorter(sorter);
+	tableOutlet.setRowHeight(tableOutlet.getRowHeight()+Utilities.fontSize()-10);
     }
 
     /**
@@ -32,6 +51,12 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tableOutlet = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        datefilter = new javax.swing.JTextField();
+        clientfilter = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -49,8 +74,61 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jScrollPane1.setViewportView(tableOutlet);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setLayout(new java.awt.GridLayout(2, 2));
+
+        datefilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                datefilterKeyReleased(evt);
+            }
+        });
+        jPanel2.add(datefilter);
+
+        clientfilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                clientfilterKeyReleased(evt);
+            }
+        });
+        jPanel2.add(clientfilter);
+
+        jLabel1.setText("Datum");
+        jPanel2.add(jLabel1);
+
+        jLabel2.setText("Klant");
+        jPanel2.add(jLabel2);
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void datefilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_datefilterKeyReleased
+        if (!datefilter.getText().isEmpty()) {
+	    filter = RowFilter.regexFilter(datefilter.getText(), 0);
+	} else {
+	    filter = null;
+	}
+	sorter.setRowFilter(filter);
+    }//GEN-LAST:event_datefilterKeyReleased
+
+    private void clientfilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clientfilterKeyReleased
+        if (!clientfilter.getText().isEmpty()) {
+	    filter = RowFilter.regexFilter(clientfilter.getText(), 1);
+	} else {
+	    filter = null;
+	}
+	sorter.setRowFilter(filter);
+    }//GEN-LAST:event_clientfilterKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField clientfilter;
+    private javax.swing.JTextField datefilter;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableOutlet;
     // End of variables declaration//GEN-END:variables
