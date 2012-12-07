@@ -7,10 +7,12 @@ package gui.invoices.controllers;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
 import gui.utilities.table.InvoiceTableModel;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
@@ -52,31 +54,21 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableOutlet = new javax.swing.JTable();
+        noResultOutlet = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         dateFilterOutlet = new javax.swing.JTextField();
         clientFilterOutlet = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableOutlet = new javax.swing.JTable();
+
+        noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        noResultOutlet.setText("Geen resultaten");
 
         setLayout(new java.awt.BorderLayout());
-
-        tableOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tableOutlet);
-
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -105,6 +97,25 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         add(jPanel1, java.awt.BorderLayout.SOUTH);
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        tableOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tableOutlet);
+
+        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        add(jPanel3, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateFilter(){
@@ -117,6 +128,14 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	}
 	
 	sorter.setRowFilter(RowFilter.andFilter(filters_));
+	
+//	System.out.println("showing "+tableOutlet.getRowCount()+ " rows");	
+	if (tableOutlet.getRowCount() == 0) {
+	    System.out.println("wub wub");
+//	    jPanel3.add(noResultOutlet, BorderLayout.SOUTH);
+//	    jPanel3.validate();
+//	    jPanel3.repaint();
+	}
     }
     
     private void dateFilterOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateFilterOutletKeyReleased
@@ -147,7 +166,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel noResultOutlet;
     private javax.swing.JTable tableOutlet;
     // End of variables declaration//GEN-END:variables
 
