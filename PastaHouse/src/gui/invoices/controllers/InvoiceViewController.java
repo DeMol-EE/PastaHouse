@@ -7,12 +7,10 @@ package gui.invoices.controllers;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
 import gui.utilities.table.InvoiceTableModel;
-import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
@@ -36,13 +34,17 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	
 	InvoiceTableModel model = new InvoiceTableModel();
 	
-	tableOutlet.setModel(model);
+	invoiceTableOutlet.setModel(model);
 	
 	filters = new HashMap<String, RowFilter<Object, Object>>();
 	sorter = new TableRowSorter<InvoiceTableModel>(model);
 	
-	tableOutlet.setRowSorter(sorter);
-	tableOutlet.setRowHeight(tableOutlet.getRowHeight()+Utilities.fontSize()-10);
+	invoiceTableOutlet.setRowSorter(sorter);
+	invoiceTableOutlet.setRowHeight(invoiceTableOutlet.getRowHeight()+Utilities.fontSize()-10);
+	
+	/*
+	 * TODO: add column filters dynamically based on the model Invoice
+	 */
     }
 
     /**
@@ -55,52 +57,84 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private void initComponents() {
 
         noResultOutlet = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        filterPanel = new javax.swing.JPanel();
         dateFilterOutlet = new javax.swing.JTextField();
         clientFilterOutlet = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableOutlet = new javax.swing.JTable();
+        invoiceTableOutlet = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        articleTableOutlet = new javax.swing.JTable();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
 
         setLayout(new java.awt.BorderLayout());
 
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout(2, 2));
+        filterPanel.setLayout(new java.awt.GridLayout(1, 2));
 
         dateFilterOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 dateFilterOutletKeyReleased(evt);
             }
         });
-        jPanel2.add(dateFilterOutlet);
+        filterPanel.add(dateFilterOutlet);
 
         clientFilterOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 clientFilterOutletKeyReleased(evt);
             }
         });
-        jPanel2.add(clientFilterOutlet);
+        filterPanel.add(clientFilterOutlet);
 
-        jLabel1.setText("Datum");
-        jPanel2.add(jLabel1);
+        jPanel1.add(filterPanel, java.awt.BorderLayout.CENTER);
 
-        jLabel2.setText("Klant");
-        jPanel2.add(jLabel2);
+        jPanel4.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
-
-        add(jPanel1, java.awt.BorderLayout.SOUTH);
-
+        jPanel3.setPreferredSize(new java.awt.Dimension(400, 150));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        tableOutlet.setModel(new javax.swing.table.DefaultTableModel(
+        invoiceTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane1.setViewportView(invoiceTableOutlet);
+
+        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel4.add(jPanel3, java.awt.BorderLayout.CENTER);
+
+        add(jPanel4, java.awt.BorderLayout.NORTH);
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        articleTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -111,11 +145,43 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tableOutlet);
+        jScrollPane2.setViewportView(articleTableOutlet);
 
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel6.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        add(jPanel3, java.awt.BorderLayout.CENTER);
+        jPanel5.add(jPanel6, java.awt.BorderLayout.CENTER);
+
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setText("Details");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 10, 5, 0));
+        jPanel7.add(jLabel1, java.awt.BorderLayout.NORTH);
+
+        jPanel2.setLayout(new java.awt.GridLayout(3, 2));
+
+        jLabel2.setText("jLabel2");
+        jPanel2.add(jLabel2);
+
+        jLabel3.setText("jLabel3");
+        jPanel2.add(jLabel3);
+
+        jLabel4.setText("jLabel4");
+        jPanel2.add(jLabel4);
+
+        jLabel5.setText("jLabel5");
+        jPanel2.add(jLabel5);
+
+        jLabel6.setText("jLabel6");
+        jPanel2.add(jLabel6);
+
+        jLabel7.setText("jLabel7");
+        jPanel2.add(jLabel7);
+
+        jPanel7.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        jPanel5.add(jPanel7, java.awt.BorderLayout.NORTH);
+
+        add(jPanel5, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateFilter(){
@@ -130,7 +196,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	sorter.setRowFilter(RowFilter.andFilter(filters_));
 	
 //	System.out.println("showing "+tableOutlet.getRowCount()+ " rows");	
-	if (tableOutlet.getRowCount() == 0) {
+	if (invoiceTableOutlet.getRowCount() == 0) {
 	    System.out.println("wub wub");
 //	    jPanel3.add(noResultOutlet, BorderLayout.SOUTH);
 //	    jPanel3.validate();
@@ -153,23 +219,35 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         if (!clientFilterOutlet.getText().isEmpty()) {
 	    filters.put("client", RowFilter.regexFilter(clientFilterOutlet.getText(), 1));
 	} else {
-	    filters.put("client", RowFilter.regexFilter(clientFilterOutlet.getText(), 1));
+	    filters.put("client", null);
 	}
 	
 	updateFilter();
     }//GEN-LAST:event_clientFilterOutletKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable articleTableOutlet;
     private javax.swing.JTextField clientFilterOutlet;
     private javax.swing.JTextField dateFilterOutlet;
+    private javax.swing.JPanel filterPanel;
+    private javax.swing.JTable invoiceTableOutlet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel noResultOutlet;
-    private javax.swing.JTable tableOutlet;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -199,7 +277,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void electFirstResponder() {
-	tableOutlet.requestFocus();
+	invoiceTableOutlet.requestFocus();
     }
 
     @Override
