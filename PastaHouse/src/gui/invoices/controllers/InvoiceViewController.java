@@ -58,19 +58,18 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         noResultOutlet = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        invoiceTableOutlet = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         filterPanel = new javax.swing.JPanel();
         dateFilterOutlet = new javax.swing.JTextField();
         clientFilterOutlet = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        invoiceTableOutlet = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        articleTableOutlet = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -78,6 +77,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        articleTableOutlet = new javax.swing.JTable();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
@@ -85,6 +87,26 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         setLayout(new java.awt.BorderLayout());
 
         jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel3.setPreferredSize(new java.awt.Dimension(400, 150));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        invoiceTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane1.setViewportView(invoiceTableOutlet);
+
+        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel4.add(jPanel3, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -108,29 +130,44 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         jPanel4.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(400, 150));
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        invoiceTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2"
-            }
-        ));
-        jScrollPane1.setViewportView(invoiceTableOutlet);
-
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jPanel4.add(jPanel3, java.awt.BorderLayout.CENTER);
-
         add(jPanel4, java.awt.BorderLayout.NORTH);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        jPanel8.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setText("Details");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 10, 5, 0));
+        jPanel8.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jPanel8.add(jSeparator1, java.awt.BorderLayout.NORTH);
+
+        jPanel7.add(jPanel8, java.awt.BorderLayout.NORTH);
+
+        jPanel2.setLayout(new java.awt.GridLayout(3, 2));
+
+        jLabel2.setText("Klant");
+        jPanel2.add(jLabel2);
+
+        jLabel3.setText("<hyperlink to client>");
+        jPanel2.add(jLabel3);
+
+        jLabel4.setText("Datum");
+        jPanel2.add(jLabel4);
+
+        jLabel5.setText("<dateOutlet>");
+        jPanel2.add(jLabel5);
+
+        jLabel6.setText("Prijs");
+        jPanel2.add(jLabel6);
+
+        jLabel7.setText("<priceOutlet>");
+        jPanel2.add(jLabel7);
+
+        jPanel7.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        jPanel5.add(jPanel7, java.awt.BorderLayout.NORTH);
 
         jPanel6.setLayout(new java.awt.BorderLayout());
 
@@ -150,36 +187,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel6.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         jPanel5.add(jPanel6, java.awt.BorderLayout.CENTER);
-
-        jPanel7.setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setText("Details");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 10, 5, 0));
-        jPanel7.add(jLabel1, java.awt.BorderLayout.NORTH);
-
-        jPanel2.setLayout(new java.awt.GridLayout(3, 2));
-
-        jLabel2.setText("jLabel2");
-        jPanel2.add(jLabel2);
-
-        jLabel3.setText("jLabel3");
-        jPanel2.add(jLabel3);
-
-        jLabel4.setText("jLabel4");
-        jPanel2.add(jLabel4);
-
-        jLabel5.setText("jLabel5");
-        jPanel2.add(jLabel5);
-
-        jLabel6.setText("jLabel6");
-        jPanel2.add(jLabel6);
-
-        jLabel7.setText("jLabel7");
-        jPanel2.add(jLabel7);
-
-        jPanel7.add(jPanel2, java.awt.BorderLayout.CENTER);
-
-        jPanel5.add(jPanel7, java.awt.BorderLayout.NORTH);
 
         add(jPanel5, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -245,8 +252,10 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel noResultOutlet;
     // End of variables declaration//GEN-END:variables
 

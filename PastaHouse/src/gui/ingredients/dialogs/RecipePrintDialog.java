@@ -62,6 +62,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
     
     public void showDialog(PrintableRecipe model){
 	setModel(model);
+	updateTable();
 	setVisible(true);
     }
     
@@ -77,6 +78,8 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	}
 	
 	this.tableModel = new PrintableTableModel(model.getRecipe().getComponents());
+	
+	this.model.setIsWeight(weight.isSelected());
 	
 	loadModel();
 	
