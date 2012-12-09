@@ -4,6 +4,7 @@
  */
 package gui;
 
+import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 
 /**
@@ -12,4 +13,5 @@ import javax.swing.JPanel;
  */
 public interface TabbedViewController {
     public JPanel view();
+    public void handleKeyEvent(KeyEvent evt);
 }

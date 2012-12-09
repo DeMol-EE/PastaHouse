@@ -5,8 +5,9 @@
 package gui.contacts;
 
 import database.tables.Supplier;
-import gui.TabbedViewController;
 import gui.MasterDetailViewController;
+import gui.TabbedViewController;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import javax.swing.JPanel;
 
@@ -51,4 +52,9 @@ public class ContactsTabbedViewController extends javax.swing.JPanel implements 
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void handleKeyEvent(KeyEvent evt) {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

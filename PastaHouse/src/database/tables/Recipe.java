@@ -188,16 +188,20 @@ public class Recipe extends Ingredient {
 	if (this == r) {
 	    return true;
 	} else {
-	    boolean result = false;
+//	    boolean result = false;
 	    for (Component component : components.values()) {
 		if (!component.getIngredient().isBasicIngredient()) {
-		    result |= ((Recipe)component.getIngredient()).containsRecipe(r);
-		    if (result) {
+//		    result |= ((Recipe)component.getIngredient()).containsRecipe(r);
+//		    if (result) {
+//			return true;
+//		    }
+		    if (((Recipe)component.getIngredient()).containsRecipe(r)) {
 			return true;
 		    }
 		}
 	    }
-	    return result;
+	    return false;
+//	    return result;
 	}
     }
 }

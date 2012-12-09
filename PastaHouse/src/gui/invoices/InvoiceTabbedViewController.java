@@ -5,11 +5,12 @@
 package gui.invoices;
 
 import database.tables.Supplier;
-import gui.TabbedViewController;
 import gui.MasterDetailViewController;
+import gui.TabbedViewController;
 import gui.invoices.controllers.ArticleViewController;
 import gui.invoices.controllers.ClientViewController;
 import gui.invoices.controllers.InvoiceViewController;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -101,4 +102,9 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
     private javax.swing.JPanel invoiceTab;
     private javax.swing.JTabbedPane tabController;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void handleKeyEvent(KeyEvent evt) {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

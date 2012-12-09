@@ -5,11 +5,12 @@
 package gui.ingredients;
 
 import database.tables.Supplier;
+import gui.MasterDetailViewController;
 import gui.TabbedViewController;
 import gui.ingredients.controllers.BasicIngredientViewController;
-import gui.MasterDetailViewController;
 import gui.ingredients.controllers.RecipeViewController;
 import gui.ingredients.controllers.SupplierViewController;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -117,4 +118,9 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
     private javax.swing.JPanel supplierTab;
     private javax.swing.JTabbedPane tabController;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void handleKeyEvent(KeyEvent evt) {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
