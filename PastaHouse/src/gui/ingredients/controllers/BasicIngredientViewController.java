@@ -25,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -151,8 +152,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
 	updateDetail(select);
-	
-	
     }
     
     @Override
@@ -172,6 +171,9 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editMenu = new javax.swing.JMenu();
+        addMenuItem = new javax.swing.JMenuItem();
+        editMenuItem = new javax.swing.JMenuItem();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         add = new javax.swing.JButton();
@@ -209,6 +211,26 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
+
+        editMenu.setText("Edit");
+
+        addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addMenuItem.setText("Add");
+        addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(addMenuItem);
+
+        editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuItem.setText("Edit");
+        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(editMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -464,12 +486,23 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyTyped
 
+    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
+        addActionPerformed(null);
+    }//GEN-LAST:event_addMenuItemActionPerformed
+
+    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
+        editActionPerformed(null);
+    }//GEN-LAST:event_editMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JLabel brandOutlet;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuItem;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
@@ -505,16 +538,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void addProxy() {
-	addActionPerformed(null);
-    }
-
-    @Override
-    public void editProxy() {
-	editActionPerformed(null);
-    }
-
-    @Override
     public void electFirstResponder() {
 	listOutlet.requestFocus();
     }
@@ -530,5 +553,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
             evt.consume();
             listOutlet.requestFocus();
         }
+    }
+
+    @Override
+    public JMenu menu() {
+	return editMenu;
     }
 }

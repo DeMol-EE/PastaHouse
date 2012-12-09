@@ -5,6 +5,7 @@
 package gui;
 
 import gui.ingredients.controllers.ViewController;
+import javax.swing.JMenu;
 
 /**
  *
@@ -31,15 +32,9 @@ public interface MasterDetailViewController<Type> extends ViewController {
      */
     public void editAndSelect(Type newObj, Type oldObj);
     /**
-     * Used by accelerators and external sources to trigger the same action as the add-button.
-     */
-    public void addProxy();
-    /**
-     * Used by accelerators and external sources to trigger the same action as the edit-button.
-     */
-    public void editProxy();
-    /**
      * User by external sources to trigger correct focus traversal initialization. This is called every time the controller is displayed.
      */
     public void electFirstResponder();
+    
+    public JMenu menu();
 }

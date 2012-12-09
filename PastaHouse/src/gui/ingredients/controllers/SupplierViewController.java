@@ -4,15 +4,16 @@
  */
 package gui.ingredients.controllers;
 
-import gui.MasterDetailViewController;
 import database.Database;
 import database.tables.Supplier;
+import gui.MasterDetailViewController;
 import gui.ingredients.dialogs.AddSupplierDialog;
 import gui.ingredients.dialogs.EditSupplierDialog;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -81,6 +82,9 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        editMenu = new javax.swing.JMenu();
+        addMenuItem = new javax.swing.JMenuItem();
+        editMenuItem = new javax.swing.JMenuItem();
         jSplitPane1 = new javax.swing.JSplitPane();
         detail = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
@@ -126,6 +130,26 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
             }
         ));
         jScrollPane3.setViewportView(jTable1);
+
+        editMenu.setText("Edit");
+
+        addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addMenuItem.setText("Add");
+        addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(addMenuItem);
+
+        editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuItem.setText("Edit");
+        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(editMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -361,13 +385,25 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         new EditSupplierDialog(null, true, this, (Supplier) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
+
+    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
+        addActionPerformed(null);
+    }//GEN-LAST:event_addMenuItemActionPerformed
+
+    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
+        editActionPerformed(null);
+    }//GEN-LAST:event_editMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JLabel addressOutlet;
     private javax.swing.JLabel cellphoneOutlet;
     private javax.swing.JLabel contactOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuItem;
     private javax.swing.JLabel emailOutlet;
     private javax.swing.JLabel faxOutlet;
     private javax.swing.JLabel firmOutlet;
@@ -415,17 +451,12 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }
     
     @Override
-    public void addProxy() {
-        addActionPerformed(null);
-    }
-    
-    @Override
-    public void editProxy() {
-        editActionPerformed(null);
-    }
-    
-    @Override
     public void electFirstResponder() {
 	listOutlet.requestFocus();
+    }
+
+    @Override
+    public JMenu menu() {
+	return editMenu;
     }
 }

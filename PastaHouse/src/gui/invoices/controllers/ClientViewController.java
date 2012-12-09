@@ -7,6 +7,7 @@ package gui.invoices.controllers;
 import database.tables.Client;
 import gui.MasterDetailViewController;
 import java.awt.BorderLayout;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 
 /**
@@ -367,16 +368,6 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }
 
     @Override
-    public void addProxy() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void editProxy() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void electFirstResponder() {
 	listOutlet.requestFocus();
     }
@@ -384,5 +375,10 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     @Override
     public JPanel view() {
 	return this;
+    }
+
+    @Override
+    public JMenu menu() {
+	return null;
     }
 }

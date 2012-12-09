@@ -10,8 +10,10 @@ import gui.TabbedViewController;
 import gui.invoices.controllers.ArticleViewController;
 import gui.invoices.controllers.ClientViewController;
 import gui.invoices.controllers.InvoiceViewController;
-import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -71,10 +73,43 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editMenu = new javax.swing.JMenu();
+        addMenuItem = new javax.swing.JMenuItem();
+        editMenuItem = new javax.swing.JMenuItem();
+        printMenuItem = new javax.swing.JMenuItem();
         tabController = new javax.swing.JTabbedPane();
         invoiceTab = new javax.swing.JPanel();
         articleTab = new javax.swing.JPanel();
         clientTab = new javax.swing.JPanel();
+
+        editMenu.setText("Edit");
+
+        addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addMenuItem.setText("Add");
+        addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(addMenuItem);
+
+        editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuItem.setText("Edit");
+        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(editMenuItem);
+
+        printMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        printMenuItem.setText("Print");
+        printMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(printMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -96,15 +131,34 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
 
         add(tabController, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addMenuItemActionPerformed
+
+    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editMenuItemActionPerformed
+
+    private void printMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_printMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JPanel articleTab;
     private javax.swing.JPanel clientTab;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuItem;
     private javax.swing.JPanel invoiceTab;
+    private javax.swing.JMenuItem printMenuItem;
     private javax.swing.JTabbedPane tabController;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void handleKeyEvent(KeyEvent evt) {
-	throw new UnsupportedOperationException("Not supported yet.");
+    public List<JMenu> menus() {
+	List<JMenu> l = new ArrayList<JMenu>();
+	l.add(editMenu);
+	return l;
     }
 }

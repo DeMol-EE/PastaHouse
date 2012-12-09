@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
@@ -275,16 +276,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }
 
     @Override
-    public void addProxy() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void editProxy() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void electFirstResponder() {
 	invoiceTableOutlet.requestFocus();
     }
@@ -292,5 +283,10 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     @Override
     public JPanel view() {
 	return this;
+    }
+
+    @Override
+    public JMenu menu() {
+	return null;
     }
 }

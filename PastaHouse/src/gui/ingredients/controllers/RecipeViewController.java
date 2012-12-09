@@ -4,11 +4,11 @@
  */
 package gui.ingredients.controllers;
 
-import gui.MasterDetailViewController;
 import database.Database;
 import database.extra.Component;
 import database.extra.Ingredient;
 import database.tables.Recipe;
+import gui.MasterDetailViewController;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
@@ -18,6 +18,7 @@ import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticRecipeTableModel;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -92,6 +93,10 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editMenu = new javax.swing.JMenu();
+        addMenuItem = new javax.swing.JMenuItem();
+        editMenuItem = new javax.swing.JMenuItem();
+        printMenuItem = new javax.swing.JMenuItem();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -118,6 +123,35 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         edit = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         ingredientsOutlet = new javax.swing.JTable();
+
+        editMenu.setText("Edit");
+
+        addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addMenuItem.setText("Add");
+        addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(addMenuItem);
+
+        editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuItem.setText("Edit");
+        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(editMenuItem);
+
+        printMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        printMenuItem.setText("Print");
+        printMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(printMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -319,15 +353,26 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         notesKeyEvent(evt);
     }//GEN-LAST:event_preparationOutletKeyTyped
 
-    public void printProxy(){
-	printActionPerformed(null);
-    }
-    
+    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
+        addActionPerformed(null);
+    }//GEN-LAST:event_addMenuItemActionPerformed
+
+    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
+        editActionPerformed(null);
+    }//GEN-LAST:event_editMenuItemActionPerformed
+
+    private void printMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printMenuItemActionPerformed
+        printActionPerformed(null);
+    }//GEN-LAST:event_printMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuItem;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel grossWeightOutlet;
     private javax.swing.JTable ingredientsOutlet;
@@ -349,6 +394,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JTextArea preparationOutlet;
     private javax.swing.JLabel pricePerWeightOutlet;
     private javax.swing.JButton print;
+    private javax.swing.JMenuItem printMenuItem;
     private javax.swing.JList recipeListOutlet;
     // End of variables declaration//GEN-END:variables
 
@@ -369,16 +415,6 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }
 
     @Override
-    public void addProxy() {
-	addActionPerformed(null);
-    }
-
-    @Override
-    public void editProxy() {
-	editActionPerformed(null);
-    }
-
-    @Override
     public void electFirstResponder() {
 	recipeListOutlet.requestFocus();
     }
@@ -394,5 +430,10 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
             evt.consume();
             recipeListOutlet.requestFocus();
         }
+    }
+
+    @Override
+    public JMenu menu() {
+	return editMenu;
     }
 }

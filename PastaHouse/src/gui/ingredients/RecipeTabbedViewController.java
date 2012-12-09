@@ -10,11 +10,14 @@ import gui.TabbedViewController;
 import gui.ingredients.controllers.BasicIngredientViewController;
 import gui.ingredients.controllers.RecipeViewController;
 import gui.ingredients.controllers.SupplierViewController;
-import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import pastahouse.ApplicationInvoices;
 
 /**
  *
@@ -27,11 +30,15 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
     private final int supplierTabIndex = 2;
     private HashMap<Integer, MasterDetailViewController> tabs;
     
+    private final ApplicationInvoices frame;
+    
     /**
      * Creates new form RecipeTabbedViewController
      */
-    public RecipeTabbedViewController() {
+    public RecipeTabbedViewController(final ApplicationInvoices frame) {
         initComponents();
+	
+	this.frame = frame;
         
         tabs = new HashMap<Integer, MasterDetailViewController>();
         
@@ -48,20 +55,9 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 	    @Override
 	    public void stateChanged(ChangeEvent e) {
 		tabs.get(tabController.getSelectedIndex()).electFirstResponder();
+		frame.updateMenus();
 	    }
 	});
-	
-//	tabController.addChangeListener(new ChangeListener() {
-//
-//	    @Override
-//	    public void stateChanged(ChangeEvent e) {
-//		if (tabController.getSelectedIndex() == recipeTabIndex) {
-//		    print.setEnabled(true);
-//		} else {
-//		    print.setEnabled(false);
-//		}
-//	    }
-//	});
     }
     
     public void electFirstResponder(){
@@ -87,10 +83,43 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tabMenu = new javax.swing.JMenu();
+        recipeMenuItem = new javax.swing.JMenuItem();
+        ingredientMenuItem = new javax.swing.JMenuItem();
+        supplierMenuItem = new javax.swing.JMenuItem();
         tabController = new javax.swing.JTabbedPane();
         recipeTab = new javax.swing.JPanel();
         ingredientTab = new javax.swing.JPanel();
         supplierTab = new javax.swing.JPanel();
+
+        tabMenu.setText("Tabs");
+
+        recipeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
+        recipeMenuItem.setText("Recepten");
+        recipeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recipeMenuItemActionPerformed(evt);
+            }
+        });
+        tabMenu.add(recipeMenuItem);
+
+        ingredientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_MASK));
+        ingredientMenuItem.setText("Ingrediënten");
+        ingredientMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingredientMenuItemActionPerformed(evt);
+            }
+        });
+        tabMenu.add(ingredientMenuItem);
+
+        supplierMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_3, java.awt.event.InputEvent.CTRL_MASK));
+        supplierMenuItem.setText("Leveranciers");
+        supplierMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supplierMenuItemActionPerformed(evt);
+            }
+        });
+        tabMenu.add(supplierMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -112,15 +141,35 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 
         add(tabController, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void supplierMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierMenuItemActionPerformed
+        tabController.setSelectedIndex(supplierTabIndex);
+    }//GEN-LAST:event_supplierMenuItemActionPerformed
+
+    private void recipeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipeMenuItemActionPerformed
+        tabController.setSelectedIndex(recipeTabIndex);
+    }//GEN-LAST:event_recipeMenuItemActionPerformed
+
+    private void ingredientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingredientMenuItemActionPerformed
+        tabController.setSelectedIndex(ingredientTabIndex);
+    }//GEN-LAST:event_ingredientMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ingredientMenuItem;
     private javax.swing.JPanel ingredientTab;
+    private javax.swing.JMenuItem recipeMenuItem;
     private javax.swing.JPanel recipeTab;
+    private javax.swing.JMenuItem supplierMenuItem;
     private javax.swing.JPanel supplierTab;
     private javax.swing.JTabbedPane tabController;
+    private javax.swing.JMenu tabMenu;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void handleKeyEvent(KeyEvent evt) {
-	throw new UnsupportedOperationException("Not supported yet.");
+    public List<JMenu> menus() {
+	List<JMenu> l = new ArrayList<JMenu>();
+	l.add(tabMenu);
+	l.add(tabs.get(tabController.getSelectedIndex()).menu());
+	return l;
     }
 }

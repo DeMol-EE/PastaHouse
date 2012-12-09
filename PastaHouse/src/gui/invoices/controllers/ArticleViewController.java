@@ -6,6 +6,7 @@ package gui.invoices.controllers;
 
 import database.tables.Article;
 import gui.MasterDetailViewController;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 
 /**
@@ -104,6 +105,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel detail;
     private javax.swing.JButton jButton1;
@@ -138,16 +140,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     }
     
     @Override
-    public void addProxy() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void editProxy() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void electFirstResponder() {
 	listOutlet.requestFocus();
     }
@@ -155,5 +147,10 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     @Override
     public JPanel view() {
 	return this;
+    }
+
+    @Override
+    public JMenu menu() {
+	return null;
     }
 }
