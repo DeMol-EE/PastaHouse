@@ -12,14 +12,17 @@ import gui.MasterDetailViewController;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
+import gui.utilities.EmptyPanelManager;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticRecipeTableModel;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -32,7 +35,7 @@ import tools.Utilities;
  * @author Warkst
  */
 public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>{
-
+    
     /**
      * Creates new form RecipeViewController
      */
@@ -54,6 +57,14 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	recipeListOutlet.setSelectedIndex(0);
 	
 	ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
+	
+	/*
+	 * If there are no ingredients, hide the ugly right detail view
+	 */
+	if (Database.driver().getRecipesAlphabetically().isEmpty()) {
+	    detail.remove(container);
+	    detail.add(EmptyPanelManager.panel(), BorderLayout.CENTER);
+	}
     }
     
     @Override
@@ -103,6 +114,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         recipeListOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
         detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         nameOutlet = new javax.swing.JLabel();
         dateOutlet = new javax.swing.JLabel();
@@ -187,6 +199,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         detail.setFocusable(false);
         detail.setLayout(new java.awt.BorderLayout());
 
+        container.setLayout(new java.awt.BorderLayout());
+
         jPanel5.setFocusable(false);
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -201,7 +215,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         dateOutlet.setFocusable(false);
         jPanel5.add(dateOutlet);
 
-        detail.add(jPanel5, java.awt.BorderLayout.NORTH);
+        container.add(jPanel5, java.awt.BorderLayout.NORTH);
 
         jPanel7.setFocusable(false);
         jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
@@ -299,7 +313,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        detail.add(jPanel7, java.awt.BorderLayout.SOUTH);
+        container.add(jPanel7, java.awt.BorderLayout.SOUTH);
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
         jScrollPane4.setFocusable(false);
@@ -321,7 +335,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
         jScrollPane4.setViewportView(ingredientsOutlet);
 
-        detail.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        container.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        detail.add(container, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -368,6 +384,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JMenuItem addMenuItem;
+    private javax.swing.JPanel container;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
@@ -404,6 +421,11 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	dlm.update();
 	recipeListOutlet.setSelectedValue(select, true);
 	updateDetail(select);
+	
+	if (dlm.getSize() == 1) {
+	    detail.remove(EmptyPanelManager.panel());
+	    detail.add(container);
+	}
     }
     
     @Override

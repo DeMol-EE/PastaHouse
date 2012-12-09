@@ -11,6 +11,7 @@ import database.models.BasicIngredientModel;
 import database.models.RecipeModel;
 import database.models.SupplierModel;
 import database.tables.BasicIngredient;
+import database.tables.Client;
 import database.tables.Recipe;
 import database.tables.Supplier;
 import java.sql.Connection;
@@ -24,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import logging.MyLogger;
@@ -43,6 +43,7 @@ public class Database {
     private Map<Integer, Supplier> suppliersById;
     private Map<Integer, BasicIngredient> basicIngredientsById;
     private Map<Integer, Recipe> recipesById;
+    private Map<Integer, Client> clientsById;
     private Map<String, Supplier> suppliersByFirm;
     private Map<String, BasicIngredient> basicIngredientsByName;
     private Map<String, Recipe> recipesByName;
@@ -53,6 +54,7 @@ public class Database {
             suppliersById = new TreeMap<Integer, Supplier>();
             basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
             recipesById = new TreeMap<Integer, Recipe>();
+            clientsById = new TreeMap<Integer, Client>();
 	    suppliersByFirm = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
@@ -370,6 +372,10 @@ public class Database {
             String name = StringTools.capitalizeEach(rs.getString("name"));
             municipales.put(name, code);
         }
+    }
+    
+    public Map<Integer, Client> getClients() {
+	return clientsById;
     }
 
     public Map<Integer, Supplier> getSuppliers() {

@@ -6,6 +6,7 @@ package gui.utilities.list;
 
 import database.extra.Component;
 import database.tables.BasicIngredient;
+import database.tables.Client;
 import database.tables.Recipe;
 import database.tables.Supplier;
 import java.util.Map;
@@ -134,6 +135,31 @@ public class ListModelFactory {
 		    data.put(newObj.getRank(), newObj);
 		}
 		fireContentsChanged(this, 0, getSize());
+	    }
+	};
+    }
+    
+    public static AbstractListModel createClientListModel(final Map<Integer, Client> data){
+	return new EditableListModel<Client>() {
+
+	    @Override
+	    public void add(Client o) {
+//		data.put(Integer.SIZE, o)
+	    }
+
+	    @Override
+	    public void edit(Client newObj, Client oldObj) {
+//		throw new UnsupportedOperationException("Not supported yet.");
+	    }
+
+	    @Override
+	    public int getSize() {
+		return data.size();
+	    }
+
+	    @Override
+	    public Object getElementAt(int index) {
+		return data.values().toArray()[index];
 	    }
 	};
     }

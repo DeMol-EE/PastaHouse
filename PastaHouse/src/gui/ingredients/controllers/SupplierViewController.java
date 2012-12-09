@@ -9,6 +9,7 @@ import database.tables.Supplier;
 import gui.MasterDetailViewController;
 import gui.ingredients.dialogs.AddSupplierDialog;
 import gui.ingredients.dialogs.EditSupplierDialog;
+import gui.utilities.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.event.KeyEvent;
@@ -45,6 +46,15 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         });
         
         listOutlet.setSelectedIndex(0);
+	
+	
+	/*
+	 * If there are no ingredients, hide the ugly right detail view
+	 */
+	if (Database.driver().getSuppliersAlphabetically().isEmpty()) {
+	    detail.remove(container);
+	    detail.add(EmptyPanelManager.panel());
+	}
     }
     
     @Override
@@ -87,6 +97,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         editMenuItem = new javax.swing.JMenuItem();
         jSplitPane1 = new javax.swing.JSplitPane();
         detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         firmOutlet = new javax.swing.JLabel();
@@ -159,6 +170,8 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 
         detail.setFocusable(false);
         detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(10, 2));
@@ -279,7 +292,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         emailOutlet.setOpaque(true);
         fixedFields.add(emailOutlet);
 
-        detail.add(fixedFields, java.awt.BorderLayout.NORTH);
+        container.add(fixedFields, java.awt.BorderLayout.NORTH);
 
         stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
@@ -308,7 +321,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -321,7 +334,9 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         });
         jPanel1.add(edit, java.awt.BorderLayout.EAST);
 
-        detail.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+        container.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+        detail.add(container, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -400,6 +415,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel addressOutlet;
     private javax.swing.JLabel cellphoneOutlet;
     private javax.swing.JLabel contactOutlet;
+    private javax.swing.JPanel container;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
     private javax.swing.JMenu editMenu;
@@ -446,6 +462,10 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     public void addAndSelect(Supplier newObj) {
         EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
+	if (dlm.getSize() == 1) {
+	    detail.remove(EmptyPanelManager.panel());
+	    detail.add(container);
+	}
 	listOutlet.setSelectedValue(newObj, true);
 	updateDetail(newObj);
     }

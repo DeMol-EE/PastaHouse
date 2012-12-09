@@ -10,4 +10,18 @@ package database.tables;
  */
 public class Client {
     
+    private String name;
+    
+    public Client(String str){
+	name = str;
+    }
+    
+    public String getName(){
+	return name;
+    }
+
+    @Override
+    public String toString() {
+	return name;
+    }
 }

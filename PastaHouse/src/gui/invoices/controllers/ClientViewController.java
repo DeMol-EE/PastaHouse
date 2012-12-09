@@ -4,18 +4,25 @@
  */
 package gui.invoices.controllers;
 
+import database.Database;
 import database.tables.Client;
 import gui.MasterDetailViewController;
+import gui.utilities.EmptyPanelManager;
+import gui.utilities.list.EditableListModel;
+import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
+import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Warkst
  */
 public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Client> {
-
+    
     private boolean showingDetails = true;
     
     /**
@@ -23,8 +30,27 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
      */
     public ClientViewController() {
 	initComponents();
-	
+
+	listOutlet.setModel(ListModelFactory.createClientListModel(Database.driver().getClients()));
 	listOutlet.setSelectedIndex(0);
+	listOutlet.addListSelectionListener(new ListSelectionListener() {
+
+	    @Override
+	    public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+		    updateDetail((Client)listOutlet.getSelectedValue());
+		}
+	    }
+	});
+	
+	if (Database.driver().getClients().isEmpty()) {
+//	    jSplitPane1.remove(detail);
+//	    jSplitPane1.add(EmptyPanelManager.panel(), JSplitPane.RIGHT);
+	    
+	    detail.remove(container);
+	    detail.add(EmptyPanelManager.panel(), BorderLayout.CENTER);
+	    
+	}
     }
 
     /**
@@ -40,8 +66,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
+        add = new javax.swing.JButton();
         detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -52,7 +79,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         fixedWrapper = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        nameOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -96,14 +123,21 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jButton1.setText("Toevoegen...");
-        jButton1.setFocusable(false);
-        master.add(jButton1, java.awt.BorderLayout.SOUTH);
+        add.setText("Toevoegen...");
+        add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
 
         jSplitPane1.setLeftComponent(master);
 
         detail.setFocusable(false);
         detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
@@ -132,7 +166,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
         stretchableFields.add(invoicesParent, java.awt.BorderLayout.CENTER);
 
-        detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
         fixedWrapper.setLayout(new java.awt.BorderLayout());
 
@@ -144,10 +178,10 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
 
-        jLabel2.setText("jLabel2");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        jLabel2.setFocusable(false);
-        fixedFields.add(jLabel2);
+        nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        nameOutlet.setFocusable(false);
+        fixedFields.add(nameOutlet);
 
         jLabel3.setBackground(new java.awt.Color(239, 239, 239));
         jLabel3.setText("Adres");
@@ -281,7 +315,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
         fixedWrapper.add(detailsWrapper, java.awt.BorderLayout.NORTH);
 
-        detail.add(fixedWrapper, java.awt.BorderLayout.NORTH);
+        container.add(fixedWrapper, java.awt.BorderLayout.NORTH);
+
+        detail.add(container, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -292,6 +328,21 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         showingDetails = !showingDetails;
 	updateDetailsOutlet();
     }//GEN-LAST:event_detailsMouseReleased
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        
+	Map<Integer, Client> cl = Database.driver().getClients();
+	Client c = new Client("Client_"+cl.size()+1);
+	cl.put(cl.size()+1, c);
+	/*
+	 * Herp shortcut
+	 */
+	
+	addAndSelect(c);
+	
+	validate();
+	repaint();
+    }//GEN-LAST:event_addActionPerformed
 
     private void updateDetailsOutlet(){
 	fixedWrapper.removeAll();
@@ -311,6 +362,8 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
+    private javax.swing.JPanel container;
     private javax.swing.JPanel detail;
     private javax.swing.JLabel details;
     private javax.swing.JLabel details2;
@@ -320,7 +373,6 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JList invoicesOutlet;
     private javax.swing.JPanel invoicesParent;
     private javax.swing.JScrollPane invoicesScroller;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -332,7 +384,6 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -349,17 +400,25 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
+    private javax.swing.JLabel nameOutlet;
     private javax.swing.JPanel stretchableFields;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void updateDetail(Client value) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	nameOutlet.setText(value.getName());
     }
 
     @Override
     public void addAndSelect(Client newObj) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	EditableListModel<Client> elm = (EditableListModel<Client>)listOutlet.getModel();
+	elm.update();
+	if (elm.getSize() == 1) {
+	    detail.remove(EmptyPanelManager.panel());
+	    detail.add(container, BorderLayout.CENTER);
+	}
+	listOutlet.setSelectedValue(newObj, true);
+	updateDetail(newObj);
     }
 
     @Override

@@ -57,9 +57,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
     }
 
     public void updateMenus(){
-	jMenuBar1.removeAll();
-	jMenuBar1.add(jMenu1);
-	jMenuBar1.add(jMenu3);
+	removeActiveMenus();
 	addActiveMenus();
     }
     
@@ -252,13 +250,9 @@ public class ApplicationInvoices extends javax.swing.JFrame {
     }
     
     private void removeActiveMenus(){
-	if (activeTabbedViewController != null) {
-	    for (JMenu jMenu : activeTabbedViewController.menus()) {
-		if (jMenu != null) {
-		    removeMenu(jMenu);
-		}
-	    }
-	}
+	jMenuBar1.removeAll();
+	jMenuBar1.add(jMenu1);
+	jMenuBar1.add(jMenu3);
     }
     
     private void addActiveMenus(){

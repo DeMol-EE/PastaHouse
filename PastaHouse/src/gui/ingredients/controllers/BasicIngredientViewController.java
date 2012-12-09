@@ -16,8 +16,10 @@ import gui.MasterDetailViewController;
 import gui.ingredients.RecipeTabbedViewController;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
+import gui.utilities.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
@@ -38,11 +40,11 @@ import tools.StringTools;
  */
 public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>{
 
-    private RecipeTabbedViewController application;
+    private RecipeTabbedViewController delegate;
     
     /** Creates new form BasicIngredientViewController */
     public BasicIngredientViewController(RecipeTabbedViewController application) {
-	this.application = application;
+	this.delegate = application;
 	
 	initComponents();
 	
@@ -64,16 +66,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	/*
 	 * If there are no ingredients, hide the ugly right detail view
 	 */
-//	if (Database.driver().getBasicIngredientsAlphabetically().isEmpty()) {
-//	    jSplitPane1.remove(detail);
-//	    
-//	    JPanel p = new JPanel(new BorderLayout());
-//	    JLabel l = new JLabel("Klik op \"Toevoegen\" om te beginnen.");
-//	    l.setForeground(Color.darkGray);
-//	    l.setFont(new Font(l.getFont().getName(), Font.ITALIC, l.getFont().getSize()));
-//	    p.addProxy(l, BorderLayout.CENTER);
-//	    jSplitPane1.addProxy(p, JSplitPane.RIGHT);
-//	}
+	if (Database.driver().getBasicIngredientsAlphabetically().isEmpty()) {
+	    detail.remove(container);
+	    detail.add(EmptyPanelManager.panel(), BorderLayout.CENTER);
+	}
     }
     
     @Override
@@ -133,7 +129,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     
     private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {                                             
 	BasicIngredient selectedIngredient = (BasicIngredient)listOutlet.getSelectedValue();
-	application.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
+	delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
     }                                            
 
     private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {                                            
@@ -152,6 +148,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	dlm.update();
 	listOutlet.setSelectedValue(select, true);
 	updateDetail(select);
+	if (dlm.getSize() == 1) {
+	    detail.remove(EmptyPanelManager.panel());
+	    detail.add(container);
+	}
     }
     
     @Override
@@ -180,6 +180,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
         detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         nameOutlet = new javax.swing.JLabel();
@@ -265,6 +266,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
         detail.setFocusable(false);
         detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 2));
@@ -415,7 +418,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         dateOutlet.setOpaque(true);
         fixedFields.add(dateOutlet);
 
-        detail.add(fixedFields, java.awt.BorderLayout.NORTH);
+        container.add(fixedFields, java.awt.BorderLayout.NORTH);
 
         stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
@@ -442,7 +445,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
         jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -459,7 +462,9 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         });
         jPanel1.add(edit, java.awt.BorderLayout.EAST);
 
-        detail.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+        container.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+        detail.add(container, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -498,6 +503,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JButton add;
     private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JLabel brandOutlet;
+    private javax.swing.JPanel container;
     private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
     private javax.swing.JButton edit;
