@@ -16,7 +16,7 @@ import gui.MasterDetailViewController;
 import gui.ingredients.RecipeTabbedViewController;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
-import gui.utilities.EmptyPanelManager;
+import gui.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
@@ -68,7 +68,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	 */
 	if (Database.driver().getBasicIngredientsAlphabetically().isEmpty()) {
 	    detail.remove(container);
-	    detail.add(EmptyPanelManager.panel(), BorderLayout.CENTER);
+	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
     }
     
@@ -149,7 +149,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	listOutlet.setSelectedValue(select, true);
 	updateDetail(select);
 	if (dlm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.panel());
+	    detail.remove(EmptyPanelManager.instance());
 	    detail.add(container);
 	}
     }

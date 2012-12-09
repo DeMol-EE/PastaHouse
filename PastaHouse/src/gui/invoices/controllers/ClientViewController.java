@@ -7,7 +7,7 @@ package gui.invoices.controllers;
 import database.Database;
 import database.tables.Client;
 import gui.MasterDetailViewController;
-import gui.utilities.EmptyPanelManager;
+import gui.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
@@ -44,12 +44,8 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	});
 	
 	if (Database.driver().getClients().isEmpty()) {
-//	    jSplitPane1.remove(detail);
-//	    jSplitPane1.add(EmptyPanelManager.panel(), JSplitPane.RIGHT);
-	    
 	    detail.remove(container);
-	    detail.add(EmptyPanelManager.panel(), BorderLayout.CENTER);
-	    
+	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
     }
 
@@ -330,13 +326,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_detailsMouseReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        
 	Map<Integer, Client> cl = Database.driver().getClients();
 	Client c = new Client("Client_"+cl.size()+1);
 	cl.put(cl.size()+1, c);
-	/*
-	 * Herp shortcut
-	 */
 	
 	addAndSelect(c);
 	
@@ -414,7 +406,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	EditableListModel<Client> elm = (EditableListModel<Client>)listOutlet.getModel();
 	elm.update();
 	if (elm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.panel());
+	    detail.remove(EmptyPanelManager.instance());
 	    detail.add(container, BorderLayout.CENTER);
 	}
 	listOutlet.setSelectedValue(newObj, true);

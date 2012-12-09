@@ -9,7 +9,7 @@ import database.tables.Supplier;
 import gui.MasterDetailViewController;
 import gui.ingredients.dialogs.AddSupplierDialog;
 import gui.ingredients.dialogs.EditSupplierDialog;
-import gui.utilities.EmptyPanelManager;
+import gui.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.event.KeyEvent;
@@ -53,7 +53,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 	 */
 	if (Database.driver().getSuppliersAlphabetically().isEmpty()) {
 	    detail.remove(container);
-	    detail.add(EmptyPanelManager.panel());
+	    detail.add(EmptyPanelManager.instance());
 	}
     }
     
@@ -463,7 +463,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
 	if (dlm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.panel());
+	    detail.remove(EmptyPanelManager.instance());
 	    detail.add(container);
 	}
 	listOutlet.setSelectedValue(newObj, true);

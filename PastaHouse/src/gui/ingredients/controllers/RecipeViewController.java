@@ -12,7 +12,7 @@ import gui.MasterDetailViewController;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
-import gui.utilities.EmptyPanelManager;
+import gui.EmptyPanelManager;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
@@ -63,7 +63,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	 */
 	if (Database.driver().getRecipesAlphabetically().isEmpty()) {
 	    detail.remove(container);
-	    detail.add(EmptyPanelManager.panel(), BorderLayout.CENTER);
+	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
     }
     
@@ -423,7 +423,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	updateDetail(select);
 	
 	if (dlm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.panel());
+	    detail.remove(EmptyPanelManager.instance());
 	    detail.add(container);
 	}
     }
