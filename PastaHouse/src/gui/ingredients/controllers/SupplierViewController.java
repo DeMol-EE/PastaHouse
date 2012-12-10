@@ -460,6 +460,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     
     @Override
     public void electFirstResponder() {
+	((EditableListModel)listOutlet.getModel()).update();
 	listOutlet.requestFocus();
     }
 

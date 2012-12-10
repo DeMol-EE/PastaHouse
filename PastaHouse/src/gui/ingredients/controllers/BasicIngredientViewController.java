@@ -547,6 +547,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
     @Override
     public void electFirstResponder() {
+	((EditableListModel)listOutlet.getModel()).update();
 	listOutlet.requestFocus();
     }
     

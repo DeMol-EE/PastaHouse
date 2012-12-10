@@ -438,6 +438,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
     @Override
     public void electFirstResponder() {
+	((EditableListModel)recipeListOutlet.getModel()).update();
 	recipeListOutlet.requestFocus();
     }
     
