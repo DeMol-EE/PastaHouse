@@ -6,12 +6,15 @@ package gui.ingredients.controllers;
 
 import database.Database;
 import database.tables.Supplier;
+import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
+import gui.ingredients.delegates.AddSupplierDelegate;
+import gui.ingredients.delegates.EditSupplierDelegate;
 import gui.ingredients.dialogs.AddSupplierDialog;
 import gui.ingredients.dialogs.EditSupplierDialog;
-import gui.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,7 +29,7 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController<Supplier> {
+public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController<Supplier>, AddSupplierDelegate, EditSupplierDelegate {
 
     /**
      * Creates new form SupplierViewController
@@ -44,16 +47,11 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
                 }
             }
         });
+	listOutlet.setSelectedIndex(0);
         
-        listOutlet.setSelectedIndex(0);
-	
-	
-	/*
-	 * If there are no ingredients, hide the ugly right detail view
-	 */
-	if (Database.driver().getSuppliersAlphabetically().isEmpty()) {
+	if (Database.driver().getSuppliers().isEmpty()) {
 	    detail.remove(container);
-	    detail.add(EmptyPanelManager.instance());
+	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
     }
     
@@ -74,6 +72,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     
     public void selectSupplier(Supplier supplier) {
         listOutlet.setSelectedValue(supplier, true);
+	updateDetail(supplier);
     }
     
     @Override
@@ -369,7 +368,8 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
+//        new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
+        new AddSupplierDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
     
     private void notesKeyEvent(KeyEvent evt){
@@ -451,21 +451,9 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void editAndSelect(Supplier newObj, Supplier oldObj){
+    public void editSupplier(Supplier newObj, Supplier oldObj){
 	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.edit(newObj, oldObj);
-	listOutlet.setSelectedValue(newObj, true);
-	updateDetail(newObj);
-    }
-    
-    @Override
-    public void addAndSelect(Supplier newObj) {
-        EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.update();
-	if (dlm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.instance());
-	    detail.add(container);
-	}
 	listOutlet.setSelectedValue(newObj, true);
 	updateDetail(newObj);
     }
@@ -478,5 +466,17 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     @Override
     public JMenu menu() {
 	return editMenu;
+    }
+
+    @Override
+    public void addSupplier(Supplier s) {
+	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.update();
+	if (dlm.getSize() == 1) {
+	    detail.removeAll();
+	    detail.add(container);
+	}
+	listOutlet.setSelectedValue(s, true);
+	updateDetail(s);
     }
 }

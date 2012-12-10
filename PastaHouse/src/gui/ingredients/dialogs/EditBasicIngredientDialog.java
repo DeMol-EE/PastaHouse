@@ -8,7 +8,8 @@ import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.tables.BasicIngredient;
 import database.tables.Supplier;
-import gui.MasterDetailViewController;
+import gui.ingredients.delegates.AddSupplierDelegate;
+import gui.ingredients.delegates.EditBasicIngredientDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
@@ -32,11 +33,11 @@ import tools.Utilities;
  *
  * @author Robin jr
  */
-public class EditBasicIngredientDialog extends javax.swing.JDialog{
+public class EditBasicIngredientDialog extends javax.swing.JDialog implements AddSupplierDelegate{
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
-    private final MasterDetailViewController delegate;
+    private final EditBasicIngredientDelegate delegate;
     
     private final DatePicker dp;
     private final AutocompleteCombobox supplierBox;
@@ -44,7 +45,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
     /**
      * Creates new form EditBasicIngredientDialog
      */
-    public EditBasicIngredientDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate, BasicIngredient model) {
+    public EditBasicIngredientDialog(java.awt.Frame parent, boolean modal, EditBasicIngredientDelegate delegate, BasicIngredient model) {
 	super(parent, modal);
 	initComponents();
 	
@@ -136,7 +137,9 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         brandOutlet = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         packagingOutlet = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        addSupplier = new javax.swing.JButton();
         supplierParent = new javax.swing.JPanel();
         supplierOutlet = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
@@ -215,10 +218,23 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
         });
         fixedFields.add(packagingOutlet);
 
-        jLabel3.setText("Leverancier");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel3.setFocusable(false);
-        fixedFields.add(jLabel3);
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
+        jLabel4.setText("Leverancier");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jLabel4.setFocusable(false);
+        jPanel10.add(jLabel4, java.awt.BorderLayout.CENTER);
+
+        addSupplier.setText("+");
+        addSupplier.setFocusable(false);
+        addSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSupplierActionPerformed(evt);
+            }
+        });
+        jPanel10.add(addSupplier, java.awt.BorderLayout.EAST);
+
+        fixedFields.add(jPanel10);
 
         supplierParent.setLayout(new java.awt.BorderLayout());
 
@@ -612,7 +628,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
 
 	    if(model.update()){
-		delegate.editAndSelect(model, defaultModel);
+		delegate.editBasicIngredient(model, defaultModel);
 		disposeLater();
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
@@ -639,7 +655,12 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
 	weightPerUnitFormattedOutlet.setText(cwpu.substring(0, cwpu.lastIndexOf("/")+1)+packagingOutlet.getText());
     }//GEN-LAST:event_packagingOutletKeyReleased
 
+    private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
+        new AddSupplierDialog(null, true, this).setVisible(true);
+    }//GEN-LAST:event_addSupplierActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addSupplier;
     private javax.swing.JTextField brandOutlet;
     private javax.swing.JButton cancel;
     private javax.swing.JPanel detail;
@@ -656,10 +677,11 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -690,4 +712,19 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog{
     private javax.swing.JTextField weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
 
+    @Override
+    public void addSupplier(Supplier s) {
+	supplierParent.removeAll();
+	List suppliers = new ArrayList();
+	suppliers.add("");
+	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
+	supplierBox.setDataList(suppliers);
+	supplierParent.add(supplierBox, BorderLayout.CENTER);
+	/*
+	 * Select the newly created supplier
+	 */
+	supplierBox.setSelectedItem(s);
+	
+	pricePerUnitOutlet.requestFocus();
+    }
 }

@@ -6,14 +6,16 @@ package gui.invoices.controllers;
 
 import database.Database;
 import database.tables.Client;
-import gui.MasterDetailViewController;
 import gui.EmptyPanelManager;
+import gui.MasterDetailViewController;
+import gui.invoices.delegates.ClientDialogDelegate;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
 import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -21,7 +23,7 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Warkst
  */
-public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Client> {
+public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Client>, ClientDialogDelegate {
     
     private boolean showingDetails = true;
     
@@ -32,7 +34,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	initComponents();
 
 	listOutlet.setModel(ListModelFactory.createClientListModel(Database.driver().getClients()));
-	listOutlet.setSelectedIndex(0);
+	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.addListSelectionListener(new ListSelectionListener() {
 
 	    @Override
@@ -42,6 +44,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 		}
 	    }
 	});
+	listOutlet.setSelectedIndex(0);
 	
 	if (Database.driver().getClients().isEmpty()) {
 	    detail.remove(container);
@@ -330,7 +333,11 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	Client c = new Client("Client_"+cl.size()+1);
 	cl.put(cl.size()+1, c);
 	
-	addAndSelect(c);
+	
+	/*
+	 * Herp derp shortcut
+	 */
+	addClient(c);
 	
 	validate();
 	repaint();
@@ -402,20 +409,15 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }
 
     @Override
-    public void addAndSelect(Client newObj) {
+    public void addClient(Client newObj) {
 	EditableListModel<Client> elm = (EditableListModel<Client>)listOutlet.getModel();
 	elm.update();
 	if (elm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.instance());
+	    detail.removeAll();
 	    detail.add(container, BorderLayout.CENTER);
 	}
 	listOutlet.setSelectedValue(newObj, true);
 	updateDetail(newObj);
-    }
-
-    @Override
-    public void editAndSelect(Client newObj, Client oldObj) {
-	throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

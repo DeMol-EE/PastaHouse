@@ -128,16 +128,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     public void updateDetail(Article value) {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public void addAndSelect(Article newObj) {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void editAndSelect(Article newObj, Article oldObj) {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
     
     @Override
     public void electFirstResponder() {

@@ -43,7 +43,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="recipeMenuItem">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F1"/>
+                  <KeyStroke key="Shift+F1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Recepten"/>
               </Properties>
@@ -54,7 +54,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="invoiceMenuItem">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F2"/>
+                  <KeyStroke key="Shift+F2"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Facturatie"/>
               </Properties>
@@ -65,7 +65,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="contactsMenuItem">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F3"/>
+                  <KeyStroke key="Shift+F3"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Adressenboek"/>
               </Properties>

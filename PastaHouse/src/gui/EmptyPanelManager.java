@@ -13,20 +13,20 @@ import javax.swing.JPanel;
  * @author Warkst
  */
 public class EmptyPanelManager {
-    private static JPanel panel;
     
     public static JPanel instance(){
-	if (panel == null) {
-	    panel = new EmptyPanel();
-	}
-	return panel;
+	return new EmptyPanel("Klik op \"Toevoegen...\" om te beginnen, of druk op ctrl+N.");
+    }
+    
+    public static JPanel instance(String msg){
+	return new EmptyPanel(msg);
     }
     
     private static class EmptyPanel extends JPanel{
-	private EmptyPanel(){
+	private EmptyPanel(String msg){
 	    super();
 	    setLayout(new BorderLayout());
-	    JLabel l = new JLabel("Klik op \"Toevoegen...\" om te beginnen, of druk op ctrl+N.");
+	    JLabel l = new JLabel(msg);
 	    l.setHorizontalAlignment(JLabel.CENTER);
 	    add(l, BorderLayout.CENTER);
 	}

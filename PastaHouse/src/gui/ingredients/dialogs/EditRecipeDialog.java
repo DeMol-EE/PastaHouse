@@ -9,8 +9,8 @@ import database.Database;
 import database.extra.Component;
 import database.extra.Ingredient;
 import database.tables.Recipe;
-import gui.ingredients.controllers.ComboCoxCallback;
-import gui.MasterDetailViewController;
+import gui.ingredients.delegates.ComboCoxDelegate;
+import gui.ingredients.delegates.EditRecipeDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.cell.CellEditorFactory;
@@ -25,7 +25,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
@@ -44,16 +43,16 @@ import tools.Utilities;
  *
  * @author Robin jr
  */
-public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCallback{
+public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDelegate{
 
     private final Recipe model;
     private final Recipe defaultModel;
     private final DatePicker dp;
-    private final MasterDetailViewController delegate;
+    private final EditRecipeDelegate delegate;
     /**
      * Creates new form EditRecipeDialog
      */
-    public EditRecipeDialog(java.awt.Frame parent, boolean modal, Recipe model, MasterDetailViewController delegate) {
+    public EditRecipeDialog(java.awt.Frame parent, boolean modal, Recipe model, EditRecipeDelegate delegate) {
 	super(parent, modal);
 	initComponents();
 	
@@ -383,7 +382,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxCal
 	    model.setPreparation(preparationOutlet.getText());
 	    
 	    if(model.update()){
-		delegate.editAndSelect(model, defaultModel);
+		delegate.editRecipe(model, defaultModel);
 		disposeLater();
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);

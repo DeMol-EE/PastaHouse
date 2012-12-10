@@ -6,7 +6,7 @@ package gui.utilities.cell;
 
 import database.Database;
 import database.extra.Ingredient;
-import gui.ingredients.controllers.ComboCoxCallback;
+import gui.ingredients.delegates.ComboCoxDelegate;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.Color;
 import java.awt.Component;
@@ -41,7 +41,7 @@ public class CellEditorFactory {
 	return new DoubleEditor();
     }
 
-    public static TableCellEditor createComboBoxEditor(List components, ComboCoxCallback callback) {
+    public static TableCellEditor createComboBoxEditor(List components, ComboCoxDelegate callback) {
 	return new ComboBoxEditor(components, callback);
     }
 
@@ -137,7 +137,7 @@ public class CellEditorFactory {
 
 	private AutocompleteCombobox acb;
 
-	public ComboBoxEditor(List data, final ComboCoxCallback callback) {
+	public ComboBoxEditor(List data, final ComboCoxDelegate callback) {
 	    this.acb = new AutocompleteCombobox(data);
 	    this.acb.setOpaque(true);
 	    this.acb.setBorder(BorderFactory.createEmptyBorder());

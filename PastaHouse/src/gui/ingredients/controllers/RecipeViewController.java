@@ -8,11 +8,13 @@ import database.Database;
 import database.extra.Component;
 import database.extra.Ingredient;
 import database.tables.Recipe;
+import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
+import gui.ingredients.delegates.AddRecipeDelegate;
+import gui.ingredients.delegates.EditRecipeDelegate;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
-import gui.EmptyPanelManager;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
@@ -22,7 +24,6 @@ import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -34,7 +35,7 @@ import tools.Utilities;
  *
  * @author Warkst
  */
-public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>{
+public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>, AddRecipeDelegate, EditRecipeDelegate{
     
     /**
      * Creates new form RecipeViewController
@@ -416,20 +417,19 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void addAndSelect(Recipe select) {
+    public void addRecipe(Recipe select) {
 	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
 	dlm.update();
-	recipeListOutlet.setSelectedValue(select, true);
-	updateDetail(select);
-	
 	if (dlm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.instance());
+	    detail.removeAll();
 	    detail.add(container);
 	}
+	recipeListOutlet.setSelectedValue(select, true);
+	updateDetail(select);
     }
     
     @Override
-    public void editAndSelect(Recipe n, Recipe o){
+    public void editRecipe(Recipe n, Recipe o){
 	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
 	dlm.edit(n, o);
 	recipeListOutlet.setSelectedValue(n, true);

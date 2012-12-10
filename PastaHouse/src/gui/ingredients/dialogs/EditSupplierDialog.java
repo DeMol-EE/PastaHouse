@@ -6,7 +6,7 @@ package gui.ingredients.dialogs;
 
 import database.Database;
 import database.tables.Supplier;
-import gui.ingredients.controllers.SupplierViewController;
+import gui.ingredients.delegates.EditSupplierDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
@@ -28,14 +28,14 @@ import tools.Utilities;
  */
 public class EditSupplierDialog extends javax.swing.JDialog {
 
-    private SupplierViewController delegate;
+    private final EditSupplierDelegate delegate;
     private final Supplier model;
     private final Supplier defaultModel;
 
     /**
      * Creates new form EditSupplierDialog
      */
-    public EditSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate, Supplier model) {
+    public EditSupplierDialog(java.awt.Frame parent, boolean modal, EditSupplierDelegate delegate, Supplier model) {
         super(parent, modal);
         initComponents();
 
@@ -313,7 +313,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	    model.setNotes(notesOutlet.getText());
 
 	    if (model.update()) {
-		delegate.editAndSelect(model, defaultModel);
+		delegate.editSupplier(model, defaultModel);
 		disposeLater();
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);

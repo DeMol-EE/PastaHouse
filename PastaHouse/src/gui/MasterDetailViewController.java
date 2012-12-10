@@ -19,19 +19,6 @@ public interface MasterDetailViewController<Type> extends ViewController {
      */
     public void updateDetail(Type value);
     /**
-     * Should provide functionality to add a new item to the master-component's data source and select it in the list (and consequently update the detail view).
-     * 
-     * @param newObj The object to be added and selected.
-     */
-    public void addAndSelect(Type newObj);
-    /**
-     * Should provide functionality to edit an existing item in the master-component's data source and select it in the list (and consequently update the detail view).
-     * 
-     * @param newObj The new version of the edited item.
-     * @param oldObj The previous version of the edited item (can be used for sorting).
-     */
-    public void editAndSelect(Type newObj, Type oldObj);
-    /**
      * User by external sources to trigger correct focus traversal initialization. This is called every time the controller is displayed.
      */
     public void electFirstResponder();

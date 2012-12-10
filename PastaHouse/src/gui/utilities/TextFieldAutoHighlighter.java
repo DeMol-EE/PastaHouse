@@ -30,7 +30,14 @@ public class TextFieldAutoHighlighter {
 
 	    @Override
 	    public void focusLost(FocusEvent e) {
-		
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//		    @Override
+//		    public void run() {
+//			f.setSelectionStart(0);
+//			f.setSelectionEnd(0);
+//		    }
+//		});
 	    }
 	});
     }

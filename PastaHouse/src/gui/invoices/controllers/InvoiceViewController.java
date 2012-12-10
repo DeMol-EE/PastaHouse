@@ -264,17 +264,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     public void updateDetail(Invoice value) {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public void addAndSelect(Invoice newObj) {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void editAndSelect(Invoice newObj, Invoice oldObj) {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    
     @Override
     public void electFirstResponder() {
 	invoiceTableOutlet.requestFocus();

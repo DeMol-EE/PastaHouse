@@ -8,7 +8,7 @@ import database.Database;
 import database.FunctionResult;
 import database.models.SupplierModel;
 import database.tables.Supplier;
-import gui.ingredients.controllers.SupplierViewController;
+import gui.ingredients.delegates.AddSupplierDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
@@ -28,13 +28,13 @@ import javax.swing.SwingUtilities;
  */
 public class AddSupplierDialog extends javax.swing.JDialog {
 
-    private SupplierViewController delegate;
+    private AddSupplierDelegate delegate;
     private final SupplierModel model;
 
     /**
      * Creates new form AddSupplierDialog
      */
-    public AddSupplierDialog(java.awt.Frame parent, boolean modal, SupplierViewController delegate) {
+    public AddSupplierDialog(java.awt.Frame parent, boolean modal, AddSupplierDelegate delegate) {
         super(parent, modal);
         initComponents();
         setTitle("Leverancier toevoegen");
@@ -245,7 +245,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 	    
 	    FunctionResult<Supplier> result = model.create();
             if (result.getCode() == 0 && result.getObj() != null) {
-		delegate.addAndSelect(result.getObj());
+//		delegate.addAndSelect(result.getObj());
+		delegate.addSupplier(result.getObj());
 		disposeLater();
             } else {
                 // switch case the return code

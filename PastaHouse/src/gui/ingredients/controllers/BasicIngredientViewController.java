@@ -12,11 +12,13 @@ package gui.ingredients.controllers;
 
 import database.*;
 import database.tables.BasicIngredient;
+import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
 import gui.ingredients.RecipeTabbedViewController;
+import gui.ingredients.delegates.AddBasicIngredientDelegate;
+import gui.ingredients.delegates.EditBasicIngredientDelegate;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
-import gui.EmptyPanelManager;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
@@ -38,7 +40,7 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>{
+public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>, AddBasicIngredientDelegate, EditBasicIngredientDelegate{
 
     private RecipeTabbedViewController delegate;
     
@@ -66,7 +68,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	/*
 	 * If there are no ingredients, hide the ugly right detail view
 	 */
-	if (Database.driver().getBasicIngredientsAlphabetically().isEmpty()) {
+	if (Database.driver().getBasicIngredients().isEmpty()) {
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
@@ -143,19 +145,19 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }
     
     @Override
-    public void addAndSelect(BasicIngredient select){
+    public void addBasicIngredient(BasicIngredient select){
 	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.update();
-	listOutlet.setSelectedValue(select, true);
-	updateDetail(select);
 	if (dlm.getSize() == 1) {
-	    detail.remove(EmptyPanelManager.instance());
+	    detail.removeAll();
 	    detail.add(container);
 	}
+	listOutlet.setSelectedValue(select, true);
+	updateDetail(select);
     }
     
     @Override
-    public void editAndSelect(BasicIngredient n, BasicIngredient o){
+    public void editBasicIngredient(BasicIngredient n, BasicIngredient o){
 	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
 	dlm.edit(n, o);
 	listOutlet.setSelectedValue(n, true);

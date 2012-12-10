@@ -10,8 +10,8 @@ import database.extra.Component;
 import database.extra.Ingredient;
 import database.models.RecipeModel;
 import database.tables.Recipe;
-import gui.ingredients.controllers.ComboCoxCallback;
-import gui.MasterDetailViewController;
+import gui.ingredients.delegates.AddRecipeDelegate;
+import gui.ingredients.delegates.ComboCoxDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.cell.CellEditorFactory;
@@ -42,16 +42,16 @@ import tools.Utilities;
  *
  * @author Warkst
  */
-public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCallback{
+public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDelegate{
 
-    private final MasterDetailViewController delegate;
+    private final AddRecipeDelegate delegate;
     private final RecipeModel model;
     private final Map<Integer, Component> components;
     
     /**
      * Creates new form AddRecipeDialog
      */
-    public AddRecipeDialog(java.awt.Frame parent, boolean modal, MasterDetailViewController delegate) {
+    public AddRecipeDialog(java.awt.Frame parent, boolean modal, AddRecipeDelegate delegate) {
 	super(parent, modal);
 	initComponents();
 	
@@ -366,7 +366,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxCall
 
             FunctionResult<Recipe> res = model.create();
 	    if (res.getCode() == 0 && res.getObj() != null) {
-		delegate.addAndSelect(res.getObj());
+		delegate.addRecipe(res.getObj());
                 disposeLater();
             } else {
                 JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het aanmaken van dit recept in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
