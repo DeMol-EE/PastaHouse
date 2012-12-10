@@ -369,7 +369,8 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 		delegate.addRecipe(res.getObj());
                 disposeLater();
             } else {
-                JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het aanmaken van dit recept in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Het toevoegen van het recept heeft foutcode "+res.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		disposeLater();
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());

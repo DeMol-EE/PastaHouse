@@ -14,8 +14,8 @@ import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
@@ -250,7 +250,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 		disposeLater();
             } else {
                 // switch case the return code
-		System.err.println("Database driver returned with code: "+result.getCode());
+		JOptionPane.showMessageDialog(null, "Het toevoegen van de leverancier heeft foutcode "+result.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		disposeLater();
             }
         } catch (Exception ex) {
 	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
@@ -322,23 +323,14 @@ public class AddSupplierDialog extends javax.swing.JDialog {
                 setMunicipal();
             }
         });
-        comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+        comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                setMunicipal();
-            }
-        });
+	    @Override
+	    public void keyReleased(KeyEvent e) {
+		setMunicipal();
+	    }
+	    
+	});
 
         HolderGemeentes.add(comboGemeentes);
 
