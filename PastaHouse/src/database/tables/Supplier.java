@@ -5,7 +5,7 @@
 package database.tables;
 
 import database.Database;
-import database.extra.Record;
+import database.extra.Contact;
 import database.models.SupplierModel;
 import tools.Configuration;
 import tools.StringTools;
@@ -14,7 +14,7 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class Supplier extends Record{
+public class Supplier extends Contact{
     private String firm;
     private String address;
     private String municipality;
@@ -30,7 +30,7 @@ public class Supplier extends Record{
     private boolean deleted;
 
     private Supplier(int id, String firm, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
-	super(id, Configuration.center().getDB_TABLE_SUP());
+	super(id, Configuration.center().getDB_TABLE_SUP(), firm, address, municipality, telephone, cellphone, email);
 	this.firm = firm;
 	this.address = address;
 	this.municipality = municipality;
@@ -40,13 +40,13 @@ public class Supplier extends Record{
 	this.email = email;
 	this.notes = notes;
 	this.contact = contact;
-	this.deleted = deleted;
         this.telephone2 = telephone2;
         this.zipcode = zipcode;
+	this.deleted = deleted;
     }
     
     private Supplier(int id, SupplierModel s){
-	super(id, Configuration.center().getDB_TABLE_SUP());
+	super(id, Configuration.center().getDB_TABLE_SUP(), s.getFirm(), s.getAddress(), s.getMunicipality(), s.getTelephone(), s.getCellphone(), s.getEmail());
 	this.firm = s.getFirm();
 	this.address = s.getAddress();
 	this.municipality = s.getMunicipality();
@@ -57,8 +57,8 @@ public class Supplier extends Record{
 	this.email = s.getEmail();
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
-	this.deleted = false;
         this.zipcode = s.getZipcode();
+	this.deleted = false;
     }
     
     /**
@@ -66,7 +66,7 @@ public class Supplier extends Record{
      * @param s 
      */
     public Supplier(Supplier s){
-	super(s.getPrimaryKeyValue(), s.getTableName());
+	super(s.getPrimaryKeyValue(), s.getTableName(), s.getFirm(), s.getAddress(), s.getMunicipality(), s.getTelephone(), s.getCellphone(), s.getEmail());
 	this.firm = s.getFirm();
 	this.address = s.getAddress();
 	this.municipality = s.getMunicipality();
@@ -77,8 +77,8 @@ public class Supplier extends Record{
 	this.email = s.getEmail();
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
-	this.deleted = false;
         this.zipcode = s.getZipcode();
+	this.deleted = false;
     }
     
     public void copy(Supplier s){
@@ -92,8 +92,8 @@ public class Supplier extends Record{
 	this.email = s.getEmail();
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
-	this.deleted = s.isDeleted();
         this.zipcode = s.getZipcode();
+	this.deleted = s.isDeleted();
     }
     
     /**
@@ -129,10 +129,6 @@ public class Supplier extends Record{
 	return new Supplier(id, s);
     }
     
-    public String getAddress() {
-	return address;
-    }
-
     public void setAddress(String address) {
 	this.address = address;
     }
@@ -145,10 +141,6 @@ public class Supplier extends Record{
         this.zipcode = zipcode;
     }
 
-    public String getCellphone() {
-	return cellphone;
-    }
-
     public void setCellphone(String cellphone) {
 	this.cellphone = cellphone;
     }
@@ -159,10 +151,6 @@ public class Supplier extends Record{
 
     public void setContact(String contact) {
 	this.contact = contact;
-    }
-
-    public String getEmail() {
-	return email;
     }
 
     public void setEmail(String email) {
@@ -185,10 +173,6 @@ public class Supplier extends Record{
 	this.firm = firm;
     }
 
-    public String getMunicipality() {
-	return municipality;
-    }
-
     public void setMunicipality(String municipality) {
 	this.municipality = municipality;
     }
@@ -199,10 +183,6 @@ public class Supplier extends Record{
 
     public void setNotes(String notes) {
 	this.notes = notes;
-    }
-
-    public String getTelephone() {
-	return telephone;
     }
 
     public void setTelephone(String telephone) {
@@ -257,5 +237,10 @@ public class Supplier extends Record{
     @Override
     public boolean delete() {
 	return false;
+    }
+    
+    @Override
+    public String filterable() {
+	return firm+";"+address+";"+zipcode+";"+municipality+";"+telephone+";"+telephone2+";"+cellphone+";"+fax+";"+email+";"+notes+";"+contact;
     }
 }

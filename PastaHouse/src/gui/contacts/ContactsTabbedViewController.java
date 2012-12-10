@@ -4,12 +4,9 @@
  */
 package gui.contacts;
 
-import database.tables.Supplier;
-import gui.MasterDetailViewController;
 import gui.TabbedViewController;
-import java.awt.event.KeyEvent;
+import gui.contacts.controllers.ContactsViewController;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -19,10 +16,8 @@ import javax.swing.JPanel;
  * @author Hannes
  */
 public class ContactsTabbedViewController extends javax.swing.JPanel implements TabbedViewController{
-
-    private final int articlesTabIndex = 0;
-    private final int clientsTabIndex = 1;
-    private HashMap<Integer, MasterDetailViewController> tabs;
+    
+    private ContactsViewController cvc;
     
     /**
      * Creates new form RecipeTabbedViewController
@@ -30,11 +25,9 @@ public class ContactsTabbedViewController extends javax.swing.JPanel implements 
     public ContactsTabbedViewController() {
         initComponents();
         
-        tabs = new HashMap<Integer, MasterDetailViewController>();
-        
-    }
-    
-    public void selectAndSwitchToSupplier(Supplier supplier){
+	cvc = new ContactsViewController();
+	
+	add(cvc);
     }
     
     @Override
@@ -51,66 +44,22 @@ public class ContactsTabbedViewController extends javax.swing.JPanel implements 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        editMenu = new javax.swing.JMenu();
-        addMenuItem = new javax.swing.JMenuItem();
-        editMenuItem = new javax.swing.JMenuItem();
-        printMenuItem = new javax.swing.JMenuItem();
-
-        editMenu.setText("Edit");
-
-        addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        addMenuItem.setText("Add");
-        addMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addMenuItemActionPerformed(evt);
-            }
-        });
-        editMenu.add(addMenuItem);
-
-        editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        editMenuItem.setText("Edit");
-        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editMenuItemActionPerformed(evt);
-            }
-        });
-        editMenu.add(editMenuItem);
-
-        printMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        printMenuItem.setText("Print");
-        printMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                printMenuItemActionPerformed(evt);
-            }
-        });
-        editMenu.add(printMenuItem);
-
         setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addMenuItemActionPerformed
-
-    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editMenuItemActionPerformed
-
-    private void printMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_printMenuItemActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem addMenuItem;
-    private javax.swing.JMenu editMenu;
-    private javax.swing.JMenuItem editMenuItem;
-    private javax.swing.JMenuItem printMenuItem;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public List<JMenu> menus() {
+	
+	/*
+	 * Menus are being requested so this component is being showed.
+	 */
+	cvc.electFirstResponder();
+	
 	List<JMenu> l = new ArrayList<JMenu>();
-	l.add(editMenu);
+//	l.add(editMenu);
 	return l;
     }
 }

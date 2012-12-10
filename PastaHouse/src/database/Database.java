@@ -12,6 +12,7 @@ import database.models.RecipeModel;
 import database.models.SupplierModel;
 import database.tables.BasicIngredient;
 import database.tables.Client;
+import database.extra.Contact;
 import database.tables.Recipe;
 import database.tables.Supplier;
 import java.sql.Connection;
@@ -413,6 +414,12 @@ public class Database {
         ArrayList<Ingredient> me = new ArrayList<Ingredient>();
 	me.addAll(sorted.values());
         return me;
+    }
+    
+    public Map<String, Contact> getContactsAlphabetically() {
+	Map<String, Contact> contacts = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
+	contacts.putAll(suppliersByFirm);
+	return contacts;
     }
 
     /**
