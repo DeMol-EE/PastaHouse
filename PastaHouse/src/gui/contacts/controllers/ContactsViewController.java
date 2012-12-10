@@ -13,6 +13,8 @@ import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -35,6 +37,16 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	listModel = new ContactListModel(database.Database.driver().getContactsAlphabetically());
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.setModel(listModel);
+	
+	listOutlet.addListSelectionListener(new ListSelectionListener() {
+
+	    @Override
+	    public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+		    updateDetail((Contact)listOutlet.getSelectedValue());
+		}
+	    }
+	});
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
     }
@@ -64,9 +76,13 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         listOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
         detail = new javax.swing.JPanel();
-        fixedFields = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        typeOutlet = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jPanel2 = new javax.swing.JPanel();
+        fixedFields = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -148,13 +164,25 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
         detail.setLayout(new java.awt.BorderLayout());
 
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel2.setText("Type");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
+        jPanel4.add(jLabel2);
+
+        typeOutlet.setText("<typeOutlet>");
+        jPanel4.add(typeOutlet);
+
+        jPanel3.add(jPanel4, java.awt.BorderLayout.CENTER);
+        jPanel3.add(jSeparator1, java.awt.BorderLayout.SOUTH);
+
+        detail.add(jPanel3, java.awt.BorderLayout.NORTH);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
         fixedFields.setLayout(new java.awt.GridLayout(5, 2));
-
-        jLabel2.setText("jLabel2");
-        fixedFields.add(jLabel2);
-
-        jLabel3.setText("jLabel3");
-        fixedFields.add(jLabel3);
 
         jLabel4.setText("jLabel4");
         fixedFields.add(jLabel4);
@@ -180,7 +208,9 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         jLabel10.setText("jLabel10");
         fixedFields.add(jLabel10);
 
-        detail.add(fixedFields, java.awt.BorderLayout.NORTH);
+        jPanel2.add(fixedFields, java.awt.BorderLayout.NORTH);
+
+        detail.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -230,7 +260,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -238,15 +267,20 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
+    private javax.swing.JLabel typeOutlet;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void updateDetail(Contact value) {
-	throw new UnsupportedOperationException("Not supported yet.");
+    public void updateDetail(Contact contact) {
+	typeOutlet.setText(contact.getType());
     }
 
     @Override

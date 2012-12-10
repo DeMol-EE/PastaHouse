@@ -646,3 +646,9 @@ Database driver:: loaded 5 recipes (linked 10 ingredients and 4 recipes)!
 Database driver:: loaded 7 suppliers!
 Database driver:: loaded 6 basic ingredients!
 Database driver:: loaded 5 recipes (linked 10 ingredients and 4 recipes)!
+Database driver:: loaded 7 suppliers!
+Database driver:: loaded 6 basic ingredients!
+Database driver:: loaded 5 recipes (linked 10 ingredients and 4 recipes)!
+Database driver:: loaded 7 suppliers!
+Database driver:: loaded 6 basic ingredients!
+Database driver:: loaded 5 recipes (linked 10 ingredients and 4 recipes)!

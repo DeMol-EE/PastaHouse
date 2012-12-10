@@ -15,14 +15,8 @@ import tools.StringTools;
  * @author Warkst
  */
 public class Supplier extends Contact{
-    private String firm;
-    private String address;
-    private String municipality;
-    private String telephone;
     private String telephone2;
-    private String cellphone;
     private String fax;
-    private String email;
     private String notes;
     private String contact;
     private int zipcode;
@@ -31,13 +25,7 @@ public class Supplier extends Contact{
 
     private Supplier(int id, String firm, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String notes, String contact, boolean deleted) {
 	super(id, Configuration.center().getDB_TABLE_SUP(), firm, address, municipality, telephone, cellphone, email);
-	this.firm = firm;
-	this.address = address;
-	this.municipality = municipality;
-	this.telephone = telephone;
-	this.cellphone = cellphone;
 	this.fax = fax;
-	this.email = email;
 	this.notes = notes;
 	this.contact = contact;
         this.telephone2 = telephone2;
@@ -47,14 +35,8 @@ public class Supplier extends Contact{
     
     private Supplier(int id, SupplierModel s){
 	super(id, Configuration.center().getDB_TABLE_SUP(), s.getFirm(), s.getAddress(), s.getMunicipality(), s.getTelephone(), s.getCellphone(), s.getEmail());
-	this.firm = s.getFirm();
-	this.address = s.getAddress();
-	this.municipality = s.getMunicipality();
-	this.telephone = s.getTelephone();
-        this.telephone2 = s.getTelephone2();
-	this.cellphone = s.getCellphone();
+	this.telephone2 = s.getTelephone2();
 	this.fax = s.getFax();
-	this.email = s.getEmail();
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
         this.zipcode = s.getZipcode();
@@ -67,14 +49,8 @@ public class Supplier extends Contact{
      */
     public Supplier(Supplier s){
 	super(s.getPrimaryKeyValue(), s.getTableName(), s.getFirm(), s.getAddress(), s.getMunicipality(), s.getTelephone(), s.getCellphone(), s.getEmail());
-	this.firm = s.getFirm();
-	this.address = s.getAddress();
-	this.municipality = s.getMunicipality();
-	this.telephone = s.getTelephone();
-        this.telephone2 = s.getTelephone2();
-	this.cellphone = s.getCellphone();
+	this.telephone2 = s.getTelephone2();
 	this.fax = s.getFax();
-	this.email = s.getEmail();
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
         this.zipcode = s.getZipcode();
@@ -82,14 +58,14 @@ public class Supplier extends Contact{
     }
     
     public void copy(Supplier s){
-	this.firm = s.getFirm();
-	this.address = s.getAddress();
-	this.municipality = s.getMunicipality();
-	this.telephone = s.getTelephone();
+	setFirm(s.getFirm());
+	setAddress(s.getAddress());
+	setMunicipality(s.getMunicipality());
+	setTelephone(s.getTelephone());
         this.telephone2 = s.getTelephone2();
-	this.cellphone = s.getCellphone();
+	setCellphone(s.getCellphone());
 	this.fax = s.getFax();
-	this.email = s.getEmail();
+	setEmail(s.getEmail());
 	this.notes = s.getNotes();
 	this.contact = s.getContact();
         this.zipcode = s.getZipcode();
@@ -129,10 +105,6 @@ public class Supplier extends Contact{
 	return new Supplier(id, s);
     }
     
-    public void setAddress(String address) {
-	this.address = address;
-    }
-
     public int getZipcode() {
         return zipcode;
     }
@@ -141,20 +113,12 @@ public class Supplier extends Contact{
         this.zipcode = zipcode;
     }
 
-    public void setCellphone(String cellphone) {
-	this.cellphone = cellphone;
-    }
-
     public String getContact() {
 	return contact;
     }
 
     public void setContact(String contact) {
 	this.contact = contact;
-    }
-
-    public void setEmail(String email) {
-	this.email = email;
     }
 
     public String getFax() {
@@ -166,15 +130,11 @@ public class Supplier extends Contact{
     }
 
     public String getFirm() {
-	return firm;
+	return getName();
     }
 
     public void setFirm(String firm) {
-	this.firm = firm;
-    }
-
-    public void setMunicipality(String municipality) {
-	this.municipality = municipality;
+	setName(firm);
     }
 
     public String getNotes() {
@@ -183,10 +143,6 @@ public class Supplier extends Contact{
 
     public void setNotes(String notes) {
 	this.notes = notes;
-    }
-
-    public void setTelephone(String telephone) {
-	this.telephone = telephone;
     }
 
     public boolean isDeleted() {
@@ -199,7 +155,7 @@ public class Supplier extends Contact{
     
     @Override
     public String toString(){
-	return StringTools.capitalize(firm);
+	return StringTools.capitalize(getName());
     }
 
     public String getTelephone2() {
@@ -219,19 +175,29 @@ public class Supplier extends Contact{
     @Override
     public boolean update() {
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
-		"firma = \""+ firm +"\", "
+		"firma = \""+ getName() +"\", "
 //		"firma = "+(firm.length()>0 ? "\""+ firm +"\"":"NULL")+", "
-		+ "adres = "+(address.length()>0 ? "\""+ address +"\"":"NULL")+", "
+		+ "adres = "+(getAddress().length()>0 ? "\""+ getAddress() +"\"":"NULL")+", "
 		+ "postcode = "+ zipcode +", "
-		+ "gemeente = "+(municipality.length()>0 ?"\""+municipality +"\"":"NULL")+", "
-		+ "tel = "+(telephone.length()>0? "\""+telephone +"\"":"NULL")+", "
+		+ "gemeente = "+(getMunicipality().length()>0 ?"\""+getMunicipality() +"\"":"NULL")+", "
+		+ "tel = "+(getTelephone().length()>0? "\""+getTelephone() +"\"":"NULL")+", "
                 + "tel2 = "+(telephone2.length()>0? "\""+telephone2 +"\"":"NULL")+", "
-		+ "gsm = "+(cellphone.length()>0? "\""+cellphone +"\"":"NULL")+", "
+		+ "gsm = "+(getCellphone().length()>0? "\""+getCellphone() +"\"":"NULL")+", "
 		+ "fax = "+(fax.length()>0? "\""+fax +"\"":"NULL")+", "
-		+ "email = "+(email.length()>0? "\""+email +"\"":"NULL")+", "
+		+ "email = "+(getEmail().length()>0? "\""+getEmail() +"\"":"NULL")+", "
 		+ "opmerking = "+(notes.length()>0? "\""+notes +"\"":"NULL")+", "
 		+ "contactpersoon = "+(contact.length()>0 ? "\""+contact +"\"":"NULL")+", "
 		+ "verwijderd = 0");
+    }
+    
+    @Override
+    public String getType(){
+	return "Leverancier";
+    }
+    
+    @Override
+    public boolean isSupplier(){
+	return true;
     }
 
     @Override
@@ -241,6 +207,6 @@ public class Supplier extends Contact{
     
     @Override
     public String filterable() {
-	return firm+";"+address+";"+zipcode+";"+municipality+";"+telephone+";"+telephone2+";"+cellphone+";"+fax+";"+email+";"+notes+";"+contact;
+	return super.filterable()+";"+zipcode+";"+telephone2+";"+fax+";"+notes+";"+contact;
     }
 }

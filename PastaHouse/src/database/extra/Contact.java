@@ -15,12 +15,12 @@ public abstract class Contact extends Record implements Filterable{
     /*
      * Test fields
      */
-    private final String name;
-    private final String address;
-    private final String municipality;
-    private final String telephone;
-    private final String cellphone;
-    private final String email;
+    private String name;
+    private String address;
+    private String municipality;
+    private String telephone;
+    private String cellphone;
+    private String email;
 
     public Contact(int id, String table, String name, String address, String municipality, String telephone, String cellphone, String email){
 	super(id, table);
@@ -56,6 +56,39 @@ public abstract class Contact extends Record implements Filterable{
 	return email;
     }
 
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public void setAddress(String address) {
+	this.address = address;
+    }
+
+    public void setMunicipality(String municipality) {
+	this.municipality = municipality;
+    }
+
+    public void setTelephone(String telephone) {
+	this.telephone = telephone;
+    }
+
+    public void setCellphone(String cellphone) {
+	this.cellphone = cellphone;
+    }
+
+    public void setEmail(String email) {
+	this.email = email;
+    }
+    
+    public abstract String getType();
+    
+    public abstract boolean isSupplier();
+
+    @Override
+    public String filterable(){
+	return getType()+";"+name+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email;
+    }
+    
     @Override
     public boolean update() {
 	throw new UnsupportedOperationException("Not supported yet.");
