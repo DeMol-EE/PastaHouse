@@ -5,6 +5,7 @@
 package gui.utilities.list;
 
 import database.extra.Component;
+import database.tables.Article;
 import database.tables.BasicIngredient;
 import database.tables.Client;
 import database.tables.Recipe;
@@ -161,6 +162,37 @@ public class ListModelFactory {
 	    public Object getElementAt(int index) {
 		return data.values().toArray()[index];
 	    }
+	};
+    }
+    
+    public static AbstractListModel createArticleListModel(final Map<String, Article> data){
+	return new EditableListModel<Article>(){
+
+	    @Override
+	    public void add(Article o) {
+		data.put(o.getName(), o);
+		fireContentsChanged(this, 0, getSize());
+	    }
+
+	    @Override
+	    public void edit(Article newObj, Article oldObj) {
+		if (data.get(oldObj.getName())!=null) {
+		    data.remove(oldObj.getName());
+		    data.put(newObj.getName(), newObj);
+		}
+		fireContentsChanged(this, 0, getSize());
+	    }
+
+	    @Override
+	    public int getSize() {
+		return data.size();
+	    }
+
+	    @Override
+	    public Object getElementAt(int index) {
+		return data.values().toArray()[index];
+	    }
+	    
 	};
     }
 }

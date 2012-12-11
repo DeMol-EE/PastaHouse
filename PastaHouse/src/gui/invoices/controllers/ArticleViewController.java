@@ -4,16 +4,28 @@
  */
 package gui.invoices.controllers;
 
+import database.Database;
 import database.tables.Article;
+import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
+import gui.invoices.delegates.AddArticleDelegate;
+import gui.invoices.delegates.EditArticleDelegate;
+import gui.invoices.dialogs.AddArticleDialog;
+import gui.utilities.list.EditableListModel;
+import gui.utilities.list.ListModelFactory;
+import java.awt.BorderLayout;
+import java.text.DecimalFormat;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Warkst
  */
-public class ArticleViewController extends javax.swing.JPanel implements MasterDetailViewController<Article> {
+public class ArticleViewController extends javax.swing.JPanel implements MasterDetailViewController<Article>, AddArticleDelegate, EditArticleDelegate {
 
     /**
      * Creates new form ArticleViewController
@@ -21,7 +33,24 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     public ArticleViewController() {
 	initComponents();
 	
+	listOutlet.setModel(ListModelFactory.createArticleListModel(database.Database.driver().getArticlesAlphabetically()));
+	
+	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	listOutlet.addListSelectionListener(new ListSelectionListener() {
+
+	    @Override
+	    public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+		    if(listOutlet.getSelectedValue() != null) updateDetail((Article)listOutlet.getSelectedValue());
+		}
+	    }
+	});
 	listOutlet.setSelectedIndex(0);
+	
+	if (Database.driver().getArticles().isEmpty()) {
+	    detail.remove(container);
+	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
+	}
     }
 
     /**
@@ -37,15 +66,22 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
+        add = new javax.swing.JButton();
         detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        nameOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        codeOutlet = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        priceAOutlet = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        priceBOutlet = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        unitOutlet = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        taxesOutlet = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
@@ -64,34 +100,83 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jButton1.setText("Toevoegen...");
-        master.add(jButton1, java.awt.BorderLayout.SOUTH);
+        add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
 
         jSplitPane1.setLeftComponent(master);
 
         detail.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.GridLayout(3, 2));
+        container.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setLayout(new java.awt.GridLayout(6, 2));
 
         jLabel1.setText("Naam");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jPanel1.add(jLabel1);
 
-        jLabel2.setText("jLabel2");
-        jPanel1.add(jLabel2);
+        nameOutlet.setText("<nameOutlet>");
+        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jPanel1.add(nameOutlet);
 
+        jLabel3.setBackground(new java.awt.Color(239, 239, 239));
         jLabel3.setText("Code");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel3.setOpaque(true);
         jPanel1.add(jLabel3);
 
-        jLabel4.setText("jLabel4");
-        jPanel1.add(jLabel4);
+        codeOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        codeOutlet.setText("<codeOutlet>");
+        codeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        codeOutlet.setOpaque(true);
+        jPanel1.add(codeOutlet);
 
-        jLabel5.setText("jLabel5");
+        jLabel5.setText("Prijs A (Excl BTW)");
+        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jPanel1.add(jLabel5);
 
-        jLabel6.setText("jLabel6");
-        jPanel1.add(jLabel6);
+        priceAOutlet.setText("<priceAOutlet>");
+        priceAOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jPanel1.add(priceAOutlet);
 
-        detail.add(jPanel1, java.awt.BorderLayout.NORTH);
+        jLabel7.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel7.setText("Prijs B (Excl BTW)");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel7.setOpaque(true);
+        jPanel1.add(jLabel7);
+
+        priceBOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        priceBOutlet.setText("<priceBOutlet>");
+        priceBOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        priceBOutlet.setOpaque(true);
+        jPanel1.add(priceBOutlet);
+
+        jLabel9.setText("Eenheid");
+        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jPanel1.add(jLabel9);
+
+        unitOutlet.setText("<unitOutlet>");
+        unitOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jPanel1.add(unitOutlet);
+
+        jLabel11.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel11.setText("BTW tarief");
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel11.setOpaque(true);
+        jPanel1.add(jLabel11);
+
+        taxesOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        taxesOutlet.setText("<taxesOutlet>");
+        taxesOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        taxesOutlet.setOpaque(true);
+        jPanel1.add(taxesOutlet);
+
+        container.add(jPanel1, java.awt.BorderLayout.NORTH);
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
 
@@ -99,22 +184,30 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
-        detail.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        container.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        detail.add(container, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        new AddArticleDialog(null, true, this).setVisible(true);
+    }//GEN-LAST:event_addActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
+    private javax.swing.JLabel codeOutlet;
+    private javax.swing.JPanel container;
     private javax.swing.JPanel detail;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -122,11 +215,23 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
+    private javax.swing.JLabel nameOutlet;
+    private javax.swing.JLabel priceAOutlet;
+    private javax.swing.JLabel priceBOutlet;
+    private javax.swing.JLabel taxesOutlet;
+    private javax.swing.JLabel unitOutlet;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void updateDetail(Article value) {
-	throw new UnsupportedOperationException("Not supported yet.");
+    public void updateDetail(Article article) {
+	DecimalFormat three = new DecimalFormat("0.000");
+	
+	nameOutlet.setText(article.getName());
+	codeOutlet.setText(article.getCode());
+	priceAOutlet.setText(three.format(article.getPriceA()));
+	priceBOutlet.setText(three.format(article.getPriceB()));
+	unitOutlet.setText(article.getUnit());
+	taxesOutlet.setText(new DecimalFormat("0.00").format(article.getTaxes()));
     }
     
     @Override
@@ -142,5 +247,25 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     @Override
     public JMenu menu() {
 	return null;
+    }
+
+    @Override
+    public void addArticle(Article article) {
+	EditableListModel<Article> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.update();
+	if (dlm.getSize() == 1) {
+	    detail.removeAll();
+	    detail.add(container);
+	}
+	listOutlet.setSelectedValue(article, true);
+	updateDetail(article);
+    }
+
+    @Override
+    public void editArticle(Article o, Article n) {
+	EditableListModel<Article> dlm = (EditableListModel)listOutlet.getModel();
+	dlm.edit(n, o);
+	listOutlet.setSelectedValue(n, true);
+	updateDetail(n);
     }
 }

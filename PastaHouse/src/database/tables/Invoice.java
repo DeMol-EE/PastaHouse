@@ -9,5 +9,4 @@ package database.tables;
  * @author Robin jr
  */
 public class Invoice {
-    
 }

@@ -59,7 +59,7 @@ public class ContactsTabbedViewController extends javax.swing.JPanel implements 
 	cvc.electFirstResponder();
 	
 	List<JMenu> l = new ArrayList<JMenu>();
-//	l.add(editMenu);
+	l.add(cvc.menu());
 	return l;
     }
 }

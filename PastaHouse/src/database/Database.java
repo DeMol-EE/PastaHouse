@@ -6,13 +6,14 @@
 package database;
 
 import database.extra.Component;
+import database.extra.Contact;
 import database.extra.Ingredient;
 import database.models.BasicIngredientModel;
 import database.models.RecipeModel;
 import database.models.SupplierModel;
+import database.tables.Article;
 import database.tables.BasicIngredient;
 import database.tables.Client;
-import database.extra.Contact;
 import database.tables.Recipe;
 import database.tables.Supplier;
 import java.sql.Connection;
@@ -45,10 +46,12 @@ public class Database {
     private Map<Integer, BasicIngredient> basicIngredientsById;
     private Map<Integer, Recipe> recipesById;
     private Map<Integer, Client> clientsById;
+    private Map<Integer, Article> articlesById;
     private Map<String, Supplier> suppliersByFirm;
     private Map<String, BasicIngredient> basicIngredientsByName;
     private Map<String, Recipe> recipesByName;
     private Map<String, Integer> municipales;
+    private Map<String, Article> articlesByName;
 
     private Database() {
         try {
@@ -56,9 +59,12 @@ public class Database {
             basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
             recipesById = new TreeMap<Integer, Recipe>();
             clientsById = new TreeMap<Integer, Client>();
+            articlesById = new TreeMap<Integer, Article>();
+	    
 	    suppliersByFirm = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
+	    articlesByName = new TreeMap<String, Article>(String.CASE_INSENSITIVE_ORDER);
 	    
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
             // connect to db
@@ -393,6 +399,14 @@ public class Database {
     
     public Map<String, BasicIngredient> getBasicIngredientsAlphabetically() {
         return basicIngredientsByName;
+    }
+    
+    public Map<Integer, Article> getArticles() {
+	return articlesById;
+    }
+    
+    public Map<String, Article> getArticlesAlphabetically() {
+	return articlesByName;
     }
 
     public Map<Integer, Recipe> getRecipes() {

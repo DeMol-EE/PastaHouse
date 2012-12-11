@@ -8,6 +8,7 @@ import database.extra.Contact;
 import gui.MasterDetailViewController;
 import gui.contacts.datasource.FilterPanelDataSource;
 import gui.contacts.delegates.FilterPanelDelegate;
+import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.list.ContactListModel;
 import java.util.Set;
 import javax.swing.JMenu;
@@ -52,6 +53,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	listOutlet.setSelectedIndex(0);
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
+	TextFieldAutoHighlighter.installHighlighter(filter);
     }
 
     /**
@@ -118,6 +120,11 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
         searchMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         searchMenuItem.setText("Zoeken");
+        searchMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMenuItemActionPerformed(evt);
+            }
+        });
         editMenu.add(searchMenuItem);
 
         filteringPanel.setLayout(new java.awt.BorderLayout());
@@ -251,6 +258,10 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    listModel.setFilter(filter.getText());
 	}
     }//GEN-LAST:event_filterKeyReleased
+
+    private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
+        filter.requestFocus();
+    }//GEN-LAST:event_searchMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
