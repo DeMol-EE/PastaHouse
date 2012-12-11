@@ -4,7 +4,9 @@
  */
 package gui.invoices.dialogs;
 
+import database.FunctionResult;
 import database.models.ArticleModel;
+import database.tables.Article;
 import gui.invoices.delegates.AddArticleDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
@@ -13,6 +15,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -31,6 +34,8 @@ public class AddArticleDialog extends javax.swing.JDialog {
     public AddArticleDialog(java.awt.Frame parent, boolean modal, AddArticleDelegate delegate) {
 	super(parent, modal);
 	initComponents();
+	
+	setLocationRelativeTo(null);
 	
 	this.delegate = delegate;
 	this.model = new ArticleModel();
@@ -96,6 +101,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(400, 400));
 
         container.setLayout(new java.awt.BorderLayout());
 
@@ -116,7 +122,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jPanel1.add(jLabel5);
 
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         priceAOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -135,7 +141,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jLabel7.setOpaque(true);
         jPanel1.add(jLabel7);
 
-        jPanel5.setLayout(new java.awt.GridLayout());
+        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
 
         priceBOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -159,7 +165,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jLabel11.setOpaque(true);
         jPanel1.add(jLabel11);
 
-        jPanel6.setLayout(new java.awt.GridLayout());
+        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
 
         taxesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -187,7 +193,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         create.setText("Aanmaken");
         create.addActionListener(new java.awt.event.ActionListener() {
@@ -213,7 +219,38 @@ public class AddArticleDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
-        // TODO add your handling code here:
+        try{
+	    if (nameOutlet.getText().isEmpty()
+		    || codeOutlet.getText().isEmpty()
+		    || priceAOutlet.getText().isEmpty()
+		    || priceBOutlet.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
+	    /*
+	     * Set values on the model
+	     */
+	    model.setName(nameOutlet.getText());
+	    model.setCode(codeOutlet.getText());
+	    model.setPriceA(Double.parseDouble(priceAOutlet.getText()));
+	    model.setPriceB(Double.parseDouble(priceBOutlet.getText()));
+	    model.setUnit(unitOutlet.getText());
+	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+	    
+	    FunctionResult<Article> res = model.create();
+	    if (res.getCode() == 0 && res.getObj() != null) {
+		delegate.addArticle(res.getObj());
+		disposeLater();
+	    } else {
+		// switch case error code
+		JOptionPane.showMessageDialog(null, "Het toevoegen van het artikel heeft foutcode "+res.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		disposeLater();
+	    }
+	} catch (Exception e){
+	    System.err.println("Error: \n"+e.getMessage());
+	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+	}
     }//GEN-LAST:event_createActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
@@ -241,6 +278,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	} catch (Exception e) {
 	    priceAOutlet.setForeground(Color.red);
 	    priceAFormattedOutlet.setForeground(Color.red);
+	    priceAFormattedOutlet.setText("???");
 	}
     }
     
@@ -253,6 +291,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	} catch (Exception e) {
 	    priceBOutlet.setForeground(Color.red);
 	    priceBFormattedOutlet.setForeground(Color.red);
+	    priceBFormattedOutlet.setText("???");
 	}
     }
     
@@ -265,6 +304,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	} catch (Exception e) {
 	    taxesOutlet.setForeground(Color.red);
 	    taxesFormattedOutlet.setForeground(Color.red);
+	    taxesFormattedOutlet.setText("???");
 	}
     }
     

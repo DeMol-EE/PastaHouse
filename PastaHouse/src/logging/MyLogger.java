@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,7 +64,7 @@ public class MyLogger {
     public static void log(String msg, int lvl){
 	logToChat(msg, lvl);
 	if (lvl <= logLevel) {
-	    logToFile(msg);
+//	    logToFile(msg);
 	}
     }
     

@@ -5,3 +5,4 @@ table_recipes_ingredients,recipesingredients
 table_recipes_recipes,recipesrecipes
 table_suppliers,suppliers
 table_municipales, Gemeentes
+table_municipales,articles

@@ -8,6 +8,7 @@ package database;
 import database.extra.Component;
 import database.extra.Contact;
 import database.extra.Ingredient;
+import database.models.ArticleModel;
 import database.models.BasicIngredientModel;
 import database.models.RecipeModel;
 import database.models.SupplierModel;
@@ -77,6 +78,7 @@ public class Database {
             loadBasicIngredients();
             loadRecipes();
             loadMunicipales();
+	    loadArticles();
 
         } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -157,6 +159,39 @@ public class Database {
             preparedStatement.close();
         }
         return new FunctionResult<Supplier>(code, newSup);
+    }
+    
+    public FunctionResult<Article> addArticle(ArticleModel art) throws SQLException {
+        int code = 0;
+	Article newArt = null;
+        String insertTableSQL = "INSERT INTO articles"
+                + "(name, code, pricea, priceb, unit, taxes) VALUES"
+                + "(?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
+        try {
+            preparedStatement.setString(1, art.getName());
+            preparedStatement.setString(2, art.getCode());
+            preparedStatement.setDouble(3, art.getPriceA());
+            preparedStatement.setDouble(4, art.getPriceB());
+	    preparedStatement.setString(5, art.getUnit());
+            preparedStatement.setDouble(6, art.getTaxes());
+            preparedStatement.executeUpdate();
+	    
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_ART()+" WHERE name=\""+art.getName()+"\"");
+	    if (rs.next()) {
+		newArt = Article.createFromModel(rs.getInt("id"), art);
+		articlesById.put(newArt.getPrimaryKeyValue(), newArt);
+		articlesByName.put(newArt.getName(), newArt);
+	    } else {
+		code = 2;
+	    }
+        } catch (SQLException ex) {
+            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+	    code = 1;
+        } finally {
+            preparedStatement.close();
+        }
+        return new FunctionResult<Article>(code, newArt);
     }
 
     private void loadBasicIngredients() throws SQLException {
@@ -379,6 +414,25 @@ public class Database {
             String name = StringTools.capitalizeEach(rs.getString("name"));
             municipales.put(name, code);
         }
+    }
+    
+    private void loadArticles() throws SQLException {
+        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_ART());
+        while (rs.next()) {
+	    Article a = Article.loadWithValues(
+		    rs.getInt("id"),
+                    rs.getString("code"),
+		    rs.getString("name"),
+                    rs.getDouble("pricea"),
+                    rs.getDouble("priceb"),
+                    rs.getString("unit"),
+		    rs.getDouble("taxes"));
+            articlesById.put(a.getPrimaryKeyValue(), a);
+            articlesByName.put(a.getName(), a);
+        }
+
+//        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
+	MyLogger.log("Database driver:: loaded " + articlesById.size() + " articles!", MyLogger.LOW);
     }
     
     public Map<Integer, Client> getClients() {

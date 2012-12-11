@@ -95,6 +95,12 @@ public class Article extends Record{
     public void setTaxes(double taxes) {
 	this.taxes = taxes;
     }
+    
+    @Override
+    public String toString(){
+//	return name+" ("+code+")";
+	return name;
+    }
 
     @Override
     public boolean update() {

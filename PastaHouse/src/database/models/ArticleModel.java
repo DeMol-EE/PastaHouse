@@ -4,7 +4,10 @@
  */
 package database.models;
 
+import database.Database;
 import database.FunctionResult;
+import database.tables.Article;
+import java.sql.SQLException;
 
 /**
  *
@@ -68,7 +71,12 @@ public class ArticleModel implements Model{
     
     @Override
     public FunctionResult create() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	try {
+	    return Database.driver().addArticle(this);
+	} catch (SQLException ex) {
+	    System.err.println("Exception:\n"+ex.getMessage());
+	    return new FunctionResult<Article>(3, null);
+	}
     }
     
 }

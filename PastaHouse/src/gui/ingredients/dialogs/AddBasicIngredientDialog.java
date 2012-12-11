@@ -422,10 +422,6 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 	    }
 	    model.setSupplier(s);
 	    
-	    if (model.getName().isEmpty() || model.getSupplier() == null) {
-		throw new RuntimeException("Invalid form");
-	    }
-	    
 	    FunctionResult<BasicIngredient> res = model.create();
 	    if (res.getCode() == 0 && res.getObj() != null) {
 		delegate.addBasicIngredient(res.getObj());
@@ -436,7 +432,6 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 		disposeLater();
 	    }
 	} catch (Exception e){
-	    Object o = supplierBox.getSelectedItem();
 	    System.err.println("Error: \n"+e.getMessage());
 	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 	}

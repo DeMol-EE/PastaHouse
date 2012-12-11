@@ -228,10 +228,10 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	
 	nameOutlet.setText(article.getName());
 	codeOutlet.setText(article.getCode());
-	priceAOutlet.setText(three.format(article.getPriceA()));
-	priceBOutlet.setText(three.format(article.getPriceB()));
+	priceAOutlet.setText(three.format(article.getPriceA())+" euro");
+	priceBOutlet.setText(three.format(article.getPriceB())+" euro");
 	unitOutlet.setText(article.getUnit());
-	taxesOutlet.setText(new DecimalFormat("0.00").format(article.getTaxes()));
+	taxesOutlet.setText(new DecimalFormat("0.00").format(article.getTaxes())+" %");
     }
     
     @Override
