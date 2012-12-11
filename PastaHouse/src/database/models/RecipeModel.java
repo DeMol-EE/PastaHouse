@@ -22,10 +22,10 @@ public class RecipeModel implements Model{
     
     private double netWeight;
     private String preparation;
-    private Map<Integer, Component> ingredients;
+    private Map<Integer, Component> components;
 
     public RecipeModel(){
-	ingredients = new TreeMap<Integer, Component>();
+	components = new TreeMap<Integer, Component>();
     }
     
     public String getName() {
@@ -61,11 +61,11 @@ public class RecipeModel implements Model{
     }
 
     public Map<Integer, Component> getComponents() {
-	return ingredients;
+	return components;
     }
 
     public void setIngredients(Map<Integer, Component> ingredients) {
-	this.ingredients = ingredients;
+	this.components = ingredients;
     }
     
     /**
@@ -76,7 +76,7 @@ public class RecipeModel implements Model{
     public double getGrossWeight(){
 	double returnMe = 0.0;
 	
-	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
+	for (Map.Entry<Integer, Component> entry : components.entrySet()) {
 	    returnMe += entry.getValue().getQuantity();
 	}
 	
@@ -86,7 +86,7 @@ public class RecipeModel implements Model{
     public double getPricePerWeight(){
 	double returnMe = 0.0;
 	
-	for (Map.Entry<Integer, Component> entry : ingredients.entrySet()) {
+	for (Map.Entry<Integer, Component> entry : components.entrySet()) {
 	    if (entry.getValue().getIngredient() != null) {
 		returnMe += entry.getValue().getIngredient().getPricePerWeight()*entry.getValue().getQuantity();
 	    }

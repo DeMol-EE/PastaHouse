@@ -106,6 +106,7 @@
             <Component class="javax.swing.JButton" name="addSupplier">
               <Properties>
                 <Property name="text" type="java.lang.String" value="+"/>
+                <Property name="toolTipText" type="java.lang.String" value="Klik hier om een nieuwe leverancier toe te voegen."/>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Events>

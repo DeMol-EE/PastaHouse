@@ -462,6 +462,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     public void electFirstResponder() {
 	((EditableListModel)listOutlet.getModel()).update();
 	listOutlet.requestFocus();
+	if(listOutlet.getSelectedValue()!=null) updateDetail((Supplier)listOutlet.getSelectedValue());
     }
 
     @Override

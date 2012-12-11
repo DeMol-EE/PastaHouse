@@ -440,6 +440,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     public void electFirstResponder() {
 	((EditableListModel)recipeListOutlet.getModel()).update();
 	recipeListOutlet.requestFocus();
+	if(recipeListOutlet.getSelectedValue()!=null) updateDetail((Recipe)recipeListOutlet.getSelectedValue());
     }
     
     private void notesKeyEvent(KeyEvent evt){

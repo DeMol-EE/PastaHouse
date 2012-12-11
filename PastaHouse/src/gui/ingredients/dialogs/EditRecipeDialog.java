@@ -8,7 +8,9 @@ import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.extra.Component;
 import database.extra.Ingredient;
+import database.tables.BasicIngredient;
 import database.tables.Recipe;
+import gui.ingredients.delegates.AddBasicIngredientDelegate;
 import gui.ingredients.delegates.ComboCoxDelegate;
 import gui.ingredients.delegates.EditRecipeDelegate;
 import gui.utilities.AcceleratorAdder;
@@ -43,12 +45,13 @@ import tools.Utilities;
  *
  * @author Robin jr
  */
-public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDelegate{
+public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDelegate, AddBasicIngredientDelegate{
 
     private final Recipe model;
     private final Recipe defaultModel;
     private final DatePicker dp;
     private final EditRecipeDelegate delegate;
+    private final EditableRecipeTableModel tableModel;
     /**
      * Creates new form EditRecipeDialog
      */
@@ -74,7 +77,10 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 //	Map<Integer, Component> m = model.getComponents();
 //	if (m.remove.) {
 //	}
-	this.ingredientsOutlet.setModel(new EditableRecipeTableModel(model.getComponents()));
+	
+	this.tableModel = new EditableRecipeTableModel(model.getComponents());
+	
+	this.ingredientsOutlet.setModel(tableModel);
 	this.ingredientsOutlet.getModel().addTableModelListener(new TableModelListener() {
 
 	    @Override
@@ -221,6 +227,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
+        newBasicIngredient = new javax.swing.JButton();
         addComponent = new javax.swing.JButton();
         removeComponent = new javax.swing.JButton();
 
@@ -335,7 +342,15 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 
         jPanel8.setLayout(new java.awt.BorderLayout());
 
-        jPanel9.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel9.setLayout(new java.awt.GridLayout(1, 3));
+
+        newBasicIngredient.setText("Nieuw...");
+        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newBasicIngredientActionPerformed(evt);
+            }
+        });
+        jPanel9.add(newBasicIngredient);
 
         addComponent.setText("Toevoegen");
         addComponent.addActionListener(new java.awt.event.ActionListener() {
@@ -401,7 +416,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
     private void removeComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComponentActionPerformed
         int selected = ingredientsOutlet.getSelectedRow();
 	if(ingredientsOutlet.getSelectedRow()>-1 && ingredientsOutlet.getSelectedRow() < ingredientsOutlet.getModel().getRowCount()){
-	    ((EditableRecipeTableModel)ingredientsOutlet.getModel()).removeRow(ingredientsOutlet.getSelectedRow());
+	    tableModel.removeRow(ingredientsOutlet.getSelectedRow());
 	    int row = Math.max(0, Math.min(selected, ingredientsOutlet.getModel().getRowCount()-1));
 	    if (ingredientsOutlet.getModel().getRowCount() > 0) {
 		ingredientsOutlet.getSelectionModel().setSelectionInterval(row, row);
@@ -410,7 +425,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
     }//GEN-LAST:event_removeComponentActionPerformed
 
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentActionPerformed
-        ((EditableRecipeTableModel)ingredientsOutlet.getModel()).addRow();
+        tableModel.addRow();
 	int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
 	ingredientsOutlet.scrollRectToVisible(ingredientsOutlet.getCellRect(ingredientsOutlet.getRowCount()-1, 0, true));
 	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
@@ -426,6 +441,10 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 	    ingredientsOutlet.transferFocus();
 	}
     }//GEN-LAST:event_ingredientsOutletKeyReleased
+
+    private void newBasicIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newBasicIngredientActionPerformed
+        new AddBasicIngredientDialog(null, true, this).setVisible(true);
+    }//GEN-LAST:event_newBasicIngredientActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addComponent;
@@ -450,9 +469,40 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
     private javax.swing.JTextField nameOutlet;
     private javax.swing.JLabel netWeightFormattedOutlet;
     private javax.swing.JTextField netWeightOutlet;
+    private javax.swing.JButton newBasicIngredient;
     private javax.swing.JTextArea preparationOutlet;
     private javax.swing.JLabel pricePerWeightOutlet;
     private javax.swing.JButton removeComponent;
     private javax.swing.JButton save;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void addBasicIngredient(BasicIngredient bi) {
+	/*
+	 * Add to table model, add new component and set ingredient to be "bi"
+	 */
+	List ingredients = new ArrayList();
+	ingredients.add("");
+	/*
+	 * Add all ingredients and recipes that are not and do not contain the model to prevent loops in recipes
+	 */
+	Collection<Ingredient> c = new TreeSet<Ingredient>();
+	for (Ingredient ingredient : Database.driver().getIngredients()) {
+	    if (ingredient.isBasicIngredient() ||
+		    (!ingredient.isBasicIngredient() && !((Recipe)ingredient).containsRecipe(model))) {
+		c.add(ingredient);
+	    }
+	}
+	
+	ingredients.addAll(c);
+	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(ingredients, this);
+	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
+	
+	tableModel.addRow();
+	int lastIndex = ingredientsOutlet.getModel().getRowCount()-1;
+	ingredientsOutlet.scrollRectToVisible(ingredientsOutlet.getCellRect(ingredientsOutlet.getRowCount()-1, 0, true));
+	ingredientsOutlet.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+	
+	tableModel.setValueAt(bi, ingredientsOutlet.getSelectedRow(), 0);
+    }
 }

@@ -43,10 +43,13 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-		    updateDetail((Contact)listOutlet.getSelectedValue());
+		    if (listOutlet.getSelectedValue()!=null) {
+			updateDetail((Contact)listOutlet.getSelectedValue());
+		    }
 		}
 	    }
 	});
+	listOutlet.setSelectedIndex(0);
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
     }
@@ -63,6 +66,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         editMenu = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
+        searchMenuItem = new javax.swing.JMenuItem();
         filteringPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -95,7 +99,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         editMenu.setText("Edit");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        addMenuItem.setText("Add");
+        addMenuItem.setText("Toevoegen");
         addMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMenuItemActionPerformed(evt);
@@ -104,13 +108,17 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         editMenu.add(addMenuItem);
 
         editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        editMenuItem.setText("Edit");
+        editMenuItem.setText("Wijzigen");
         editMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMenuItemActionPerformed(evt);
             }
         });
         editMenu.add(editMenuItem);
+
+        searchMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        searchMenuItem.setText("Zoeken");
+        editMenu.add(searchMenuItem);
 
         filteringPanel.setLayout(new java.awt.BorderLayout());
 
@@ -275,6 +283,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
+    private javax.swing.JMenuItem searchMenuItem;
     private javax.swing.JLabel typeOutlet;
     // End of variables declaration//GEN-END:variables
 

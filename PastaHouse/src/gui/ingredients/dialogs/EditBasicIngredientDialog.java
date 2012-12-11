@@ -226,6 +226,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         jPanel10.add(jLabel4, java.awt.BorderLayout.CENTER);
 
         addSupplier.setText("+");
+        addSupplier.setToolTipText("Klik hier om een nieuwe leverancier toe te voegen.");
         addSupplier.setFocusable(false);
         addSupplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

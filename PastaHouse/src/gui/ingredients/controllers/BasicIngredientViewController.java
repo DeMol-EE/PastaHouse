@@ -549,6 +549,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     public void electFirstResponder() {
 	((EditableListModel)listOutlet.getModel()).update();
 	listOutlet.requestFocus();
+	if(listOutlet.getSelectedValue()!=null) updateDetail((BasicIngredient)listOutlet.getSelectedValue());
     }
     
     private void notesKeyEvent(KeyEvent evt){
