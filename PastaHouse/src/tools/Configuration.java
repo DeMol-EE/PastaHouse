@@ -27,6 +27,7 @@ public class Configuration {
     private final String DB_TABLE_SUP_kp = "table_suppliers";
     private final String DB_TABLE_MUNI_kp = "table_municipales";
     private final String DB_TABLE_ART_kp = "table_articles";
+    private final String DB_TABLE_CL_kp = "table_clients";
     
     // defaults
     private String DB_URL_d = "jdbc:sqlite:pastahouse.db";
@@ -37,6 +38,7 @@ public class Configuration {
     private String DB_TABLE_SUP_d = "suppliers";
     private String DB_TABLE_MUNI_d = "Gemeentes";
     private String DB_TABLE_ART_d = "articles";
+    private String DB_TABLE_CL_d = "clients";
     
     // variables storing the actual values from the conf file
     private String DB_URL;
@@ -47,6 +49,7 @@ public class Configuration {
     private String DB_TABLE_SUP;
     private String DB_TABLE_MUNI;
     private String DB_TABLE_ART;
+    private String DB_TABLE_CL;
  
     private static Configuration center;
     
@@ -66,6 +69,7 @@ public class Configuration {
 		DB_TABLE_SUP = DB_TABLE_SUP_d;
                 DB_TABLE_MUNI = DB_TABLE_MUNI_d;
                 DB_TABLE_ART = DB_TABLE_ART_d;
+                DB_TABLE_CL = DB_TABLE_CL_d;
     
 		// write the settings to the file
 		FileWriter fstream = new FileWriter(conf);
@@ -78,6 +82,7 @@ public class Configuration {
 		out.write(DB_TABLE_SUP_kp+","+DB_TABLE_SUP_d+"\n");
                 out.write(DB_TABLE_MUNI_kp+","+DB_TABLE_MUNI_d+"\n");
                 out.write(DB_TABLE_ART_kp+","+DB_TABLE_ART_d+"\n");
+                out.write(DB_TABLE_CL_kp+","+DB_TABLE_CL_d+"\n");
 		//Close the output stream
 		out.close();
 	    } else {
@@ -106,6 +111,7 @@ public class Configuration {
 		DB_TABLE_SUP = values.containsKey(DB_TABLE_SUP_kp) ? values.get(DB_TABLE_SUP_kp) : DB_TABLE_SUP_d;
                 DB_TABLE_MUNI = values.containsKey(DB_TABLE_MUNI_kp) ? values.get(DB_TABLE_MUNI_kp) : DB_TABLE_MUNI_d;
                 DB_TABLE_ART = values.containsKey(DB_TABLE_ART_kp) ? values.get(DB_TABLE_ART_kp) : DB_TABLE_ART_d;
+                DB_TABLE_CL = values.containsKey(DB_TABLE_CL_kp) ? values.get(DB_TABLE_CL_kp) : DB_TABLE_CL_d;
 	    }
 	    
 	} catch(Exception e){
@@ -151,5 +157,9 @@ public class Configuration {
     
     public String getDB_TABLE_ART() {
 	return DB_TABLE_ART;
+    }
+    
+    public String getDB_TABLE_CL() {
+	return DB_TABLE_CL;
     }
 }

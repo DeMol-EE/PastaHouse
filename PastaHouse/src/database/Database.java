@@ -10,6 +10,7 @@ import database.extra.Contact;
 import database.extra.Ingredient;
 import database.models.ArticleModel;
 import database.models.BasicIngredientModel;
+import database.models.ClientModel;
 import database.models.RecipeModel;
 import database.models.SupplierModel;
 import database.tables.Article;
@@ -51,6 +52,7 @@ public class Database {
     private Map<String, Supplier> suppliersByFirm;
     private Map<String, BasicIngredient> basicIngredientsByName;
     private Map<String, Recipe> recipesByName;
+    private Map<String, Client> clientsByName;
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
 
@@ -65,6 +67,7 @@ public class Database {
 	    suppliersByFirm = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
+	    clientsByName = new TreeMap<String, Client>(String.CASE_INSENSITIVE_ORDER);
 	    articlesByName = new TreeMap<String, Article>(String.CASE_INSENSITIVE_ORDER);
 	    
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
@@ -96,6 +99,32 @@ public class Database {
     public Connection getConnection() {
         return connection;
     }
+    
+    private void loadClients() throws SQLException {
+        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_CL());
+        while (rs.next()) {
+	    Client s = Client.loadWithValues(
+		    rs.getInt("id"),
+		    rs.getString("naam"),
+                    rs.getString("contactpersoon"),
+                    rs.getString("adres"),
+                    rs.getInt("postcode"),
+		    rs.getString("gemeente"),
+                    rs.getString("tel"),
+                    rs.getString("tel2"),
+                    rs.getString("gsm"),
+                    rs.getString("fax"),
+                    rs.getString("email"),
+                    rs.getString("btwnummer"),
+                    rs.getString("prijscode"),
+                    rs.getString("opmerking"));
+            clientsById.put(s.getPrimaryKeyValue(), s);
+            clientsByName.put(s.getName(), s);
+        }
+
+//        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
+	MyLogger.log("Database driver:: loaded " + suppliersById.size() + " suppliers!", MyLogger.LOW);
+    }
 
     private void loadSuppliers() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_SUP());
@@ -103,19 +132,21 @@ public class Database {
 	    Supplier s = Supplier.loadWithValues(
 		    rs.getInt("id"),
 		    rs.getString("firma"),
+                    rs.getString("contactpersoon"),
                     rs.getString("adres"),
-                    rs.getString("gemeente"),
                     rs.getInt("postcode"),
+		    rs.getString("gemeente"),
                     rs.getString("tel"),
                     rs.getString("tel2"),
                     rs.getString("gsm"),
                     rs.getString("fax"),
                     rs.getString("email"),
+                    rs.getString("btwnr"),
+                    rs.getString("prijscode"),
                     rs.getString("opmerking"),
-                    rs.getString("contactpersoon"),
                     rs.getBoolean("verwijderd"));
             suppliersById.put(s.getPrimaryKeyValue(), s);
-            suppliersByFirm.put(s.getFirm(), s);
+            suppliersByFirm.put(s.getName(), s);
         }
 
 //        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
@@ -126,8 +157,8 @@ public class Database {
         int code = 0;
 	Supplier newSup = null;
         String insertTableSQL = "INSERT INTO suppliers"
-                + "(firma, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd) VALUES"
-                + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "(firma, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd, btwnr, prijscode) VALUES"
+                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
             preparedStatement.setString(1, sup.getFirm());
@@ -142,13 +173,15 @@ public class Database {
             preparedStatement.setString(10, sup.getFax());
             preparedStatement.setInt(11, sup.getZipcode());
             preparedStatement.setInt(12, 0);
+	    preparedStatement.setString(13, sup.getTaxnumber());
+            preparedStatement.setString(14, sup.getPricecode());
             preparedStatement.executeUpdate();
 	    
 	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_SUP()+" WHERE firma=\""+sup.getFirm()+"\"");
 	    if (rs.next()) {
 		newSup = Supplier.createFromModel(rs.getInt("id"), sup);
 		suppliersById.put(newSup.getPrimaryKeyValue(), newSup);
-		suppliersByFirm.put(newSup.getFirm(), newSup);
+		suppliersByFirm.put(newSup.getName(), newSup);
 	    } else {
 		code = 2;
 	    }
@@ -159,6 +192,47 @@ public class Database {
             preparedStatement.close();
         }
         return new FunctionResult<Supplier>(code, newSup);
+    }
+    
+    public FunctionResult<Client> addClient(ClientModel cl) throws SQLException {
+        int code = 0;
+	Client newCl = null;
+        String insertTableSQL = "INSERT INTO klanten"
+                + "(naam, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd, btwnummer, prijscode) VALUES"
+                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
+        try {
+            preparedStatement.setString(1, cl.getName());
+            preparedStatement.setString(2, cl.getAddress());
+            preparedStatement.setString(3, cl.getMunicipality());
+            preparedStatement.setString(4, cl.getTelephone());
+            preparedStatement.setString(5, cl.getTelephone2());
+            preparedStatement.setString(6, cl.getCellphone());
+            preparedStatement.setString(7, cl.getEmail());
+            preparedStatement.setString(8, cl.getNotes());
+            preparedStatement.setString(9, cl.getContact());
+            preparedStatement.setString(10, cl.getFax());
+            preparedStatement.setInt(11, cl.getZipcode());
+            preparedStatement.setInt(12, 0);
+	    preparedStatement.setString(13, cl.getTaxnumber());
+            preparedStatement.setString(14, cl.getPricecode());
+            preparedStatement.executeUpdate();
+	    
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CL()+" WHERE naam=\""+cl.getName()+"\"");
+	    if (rs.next()) {
+		newCl = Client.createFromModel(rs.getInt("id"), cl);
+		clientsById.put(newCl.getPrimaryKeyValue(), newCl);
+		clientsByName.put(newCl.getName(), newCl);
+	    } else {
+		code = 2;
+	    }
+        } catch (SQLException ex) {
+            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+	    code = 1;
+        } finally {
+            preparedStatement.close();
+        }
+        return new FunctionResult<Client>(code, newCl);
     }
     
     public FunctionResult<Article> addArticle(ArticleModel art) throws SQLException {
@@ -437,6 +511,10 @@ public class Database {
     
     public Map<Integer, Client> getClients() {
 	return clientsById;
+    }
+    
+    public Map<String, Client> getClientsAlphabetically() {
+	return clientsByName;
     }
 
     public Map<Integer, Supplier> getSuppliers() {

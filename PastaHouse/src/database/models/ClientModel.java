@@ -6,15 +6,15 @@ package database.models;
 
 import database.Database;
 import database.FunctionResult;
-import database.tables.Supplier;
+import database.tables.Client;
 import java.sql.SQLException;
 
 /**
  *
  * @author Warkst
  */
-public class SupplierModel implements Model{
-    private String firm;
+public class ClientModel implements Model{
+    private String name;
     private String address;
     private String municipality;
     private String telephone;
@@ -28,16 +28,16 @@ public class SupplierModel implements Model{
     private String taxnumber;
     private String pricecode;
 
-    public SupplierModel(){
+    public ClientModel(){
 	
     }
     
-    public String getFirm() {
-	return firm;
+    public String getName() {
+	return name;
     }
 
-    public void setFirm(String firm) {
-	this.firm = firm;
+    public void setName(String name) {
+	this.name = name;
     }
 
     public String getAddress() {
@@ -140,12 +140,13 @@ public class SupplierModel implements Model{
      * Tries to create this Supplier in the database. Returns a FunctionResult with code 0 if successful (and a pointer to the new supplier) and any other code if not.
      */
     @Override
-    public FunctionResult<Supplier> create(){
+    public FunctionResult<Client> create(){
 	try {
-	    return Database.driver().addSupplier(this);
+	    return Database.driver().addClient(this);
 	} catch (SQLException ex) {
-	    return new FunctionResult<Supplier>(3, null);
+	    return new FunctionResult<Client>(3, null);
 	}
         
     }
+    
 }

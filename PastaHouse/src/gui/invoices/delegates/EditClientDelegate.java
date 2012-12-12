@@ -10,6 +10,6 @@ import database.tables.Client;
  *
  * @author Warkst
  */
-public interface ClientDialogDelegate {
-    public void addClient(Client c);
+public interface EditClientDelegate {
+    public void updateClient(Client o, Client n);
 }

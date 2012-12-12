@@ -16,20 +16,34 @@ public abstract class Contact extends Record implements Filterable{
      * Test fields
      */
     private String name;
+    private String contact;
     private String address;
+    private int zipcode;
     private String municipality;
     private String telephone;
+    private String telephone2;
     private String cellphone;
+    private String fax;
     private String email;
+    private String taxnumber;
+    private String pricecode;
+    private String notes;
 
-    public Contact(int id, String table, String name, String address, String municipality, String telephone, String cellphone, String email){
+    public Contact(int id, String table, String name, String contact, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes){
 	super(id, table);
 	this.name = name;
+	this.contact = contact;
 	this.address = address;
+	this.zipcode = zipcode;
 	this.municipality = municipality;
 	this.telephone = telephone;
+	this.telephone2 = telephone2;
 	this.cellphone = cellphone;
+	this.fax = fax;
 	this.email = email;
+	this.taxnumber = taxnumber;
+	this.pricecode = pricecode;
+	this.notes = notes;
     }
 
     public String getName() {
@@ -79,6 +93,62 @@ public abstract class Contact extends Record implements Filterable{
     public void setEmail(String email) {
 	this.email = email;
     }
+
+    public String getContact() {
+	return contact;
+    }
+
+    public void setContact(String contact) {
+	this.contact = contact;
+    }
+
+    public int getZipcode() {
+	return zipcode;
+    }
+
+    public void setZipcode(int zipcode) {
+	this.zipcode = zipcode;
+    }
+
+    public String getTelephone2() {
+	return telephone2;
+    }
+
+    public void setTelephone2(String telephone2) {
+	this.telephone2 = telephone2;
+    }
+
+    public String getFax() {
+	return fax;
+    }
+
+    public void setFax(String fax) {
+	this.fax = fax;
+    }
+
+    public String getTaxnumber() {
+	return taxnumber;
+    }
+
+    public void setTaxnumber(String taxnumber) {
+	this.taxnumber = taxnumber;
+    }
+
+    public String getPricecode() {
+	return pricecode;
+    }
+
+    public void setPricecode(String pricecode) {
+	this.pricecode = pricecode;
+    }
+
+    public String getNotes() {
+	return notes;
+    }
+
+    public void setNotes(String notes) {
+	this.notes = notes;
+    }
     
     public abstract String getType();
     
@@ -86,7 +156,7 @@ public abstract class Contact extends Record implements Filterable{
 
     @Override
     public String filterable(){
-	return getType()+";"+name+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email;
+	return getType()+";"+name+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email+";"+zipcode+";"+telephone2+";"+fax+";"+notes+";"+contact;
     }
     
     @Override

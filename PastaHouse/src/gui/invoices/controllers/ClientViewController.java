@@ -8,7 +8,7 @@ import database.Database;
 import database.tables.Client;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
-import gui.invoices.delegates.ClientDialogDelegate;
+import gui.invoices.delegates.AddClientDelegate;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
@@ -23,7 +23,7 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Warkst
  */
-public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Client>, ClientDialogDelegate {
+public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Client>, AddClientDelegate {
     
     private boolean showingDetails = true;
     
@@ -329,18 +329,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_detailsMouseReleased
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	Map<Integer, Client> cl = Database.driver().getClients();
-	Client c = new Client("Client_"+cl.size()+1);
-	cl.put(cl.size()+1, c);
 	
-	
-	/*
-	 * Herp derp shortcut
-	 */
-	addClient(c);
-	
-	validate();
-	repaint();
     }//GEN-LAST:event_addActionPerformed
 
     private void updateDetailsOutlet(){

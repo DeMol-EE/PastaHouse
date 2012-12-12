@@ -300,7 +300,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 		return;
 	    }
 	    
-	    model.setFirm(txtFirma.getText());
+	    model.setName(txtFirma.getText());
 	    model.setContact(txtContact.getText());
 	    model.setAddress(txtAdres.getText());
 	    model.setZipcode(Integer.parseInt(txtGemeente.getText()));
