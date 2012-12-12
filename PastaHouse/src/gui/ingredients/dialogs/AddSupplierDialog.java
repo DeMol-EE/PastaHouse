@@ -12,6 +12,7 @@ import gui.ingredients.delegates.AddSupplierDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -21,6 +22,7 @@ import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import tools.Utilities;
 
 /**
  *
@@ -167,6 +169,12 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jLabel3.setText("BTWNummer");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel3);
+
+        taxnrOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                taxnrOutletKeyReleased(evt);
+            }
+        });
         jPanel2.add(taxnrOutlet);
 
         jLabel4.setText("Prijscode");
@@ -306,6 +314,15 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         }
         comboGemeentes.setDataList(items);
     }//GEN-LAST:event_txtPostcodeKeyReleased
+
+    private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
+        if (!Utilities.validTaxNr(taxnrOutlet.getText())) {
+	    taxnrOutlet.setForeground(Color.red);
+	} else {
+	    taxnrOutlet.setForeground(Color.black);
+	}
+    }//GEN-LAST:event_taxnrOutletKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HolderGemeentes;
     private javax.swing.JButton add;
