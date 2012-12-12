@@ -4,6 +4,7 @@
  */
 package database.tables;
 
+import database.Database;
 import database.extra.Record;
 import database.models.ArticleModel;
 import tools.Configuration;
@@ -123,7 +124,13 @@ public class Article extends Record{
 
     @Override
     public boolean update() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
+		"name = "+(name.length()>0 ? "\""+ name +"\"":"NULL")+", "
+		+ "code = "+(code.length()>0 ?"\""+code +"\"":"NULL")+", "
+		+ "pricea = "+(priceA>0? "\""+priceA +"\"":"NULL")+", "
+		+ "priceb = "+(priceB>0? "\""+priceB +"\"":"NULL")+", "
+		+ "unit = "+(unit.length()>0 ?"\""+unit +"\"":"NULL")+", "
+		+ "taxes = "+(taxes>0? "\""+taxes +"\"":"NULL"));
     }
 
     @Override
