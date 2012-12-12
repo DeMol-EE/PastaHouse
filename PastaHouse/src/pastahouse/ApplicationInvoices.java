@@ -52,6 +52,10 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         validate();
 
         getContentPane().removeAll();
+//	ImagePanelBean ipb = new ImagePanelBean();
+//	ipb.setBackgroundImage(new ImageIcon(ImagePanelBean.class.getResource("logo.png")), getSize());
+//	getContentPane().add(ipb);
+//	ipb.add(buttonPanel);
         getContentPane().add(buttonPanel, BorderLayout.CENTER);
         validate();
     }
@@ -99,6 +103,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         });
 
         buttonPanel.setFocusable(false);
+        buttonPanel.setOpaque(false);
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
         fillerWest.setFocusable(false);
@@ -144,6 +149,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         buttonPanel.add(fillerSouth, gridBagConstraints);
 
         jPanel1.setFocusable(false);
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridLayout(3, 1, 0, 10));
 
         btnRecipes.setText("Recepten");

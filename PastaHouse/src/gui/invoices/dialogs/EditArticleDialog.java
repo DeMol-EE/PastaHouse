@@ -131,7 +131,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
         jLabel5.setFocusable(false);
         jPanel1.add(jLabel5);
 
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         priceAOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -152,7 +152,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
         jLabel7.setOpaque(true);
         jPanel1.add(jLabel7);
 
-        jPanel5.setLayout(new java.awt.GridLayout());
+        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
 
         priceBOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -179,7 +179,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
         jLabel11.setOpaque(true);
         jPanel1.add(jLabel11);
 
-        jPanel6.setLayout(new java.awt.GridLayout());
+        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
 
         taxesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -208,7 +208,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         save.setText("Opslaan");
         save.setFocusable(false);
@@ -305,6 +305,11 @@ public class EditArticleDialog extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+	    
+	    if (!database.Database.driver().isArticleCodeUnique(codeOutlet.getText(), model)) {
+		JOptionPane.showMessageDialog(null, "Deze artikelcode is niet uniek!", "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
 
             /*
             * Set values on the model

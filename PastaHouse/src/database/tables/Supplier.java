@@ -114,7 +114,6 @@ public class Supplier extends Contact{
     public boolean update() {
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
 		"firma = \""+ getName() +"\", "
-//		"firma = "+(firm.length()>0 ? "\""+ firm +"\"":"NULL")+", "
 		+ "adres = "+(getAddress().length()>0 ? "\""+ getAddress() +"\"":"NULL")+", "
 		+ "postcode = "+ getZipcode() +", "
 		+ "gemeente = "+(getMunicipality().length()>0 ?"\""+getMunicipality() +"\"":"NULL")+", "

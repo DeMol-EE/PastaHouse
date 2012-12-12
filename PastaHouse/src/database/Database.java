@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import logging.MyLogger;
@@ -551,6 +553,32 @@ public class Database {
 
     public Map<String, Integer> getMunicipales() {
         return municipales;
+    }
+    
+    public boolean isArticleCodeUnique(String code){
+	Set<String> codes = new TreeSet<String>();
+	for (Article article : articlesByName.values()) {
+	    if (codes.contains(code)) {
+		return false;
+	    } else {
+		codes.add(article.getCode());
+	    }
+	}
+	return true;
+    }
+    
+    public boolean isArticleCodeUnique(String code, Article exclude){
+	Set<String> codes = new TreeSet<String>();
+	for (Article article : articlesByName.values()) {
+	    if (codes.contains(code)) {
+		return false;
+	    } else {
+		if (article != exclude) {
+		    codes.add(article.getCode());
+		}
+	    }
+	}
+	return true;
     }
 
     public List<Ingredient> getIngredients() {

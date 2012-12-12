@@ -237,6 +237,11 @@ public class AddArticleDialog extends javax.swing.JDialog {
 		return;
 	    }
 	    
+	    if (!database.Database.driver().isArticleCodeUnique(codeOutlet.getText())) {
+		JOptionPane.showMessageDialog(null, "Deze artikelcode is niet uniek!", "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
 	    /*
 	     * Set values on the model
 	     */

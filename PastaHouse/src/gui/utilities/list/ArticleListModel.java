@@ -4,8 +4,8 @@
  */
 package gui.utilities.list;
 
-import database.extra.Contact;
 import database.tables.Article;
+import database.tables.Supplier;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.AbstractListModel;
@@ -23,6 +23,14 @@ private final Map<String, Article> persistentData;
 	this.persistentData = data;
 	this.filteredData = new TreeMap<String, Article>(data);
 	this.filter = null;
+    }
+    
+    public void edit(Article newObj, Article oldObj) {
+	if (persistentData.get(oldObj.getName())!=null) {
+	    persistentData.remove(oldObj.getName());
+	    persistentData.put(newObj.getName(), newObj);
+	}
+	update();
     }
     
     /**

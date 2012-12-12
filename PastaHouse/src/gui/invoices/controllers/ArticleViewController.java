@@ -332,7 +332,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void addArticle(Article article) {
-	EditableListModel<Article> dlm = (EditableListModel)listOutlet.getModel();
+	ArticleListModel dlm = (ArticleListModel)listOutlet.getModel();
 	dlm.update();
 	if (dlm.getSize() == 1) {
 	    detail.removeAll();
@@ -344,7 +344,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void editArticle(Article o, Article n) {
-	EditableListModel<Article> dlm = (EditableListModel)listOutlet.getModel();
+	ArticleListModel dlm = (ArticleListModel)listOutlet.getModel();
 	dlm.edit(n, o);
 	listOutlet.setSelectedValue(n, true);
 	updateDetail(n);
