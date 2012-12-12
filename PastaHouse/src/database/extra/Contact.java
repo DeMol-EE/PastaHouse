@@ -15,7 +15,7 @@ public abstract class Contact extends Record implements Filterable{
     /*
      * Test fields
      */
-    private String name;
+    private String firm;
     private String contact;
     private String address;
     private int zipcode;
@@ -29,9 +29,9 @@ public abstract class Contact extends Record implements Filterable{
     private String pricecode;
     private String notes;
 
-    public Contact(int id, String table, String name, String contact, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes){
+    public Contact(int id, String table, String firm, String contact, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes){
 	super(id, table);
-	this.name = name;
+	this.firm = firm;
 	this.contact = contact;
 	this.address = address;
 	this.zipcode = zipcode;
@@ -46,8 +46,8 @@ public abstract class Contact extends Record implements Filterable{
 	this.notes = notes;
     }
 
-    public String getName() {
-	return name;
+    public String getFirm() {
+	return firm;
     }
 
     public String getAddress() {
@@ -70,8 +70,8 @@ public abstract class Contact extends Record implements Filterable{
 	return email;
     }
 
-    public void setName(String name) {
-	this.name = name;
+    public void setFirm(String firm) {
+	this.firm = firm;
     }
 
     public void setAddress(String address) {
@@ -156,7 +156,7 @@ public abstract class Contact extends Record implements Filterable{
 
     @Override
     public String filterable(){
-	return getType()+";"+name+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email+";"+zipcode+";"+telephone2+";"+fax+";"+notes+";"+contact;
+	return getType()+";"+firm+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email+";"+zipcode+";"+telephone2+";"+fax+";"+notes+";"+contact;
     }
     
     @Override

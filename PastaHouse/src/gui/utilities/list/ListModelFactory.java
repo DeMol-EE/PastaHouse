@@ -140,17 +140,22 @@ public class ListModelFactory {
 	};
     }
     
-    public static AbstractListModel createClientListModel(final Map<Integer, Client> data){
+    public static AbstractListModel createClientListModel(final Map<String, Client> data){
 	return new EditableListModel<Client>() {
 
 	    @Override
 	    public void add(Client o) {
-//		data.put(Integer.SIZE, o)
+		data.put(o.getContact(), o);
+		fireContentsChanged(this, 0, getSize());
 	    }
 
 	    @Override
 	    public void edit(Client newObj, Client oldObj) {
-//		throw new UnsupportedOperationException("Not supported yet.");
+		if (data.get(oldObj.getContact())!=null) {
+		    data.remove(oldObj.getContact());
+		    data.put(newObj.getContact(), newObj);
+		}
+		fireContentsChanged(this, 0, getSize());
 	    }
 
 	    @Override

@@ -49,6 +49,9 @@ public class StringTools {
     }
 
     public static String capitalizeEach(String s) {
+	if (s==null || s.isEmpty()) {
+	    return "";
+	}
 	String[] parts = s.split(" ");
 	String returnMe = "";
 	if (s.length() > 1) {

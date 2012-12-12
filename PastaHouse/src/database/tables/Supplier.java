@@ -33,12 +33,12 @@ public class Supplier extends Contact{
      * @param s 
      */
     public Supplier(Supplier s){
-	super(s.getPrimaryKeyValue(), s.getTableName(), s.getName(), s.getContact(), s.getAddress(), s.getZipcode(), s.getMunicipality(), s.getTelephone(), s.getTelephone2(), s.getCellphone(), s.getFax(), s.getEmail(), s.getTaxnumber(), s.getPricecode(), s.getNotes());
+	super(s.getPrimaryKeyValue(), s.getTableName(), s.getFirm(), s.getContact(), s.getAddress(), s.getZipcode(), s.getMunicipality(), s.getTelephone(), s.getTelephone2(), s.getCellphone(), s.getFax(), s.getEmail(), s.getTaxnumber(), s.getPricecode(), s.getNotes());
 	this.deleted = false;
     }
     
     public void copy(Supplier s){
-	setName(s.getName());
+	setFirm(s.getFirm());
 	setAddress(s.getAddress());
 	setMunicipality(s.getMunicipality());
 	setTelephone(s.getTelephone());
@@ -95,13 +95,9 @@ public class Supplier extends Contact{
 	this.deleted = verwijderd;
     }
     
-    public String getFirm(){
-	return getName();
-    }
-    
     @Override
     public String toString(){
-	return StringTools.capitalize(getName());
+	return StringTools.capitalize(super.getFirm());
     }
 
     /**
@@ -113,7 +109,7 @@ public class Supplier extends Contact{
     @Override
     public boolean update() {
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
-		"firma = \""+ getName() +"\", "
+		"firma = \""+ super.getFirm() +"\", "
 		+ "adres = "+(getAddress().length()>0 ? "\""+ getAddress() +"\"":"NULL")+", "
 		+ "postcode = "+ getZipcode() +", "
 		+ "gemeente = "+(getMunicipality().length()>0 ?"\""+getMunicipality() +"\"":"NULL")+", "

@@ -8,13 +8,15 @@ import database.Database;
 import database.FunctionResult;
 import database.tables.Client;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Warkst
  */
 public class ClientModel implements Model{
-    private String name;
+    private String firm;
     private String address;
     private String municipality;
     private String telephone;
@@ -32,12 +34,12 @@ public class ClientModel implements Model{
 	
     }
     
-    public String getName() {
-	return name;
+    public String getFirm() {
+	return firm;
     }
 
-    public void setName(String name) {
-	this.name = name;
+    public void setFirm(String firm) {
+	this.firm = firm;
     }
 
     public String getAddress() {
@@ -144,6 +146,7 @@ public class ClientModel implements Model{
 	try {
 	    return Database.driver().addClient(this);
 	} catch (SQLException ex) {
+	    Logger.getLogger(ClientModel.class.getName()).log(Level.SEVERE, null, ex);
 	    return new FunctionResult<Client>(3, null);
 	}
         

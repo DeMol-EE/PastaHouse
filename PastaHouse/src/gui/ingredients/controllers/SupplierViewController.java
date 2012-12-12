@@ -19,6 +19,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import tools.StringTools;
@@ -401,7 +402,13 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 //        new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
-        new AddSupplierDialog(null, true, this).setVisible(true);
+	final SupplierViewController me = this;
+        SwingUtilities.invokeLater(new Runnable() {
+	    @Override
+	    public void run() {
+		new AddSupplierDialog(null, true, me).setVisible(true);
+	    }
+	});
     }//GEN-LAST:event_addActionPerformed
     
     private void notesKeyEvent(KeyEvent evt){

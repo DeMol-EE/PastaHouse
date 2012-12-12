@@ -13,7 +13,6 @@ import gui.invoices.delegates.EditArticleDelegate;
 import gui.invoices.dialogs.AddArticleDialog;
 import gui.invoices.dialogs.EditArticleDialog;
 import gui.utilities.list.ArticleListModel;
-import gui.utilities.list.EditableListModel;
 import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;

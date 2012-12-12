@@ -38,7 +38,7 @@ public class Configuration {
     private String DB_TABLE_SUP_d = "suppliers";
     private String DB_TABLE_MUNI_d = "Gemeentes";
     private String DB_TABLE_ART_d = "articles";
-    private String DB_TABLE_CL_d = "clients";
+    private String DB_TABLE_CL_d = "klanten";
     
     // variables storing the actual values from the conf file
     private String DB_URL;

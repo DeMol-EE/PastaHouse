@@ -4,7 +4,6 @@
  */
 package gui;
 
-import gui.ingredients.controllers.ViewController;
 import javax.swing.JMenu;
 
 /**

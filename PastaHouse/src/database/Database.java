@@ -54,7 +54,7 @@ public class Database {
     private Map<String, Supplier> suppliersByFirm;
     private Map<String, BasicIngredient> basicIngredientsByName;
     private Map<String, Recipe> recipesByName;
-    private Map<String, Client> clientsByName;
+    private Map<String, Client> clientsByContact;
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
 
@@ -69,7 +69,7 @@ public class Database {
 	    suppliersByFirm = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
-	    clientsByName = new TreeMap<String, Client>(String.CASE_INSENSITIVE_ORDER);
+	    clientsByContact = new TreeMap<String, Client>(String.CASE_INSENSITIVE_ORDER);
 	    articlesByName = new TreeMap<String, Article>(String.CASE_INSENSITIVE_ORDER);
 	    
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
@@ -83,6 +83,7 @@ public class Database {
             loadBasicIngredients();
             loadRecipes();
             loadMunicipales();
+	    loadClients();
 	    loadArticles();
 
         } catch (Exception ex) {
@@ -121,11 +122,11 @@ public class Database {
                     rs.getString("prijscode"),
                     rs.getString("opmerking"));
             clientsById.put(s.getPrimaryKeyValue(), s);
-            clientsByName.put(s.getName(), s);
+            clientsByContact.put(s.getContact(), s);
         }
 
 //        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
-	MyLogger.log("Database driver:: loaded " + suppliersById.size() + " suppliers!", MyLogger.LOW);
+	MyLogger.log("Database driver:: loaded " + clientsById.size() + " clients!", MyLogger.LOW);
     }
 
     private void loadSuppliers() throws SQLException {
@@ -148,7 +149,7 @@ public class Database {
                     rs.getString("opmerking"),
                     rs.getBoolean("verwijderd"));
             suppliersById.put(s.getPrimaryKeyValue(), s);
-            suppliersByFirm.put(s.getName(), s);
+            suppliersByFirm.put(s.getFirm(), s);
         }
 
 //        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
@@ -183,7 +184,7 @@ public class Database {
 	    if (rs.next()) {
 		newSup = Supplier.createFromModel(rs.getInt("id"), sup);
 		suppliersById.put(newSup.getPrimaryKeyValue(), newSup);
-		suppliersByFirm.put(newSup.getName(), newSup);
+		suppliersByFirm.put(newSup.getFirm(), newSup);
 	    } else {
 		code = 2;
 	    }
@@ -200,11 +201,11 @@ public class Database {
         int code = 0;
 	Client newCl = null;
         String insertTableSQL = "INSERT INTO klanten"
-                + "(naam, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd, btwnummer, prijscode) VALUES"
-                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "(naam, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, btwnummer, prijscode) VALUES"
+                + "(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
-            preparedStatement.setString(1, cl.getName());
+            preparedStatement.setString(1, cl.getFirm());
             preparedStatement.setString(2, cl.getAddress());
             preparedStatement.setString(3, cl.getMunicipality());
             preparedStatement.setString(4, cl.getTelephone());
@@ -215,16 +216,15 @@ public class Database {
             preparedStatement.setString(9, cl.getContact());
             preparedStatement.setString(10, cl.getFax());
             preparedStatement.setInt(11, cl.getZipcode());
-            preparedStatement.setInt(12, 0);
-	    preparedStatement.setString(13, cl.getTaxnumber());
-            preparedStatement.setString(14, cl.getPricecode());
+	    preparedStatement.setString(12, cl.getTaxnumber());
+            preparedStatement.setString(13, cl.getPricecode());
             preparedStatement.executeUpdate();
 	    
-	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CL()+" WHERE naam=\""+cl.getName()+"\"");
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CL()+" WHERE naam=\""+cl.getFirm()+"\"");
 	    if (rs.next()) {
 		newCl = Client.createFromModel(rs.getInt("id"), cl);
 		clientsById.put(newCl.getPrimaryKeyValue(), newCl);
-		clientsByName.put(newCl.getName(), newCl);
+		clientsByContact.put(newCl.getContact(), newCl);
 	    } else {
 		code = 2;
 	    }
@@ -516,7 +516,7 @@ public class Database {
     }
     
     public Map<String, Client> getClientsAlphabetically() {
-	return clientsByName;
+	return clientsByContact;
     }
 
     public Map<Integer, Supplier> getSuppliers() {
@@ -593,6 +593,7 @@ public class Database {
     public Map<String, Contact> getContactsAlphabetically() {
 	Map<String, Contact> contacts = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
 	contacts.putAll(suppliersByFirm);
+	contacts.putAll(clientsByContact);
 	return contacts;
     }
 

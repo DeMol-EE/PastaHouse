@@ -16,23 +16,20 @@ import tools.StringTools;
  */
 public class Client extends Contact{
     
-    private String name;
-    
-    
-    private Client(int id, String name, String contact, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes) {
-	super(id, Configuration.center().getDB_TABLE_CL(), name, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnumber, pricecode, notes);
+    private Client(int id, String firm, String contact, String address, int zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes) {
+	super(id, Configuration.center().getDB_TABLE_CL(), firm, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnumber, pricecode, notes);
     }
     
     private Client(int id, ClientModel s){
-	super(id, Configuration.center().getDB_TABLE_CL(), s.getName(), s.getContact(), s.getAddress(), s.getZipcode(), s.getMunicipality(), s.getTelephone(), s.getTelephone2(), s.getCellphone(), s.getFax(), s.getEmail(), s.getTaxnumber(), s.getPricecode(), s.getNotes());
+	super(id, Configuration.center().getDB_TABLE_CL(), s.getFirm(), s.getContact(), s.getAddress(), s.getZipcode(), s.getMunicipality(), s.getTelephone(), s.getTelephone2(), s.getCellphone(), s.getFax(), s.getEmail(), s.getTaxnumber(), s.getPricecode(), s.getNotes());
     }
     
     public Client(Client copy){
-	super(copy.getPrimaryKeyValue(), copy.getTableName(), copy.getName(), copy.getContact(), copy.getAddress(), copy.getZipcode(), copy.getMunicipality(), copy.getTelephone(), copy.getTelephone2(), copy.getCellphone(), copy.getFax(), copy.getEmail(), copy.getTaxnumber(), copy.getPricecode(), copy.getNotes());
+	super(copy.getPrimaryKeyValue(), copy.getTableName(), copy.getFirm(), copy.getContact(), copy.getAddress(), copy.getZipcode(), copy.getMunicipality(), copy.getTelephone(), copy.getTelephone2(), copy.getCellphone(), copy.getFax(), copy.getEmail(), copy.getTaxnumber(), copy.getPricecode(), copy.getNotes());
     }
     
     public void copy(Client copy){
-	setName(copy.getName());
+	setFirm(copy.getFirm());
 	setContact(copy.getContact());
 	setAddress(copy.getAddress());
         setZipcode(copy.getZipcode());
@@ -57,7 +54,7 @@ public class Client extends Contact{
     
     @Override
     public String toString() {
-	return StringTools.capitalize(name);
+	return StringTools.capitalize(getContact());
     }
 
     @Override
@@ -73,7 +70,7 @@ public class Client extends Contact{
     @Override
     public boolean update() {
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
-		"naam = \""+ getName() +"\", "
+		"naam = "+(getFirm().length()>0 ? "\""+ getFirm() +"\"":"NULL")+", "
 		+ "adres = "+(getAddress().length()>0 ? "\""+ getAddress() +"\"":"NULL")+", "
 		+ "postcode = "+ getZipcode() +", "
 		+ "gemeente = "+(getMunicipality().length()>0 ?"\""+getMunicipality() +"\"":"NULL")+", "

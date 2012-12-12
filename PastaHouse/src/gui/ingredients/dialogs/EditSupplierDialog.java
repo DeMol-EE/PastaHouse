@@ -114,8 +114,6 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 //        jPanel2.addProxy(comboGemeentes, 9);
 	muniParent.add(comboGemeentes, BorderLayout.CENTER);
         comboGemeentes.setSelectedItem(model.getMunicipality());
-	
-	System.out.println(model.getMunicipality());
     }
     
     private void setMunicipal() {
@@ -325,7 +323,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 		return;
 	    }
 	    
-	    model.setName(txtFirma.getText());
+	    model.setFirm(txtFirma.getText());
 	    model.setContact(txtContact.getText());
 	    model.setAddress(txtAdres.getText());
 	    model.setZipcode(Integer.parseInt(txtGemeente.getText()));

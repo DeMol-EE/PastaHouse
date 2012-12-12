@@ -6,3 +6,4 @@ table_recipes_recipes,recipesrecipes
 table_suppliers,suppliers
 table_municipales, Gemeentes
 table_articles,articles
+table_clients,klanten

@@ -51,7 +51,11 @@ public class ContactListModel extends AbstractListModel{
 
     @Override
     public Object getElementAt(int index) {
-	return filter == null ? persistentData.values().toArray()[index] : filteredData.values().toArray()[index];
+	if (index > filteredData.size()) {
+	    return null;
+	} else {
+	    return filter == null ? persistentData.values().toArray()[index] : filteredData.values().toArray()[index];
+	}
     }
     
     private void filterData(){
@@ -61,7 +65,11 @@ public class ContactListModel extends AbstractListModel{
 	    filteredData = new TreeMap<String, Contact>();
 	    for (Contact contact : persistentData.values()) {
 		if (contact.filterable().toLowerCase().contains(filter.toLowerCase())) {
-		    filteredData.put(contact.getName(), contact);
+		    if (contact.isSupplier()) {
+			filteredData.put(contact.getFirm(), contact);
+		    } else {
+			filteredData.put(contact.getContact(), contact);
+		    }
 		}
 	    }
 	}
