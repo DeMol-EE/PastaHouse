@@ -4,7 +4,7 @@
  */
 package gui.ingredients;
 
-import database.tables.Supplier;
+import database.tables.Contact;
 import gui.MasterDetailViewController;
 import gui.TabbedViewController;
 import gui.ingredients.controllers.BasicIngredientViewController;
@@ -60,7 +60,7 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 	tabs.get(tabController.getSelectedIndex()).electFirstResponder();
     }
     
-    public void selectAndSwitchToSupplier(Supplier supplier){
+    public void selectAndSwitchToSupplier(Contact supplier){
 	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
 	tabController.setSelectedIndex(supplierTabIndex);
     }

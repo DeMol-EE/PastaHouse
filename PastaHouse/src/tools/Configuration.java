@@ -24,10 +24,9 @@ public class Configuration {
     private final String DB_TABLE_REC_kp = "table_recipes";
     private final String DB_TABLE_REC_INGR_kp = "table_recipes_ingredients";
     private final String DB_TABLE_REC_REC_kp = "table_recipes_recipes";
-    private final String DB_TABLE_SUP_kp = "table_suppliers";
+    private final String DB_TABLE_CON_kp = "table_contacts";
     private final String DB_TABLE_MUNI_kp = "table_municipales";
     private final String DB_TABLE_ART_kp = "table_articles";
-    private final String DB_TABLE_CL_kp = "table_clients";
     
     // defaults
     private String DB_URL_d = "jdbc:sqlite:pastahouse.db";
@@ -35,10 +34,9 @@ public class Configuration {
     private String DB_TABLE_REC_d = "recipes";
     private String DB_TABLE_REC_INGR_d = "recipesingredients";
     private String DB_TABLE_REC_REC_d = "recipesrecipes";
-    private String DB_TABLE_SUP_d = "suppliers";
+    private String DB_TABLE_CON_d = "contacts";
     private String DB_TABLE_MUNI_d = "Gemeentes";
     private String DB_TABLE_ART_d = "articles";
-    private String DB_TABLE_CL_d = "klanten";
     
     // variables storing the actual values from the conf file
     private String DB_URL;
@@ -46,10 +44,9 @@ public class Configuration {
     private String DB_TABLE_REC;
     private String DB_TABLE_REC_INGR;
     private String DB_TABLE_REC_REC;
-    private String DB_TABLE_SUP;
+    private String DB_TABLE_CON;
     private String DB_TABLE_MUNI;
     private String DB_TABLE_ART;
-    private String DB_TABLE_CL;
  
     private static Configuration center;
     
@@ -66,10 +63,9 @@ public class Configuration {
 		DB_TABLE_REC = DB_TABLE_REC_d;
 		DB_TABLE_REC_INGR = DB_TABLE_REC_INGR_d;
 		DB_TABLE_REC_REC = DB_TABLE_REC_REC_d;
-		DB_TABLE_SUP = DB_TABLE_SUP_d;
+		DB_TABLE_CON = DB_TABLE_CON_d;
                 DB_TABLE_MUNI = DB_TABLE_MUNI_d;
                 DB_TABLE_ART = DB_TABLE_ART_d;
-                DB_TABLE_CL = DB_TABLE_CL_d;
     
 		// write the settings to the file
 		FileWriter fstream = new FileWriter(conf);
@@ -79,10 +75,9 @@ public class Configuration {
 		out.write(DB_TABLE_REC_kp+","+DB_TABLE_REC_d+"\n");
 		out.write(DB_TABLE_REC_INGR_kp+","+DB_TABLE_REC_INGR_d+"\n");
 		out.write(DB_TABLE_REC_REC_kp+","+DB_TABLE_REC_REC_d+"\n");
-		out.write(DB_TABLE_SUP_kp+","+DB_TABLE_SUP_d+"\n");
+		out.write(DB_TABLE_CON_kp+","+DB_TABLE_CON_d+"\n");
                 out.write(DB_TABLE_MUNI_kp+","+DB_TABLE_MUNI_d+"\n");
                 out.write(DB_TABLE_ART_kp+","+DB_TABLE_ART_d+"\n");
-                out.write(DB_TABLE_CL_kp+","+DB_TABLE_CL_d+"\n");
 		//Close the output stream
 		out.close();
 	    } else {
@@ -108,10 +103,9 @@ public class Configuration {
 		DB_TABLE_REC = values.containsKey(DB_TABLE_REC_kp) ? values.get(DB_TABLE_REC_kp) : DB_TABLE_REC_d;
 		DB_TABLE_REC_INGR = values.containsKey(DB_TABLE_REC_INGR_kp) ? values.get(DB_TABLE_REC_INGR_kp) : DB_TABLE_REC_INGR_d;
 		DB_TABLE_REC_REC = values.containsKey(DB_TABLE_REC_REC_kp) ? values.get(DB_TABLE_REC_REC_kp) : DB_TABLE_REC_REC_d;
-		DB_TABLE_SUP = values.containsKey(DB_TABLE_SUP_kp) ? values.get(DB_TABLE_SUP_kp) : DB_TABLE_SUP_d;
+		DB_TABLE_CON = values.containsKey(DB_TABLE_CON_kp) ? values.get(DB_TABLE_CON_kp) : DB_TABLE_CON_d;
                 DB_TABLE_MUNI = values.containsKey(DB_TABLE_MUNI_kp) ? values.get(DB_TABLE_MUNI_kp) : DB_TABLE_MUNI_d;
                 DB_TABLE_ART = values.containsKey(DB_TABLE_ART_kp) ? values.get(DB_TABLE_ART_kp) : DB_TABLE_ART_d;
-                DB_TABLE_CL = values.containsKey(DB_TABLE_CL_kp) ? values.get(DB_TABLE_CL_kp) : DB_TABLE_CL_d;
 	    }
 	    
 	} catch(Exception e){
@@ -147,8 +141,8 @@ public class Configuration {
 	return DB_TABLE_REC_REC;
     }
     
-    public String getDB_TABLE_SUP() {
-	return DB_TABLE_SUP;
+    public String getDB_TABLE_CON() {
+	return DB_TABLE_CON;
     }
     
     public String getDB_TABLE_MUNI() {
@@ -157,9 +151,5 @@ public class Configuration {
     
     public String getDB_TABLE_ART() {
 	return DB_TABLE_ART;
-    }
-    
-    public String getDB_TABLE_CL() {
-	return DB_TABLE_CL;
     }
 }

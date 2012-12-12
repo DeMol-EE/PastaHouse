@@ -7,8 +7,9 @@ package gui.ingredients.dialogs;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.tables.BasicIngredient;
-import database.tables.Supplier;
-import gui.ingredients.delegates.AddSupplierDelegate;
+import database.tables.Contact;
+import gui.contacts.delegates.AddContactDelegate;
+import gui.contacts.dialogs.AddContactDialog;
 import gui.ingredients.delegates.EditBasicIngredientDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
@@ -33,7 +34,7 @@ import tools.Utilities;
  *
  * @author Robin jr
  */
-public class EditBasicIngredientDialog extends javax.swing.JDialog implements AddSupplierDelegate{
+public class EditBasicIngredientDialog extends javax.swing.JDialog implements AddContactDelegate{
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
@@ -63,7 +64,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	setLocationRelativeTo(null);
 	setTitle("Ingrediënt wijzigen");
 	
-	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliers().values().toArray()));
+	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliersAlphabetically().values().toArray()));
 	
 	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
 	fixedFields.add(dp);
@@ -611,9 +612,9 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    model.setName(nameOutlet.getText());
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
 	    model.setNotes(notesOutlet.getText());
-	    Supplier supp;
-	    if (supplierBox.getSelectedItem() instanceof Supplier) {
-		supp = (Supplier)supplierBox.getSelectedItem();
+	    Contact supp;
+	    if (supplierBox.getSelectedItem() instanceof Contact) {
+		supp = (Contact)supplierBox.getSelectedItem();
 	    } else if (supplierBox.getSelectedItem() instanceof String) {
 		String s = (String)supplierBox.getSelectedItem();
 		supp = Database.driver().getSuppliersAlphabetically().get(s.toLowerCase());
@@ -657,7 +658,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     }//GEN-LAST:event_packagingOutletKeyReleased
 
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
-        new AddSupplierDialog(null, true, this).setVisible(true);
+        AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -714,7 +715,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void addSupplier(Supplier s) {
+    public void addContact(Contact s) {
 	supplierParent.removeAll();
 	List suppliers = new ArrayList();
 	suppliers.add("");

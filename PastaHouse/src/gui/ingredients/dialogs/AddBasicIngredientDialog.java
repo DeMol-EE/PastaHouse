@@ -8,9 +8,10 @@ import database.Database;
 import database.FunctionResult;
 import database.models.BasicIngredientModel;
 import database.tables.BasicIngredient;
-import database.tables.Supplier;
+import database.tables.Contact;
+import gui.contacts.delegates.AddContactDelegate;
+import gui.contacts.dialogs.AddContactDialog;
 import gui.ingredients.delegates.AddBasicIngredientDelegate;
-import gui.ingredients.delegates.AddSupplierDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
@@ -32,7 +33,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Robin jr
  */
-public class AddBasicIngredientDialog extends javax.swing.JDialog implements AddSupplierDelegate{
+public class AddBasicIngredientDialog extends javax.swing.JDialog implements AddContactDelegate{
 
     private final AddBasicIngredientDelegate delegate;
     private final BasicIngredientModel model;
@@ -414,9 +415,9 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
 	    model.setNotes(notesOutlet.getText());
 	    
-	    Supplier s = null;
-	    if (supplierBox.getSelectedItem() instanceof Supplier) {
-		s = (Supplier)supplierBox.getSelectedItem();
+	    Contact s = null;
+	    if (supplierBox.getSelectedItem() instanceof Contact) {
+		s = (Contact)supplierBox.getSelectedItem();
 	    } else if(supplierBox.getSelectedItem() instanceof String){
 		s = Database.driver().getSuppliersAlphabetically().get((String)supplierBox.getSelectedItem());
 	    }
@@ -438,7 +439,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
     }//GEN-LAST:event_addActionPerformed
 
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
-        new AddSupplierDialog(null, true, this).setVisible(true);
+        AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
     
     private void disposeLater(){
@@ -490,7 +491,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void addSupplier(Supplier s) {
+    public void addContact(Contact s) {
 	supplierParent.removeAll();
 	List suppliers = new ArrayList();
 	suppliers.add("");

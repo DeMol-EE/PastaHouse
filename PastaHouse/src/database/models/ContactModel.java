@@ -4,36 +4,37 @@
  */
 package database.models;
 
-import database.Database;
 import database.FunctionResult;
-import database.tables.Client;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Warkst
  */
-public class ClientModel implements Model{
+public class ContactModel implements Model{
+
     private String firm;
+    private String contact;
     private String address;
+    private String zipcode;
     private String municipality;
     private String telephone;
     private String telephone2;
     private String cellphone;
     private String fax;
     private String email;
-    private String notes;
-    private String contact;
-    private int zipcode;
     private String taxnumber;
     private String pricecode;
-
-    public ClientModel(){
+    private String notes;
+    private String type;
+    
+    public ContactModel(){
 	
     }
     
+    public ContactModel(String type){
+	this.type = type;
+    }
+
     public String getFirm() {
 	return firm;
     }
@@ -42,12 +43,28 @@ public class ClientModel implements Model{
 	this.firm = firm;
     }
 
+    public String getContact() {
+	return contact;
+    }
+
+    public void setContact(String contact) {
+	this.contact = contact;
+    }
+
     public String getAddress() {
 	return address;
     }
 
     public void setAddress(String address) {
 	this.address = address;
+    }
+
+    public String getZipcode() {
+	return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+	this.zipcode = zipcode;
     }
 
     public String getMunicipality() {
@@ -98,30 +115,6 @@ public class ClientModel implements Model{
 	this.email = email;
     }
 
-    public String getNotes() {
-	return notes;
-    }
-
-    public void setNotes(String notes) {
-	this.notes = notes;
-    }
-
-    public String getContact() {
-	return contact;
-    }
-
-    public void setContact(String contact) {
-	this.contact = contact;
-    }
-
-    public int getZipcode() {
-	return zipcode;
-    }
-
-    public void setZipcode(int zipcode) {
-	this.zipcode = zipcode;
-    }
-
     public String getTaxnumber() {
 	return taxnumber;
     }
@@ -138,18 +131,35 @@ public class ClientModel implements Model{
 	this.pricecode = pricecode;
     }
 
-    /**
-     * Tries to create this Supplier in the database. Returns a FunctionResult with code 0 if successful (and a pointer to the new supplier) and any other code if not.
-     */
+    public String getNotes() {
+	return notes;
+    }
+
+    public void setNotes(String notes) {
+	this.notes = notes;
+    }
+
+    public String getType() {
+	return type;
+    }
+
+    public void setType(String type) {
+	this.type = type;
+    }
+    
+    public boolean isSupplier(){
+	return type.equalsIgnoreCase("supplier");
+    }
+    
     @Override
-    public FunctionResult<Client> create(){
-	try {
-	    return Database.driver().addClient(this);
-	} catch (SQLException ex) {
-	    Logger.getLogger(ClientModel.class.getName()).log(Level.SEVERE, null, ex);
-	    return new FunctionResult<Client>(3, null);
+    public FunctionResult create() {
+	try{
+	    return database.Database.driver().addContact(this);
+	} catch (Exception e){
+	    System.err.println("Error caught");
+	    e.printStackTrace();
+	    return new FunctionResult(3, null);
 	}
-        
     }
     
 }

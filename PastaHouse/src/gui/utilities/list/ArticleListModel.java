@@ -5,7 +5,6 @@
 package gui.utilities.list;
 
 import database.tables.Article;
-import database.tables.Supplier;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.AbstractListModel;

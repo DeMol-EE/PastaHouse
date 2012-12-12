@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.ingredients.dialogs;
+package gui.contacts.dialogs;
 
 import database.Database;
-import database.tables.Supplier;
-import gui.ingredients.delegates.EditSupplierDelegate;
+import database.tables.Contact;
+import gui.contacts.delegates.EditContactDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
@@ -18,6 +18,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -27,16 +29,20 @@ import tools.Utilities;
  *
  * @author Warkst
  */
-public class EditSupplierDialog extends javax.swing.JDialog {
+public class EditContactDialog extends javax.swing.JDialog {
 
-    private final EditSupplierDelegate delegate;
-    private final Supplier model;
-    private final Supplier defaultModel;
+    private final EditContactDelegate delegate;
+    private final Contact model;
+    private final Contact defaultModel;
+    
+    private int type;
+    private JComboBox typeBox;
+
 
     /**
-     * Creates new form EditSupplierDialog
+     * Creates new form EditContactDialog
      */
-    public EditSupplierDialog(java.awt.Frame parent, boolean modal, EditSupplierDelegate delegate, Supplier model) {
+    private EditContactDialog(java.awt.Frame parent, boolean modal, EditContactDelegate delegate, Contact model, int type) {
         super(parent, modal);
         initComponents();
 
@@ -47,10 +53,21 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
         this.delegate = delegate;
         this.model = model;
-
-        this.defaultModel = new Supplier(model);
+	this.defaultModel = new Contact(model);
+	this.type = type;
 
         loadModel();
+	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+	
+	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
+	
+	if (type == Contact.supplier) {
+	    setTitle("Leverancier toevoegen");
+	    firmLabel.setText("Firma *");
+	} else {
+	    setTitle("Klant toevoegen");
+	    contactLabel.setText("Contactpersoon *");
+	}
 	
 	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
 	    @Override
@@ -65,6 +82,52 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 		cancelActionPerformed(e);
 	    }
 	});
+    }
+    
+    private EditContactDialog(java.awt.Frame parent, boolean modal, EditContactDelegate delegate, Contact model) {
+        super(parent, modal);
+        initComponents();
+
+        setTitle("Leverancier wijzigen");
+
+        setModalityType(ModalityType.APPLICATION_MODAL);
+        setLocationRelativeTo(null);
+
+        this.delegate = delegate;
+        this.model = model;
+        this.defaultModel = new Contact(model);
+	this.type = Contact.both;
+
+        loadModel();
+	
+	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+	typeParent.add(typeBox);
+	
+	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		saveActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
+    }
+    
+    public static EditContactDialog createSupplierDialog(EditContactDelegate delegate, Contact model){
+	return new EditContactDialog(null, true, delegate, model, Contact.supplier);
+    }
+    
+    public static EditContactDialog createClientDialog(EditContactDelegate delegate, Contact model){
+	return new EditContactDialog(null, true, delegate, model, Contact.client);
+    }
+    
+    public static EditContactDialog createContactDialog(EditContactDelegate delegate, Contact model){
+	return new EditContactDialog(null, true, delegate, model);
     }
 
     private void loadModel() {
@@ -136,10 +199,16 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        typeTF = new javax.swing.JLabel();
+        typeParent = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
+        firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        contactLabel = new javax.swing.JLabel();
         txtContact = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtAdres = new javax.swing.JTextField();
@@ -171,19 +240,38 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(600, 700));
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        jPanel7.setLayout(new java.awt.GridLayout(1, 2));
+
+        typeTF.setText("Type");
+        typeTF.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 1));
+        jPanel7.add(typeTF);
+
+        typeParent.setLayout(new java.awt.BorderLayout());
+        jPanel7.add(typeParent);
+
+        jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
+        jPanel6.add(jSeparator1, java.awt.BorderLayout.SOUTH);
+
+        jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
 
         jPanel2.setLayout(new java.awt.GridLayout(12, 2));
 
-        jLabel11.setText("Firma *");
-        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel11.setFocusable(false);
-        jPanel2.add(jLabel11);
+        firmLabel.setText("Firma");
+        firmLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        firmLabel.setFocusable(false);
+        jPanel2.add(firmLabel);
         jPanel2.add(txtFirma);
 
-        jLabel10.setText("Contactpersoon");
-        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel10.setFocusable(false);
-        jPanel2.add(jLabel10);
+        contactLabel.setText("Contactpersoon");
+        contactLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        contactLabel.setFocusable(false);
+        jPanel2.add(contactLabel);
         jPanel2.add(txtContact);
 
         jLabel13.setText("Adres");
@@ -260,7 +348,9 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
         jPanel2.add(pricecodeOutlet);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        jPanel5.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel5, java.awt.BorderLayout.NORTH);
 
         jPanel3.setPreferredSize(new java.awt.Dimension(528, 300));
 
@@ -286,7 +376,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -333,7 +423,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	    model.setFirm(txtFirma.getText());
 	    model.setContact(txtContact.getText());
 	    model.setAddress(txtAdres.getText());
-	    model.setZipcode(Integer.parseInt(txtGemeente.getText()));
+	    model.setZipcode(txtGemeente.getText());
 	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
 	    model.setTelephone(txtTel.getText());
 	    model.setTelephone2(txttel2.getText());
@@ -345,7 +435,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	    model.setPricecode(pricecodeOutlet.getSelectedIndex() == 0 ? null : pricecodeOutlet.getSelectedItem().toString());
 
 	    if (model.update()) {
-		delegate.editSupplier(model, defaultModel);
+		delegate.editContact(model, defaultModel);
 		disposeLater();
 	    } else {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
@@ -403,10 +493,10 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
+    private javax.swing.JLabel contactLabel;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JLabel firmLabel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -420,7 +510,11 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel muniParent;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
@@ -435,6 +529,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtGemeente;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txttel2;
+    private javax.swing.JPanel typeParent;
+    private javax.swing.JLabel typeTF;
     // End of variables declaration//GEN-END:variables
     private AutocompleteCombobox comboGemeentes;
 }

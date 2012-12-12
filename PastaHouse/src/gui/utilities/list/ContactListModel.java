@@ -4,7 +4,7 @@
  */
 package gui.utilities.list;
 
-import database.extra.Contact;
+import database.tables.Contact;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.AbstractListModel;

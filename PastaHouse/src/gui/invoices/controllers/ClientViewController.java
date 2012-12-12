@@ -5,15 +5,14 @@
 package gui.invoices.controllers;
 
 import database.Database;
-import database.tables.Client;
+import database.tables.Contact;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
-import gui.invoices.delegates.AddClientDelegate;
-import gui.invoices.delegates.EditClientDelegate;
-import gui.invoices.dialogs.AddClientDialog;
-import gui.invoices.dialogs.EditClientDialog;
-import gui.utilities.list.EditableListModel;
-import gui.utilities.list.ListModelFactory;
+import gui.contacts.delegates.AddContactDelegate;
+import gui.contacts.delegates.EditContactDelegate;
+import gui.contacts.dialogs.AddContactDialog;
+import gui.contacts.dialogs.EditContactDialog;
+import gui.utilities.list.ClientListModel;
 import java.awt.BorderLayout;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -27,7 +26,9 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Client>, AddClientDelegate, EditClientDelegate {
+public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, AddContactDelegate, EditContactDelegate {
+    
+    private ClientListModel listModel;
     
     /**
      * Creates new form ClientViewController
@@ -35,20 +36,21 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     public ClientViewController() {
 	initComponents();
 
-	listOutlet.setModel(ListModelFactory.createClientListModel(Database.driver().getClientsAlphabetically()));
+	listModel = new ClientListModel(Database.driver().getContactsAlphabetically());
+	
+	listOutlet.setModel(listModel);
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.addListSelectionListener(new ListSelectionListener() {
-
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-		    updateDetail((Client)listOutlet.getSelectedValue());
+		    updateDetail((Contact)listOutlet.getSelectedValue());
 		}
 	    }
 	});
 	listOutlet.setSelectedIndex(0);
 	
-	if (Database.driver().getClients().isEmpty()) {
+	if (Database.driver().getClientsAlphabetically().isEmpty()) {
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
@@ -368,10 +370,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 	final ClientViewController me = this;
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
-		new AddClientDialog(null, true, me).setVisible(true);
+		AddContactDialog.createClientDialog(me).setVisible(true);
 	    }
 	});
     }//GEN-LAST:event_addActionPerformed
@@ -388,10 +389,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         final ClientViewController me = this;
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
-		if(listOutlet.getSelectedValue()!=null) new EditClientDialog(null, true, me, (Client)listOutlet.getSelectedValue()).setVisible(true);
+		if(listOutlet.getSelectedValue()!=null) EditContactDialog.createClientDialog(me, (Contact)listOutlet.getSelectedValue()).setVisible(true);
 	    }
 	});
     }//GEN-LAST:event_editActionPerformed
@@ -443,7 +443,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void updateDetail(Client client) {
+    public void updateDetail(Contact client) {
 	firmOutlet.setText(StringTools.capitalizeEach(client.getFirm()));
 	contactOutlet.setText(StringTools.capitalizeEach(client.getContact()));
         addressOutlet.setText(StringTools.capitalizeEach(client.getAddress()));
@@ -464,10 +464,11 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }
 
     @Override
-    public void addClient(Client newObj) {
-	EditableListModel<Client> elm = (EditableListModel<Client>)listOutlet.getModel();
-	elm.update();
-	if (elm.getSize() == 1) {
+    public void addContact(Contact newObj) {
+//	EditableListModel<Contact> elm = (EditableListModel<Contact>)listOutlet.getModel();
+//	elm.update();
+	listModel.update();
+	if (listModel.getSize() == 1) {
 	    detail.removeAll();
 	    detail.add(container, BorderLayout.CENTER);
 	}
@@ -477,6 +478,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
     @Override
     public void electFirstResponder() {
+	listModel.update();
 	listOutlet.requestFocus();
     }
 
@@ -491,9 +493,10 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }
 
     @Override
-    public void updateClient(Client o, Client n) {
-	EditableListModel<Client> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.edit(n, o);
+    public void editContact(Contact o, Contact n) {
+//	EditableListModel<Contact> dlm = (EditableListModel)listOutlet.getModel();
+//	dlm.edit(n, o);
+	listModel.edit(n, o);
 	listOutlet.setSelectedValue(n, true);
 	updateDetail(n);
     }

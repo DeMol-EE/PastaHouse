@@ -7,9 +7,8 @@ package gui.utilities.list;
 import database.extra.Component;
 import database.tables.Article;
 import database.tables.BasicIngredient;
-import database.tables.Client;
+import database.tables.Contact;
 import database.tables.Recipe;
-import database.tables.Supplier;
 import java.util.Map;
 import javax.swing.AbstractListModel;
 
@@ -50,8 +49,8 @@ public class ListModelFactory {
 	};
     }
     
-    public static AbstractListModel createSupplierListModel(final Map<String, Supplier> data){
-	return new EditableListModel<Supplier>() {
+    public static AbstractListModel createContactListModel(final Map<String, Contact> data){
+	return new EditableListModel<Contact>() {
 
 	    @Override
 	    public int getSize() {
@@ -64,16 +63,16 @@ public class ListModelFactory {
 	    }
 	    
 	    @Override
-	    public void add(Supplier o){
-		data.put(o.getFirm(), o);
+	    public void add(Contact o){
+		data.put(o.getSortKey(), o);
 		fireContentsChanged(this, 0, getSize());
 	    }
 
 	    @Override
-	    public void edit(Supplier newObj, Supplier oldObj) {
-		if (data.get(oldObj.getFirm())!=null) {
+	    public void edit(Contact newObj, Contact oldObj) {
+		if (data.get(oldObj.getSortKey())!=null) {
 		    data.remove(oldObj.getFirm());
-		    data.put(newObj.getFirm(), newObj);
+		    data.put(newObj.getSortKey(), newObj);
 		}
 		fireContentsChanged(this, 0, getSize());
 	    }
@@ -136,36 +135,6 @@ public class ListModelFactory {
 		    data.put(newObj.getRank(), newObj);
 		}
 		fireContentsChanged(this, 0, getSize());
-	    }
-	};
-    }
-    
-    public static AbstractListModel createClientListModel(final Map<String, Client> data){
-	return new EditableListModel<Client>() {
-
-	    @Override
-	    public void add(Client o) {
-		data.put(o.getContact(), o);
-		fireContentsChanged(this, 0, getSize());
-	    }
-
-	    @Override
-	    public void edit(Client newObj, Client oldObj) {
-		if (data.get(oldObj.getContact())!=null) {
-		    data.remove(oldObj.getContact());
-		    data.put(newObj.getContact(), newObj);
-		}
-		fireContentsChanged(this, 0, getSize());
-	    }
-
-	    @Override
-	    public int getSize() {
-		return data.size();
-	    }
-
-	    @Override
-	    public Object getElementAt(int index) {
-		return data.values().toArray()[index];
 	    }
 	};
     }

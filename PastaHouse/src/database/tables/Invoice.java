@@ -15,7 +15,7 @@ import java.util.List;
 public class Invoice extends Record{
     private int number;
     private String date;
-    private Client client;
+    private Contact client;
     private String priceCode;
     private double save;
     private List<InvoiceItem> items;

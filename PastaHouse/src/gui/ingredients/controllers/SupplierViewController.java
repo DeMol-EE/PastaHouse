@@ -5,15 +5,15 @@
 package gui.ingredients.controllers;
 
 import database.Database;
-import database.tables.Supplier;
+import database.tables.Contact;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
-import gui.ingredients.delegates.AddSupplierDelegate;
-import gui.ingredients.delegates.EditSupplierDelegate;
-import gui.ingredients.dialogs.AddSupplierDialog;
-import gui.ingredients.dialogs.EditSupplierDialog;
+import gui.contacts.delegates.AddContactDelegate;
+import gui.contacts.delegates.EditContactDelegate;
+import gui.contacts.dialogs.AddContactDialog;
+import gui.contacts.dialogs.EditContactDialog;
 import gui.utilities.list.EditableListModel;
-import gui.utilities.list.ListModelFactory;
+import gui.utilities.list.SupplierListModel;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
@@ -28,34 +28,38 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController<Supplier>, AddSupplierDelegate, EditSupplierDelegate {
+public class SupplierViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, AddContactDelegate, EditContactDelegate {
 
+    private SupplierListModel listModel;
+    
     /**
      * Creates new form SupplierViewController
      */
     public SupplierViewController() {
         initComponents();
         
-        listOutlet.setModel(ListModelFactory.createSupplierListModel(Database.driver().getSuppliersAlphabetically()));
+	listModel = new SupplierListModel(Database.driver().getContactsAlphabetically());
+	
+        listOutlet.setModel(listModel);
         listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listOutlet.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    updateDetail((Supplier)listOutlet.getSelectedValue());
+                    updateDetail((Contact)listOutlet.getSelectedValue());
                 }
             }
         });
 	listOutlet.setSelectedIndex(0);
         
-	if (Database.driver().getSuppliers().isEmpty()) {
+	if (listModel.getSize() == 0) {
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
     }
     
     @Override
-    public void updateDetail(Supplier s) {
+    public void updateDetail(Contact s) {
         firmOutlet.setText(StringTools.capitalize(s.getFirm()));
         contactOutlet.setText(StringTools.capitalizeEach(s.getContact()));
         addressOutlet.setText(StringTools.capitalizeEach(s.getAddress()));
@@ -75,7 +79,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 	pricecodeOutlet.setText(code);
     }
     
-    public void selectSupplier(Supplier supplier) {
+    public void selectSupplier(Contact supplier) {
         listOutlet.setSelectedValue(supplier, true);
 	updateDetail(supplier);
     }
@@ -401,12 +405,12 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-//        new AddSupplierDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
+//        new AddContactDialog((JFrame) SwingUtilities.getWindowAncestor(this).getParent(), true, this).setVisible(true);
 	final SupplierViewController me = this;
         SwingUtilities.invokeLater(new Runnable() {
 	    @Override
 	    public void run() {
-		new AddSupplierDialog(null, true, me).setVisible(true);
+		AddContactDialog.createSupplierDialog(me).setVisible(true);
 	    }
 	});
     }//GEN-LAST:event_addActionPerformed
@@ -437,7 +441,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }//GEN-LAST:event_notesOutletKeyTyped
     
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditSupplierDialog(null, true, this, (Supplier) listOutlet.getSelectedValue()).setVisible(true);
+        EditContactDialog.createSupplierDialog(this, (Contact) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
@@ -494,18 +498,19 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void editSupplier(Supplier newObj, Supplier oldObj){
-	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.edit(newObj, oldObj);
+    public void editContact(Contact oldObj, Contact newObj){
+//	EditableListModel<Contact> dlm = (EditableListModel)listOutlet.getModel();
+	listModel.edit(newObj, oldObj);
 	listOutlet.setSelectedValue(newObj, true);
 	updateDetail(newObj);
     }
     
     @Override
     public void electFirstResponder() {
-	((EditableListModel)listOutlet.getModel()).update();
+//	((EditableListModel)listOutlet.getModel()).update();
+	listModel.update();
 	listOutlet.requestFocus();
-	if(listOutlet.getSelectedValue()!=null) updateDetail((Supplier)listOutlet.getSelectedValue());
+	if(listOutlet.getSelectedValue()!=null) updateDetail((Contact)listOutlet.getSelectedValue());
     }
 
     @Override
@@ -514,10 +519,11 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     }
 
     @Override
-    public void addSupplier(Supplier s) {
-	EditableListModel<Supplier> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.update();
-	if (dlm.getSize() == 1) {
+    public void addContact(Contact s) {
+//	EditableListModel<Contact> dlm = (EditableListModel)listOutlet.getModel();
+//	dlm.update();
+	listModel.update();
+	if (listModel.getSize() == 1) {
 	    detail.removeAll();
 	    detail.add(container);
 	}

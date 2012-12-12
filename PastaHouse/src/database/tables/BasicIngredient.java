@@ -17,7 +17,7 @@ import tools.StringTools;
  */
 public class BasicIngredient extends Ingredient {
     // database columns
-    private Supplier supplier; // Foreign key, references Suppliers
+    private Contact supplier; // Foreign key, references Suppliers
     private String brand;
     private String packaging;
     private double pricePerUnit;
@@ -28,7 +28,7 @@ public class BasicIngredient extends Ingredient {
     
     // derived variables
     
-    private BasicIngredient(int id, Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+    private BasicIngredient(int id, Contact supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
 	super(name, date, id, Configuration.center().getDB_TABLE_INGR());
 	this.supplier = supplier;
 	this.brand = brand;
@@ -64,7 +64,7 @@ public class BasicIngredient extends Ingredient {
 	this.notes = b.getNotes();
     }
     
-    public static BasicIngredient loadWithValues(int id, Supplier supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+    public static BasicIngredient loadWithValues(int id, Contact supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
 	return new BasicIngredient(id, supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
     }
     
@@ -85,7 +85,7 @@ public class BasicIngredient extends Ingredient {
 	this.notes = b.getNotes();
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(Contact supplier) {
 	this.supplier = supplier;
     }
 
@@ -113,7 +113,7 @@ public class BasicIngredient extends Ingredient {
 	this.taxes = taxes;
     }
 
-    public Supplier getSupplier() {
+    public Contact getSupplier() {
 	return supplier;
     }
 

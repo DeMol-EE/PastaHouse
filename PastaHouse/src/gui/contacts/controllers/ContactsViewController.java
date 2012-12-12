@@ -4,15 +4,23 @@
  */
 package gui.contacts.controllers;
 
-import database.extra.Contact;
+import database.tables.Contact;
 import gui.MasterDetailViewController;
 import gui.contacts.datasource.FilterPanelDataSource;
+import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.delegates.FilterPanelDelegate;
+import gui.contacts.dialogs.AddContactDialog;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.list.ContactListModel;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.Set;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -22,7 +30,7 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class ContactsViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, FilterPanelDelegate, FilterPanelDataSource {
+public class ContactsViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, FilterPanelDelegate, FilterPanelDataSource, AddContactDelegate {
 
 //    private Map<FilterPanel, RowFilter> filtersMap;
 //    private Set<String> unusedFilterKeys;
@@ -52,6 +60,33 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    }
 	});
 	listOutlet.setSelectedIndex(0);
+	
+	listOutlet.setCellRenderer(new ListCellRenderer() {
+
+	    @Override
+	    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		JLabel label = new JLabel();
+		label.setOpaque(true);
+		
+		if (value instanceof Contact) {
+		    Contact c = (Contact) value;
+		    label.setText(c.getFullRepresentation());
+		} else {
+		    label.setText("Error: contact list cell renderer received non-contact value to display");
+		}
+		
+		label.setBorder(BorderFactory.createEmptyBorder());
+		if (isSelected) {
+		    label.setForeground(list.getSelectionForeground());
+		    label.setBackground(list.getSelectionBackground());
+		} else {
+		    label.setForeground(list.getForeground());
+		    label.setBackground(Color.white);
+		}
+		
+		return label;
+	    }
+	});
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
 	TextFieldAutoHighlighter.installHighlighter(filter);
@@ -195,6 +230,11 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
         master.add(add, java.awt.BorderLayout.SOUTH);
 
         jSplitPane1.setLeftComponent(master);
@@ -464,6 +504,10 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 //        new EditSupplierDialog(null, true, this, (Supplier) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        AddContactDialog.createContactDialog(this).setVisible(true);
+    }//GEN-LAST:event_addActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JButton addFilterOutlet;
@@ -522,7 +566,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
     @Override
     public void updateDetail(Contact contact) {
-	typeOutlet.setText(contact.getType());
+	typeOutlet.setText(contact.isSupplier() ? "Leverancier" : "Klant");
 	
 	firmOutlet.setText(StringTools.capitalizeEach(contact.getFirm()));
 	
@@ -593,5 +637,10 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 //	unused.removeAll(usedFilters);
 //	return unused;
 	return null;
+    }
+
+    @Override
+    public void addContact(Contact c) {
+	throw new UnsupportedOperationException("Not supported yet.");
     }
 }

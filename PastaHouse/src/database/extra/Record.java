@@ -4,8 +4,6 @@
  */
 package database.extra;
 
-import database.FunctionResult;
-
 /**
  *
  * @author Robin jr

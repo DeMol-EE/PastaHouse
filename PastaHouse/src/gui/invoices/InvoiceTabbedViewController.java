@@ -4,7 +4,6 @@
  */
 package gui.invoices;
 
-import database.tables.Supplier;
 import gui.MasterDetailViewController;
 import gui.TabbedViewController;
 import gui.invoices.controllers.ArticleViewController;
@@ -56,9 +55,6 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
 	    }
 	});
         
-    }
-    
-    public void selectAndSwitchToSupplier(Supplier supplier){
     }
     
     @Override

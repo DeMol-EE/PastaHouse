@@ -7,7 +7,7 @@ package database.models;
 import database.Database;
 import database.FunctionResult;
 import database.tables.BasicIngredient;
-import database.tables.Supplier;
+import database.tables.Contact;
 import java.sql.SQLException;
 
 /**
@@ -18,7 +18,7 @@ public class BasicIngredientModel implements Model{
     private String name;
     private String date;
     
-    private Supplier supplier; // Foreign key, references Suppliers
+    private Contact supplier; // Foreign key, references Suppliers
     private String brand;
     private String packaging;
     private double pricePerUnit;
@@ -43,11 +43,11 @@ public class BasicIngredientModel implements Model{
 	this.date = date;
     }
 
-    public Supplier getSupplier() {
+    public Contact getSupplier() {
 	return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(Contact supplier) {
 	this.supplier = supplier;
     }
 

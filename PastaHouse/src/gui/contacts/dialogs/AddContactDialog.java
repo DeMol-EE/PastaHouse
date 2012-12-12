@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.invoices.dialogs;
+package gui.contacts.dialogs;
 
 import database.Database;
 import database.FunctionResult;
-import database.models.ClientModel;
-import database.tables.Client;
-import gui.invoices.delegates.AddClientDelegate;
+import database.models.ContactModel;
+import database.tables.Contact;
+import gui.contacts.delegates.AddContactDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
@@ -19,6 +19,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -26,27 +28,65 @@ import tools.Utilities;
 
 /**
  *
- * @author Warkst
+ * @author Hannes
  */
-public class AddClientDialog extends javax.swing.JDialog {
+public class AddContactDialog extends javax.swing.JDialog {
 
-    private final AddClientDelegate delegate;
-    private final ClientModel model;
-    
+    private AddContactDelegate delegate;
+    private final ContactModel model;
+    private int type;
+    private JComboBox typeBox;
+
     /**
-     * Creates new form AddClientDialog
+     * Creates new form AddContactDialog
      */
-    public AddClientDialog(java.awt.Frame parent, boolean modal, AddClientDelegate delegate) {
-	super(parent, modal);
-	initComponents();
-	setTitle("Klant toevoegen");
+    private AddContactDialog(java.awt.Frame parent, boolean modal, AddContactDelegate delegate, int type) {
+        super(parent, modal);
+        initComponents();
+        
+        this.setLocationRelativeTo(null);
+        this.delegate = delegate;
+	this.model = new ContactModel("supplier");
+	this.type = type;
+        loadModel();
+	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
 	
-	setLocationRelativeTo(null);
+	if (type == Contact.supplier) {
+	    setTitle("Leverancier toevoegen");
+	    firmLabel.setText("Firma *");
+	} else {
+	    setTitle("Klant toevoegen");
+	    contactLabel.setText("Contactpersoon *");
+	}
 	
-	this.delegate = delegate;
-	this.model = new ClientModel();
+	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 	
-	loadModel();
+	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		addActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
+    }
+    
+    private AddContactDialog(java.awt.Frame parent, boolean modal, AddContactDelegate delegate) {
+        super(parent, modal);
+        initComponents();
+        setTitle("Leverancier toevoegen");
+        this.setLocationRelativeTo(null);
+        this.delegate = delegate;
+	this.model = new ContactModel("supplier");
+	this.type = Contact.both;
+        loadModel();
+	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+	typeParent.add(typeBox);
 	
 	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
 	    @Override
@@ -63,6 +103,18 @@ public class AddClientDialog extends javax.swing.JDialog {
 	});
     }
 
+    public static AddContactDialog createSupplierDialog(AddContactDelegate delegate){
+	return new AddContactDialog(null, true, delegate, Contact.supplier);
+    }
+    
+    public static AddContactDialog createClientDialog(AddContactDelegate delegate){
+	return new AddContactDialog(null, true, delegate, Contact.client);
+    }
+    
+    public static AddContactDialog createContactDialog(AddContactDelegate delegate){
+	return new AddContactDialog(null, true, delegate);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,10 +124,16 @@ public class AddClientDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        typeTF = new javax.swing.JLabel();
+        typeParent = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
+        firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        contactLabel = new javax.swing.JLabel();
         txtContact = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtAdres = new javax.swing.JTextField();
@@ -107,18 +165,36 @@ public class AddClientDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(536, 600));
+        setPreferredSize(new java.awt.Dimension(600, 700));
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        jPanel7.setLayout(new java.awt.GridLayout(1, 2));
+
+        typeTF.setText("Type");
+        typeTF.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 1));
+        jPanel7.add(typeTF);
+
+        typeParent.setLayout(new java.awt.BorderLayout());
+        jPanel7.add(typeParent);
+
+        jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
+        jPanel6.add(jSeparator1, java.awt.BorderLayout.SOUTH);
+
+        jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
 
         jPanel2.setLayout(new java.awt.GridLayout(12, 2));
 
-        jLabel11.setText("Firma");
-        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
-        jPanel2.add(jLabel11);
+        firmLabel.setText("Firma");
+        firmLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(firmLabel);
         jPanel2.add(txtFirma);
 
-        jLabel10.setText("Contactpersoon *");
-        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
-        jPanel2.add(jLabel10);
+        contactLabel.setText("Contactpersoon");
+        contactLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(contactLabel);
         jPanel2.add(txtContact);
 
         jLabel13.setText("Adres");
@@ -188,7 +264,9 @@ public class AddClientDialog extends javax.swing.JDialog {
         pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
         jPanel2.add(pricecodeOutlet);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        jPanel5.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel5, java.awt.BorderLayout.NORTH);
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking"));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
@@ -198,20 +276,20 @@ public class AddClientDialog extends javax.swing.JDialog {
         notesOutlet.setRows(5);
         jScrollPane2.setViewportView(notesOutlet);
 
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 524, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 732, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -248,6 +326,65 @@ public class AddClientDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        disposeLater();
+    }//GEN-LAST:event_cancelActionPerformed
+
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        try {
+	    if (txtFirma.getText().isEmpty() && type == Contact.supplier || txtContact.getText().isEmpty() && type == Contact.client) {
+		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		return;
+	    }
+	    
+	    model.setFirm(txtFirma.getText());
+	    model.setAddress(txtAdres.getText());
+	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
+	    model.setZipcode(txtPostcode.getText());
+	    model.setTelephone(txtTel.getText());
+	    model.setTelephone2(txtTel2.getText());
+	    model.setFax(txtFax.getText());
+	    model.setCellphone(txtGSM.getText());
+	    model.setEmail(txtEmail.getText());
+	    model.setContact(txtContact.getText());
+	    model.setNotes(notesOutlet.getText());
+	    model.setTaxnumber(taxnrOutlet.getText());
+	    model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
+	    if (type == Contact.both) {
+		model.setType(typeBox.getSelectedItem().toString());
+	    } else if (type == Contact.supplier) {
+		model.setType("supplier");
+	    } else if (type == Contact.client) {
+		model.setType("client");
+	    }
+	    
+	    FunctionResult<Contact> result = model.create();
+            if (result.getCode() == 0 && result.getObj() != null) {
+//		delegate.addAndSelect(result.getObj());
+		delegate.addContact(result.getObj());
+		disposeLater();
+            } else {
+                // switch case the return code
+		JOptionPane.showMessageDialog(null, "Het toevoegen van de leverancier heeft foutcode "+result.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		disposeLater();
+            }
+        } catch (Exception ex) {
+	    System.err.println("Error caught");
+	    ex.printStackTrace();
+	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_addActionPerformed
+
     private void txtPostcodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPostcodeKeyReleased
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
@@ -268,46 +405,6 @@ public class AddClientDialog extends javax.swing.JDialog {
         comboGemeentes.setDataList(items);
     }//GEN-LAST:event_txtPostcodeKeyReleased
 
-    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        try {
-            if (txtContact.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            model.setFirm(txtFirma.getText());
-            model.setAddress(txtAdres.getText());
-            model.setMunicipality(comboGemeentes.getSelectedItem().toString());
-            model.setZipcode(Integer.parseInt(txtPostcode.getText()));
-            model.setTelephone(txtTel.getText());
-            model.setTelephone2(txtTel2.getText());
-            model.setFax(txtFax.getText());
-            model.setCellphone(txtGSM.getText());
-            model.setEmail(txtEmail.getText());
-            model.setContact(txtContact.getText());
-            model.setNotes(notesOutlet.getText());
-            model.setTaxnumber(taxnrOutlet.getText());
-            model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
-
-            FunctionResult<Client> result = model.create();
-            if (result.getCode() == 0 && result.getObj() != null) {
-                //		delegate.addAndSelect(result.getObj());
-                delegate.addClient(result.getObj());
-                disposeLater();
-            } else {
-                // switch case the return code
-                JOptionPane.showMessageDialog(null, "Het toevoegen van de klant heeft foutcode "+result.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
-                disposeLater();
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_addActionPerformed
-
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        disposeLater();
-    }//GEN-LAST:event_cancelActionPerformed
-
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
         if (!Utilities.validTaxNr(taxnrOutlet.getText())) {
 	    taxnrOutlet.setForeground(Color.red);
@@ -316,24 +413,14 @@ public class AddClientDialog extends javax.swing.JDialog {
 	}
     }//GEN-LAST:event_taxnrOutletKeyReleased
 
-    private void disposeLater(){
-	SwingUtilities.invokeLater(new Runnable() {
-
-	    @Override
-	    public void run() {
-		dispose();
-	    }
-	});
-    }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HolderGemeentes;
     private javax.swing.JButton add;
     private javax.swing.JButton cancel;
+    private javax.swing.JLabel contactLabel;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JLabel firmLabel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -347,7 +434,11 @@ public class AddClientDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
     private javax.swing.JTextField taxnrOutlet;
@@ -360,11 +451,12 @@ public class AddClientDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtPostcode;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txtTel2;
+    private javax.swing.JPanel typeParent;
+    private javax.swing.JLabel typeTF;
     // End of variables declaration//GEN-END:variables
     private AutocompleteCombobox comboGemeentes;
 
     private void loadModel() {
-
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
         items.add("");

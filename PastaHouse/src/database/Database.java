@@ -6,18 +6,15 @@
 package database;
 
 import database.extra.Component;
-import database.extra.Contact;
 import database.extra.Ingredient;
 import database.models.ArticleModel;
 import database.models.BasicIngredientModel;
-import database.models.ClientModel;
+import database.models.ContactModel;
 import database.models.RecipeModel;
-import database.models.SupplierModel;
 import database.tables.Article;
 import database.tables.BasicIngredient;
-import database.tables.Client;
+import database.tables.Contact;
 import database.tables.Recipe;
-import database.tables.Supplier;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,31 +42,28 @@ public class Database {
     private static Database driver;
     private Connection connection;
     private Statement statement;
-    private Map<Integer, Supplier> suppliersById;
     private Map<Integer, BasicIngredient> basicIngredientsById;
     private Map<Integer, Recipe> recipesById;
-    private Map<Integer, Client> clientsById;
     private Map<Integer, Article> articlesById;
-    private Map<String, Supplier> suppliersByFirm;
+    private Map<Integer, Contact> contactsById;
+    
     private Map<String, BasicIngredient> basicIngredientsByName;
     private Map<String, Recipe> recipesByName;
-    private Map<String, Client> clientsByContact;
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
+    private Map<String, Contact> contactsAlphabetically;
 
     private Database() {
         try {
-            suppliersById = new TreeMap<Integer, Supplier>();
             basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
             recipesById = new TreeMap<Integer, Recipe>();
-            clientsById = new TreeMap<Integer, Client>();
             articlesById = new TreeMap<Integer, Article>();
+	    contactsById = new TreeMap<Integer, Contact>();
 	    
-	    suppliersByFirm = new TreeMap<String, Supplier>(String.CASE_INSENSITIVE_ORDER);
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
-	    clientsByContact = new TreeMap<String, Client>(String.CASE_INSENSITIVE_ORDER);
 	    articlesByName = new TreeMap<String, Article>(String.CASE_INSENSITIVE_ORDER);
+	    contactsAlphabetically = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
 	    
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
             // connect to db
@@ -79,12 +72,13 @@ public class Database {
             statement = connection.createStatement();
 
             // copy data
-            loadSuppliers();
+//            loadSuppliers();
             loadBasicIngredients();
             loadRecipes();
             loadMunicipales();
-	    loadClients();
+//	    loadClients();
 	    loadArticles();
+	    loadContacts();
 
         } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,138 +97,71 @@ public class Database {
         return connection;
     }
     
-    private void loadClients() throws SQLException {
-        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_CL());
+    private void loadContacts() throws SQLException {
+        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_CON());
         while (rs.next()) {
-	    Client s = Client.loadWithValues(
+	    Contact contact = Contact.loadWithValues(
 		    rs.getInt("id"),
-		    rs.getString("naam"),
-                    rs.getString("contactpersoon"),
-                    rs.getString("adres"),
-                    rs.getInt("postcode"),
-		    rs.getString("gemeente"),
-                    rs.getString("tel"),
-                    rs.getString("tel2"),
-                    rs.getString("gsm"),
+		    rs.getString("firm"),
+                    rs.getString("contact"),
+                    rs.getString("address"),
+                    rs.getString("zipcode"),
+		    rs.getString("municipality"),
+                    rs.getString("telephone"),
+                    rs.getString("telephone2"),
+                    rs.getString("cellphone"),
                     rs.getString("fax"),
                     rs.getString("email"),
-                    rs.getString("btwnummer"),
-                    rs.getString("prijscode"),
-                    rs.getString("opmerking"));
-            clientsById.put(s.getPrimaryKeyValue(), s);
-            clientsByContact.put(s.getContact(), s);
+                    rs.getString("taxnr"),
+                    rs.getString("pricecode"),
+                    rs.getString("notes"),
+		    rs.getString("type"));
+            contactsById.put(contact.getPrimaryKeyValue(), contact);
+	    contactsAlphabetically.put(contact.getSortKey(), contact);
         }
 
-//        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
-	MyLogger.log("Database driver:: loaded " + clientsById.size() + " clients!", MyLogger.LOW);
+	MyLogger.log("Database driver:: loaded " + contactsById.size() + " contacts ("+getSuppliersAlphabetically().size()+" suppliers and "+getClientsAlphabetically().size()+" clients)!", MyLogger.LOW);
     }
-
-    private void loadSuppliers() throws SQLException {
-        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_SUP());
-        while (rs.next()) {
-	    Supplier s = Supplier.loadWithValues(
-		    rs.getInt("id"),
-		    rs.getString("firma"),
-                    rs.getString("contactpersoon"),
-                    rs.getString("adres"),
-                    rs.getInt("postcode"),
-		    rs.getString("gemeente"),
-                    rs.getString("tel"),
-                    rs.getString("tel2"),
-                    rs.getString("gsm"),
-                    rs.getString("fax"),
-                    rs.getString("email"),
-                    rs.getString("btwnr"),
-                    rs.getString("prijscode"),
-                    rs.getString("opmerking"),
-                    rs.getBoolean("verwijderd"));
-            suppliersById.put(s.getPrimaryKeyValue(), s);
-            suppliersByFirm.put(s.getFirm(), s);
-        }
-
-//        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
-	MyLogger.log("Database driver:: loaded " + suppliersById.size() + " suppliers!", MyLogger.LOW);
-    }
-
-    public FunctionResult<Supplier> addSupplier(SupplierModel sup) throws SQLException {
+    
+    public FunctionResult<Contact> addContact(ContactModel model) throws SQLException {
         int code = 0;
-	Supplier newSup = null;
-        String insertTableSQL = "INSERT INTO suppliers"
-                + "(firma, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, verwijderd, btwnr, prijscode) VALUES"
+	Contact newCon = null;
+        String insertTableSQL = "INSERT INTO contacts"
+                + "(firm, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnr, pricecode, notes, type) VALUES"
                 + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
-            preparedStatement.setString(1, sup.getFirm());
-            preparedStatement.setString(2, sup.getAddress());
-            preparedStatement.setString(3, sup.getMunicipality());
-            preparedStatement.setString(4, sup.getTelephone());
-            preparedStatement.setString(5, sup.getTelephone2());
-            preparedStatement.setString(6, sup.getCellphone());
-            preparedStatement.setString(7, sup.getEmail());
-            preparedStatement.setString(8, sup.getNotes());
-            preparedStatement.setString(9, sup.getContact());
-            preparedStatement.setString(10, sup.getFax());
-            preparedStatement.setInt(11, sup.getZipcode());
-            preparedStatement.setInt(12, 0);
-	    preparedStatement.setString(13, sup.getTaxnumber());
-            preparedStatement.setString(14, sup.getPricecode());
+            preparedStatement.setString(1, model.getFirm());
+            preparedStatement.setString(2, model.getContact());
+            preparedStatement.setString(3, model.getAddress());
+            preparedStatement.setString(4, model.getZipcode());
+            preparedStatement.setString(5, model.getMunicipality());
+            preparedStatement.setString(6, model.getTelephone());
+            preparedStatement.setString(7, model.getTelephone2());
+            preparedStatement.setString(8, model.getCellphone());
+            preparedStatement.setString(9, model.getFax());
+	    preparedStatement.setString(10, model.getEmail());
+            preparedStatement.setString(11, model.getTaxnumber());
+            preparedStatement.setString(12, model.getPricecode());
+	    preparedStatement.setString(13, model.getNotes());
+            preparedStatement.setString(14, model.getType());
             preparedStatement.executeUpdate();
 	    
-	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_SUP()+" WHERE firma=\""+sup.getFirm()+"\"");
+	    ResultSet rs = model.isSupplier() ? statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CON()+" WHERE firm=\""+model.getFirm()+"\"") : statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CON()+" WHERE contact=\""+model.getContact()+"\"");
 	    if (rs.next()) {
-		newSup = Supplier.createFromModel(rs.getInt("id"), sup);
-		suppliersById.put(newSup.getPrimaryKeyValue(), newSup);
-		suppliersByFirm.put(newSup.getFirm(), newSup);
+		newCon = Contact.createFromModel(rs.getInt("id"), model);
+		contactsById.put(newCon.getPrimaryKeyValue(), newCon);
+		contactsAlphabetically.put(newCon.isSupplier()?newCon.getFirm():newCon.getContact(), newCon);
 	    } else {
 		code = 2;
 	    }
         } catch (SQLException ex) {
-            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
 	    code = 1;
         } finally {
             preparedStatement.close();
         }
-        return new FunctionResult<Supplier>(code, newSup);
-    }
-    
-    public FunctionResult<Client> addClient(ClientModel cl) throws SQLException {
-        int code = 0;
-	Client newCl = null;
-        String insertTableSQL = "INSERT INTO klanten"
-                + "(naam, adres, gemeente, tel, tel2, gsm, email, opmerking, contactpersoon, fax, postcode, btwnummer, prijscode) VALUES"
-                + "(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
-        try {
-            preparedStatement.setString(1, cl.getFirm());
-            preparedStatement.setString(2, cl.getAddress());
-            preparedStatement.setString(3, cl.getMunicipality());
-            preparedStatement.setString(4, cl.getTelephone());
-            preparedStatement.setString(5, cl.getTelephone2());
-            preparedStatement.setString(6, cl.getCellphone());
-            preparedStatement.setString(7, cl.getEmail());
-            preparedStatement.setString(8, cl.getNotes());
-            preparedStatement.setString(9, cl.getContact());
-            preparedStatement.setString(10, cl.getFax());
-            preparedStatement.setInt(11, cl.getZipcode());
-	    preparedStatement.setString(12, cl.getTaxnumber());
-            preparedStatement.setString(13, cl.getPricecode());
-            preparedStatement.executeUpdate();
-	    
-	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CL()+" WHERE naam=\""+cl.getFirm()+"\"");
-	    if (rs.next()) {
-		newCl = Client.createFromModel(rs.getInt("id"), cl);
-		clientsById.put(newCl.getPrimaryKeyValue(), newCl);
-		clientsByContact.put(newCl.getContact(), newCl);
-	    } else {
-		code = 2;
-	    }
-        } catch (SQLException ex) {
-            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
-	    code = 1;
-        } finally {
-            preparedStatement.close();
-        }
-        return new FunctionResult<Client>(code, newCl);
+        return new FunctionResult<Contact>(code, newCon);
     }
     
     public FunctionResult<Article> addArticle(ArticleModel art) throws SQLException {
@@ -262,7 +189,7 @@ public class Database {
 		code = 2;
 	    }
         } catch (SQLException ex) {
-            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
 	    code = 1;
         } finally {
             preparedStatement.close();
@@ -275,7 +202,7 @@ public class Database {
         while (rs.next()) {
 	    BasicIngredient b = BasicIngredient.loadWithValues(
 		    rs.getInt("id"),
-                    suppliersById.get(rs.getInt("firmaid")),
+                    contactsById.get(rs.getInt("firmaid")),
                     rs.getString("merk"),
                     rs.getString("verpakking"),
                     rs.getDouble("prijsPerVerpakking"),
@@ -322,7 +249,7 @@ public class Database {
 		code = 2;
 	    }
         } catch (SQLException ex) {
-            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
 	    code = 1;
         } finally {
             preparedStatement.close();
@@ -510,21 +437,45 @@ public class Database {
 //        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
 	MyLogger.log("Database driver:: loaded " + articlesById.size() + " articles!", MyLogger.LOW);
     }
-    
-    public Map<Integer, Client> getClients() {
-	return clientsById;
+//    
+//    public Map<Integer, Contact> getClients() {
+//	Map<Integer, Contact> clients = new TreeMap<Integer, Contact>();
+//	for (Contact contact : contactsById.values()) {
+//	    if (!contact.isSupplier()) {
+//		clients.put(contact.getPrimaryKeyValue(), contact);
+//	    }
+//	}
+//	return clients;
+//    }
+//    
+    public Map<String, Contact> getClientsAlphabetically() {
+	Map<String, Contact> clients = new TreeMap<String, Contact>();
+	for (Contact contact : contactsAlphabetically.values()) {
+	    if (!contact.isSupplier()) {
+		clients.put(contact.getSortKey(), contact);
+	    }
+	}
+	return clients;
     }
-    
-    public Map<String, Client> getClientsAlphabetically() {
-	return clientsByContact;
-    }
-
-    public Map<Integer, Supplier> getSuppliers() {
-        return suppliersById;
-    }
-    
-    public Map<String, Supplier> getSuppliersAlphabetically() {
-	return suppliersByFirm;
+//
+//    public Map<Integer, Contact> getSuppliers() {
+//	Map<Integer, Contact> suppliers = new TreeMap<Integer, Contact>();
+//	for (Contact contact : contactsById.values()) {
+//	    if (contact.isSupplier()) {
+//		suppliers.put(contact.getPrimaryKeyValue(), contact);
+//	    }
+//	}
+//	return suppliers;
+//    }
+//    
+    public Map<String, Contact> getSuppliersAlphabetically() {
+	Map<String, Contact> suppliers = new TreeMap<String, Contact>();
+	for (Contact contact : contactsAlphabetically.values()) {
+	    if (contact.isSupplier()) {
+		suppliers.put(contact.getSortKey(), contact);
+	    }
+	}
+	return suppliers;
     }
 
     public Map<Integer, BasicIngredient> getBasicIngredients() {
@@ -591,10 +542,7 @@ public class Database {
     }
     
     public Map<String, Contact> getContactsAlphabetically() {
-	Map<String, Contact> contacts = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
-	contacts.putAll(suppliersByFirm);
-	contacts.putAll(clientsByContact);
-	return contacts;
+	return contactsAlphabetically;
     }
 
     /**
@@ -621,26 +569,6 @@ public class Database {
 
             return false;
         }
-    }
-    
-    /**
-     * TODO: MAKE FAILSAFE so two calls can't generate the same id!
-     * 
-     * 
-     * @param table
-     * @return
-     * @throws Exception 
-     */
-    public int generateIdForTable(String table) throws SQLException{
-	if (table.equalsIgnoreCase(Configuration.center().getDB_TABLE_SUP())) {
-	    return Collections.max(suppliersById.keySet())+1;
-	} else if (table.equalsIgnoreCase(Configuration.center().getDB_TABLE_REC())) {
-	    return Collections.max(recipesById.keySet())+1;
-	} else if (table.equalsIgnoreCase(Configuration.center().getDB_TABLE_INGR())) {
-	    return Collections.max(basicIngredientsById.keySet())+1;
-	} else {
-	    throw new SQLException("DatabaseDriver::Table '"+table+"' is not a database table and a valid PK could not be generated!");
-	}
     }
 
     /**

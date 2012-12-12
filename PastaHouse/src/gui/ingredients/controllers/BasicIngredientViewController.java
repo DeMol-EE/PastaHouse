@@ -27,7 +27,6 @@ import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -83,31 +82,23 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	DecimalFormat twoFormatter = new DecimalFormat("0.00");
 	
-	supplierOutlet.setText(StringTools.capitalize(bi.getSupplier().getFirm()));
-	if(bi.getSupplier().isDeleted()){
-	    supplierOutlet.setForeground(Color.RED);
-	    supplierOutlet.setCursor(Cursor.getDefaultCursor());
-	    for (MouseListener mouseListener : supplierOutlet.getMouseListeners()) {
-		supplierOutlet.removeMouseListener(mouseListener);
+	supplierOutlet.setText( bi.getSupplier() != null ? StringTools.capitalize(bi.getSupplier().getFirm()) : "");
+	supplierOutlet.setForeground(Color.BLUE);
+	supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	supplierOutlet.addMouseListener(new MouseAdapter() {
+	    @Override
+	    public void mouseReleased(MouseEvent e) {
+		supplierOutletMouseReleased(e);
 	    }
-	} else {
-	    supplierOutlet.setForeground(Color.BLUE);
-	    supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	    supplierOutlet.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		    supplierOutletMouseReleased(e);
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		    supplierOutletMouseEntered(e);
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-		    supplierOutletMouseExited(e);
-		}
-	    });
-	}
+	    @Override
+	    public void mouseEntered(MouseEvent e) {
+		supplierOutletMouseEntered(e);
+	    }
+	    @Override
+	    public void mouseExited(MouseEvent e) {
+		supplierOutletMouseExited(e);
+	    }
+	});
 	
 	//€-sign?
 	nameOutlet.setText(StringTools.capitalize(bi.getName()));
