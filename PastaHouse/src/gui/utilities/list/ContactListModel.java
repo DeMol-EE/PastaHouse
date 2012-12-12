@@ -58,6 +58,14 @@ public class ContactListModel extends AbstractListModel{
 	}
     }
     
+    public void edit(Contact newObj, Contact oldObj) {
+	if (persistentData.get(oldObj.getSortKey())!=null) {
+	    persistentData.remove(oldObj.getFirm());
+	    persistentData.put(newObj.getSortKey(), newObj);
+	}
+	fireContentsChanged(this, 0, getSize());
+    }
+
     private void filterData(){
 	if (filter == null) {
 	    filteredData = new TreeMap<String, Contact>(persistentData);

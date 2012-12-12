@@ -46,8 +46,6 @@ public class EditContactDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        setTitle("Leverancier wijzigen");
-
         setModalityType(ModalityType.APPLICATION_MODAL);
         setLocationRelativeTo(null);
 
@@ -62,10 +60,10 @@ public class EditContactDialog extends javax.swing.JDialog {
 	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 	
 	if (type == Contact.supplier) {
-	    setTitle("Leverancier toevoegen");
+	    setTitle("Leverancier wijzigen");
 	    firmLabel.setText("Firma *");
 	} else {
-	    setTitle("Klant toevoegen");
+	    setTitle("Klant wijzigen");
 	    contactLabel.setText("Contactpersoon *");
 	}
 	
@@ -88,7 +86,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        setTitle("Leverancier wijzigen");
+        setTitle("Contactpersoon wijzigen");
 
         setModalityType(ModalityType.APPLICATION_MODAL);
         setLocationRelativeTo(null);
@@ -100,7 +98,12 @@ public class EditContactDialog extends javax.swing.JDialog {
 
         loadModel();
 	
-	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+	typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+	if (model.isSupplier()) {
+	    typeBox.setSelectedIndex(0);
+	} else {
+	    typeBox.setSelectedIndex(1);
+	}
 	typeParent.add(typeBox);
 	
 	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
@@ -182,7 +185,10 @@ public class EditContactDialog extends javax.swing.JDialog {
     
     private void setMunicipal() {
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
-        String munie = comboGemeentes.getSelectedItem().toString();
+        if(comboGemeentes.getSelectedItem() == null){
+	    return;
+	}
+	String munie = comboGemeentes.getSelectedItem().toString();
         if (munies.containsKey(munie)) {
             txtGemeente.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
         } else {
@@ -433,12 +439,19 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    model.setNotes(notesOutlet.getText());
 	    model.setTaxnumber(taxnrOutlet.getText());
 	    model.setPricecode(pricecodeOutlet.getSelectedIndex() == 0 ? null : pricecodeOutlet.getSelectedItem().toString());
+	    if (type == Contact.both) {
+		model.setType(typeBox.getSelectedIndex() == 0? "supplier" : "client");
+	    } else if (type == Contact.supplier) {
+		model.setType("supplier");
+	    } else if (type == Contact.client) {
+		model.setType("client");
+	    }
 
 	    if (model.update()) {
-		delegate.editContact(model, defaultModel);
+		delegate.editContact(defaultModel, model);
 		disposeLater();
 	    } else {
-		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze contactpersoon in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
 	} catch (Exception e){
 	    System.err.println("Error:\n");

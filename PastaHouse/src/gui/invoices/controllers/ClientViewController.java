@@ -346,9 +346,11 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         invoices.setText("Facturen");
+        invoices.setFocusable(false);
         jPanel2.add(invoices);
 
         edit.setText("Wijzigen...");
+        edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);
@@ -465,8 +467,6 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
     @Override
     public void addContact(Contact newObj) {
-//	EditableListModel<Contact> elm = (EditableListModel<Contact>)listOutlet.getModel();
-//	elm.update();
 	listModel.update();
 	if (listModel.getSize() == 1) {
 	    detail.removeAll();
@@ -474,6 +474,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	}
 	listOutlet.setSelectedValue(newObj, true);
 	updateDetail(newObj);
+	listOutlet.requestFocus();
     }
 
     @Override
@@ -494,10 +495,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
     @Override
     public void editContact(Contact o, Contact n) {
-//	EditableListModel<Contact> dlm = (EditableListModel)listOutlet.getModel();
-//	dlm.edit(n, o);
 	listModel.edit(n, o);
 	listOutlet.setSelectedValue(n, true);
 	updateDetail(n);
+	listOutlet.requestFocus();
     }
 }

@@ -5,16 +5,17 @@
 package gui.contacts.controllers;
 
 import database.tables.Contact;
+import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
-import gui.contacts.datasource.FilterPanelDataSource;
 import gui.contacts.delegates.AddContactDelegate;
-import gui.contacts.delegates.FilterPanelDelegate;
+import gui.contacts.delegates.EditContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
+import gui.contacts.dialogs.EditContactDialog;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.list.ContactListModel;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,7 +31,7 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class ContactsViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, FilterPanelDelegate, FilterPanelDataSource, AddContactDelegate {
+public class ContactsViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, AddContactDelegate, EditContactDelegate {
 
 //    private Map<FilterPanel, RowFilter> filtersMap;
 //    private Set<String> unusedFilterKeys;
@@ -88,6 +89,11 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    }
 	});
 	
+	if (listModel.getSize() == 0) {
+	    detail.remove(container);
+	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
+	}
+	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
 	TextFieldAutoHighlighter.installHighlighter(filter);
     }
@@ -105,12 +111,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
         searchMenuItem = new javax.swing.JMenuItem();
-        filteringPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        filters = new javax.swing.JPanel();
-        addFilterOutlet = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         filter = new javax.swing.JTextField();
@@ -183,29 +183,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
             }
         });
         editMenu.add(searchMenuItem);
-
-        filteringPanel.setLayout(new java.awt.BorderLayout());
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setText("Filters");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 0));
-        jPanel1.add(jLabel1, java.awt.BorderLayout.NORTH);
-
-        filters.setLayout(new java.awt.GridLayout(1, 1));
-
-        addFilterOutlet.setText("Toevoegen");
-        addFilterOutlet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addFilterOutletActionPerformed(evt);
-            }
-        });
-        filters.add(addFilterOutlet);
-
-        jPanel1.add(filters, java.awt.BorderLayout.CENTER);
-
-        filteringPanel.add(jPanel1, java.awt.BorderLayout.NORTH);
-        filteringPanel.add(filler1, java.awt.BorderLayout.CENTER);
 
         setLayout(new java.awt.BorderLayout());
 
@@ -461,17 +438,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         throw new UnsupportedOperationException("Not supported yet.");
     }//GEN-LAST:event_editMenuItemActionPerformed
 
-    private void addFilterOutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFilterOutletActionPerformed
-//        filters.setLayout(new GridLayout(filtersMap.size()+2, 1));
-//	FilterPanel fp = new FilterPanel(this, this);
-//	filters.add(fp, filtersMap.size());
-//	filtersMap.put(fp, null);
-//	
-//	if (unusedFilterKeys().isEmpty()) {
-//	    filters.remove(addFilterOutlet);
-//	}
-    }//GEN-LAST:event_addFilterOutletActionPerformed
-
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
         if (filter.getText().isEmpty()) {
 	    listModel.setFilter(null);
@@ -502,6 +468,10 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
 //        new EditSupplierDialog(null, true, this, (Supplier) listOutlet.getSelectedValue()).setVisible(true);
+	listModel.setFilter(null);
+	filter.setText("");
+	
+	EditContactDialog.createContactDialog(this, (Contact) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
@@ -510,7 +480,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
-    private javax.swing.JButton addFilterOutlet;
     private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JLabel addressOutlet;
     private javax.swing.JLabel cellphoneOutlet;
@@ -522,14 +491,10 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JMenuItem editMenuItem;
     private javax.swing.JLabel emailOutlet;
     private javax.swing.JLabel faxOutlet;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JTextField filter;
-    private javax.swing.JPanel filteringPanel;
-    private javax.swing.JPanel filters;
     private javax.swing.JLabel firmOutlet;
     private javax.swing.JLabel firmTitleOutlet;
     private javax.swing.JPanel fixedFields;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -542,7 +507,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -579,11 +543,11 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         emailOutlet.setText(contact.getEmail());
         telephone2Outlet.setText(contact.getTelephone2());
         notesOutlet.setText(contact.getNotes());
-        zipcodeOutlet.setText("" + contact.getZipcode());
+        zipcodeOutlet.setText(contact.getZipcode());
 	taxnrOutlet.setText(contact.getTaxnumber());
 	String code = contact.getPricecode();
 	if (code != null) {
-	    code = code.toUpperCase(); 
+	    code = code.toUpperCase();
 	}
 	pricecodeOutlet.setText(code);
     }
@@ -612,35 +576,21 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     }
 
     @Override
-    public void deleteFilter(FilterPanel fp) {
-//	filters.remove(fp);
-//	filtersMap.remove(fp);
-//	if (unusedFilterKeys().size() == 1) {
-//	    filters.add(addFilterOutlet);
-//	}
-//	filters.validate();
-//	filters.repaint();
-    }
-
-    @Override
-    public Set<String> unusedFilterKeys() {
-//	
-//	Set<String> usedFilters = new TreeSet<String>();
-//	
-//	for (FilterPanel filterPanel : filtersMap.keySet()) {
-//	    if (filterPanel.filterKey() != null) {
-//		usedFilters.add(filterPanel.filterKey());
-//	    }
-//	}
-//	
-//	Set<String> unused = new TreeSet<String>(unusedFilterKeys);
-//	unused.removeAll(usedFilters);
-//	return unused;
-	return null;
-    }
-
-    @Override
     public void addContact(Contact c) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	listModel.update();
+	if (listModel.getSize() == 1) {
+	    detail.removeAll();
+	    detail.add(container);
+	}
+	listOutlet.setSelectedValue(c, true);
+	updateDetail(c);
+    }
+
+    @Override
+    public void editContact(Contact o, Contact n) {
+	listModel.update();
+	listModel.edit(n, o);
+	listOutlet.setSelectedValue(n, true);
+	updateDetail(n);
     }
 }

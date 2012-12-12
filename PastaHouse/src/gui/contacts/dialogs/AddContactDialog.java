@@ -79,7 +79,7 @@ public class AddContactDialog extends javax.swing.JDialog {
     private AddContactDialog(java.awt.Frame parent, boolean modal, AddContactDelegate delegate) {
         super(parent, modal);
         initComponents();
-        setTitle("Leverancier toevoegen");
+        setTitle("Contactpersoon toevoegen");
         this.setLocationRelativeTo(null);
         this.delegate = delegate;
 	this.model = new ContactModel("supplier");

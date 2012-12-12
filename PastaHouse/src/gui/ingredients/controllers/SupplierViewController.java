@@ -12,7 +12,6 @@ import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.delegates.EditContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.contacts.dialogs.EditContactDialog;
-import gui.utilities.list.EditableListModel;
 import gui.utilities.list.SupplierListModel;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
@@ -509,6 +508,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     public void electFirstResponder() {
 //	((EditableListModel)listOutlet.getModel()).update();
 	listModel.update();
+	listOutlet.setSelectedIndex(0);
 	listOutlet.requestFocus();
 	if(listOutlet.getSelectedValue()!=null) updateDetail((Contact)listOutlet.getSelectedValue());
     }

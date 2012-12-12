@@ -72,13 +72,11 @@ public class Database {
             statement = connection.createStatement();
 
             // copy data
-//            loadSuppliers();
+	    loadContacts();
             loadBasicIngredients();
             loadRecipes();
             loadMunicipales();
-//	    loadClients();
 	    loadArticles();
-	    loadContacts();
 
         } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,7 +115,7 @@ public class Database {
                     rs.getString("notes"),
 		    rs.getString("type"));
             contactsById.put(contact.getPrimaryKeyValue(), contact);
-	    contactsAlphabetically.put(contact.getSortKey(), contact);
+	    contactsAlphabetically.put(contact.getSortKey().toLowerCase(), contact);
         }
 
 	MyLogger.log("Database driver:: loaded " + contactsById.size() + " contacts ("+getSuppliersAlphabetically().size()+" suppliers and "+getClientsAlphabetically().size()+" clients)!", MyLogger.LOW);
@@ -151,7 +149,7 @@ public class Database {
 	    if (rs.next()) {
 		newCon = Contact.createFromModel(rs.getInt("id"), model);
 		contactsById.put(newCon.getPrimaryKeyValue(), newCon);
-		contactsAlphabetically.put(newCon.isSupplier()?newCon.getFirm():newCon.getContact(), newCon);
+		contactsAlphabetically.put(newCon.getSortKey().toLowerCase(), newCon);
 	    } else {
 		code = 2;
 	    }
@@ -452,7 +450,7 @@ public class Database {
 	Map<String, Contact> clients = new TreeMap<String, Contact>();
 	for (Contact contact : contactsAlphabetically.values()) {
 	    if (!contact.isSupplier()) {
-		clients.put(contact.getSortKey(), contact);
+		clients.put(contact.getSortKey().toLowerCase(), contact);
 	    }
 	}
 	return clients;
@@ -472,7 +470,7 @@ public class Database {
 	Map<String, Contact> suppliers = new TreeMap<String, Contact>();
 	for (Contact contact : contactsAlphabetically.values()) {
 	    if (contact.isSupplier()) {
-		suppliers.put(contact.getSortKey(), contact);
+		suppliers.put(contact.getSortKey().toLowerCase(), contact);
 	    }
 	}
 	return suppliers;

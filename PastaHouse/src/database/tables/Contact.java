@@ -221,7 +221,7 @@ public class Contact extends Record implements Filterable{
 		"firm = "+ (firm.length()>0 ? "\""+ firm +"\"":"NULL")+", "
 		+ "contact = "+(contact.length()>0 ? "\""+ contact +"\"":"NULL")+", "
 		+ "address = "+(address.length()>0 ?"\""+address +"\"":"NULL")+", "
-		+ "zipcode = "+(zipcode.length()>0? "\""+zipcode +"\"":"NULL")+", "
+		+ "zipcode = "+(zipcode.length()>0? "\""+zipcode +"\"":"\"\"")+", "
 		+ "municipality = "+(municipality.length()>0? "\""+municipality +"\"":"NULL")+", "
 		+ "telephone = "+(telephone.length()>0? "\""+telephone +"\"":"NULL")+", "
 		+ "telephone2 = "+(telephone2.length()>=0? "\""+telephone2 +"\"":"NULL")+", "
@@ -229,7 +229,7 @@ public class Contact extends Record implements Filterable{
 		+ "fax = "+(fax.length()>0? "\""+fax +"\"":"NULL")+", "
 		+ "email = "+(email.length()>0? "\""+email +"\"":"NULL")+", "
 		+ "taxnr = "+(taxnumber.length()>0? "\""+taxnumber +"\"":"NULL")+", "
-		+ "pricecode = "+(pricecode.length()>0? "\""+pricecode +"\"":"NULL")+", "
+		+ "pricecode = "+((pricecode != null && pricecode.length()>0)? "\""+pricecode +"\"":"NULL")+", "
 		+ "notes = "+(notes.length()>0? "\""+notes +"\"":"NULL")+", "
 		+ "type = "+(type.length()>0 ? "\""+type +"\"":"NULL"));
     }

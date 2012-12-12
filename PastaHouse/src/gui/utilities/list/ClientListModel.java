@@ -46,14 +46,15 @@ public class ClientListModel extends AbstractListModel{
 
     public void add(Contact o){
 	data.put(o.getSortKey(), o);
-	fireContentsChanged(this, 0, getSize());
+	update();
     }
 
     public void edit(Contact newObj, Contact oldObj) {
 	if (data.get(oldObj.getSortKey())!=null) {
 	    data.remove(oldObj.getFirm());
 	    data.put(newObj.getSortKey(), newObj);
+//	    System.out.println("Removed "+oldObj.getSortKey()+", added "+newObj.getSortKey());
 	}
-	fireContentsChanged(this, 0, getSize());
+	update();
     }
 }
