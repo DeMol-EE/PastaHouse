@@ -126,7 +126,7 @@ public class Supplier extends Contact{
 		+ "opmerking = "+(getNotes().length()>0? "\""+getNotes() +"\"":"NULL")+", "
 		+ "contactpersoon = "+(getContact().length()>0 ? "\""+getContact() +"\"":"NULL")+", "
 		+ "btwnr = "+(getTaxnumber().length()>0 ? "\""+getTaxnumber() +"\"":"NULL")+", "
-		+ "prijscode = "+(getPricecode().length()>0 ? "\""+getPricecode() +"\"":"NULL")+", "
+		+ "prijscode = "+(getPricecode()!=null ? "\""+getPricecode() +"\"":"NULL")+", "
 		+ "verwijderd = 0");
     }
     

@@ -88,6 +88,10 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         txtFax = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        taxnrOutlet = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        pricecodeOutlet = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
@@ -100,21 +104,25 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(536, 600));
 
-        jPanel2.setLayout(new java.awt.GridLayout(10, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(12, 2));
 
         jLabel11.setText("Firma *");
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel11);
         jPanel2.add(txtFirma);
 
         jLabel10.setText("Contactpersoon");
+        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel10);
         jPanel2.add(txtContact);
 
         jLabel13.setText("Adres");
+        jLabel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel13);
         jPanel2.add(txtAdres);
 
         jLabel1.setText("Postcode");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel1);
 
         txtPostcode.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -125,30 +133,49 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         jPanel2.add(txtPostcode);
 
         jLabel12.setText("Gemeente");
+        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel12);
 
         HolderGemeentes.setLayout(new java.awt.BorderLayout());
         jPanel2.add(HolderGemeentes);
 
         jLabel9.setText("Telefoon");
+        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel9);
         jPanel2.add(txtTel);
 
         jLabel2.setText("Telefoon 2");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel2);
         jPanel2.add(txtTel2);
 
         jLabel14.setText("GSM");
+        jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel14);
         jPanel2.add(txtGSM);
 
         jLabel15.setText("Fax");
+        jLabel15.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel15);
         jPanel2.add(txtFax);
 
         jLabel16.setText("Email");
+        jLabel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel16);
         jPanel2.add(txtEmail);
+
+        jLabel3.setText("BTWNummer");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(jLabel3);
+        jPanel2.add(taxnrOutlet);
+
+        jLabel4.setText("Prijscode");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(jLabel4);
+
+        pricecodeOutlet.setMaximumRowCount(3);
+        pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
+        jPanel2.add(pricecodeOutlet);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
@@ -242,6 +269,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 	    model.setEmail(txtEmail.getText());
 	    model.setContact(txtContact.getText());
 	    model.setNotes(notesOutlet.getText());
+	    model.setTaxnumber(taxnrOutlet.getText());
+	    model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
 	    
 	    FunctionResult<Supplier> result = model.create();
             if (result.getCode() == 0 && result.getObj() != null) {
@@ -291,6 +320,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -298,6 +329,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea notesOutlet;
+    private javax.swing.JComboBox pricecodeOutlet;
+    private javax.swing.JTextField taxnrOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;

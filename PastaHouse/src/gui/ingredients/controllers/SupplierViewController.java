@@ -16,11 +16,9 @@ import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import tools.StringTools;
@@ -68,6 +66,12 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         telephone2Outlet.setText(s.getTelephone2());
         notesOutlet.setText(s.getNotes());
         zipcodeOutlet.setText("" + s.getZipcode());
+	taxnrOutlet.setText(s.getTaxnumber());
+	String code = s.getPricecode();
+	if (code != null) {
+	    code = code.toUpperCase(); 
+	}
+	pricecodeOutlet.setText(code);
     }
     
     public void selectSupplier(Supplier supplier) {
@@ -118,6 +122,10 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         faxOutlet = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         emailOutlet = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        taxnrOutlet = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        pricecodeOutlet = new javax.swing.JLabel();
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
@@ -173,7 +181,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         container.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(10, 2));
+        fixedFields.setLayout(new java.awt.GridLayout(12, 2));
 
         jLabel1.setText("Firma");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
@@ -290,6 +298,30 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         emailOutlet.setFocusable(false);
         emailOutlet.setOpaque(true);
         fixedFields.add(emailOutlet);
+
+        jLabel11.setText("BTWNummer");
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel11.setFocusable(false);
+        fixedFields.add(jLabel11);
+
+        taxnrOutlet.setText("<taxnrOutlet>");
+        taxnrOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        taxnrOutlet.setFocusable(false);
+        fixedFields.add(taxnrOutlet);
+
+        jLabel12.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel12.setText("Prijscode");
+        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel12.setFocusable(false);
+        jLabel12.setOpaque(true);
+        fixedFields.add(jLabel12);
+
+        pricecodeOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        pricecodeOutlet.setText("<pricecodeOutlet>");
+        pricecodeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        pricecodeOutlet.setFocusable(false);
+        pricecodeOutlet.setOpaque(true);
+        fixedFields.add(pricecodeOutlet);
 
         container.add(fixedFields, java.awt.BorderLayout.NORTH);
 
@@ -426,6 +458,8 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -444,7 +478,9 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
     private javax.swing.JPanel master;
     private javax.swing.JLabel municipalityOutlet;
     private javax.swing.JTextArea notesOutlet;
+    private javax.swing.JLabel pricecodeOutlet;
     private javax.swing.JPanel stretchableFields;
+    private javax.swing.JLabel taxnrOutlet;
     private javax.swing.JLabel telephone2Outlet;
     private javax.swing.JLabel telephoneOutlet;
     private javax.swing.JLabel zipcodeOutlet;

@@ -71,6 +71,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         txtContact.setText(model.getContact());
         txtAdres.setText(model.getAddress());
         // copy municipale
+	
         txtTel.setText(model.getTelephone());
 	txttel2.setText(model.getTelephone2());
         txtGSM.setText(model.getCellphone());
@@ -78,6 +79,11 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         txtEmail.setText(model.getEmail());
         notesOutlet.setText(model.getNotes());
         txtGemeente.setText(""+model.getZipcode());
+	
+	taxnrOutlet.setText(model.getTaxnumber());
+	if (model.getPricecode() != null) {
+	    pricecodeOutlet.setSelectedItem(model.getPricecode());
+	}
 
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
@@ -108,6 +114,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 //        jPanel2.addProxy(comboGemeentes, 9);
 	muniParent.add(comboGemeentes, BorderLayout.CENTER);
         comboGemeentes.setSelectedItem(model.getMunicipality());
+	
+	System.out.println(model.getMunicipality());
     }
     
     private void setMunicipal() {
@@ -150,6 +158,10 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         txtFax = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        taxnrOutlet = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        pricecodeOutlet = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
@@ -161,7 +173,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setLayout(new java.awt.GridLayout(10, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(12, 2));
 
         jLabel11.setText("Firma *");
         jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
@@ -230,6 +242,19 @@ public class EditSupplierDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel16);
         jPanel2.add(txtEmail);
 
+        jLabel3.setText("BTWNummer");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(jLabel3);
+        jPanel2.add(taxnrOutlet);
+
+        jLabel4.setText("Prijscode");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(jLabel4);
+
+        pricecodeOutlet.setMaximumRowCount(3);
+        pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
+        jPanel2.add(pricecodeOutlet);
+
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
         jPanel3.setPreferredSize(new java.awt.Dimension(528, 300));
@@ -256,7 +281,7 @@ public class EditSupplierDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -311,6 +336,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 	    model.setFax(txtFax.getText());
 	    model.setEmail(txtEmail.getText());
 	    model.setNotes(notesOutlet.getText());
+	    model.setTaxnumber(taxnrOutlet.getText());
+	    model.setPricecode(pricecodeOutlet.getSelectedIndex() == 0 ? null : pricecodeOutlet.getSelectedItem().toString());
 
 	    if (model.update()) {
 		delegate.editSupplier(model, defaultModel);
@@ -319,6 +346,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
 		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
 	} catch (Exception e){
+	    System.err.println("Error:\n");
+	    e.printStackTrace();
 	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
 	}
         
@@ -371,6 +400,8 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -379,7 +410,9 @@ public class EditSupplierDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel muniParent;
     private javax.swing.JTextArea notesOutlet;
+    private javax.swing.JComboBox pricecodeOutlet;
     private javax.swing.JButton save;
+    private javax.swing.JTextField taxnrOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;
