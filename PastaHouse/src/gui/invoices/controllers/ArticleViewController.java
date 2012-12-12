@@ -11,6 +11,7 @@ import gui.MasterDetailViewController;
 import gui.invoices.delegates.AddArticleDelegate;
 import gui.invoices.delegates.EditArticleDelegate;
 import gui.invoices.dialogs.AddArticleDialog;
+import gui.invoices.dialogs.EditArticleDialog;
 import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
@@ -62,6 +63,9 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editMenu = new javax.swing.JMenu();
+        addMenuItem = new javax.swing.JMenuItem();
+        editMenuItem = new javax.swing.JMenuItem();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -69,7 +73,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         add = new javax.swing.JButton();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        fixedfields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         nameOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -84,6 +88,28 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         taxesOutlet = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        edit = new javax.swing.JButton();
+
+        editMenu.setText("Edit");
+
+        addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addMenuItem.setText("Add");
+        addMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(addMenuItem);
+
+        editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuItem.setText("Edit");
+        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(editMenuItem);
 
         setLayout(new java.awt.BorderLayout());
 
@@ -114,69 +140,69 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
         container.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.GridLayout(6, 2));
+        fixedfields.setLayout(new java.awt.GridLayout(6, 2));
 
         jLabel1.setText("Naam");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel1.add(jLabel1);
+        fixedfields.add(jLabel1);
 
         nameOutlet.setText("<nameOutlet>");
         nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel1.add(nameOutlet);
+        fixedfields.add(nameOutlet);
 
         jLabel3.setBackground(new java.awt.Color(239, 239, 239));
         jLabel3.setText("Code");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel3.setOpaque(true);
-        jPanel1.add(jLabel3);
+        fixedfields.add(jLabel3);
 
         codeOutlet.setBackground(new java.awt.Color(239, 239, 239));
         codeOutlet.setText("<codeOutlet>");
         codeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         codeOutlet.setOpaque(true);
-        jPanel1.add(codeOutlet);
+        fixedfields.add(codeOutlet);
 
         jLabel5.setText("Prijs A (Excl BTW)");
         jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel1.add(jLabel5);
+        fixedfields.add(jLabel5);
 
         priceAOutlet.setText("<priceAOutlet>");
         priceAOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel1.add(priceAOutlet);
+        fixedfields.add(priceAOutlet);
 
         jLabel7.setBackground(new java.awt.Color(239, 239, 239));
         jLabel7.setText("Prijs B (Excl BTW)");
         jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel7.setOpaque(true);
-        jPanel1.add(jLabel7);
+        fixedfields.add(jLabel7);
 
         priceBOutlet.setBackground(new java.awt.Color(239, 239, 239));
         priceBOutlet.setText("<priceBOutlet>");
         priceBOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         priceBOutlet.setOpaque(true);
-        jPanel1.add(priceBOutlet);
+        fixedfields.add(priceBOutlet);
 
         jLabel9.setText("Eenheid");
         jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel1.add(jLabel9);
+        fixedfields.add(jLabel9);
 
         unitOutlet.setText("<unitOutlet>");
         unitOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel1.add(unitOutlet);
+        fixedfields.add(unitOutlet);
 
         jLabel11.setBackground(new java.awt.Color(239, 239, 239));
         jLabel11.setText("BTW tarief");
         jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel11.setOpaque(true);
-        jPanel1.add(jLabel11);
+        fixedfields.add(jLabel11);
 
         taxesOutlet.setBackground(new java.awt.Color(239, 239, 239));
         taxesOutlet.setText("<taxesOutlet>");
         taxesOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         taxesOutlet.setOpaque(true);
-        jPanel1.add(taxesOutlet);
+        fixedfields.add(taxesOutlet);
 
-        container.add(jPanel1, java.awt.BorderLayout.NORTH);
+        container.add(fixedfields, java.awt.BorderLayout.NORTH);
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
 
@@ -185,6 +211,18 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         jScrollPane2.setViewportView(jTextArea1);
 
         container.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        edit.setText("Wijzigen...");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jPanel1.add(edit, java.awt.BorderLayout.EAST);
+
+        container.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
         detail.add(container, java.awt.BorderLayout.CENTER);
 
@@ -197,11 +235,28 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         new AddArticleDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        if(listOutlet.getSelectedValue()!=null) new EditArticleDialog(null, true, this, (Article)listOutlet.getSelectedValue()).setVisible(true);
+    }//GEN-LAST:event_editActionPerformed
+
+    private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addMenuItemActionPerformed
+
+    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JLabel codeOutlet;
     private javax.swing.JPanel container;
     private javax.swing.JPanel detail;
+    private javax.swing.JButton edit;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuItem;
+    private javax.swing.JPanel fixedfields;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
@@ -246,7 +301,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public JMenu menu() {
-	return null;
+	return editMenu;
     }
 
     @Override

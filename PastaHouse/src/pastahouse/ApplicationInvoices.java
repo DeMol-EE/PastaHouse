@@ -38,7 +38,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         setTitle("Pasta House");
 	
 	rtvc = new RecipeTabbedViewController(this);
-        itvc = new InvoiceTabbedViewController();
+        itvc = new InvoiceTabbedViewController(this);
         ctvc = new ContactsTabbedViewController();
 	
 	activeTabbedViewController = null;

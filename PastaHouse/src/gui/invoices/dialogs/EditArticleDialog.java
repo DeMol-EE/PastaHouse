@@ -4,10 +4,8 @@
  */
 package gui.invoices.dialogs;
 
-import database.FunctionResult;
-import database.models.ArticleModel;
 import database.tables.Article;
-import gui.invoices.delegates.AddArticleDelegate;
+import gui.invoices.delegates.EditArticleDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
@@ -23,25 +21,30 @@ import javax.swing.SwingUtilities;
  *
  * @author Warkst
  */
-public class AddArticleDialog extends javax.swing.JDialog {
+public class EditArticleDialog extends javax.swing.JDialog {
 
-    private final AddArticleDelegate delegate;
-    private final ArticleModel model;
+    private final EditArticleDelegate delegate;
+    private final Article model;
+    private final Article defaultModel;
     
     /**
-     * Creates new form AddArticleDialog
+     * Creates new form EditArticleDialog
      */
-    public AddArticleDialog(java.awt.Frame parent, boolean modal, AddArticleDelegate delegate) {
+    public EditArticleDialog(java.awt.Frame parent, boolean modal, EditArticleDelegate delegate, Article model) {
 	super(parent, modal);
 	initComponents();
 	
+	this.delegate = delegate;
+	this.model = model;
+	this.defaultModel = new Article(model);
+	
 	setLocationRelativeTo(null);
 	
-	this.delegate = delegate;
-	this.model = new ArticleModel();
-	
+	TextFieldAutoHighlighter.installHighlighter(nameOutlet);
+	TextFieldAutoHighlighter.installHighlighter(codeOutlet);
 	TextFieldAutoHighlighter.installHighlighter(priceAOutlet);
 	TextFieldAutoHighlighter.installHighlighter(priceBOutlet);
+	TextFieldAutoHighlighter.installHighlighter(unitOutlet);
 	TextFieldAutoHighlighter.installHighlighter(taxesOutlet);
 	
 	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
@@ -51,19 +54,22 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	    }
 	});
 	
-	loadDefaults();
+	loadModel();
     }
-
-    private void loadDefaults(){
-	priceAOutlet.setText(""+0.0);
-	priceBOutlet.setText(""+0.0);
-	taxesOutlet.setText(""+21.0);
+    
+    private void loadModel(){
+	nameOutlet.setText(model.getName());
+	codeOutlet.setText(model.getCode());
+	priceAOutlet.setText(""+model.getPriceA());
+	priceBOutlet.setText(""+model.getPriceB());
+	unitOutlet.setText(model.getUnit());
+	taxesOutlet.setText(""+model.getTaxes());
 	
 	updatePriceAFormattedOutlet();
 	updatePriceBFormattedOutlet();
 	updateTaxesFormattedOutlet();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,7 +103,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jTextArea1 = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        create = new javax.swing.JButton();
+        save = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -125,7 +131,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jLabel5.setFocusable(false);
         jPanel1.add(jLabel5);
 
-        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel4.setLayout(new java.awt.GridLayout());
 
         priceAOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -146,7 +152,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jLabel7.setOpaque(true);
         jPanel1.add(jLabel7);
 
-        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel5.setLayout(new java.awt.GridLayout());
 
         priceBOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -173,7 +179,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
         jLabel11.setOpaque(true);
         jPanel1.add(jLabel11);
 
-        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel6.setLayout(new java.awt.GridLayout());
 
         taxesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -202,17 +208,19 @@ public class AddArticleDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel3.setLayout(new java.awt.GridLayout());
 
-        create.setText("Aanmaken");
-        create.addActionListener(new java.awt.event.ActionListener() {
+        save.setText("Opslaan");
+        save.setFocusable(false);
+        save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createActionPerformed(evt);
+                saveActionPerformed(evt);
             }
         });
-        jPanel3.add(create);
+        jPanel3.add(save);
 
         cancel.setText("Terug");
+        cancel.setFocusable(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
@@ -226,45 +234,6 @@ public class AddArticleDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
-        try{
-	    if (nameOutlet.getText().isEmpty()
-		    || codeOutlet.getText().isEmpty()
-		    || priceAOutlet.getText().isEmpty()
-		    || priceBOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-		return;
-	    }
-	    
-	    /*
-	     * Set values on the model
-	     */
-	    model.setName(nameOutlet.getText());
-	    model.setCode(codeOutlet.getText());
-	    model.setPriceA(Double.parseDouble(priceAOutlet.getText()));
-	    model.setPriceB(Double.parseDouble(priceBOutlet.getText()));
-	    model.setUnit(unitOutlet.getText());
-	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
-	    
-	    FunctionResult<Article> res = model.create();
-	    if (res.getCode() == 0 && res.getObj() != null) {
-		delegate.addArticle(res.getObj());
-		disposeLater();
-	    } else {
-		// switch case error code
-		JOptionPane.showMessageDialog(null, "Het toevoegen van het artikel heeft foutcode "+res.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
-		disposeLater();
-	    }
-	} catch (Exception e){
-	    System.err.println("Error: \n"+e.getMessage());
-	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-	}
-    }//GEN-LAST:event_createActionPerformed
-
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        disposeLater();
-    }//GEN-LAST:event_cancelActionPerformed
 
     private void priceAOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceAOutletKeyReleased
         updatePriceAFormattedOutlet();
@@ -327,11 +296,47 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	});
     }
     
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        try{
+            if (nameOutlet.getText().isEmpty()
+                || codeOutlet.getText().isEmpty()
+                || priceAOutlet.getText().isEmpty()
+                || priceBOutlet.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            /*
+            * Set values on the model
+            */
+            model.setName(nameOutlet.getText());
+            model.setCode(codeOutlet.getText());
+            model.setPriceA(Double.parseDouble(priceAOutlet.getText()));
+            model.setPriceB(Double.parseDouble(priceBOutlet.getText()));
+            model.setUnit(unitOutlet.getText());
+            model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+
+	    if (model.update()) {
+		delegate.editArticle(defaultModel, model);
+		disposeLater();
+	    } else {
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van dit artikel in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    }
+        } catch (Exception e){
+            System.err.println("Error: \n"+e.getMessage());
+            JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        model.copy(defaultModel);
+	disposeLater();
+    }//GEN-LAST:event_cancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JTextField codeOutlet;
     private javax.swing.JPanel container;
-    private javax.swing.JButton create;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
@@ -351,6 +356,7 @@ public class AddArticleDialog extends javax.swing.JDialog {
     private javax.swing.JTextField priceAOutlet;
     private javax.swing.JLabel priceBFormattedOutlet;
     private javax.swing.JTextField priceBOutlet;
+    private javax.swing.JButton save;
     private javax.swing.JLabel taxesFormattedOutlet;
     private javax.swing.JTextField taxesOutlet;
     private javax.swing.JTextField unitOutlet;

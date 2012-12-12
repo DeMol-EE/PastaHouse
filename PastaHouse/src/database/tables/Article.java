@@ -40,6 +40,25 @@ public class Article extends Record{
 	this.taxes = model.getTaxes();
     }
     
+    public Article(Article copy){
+	super(copy.getPrimaryKeyValue(), copy.getTableName());
+	this.code = copy.getCode();
+	this.name = copy.getName();
+	this.priceA = copy.getPriceA();
+	this.priceB = copy.getPriceB();
+	this.unit = copy.getUnit();
+	this.taxes = copy.getTaxes();
+    }
+    
+    public void copy(Article copy){
+	this.code = copy.getCode();
+	this.name = copy.getName();
+	this.priceA = copy.getPriceA();
+	this.priceB = copy.getPriceB();
+	this.unit = copy.getUnit();
+	this.taxes = copy.getTaxes();
+    }
+    
     public static Article loadWithValues(int id, String code, String name, double priceA, double priceB, String unit, double taxes){
 	return new Article(id, code, name, priceA, priceB, unit, taxes);
     }

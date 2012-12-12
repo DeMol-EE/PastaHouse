@@ -30,16 +30,12 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
     private final int supplierTabIndex = 2;
     private HashMap<Integer, MasterDetailViewController> tabs;
     
-    private final ApplicationInvoices frame;
-    
     /**
      * Creates new form RecipeTabbedViewController
      */
     public RecipeTabbedViewController(final ApplicationInvoices frame) {
         initComponents();
 	
-	this.frame = frame;
-        
         tabs = new HashMap<Integer, MasterDetailViewController>();
         
 	tabs.put(supplierTabIndex, new SupplierViewController());

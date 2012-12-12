@@ -632,7 +632,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 		delegate.editBasicIngredient(model, defaultModel);
 		disposeLater();
 	    } else {
-		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze leverancier in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
 	} catch (Exception ex) {
 	    System.err.println(ex.getMessage());
