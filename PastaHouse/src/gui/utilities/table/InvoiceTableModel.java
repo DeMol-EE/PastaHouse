@@ -4,6 +4,8 @@
  */
 package gui.utilities.table;
 
+import database.tables.Invoice;
+import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -12,30 +14,15 @@ import javax.swing.table.AbstractTableModel;
  */
 public class InvoiceTableModel extends AbstractTableModel{
 
-    private String[][] data = new String[8][2];
+    private final Map<Integer, Invoice> data;
     
-    public InvoiceTableModel(){
-	data[0][0] = "lol";
-	data[0][1] = "copter";
-	data[1][0] = "derp";
-	data[1][1] = "herp";
-	data[2][0] = "superstar";
-	data[2][1] = "dj";
-	data[3][0] = "dong";
-	data[3][1] = "russian";
-	data[4][0] = "pirate";
-	data[4][1] = "new";
-	data[5][0] = "gladiatar";
-	data[5][1] = "mortal";
-	data[6][0] = "combat";
-	data[6][1] = "pistoletov";
-	data[7][0] = "shuffle";
-	data[7][1] = "melbourne";
+    public InvoiceTableModel(Map<Integer, Invoice> data){
+	this.data = data;
     }
 
     @Override
     public String getColumnName(int column) {
-	return column==0? "Datum" : "Klant";
+	return column==0? "Nummer" : "Klant";
     }
 
     @Override
@@ -45,17 +32,21 @@ public class InvoiceTableModel extends AbstractTableModel{
     
     @Override
     public int getRowCount() {
-	return data.length;
+	return data.size();
     }
 
     @Override
     public int getColumnCount() {
-	return data[0].length;
+	return 2;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-	return data[rowIndex][columnIndex];
+	switch (columnIndex){
+	    case 0: return ((Invoice)data.values().toArray()[rowIndex]).getNumber();
+	    case 1: return ((Invoice)data.values().toArray()[rowIndex]).getClient().getSortKey();
+	    default: return "Error";
+	}
     }
     
 }

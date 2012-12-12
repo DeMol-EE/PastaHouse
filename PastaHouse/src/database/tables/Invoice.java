@@ -6,7 +6,9 @@ package database.tables;
 
 import database.extra.InvoiceItem;
 import database.extra.Record;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import tools.Configuration;
 
 /**
  *
@@ -18,10 +20,64 @@ public class Invoice extends Record{
     private Contact client;
     private String priceCode;
     private double save;
-    private List<InvoiceItem> items;
+    private Map<Integer, InvoiceItem> items;
 
-    public Invoice(int id, String... rest){
-	super(id, "atable");
+    private Invoice(int id, int number, String date, Contact client, String priceCode, double save) {
+	super(id, Configuration.center().getDB_TABLE_INV());
+	this.number = number;
+	this.date = date;
+	this.client = client;
+	this.priceCode = priceCode;
+	this.save = save;
+	this.items = new TreeMap<Integer, InvoiceItem>();
+    }
+    
+    public static Invoice createStub(int id, int number, String date, Contact client, String priceCode, double save){
+	return new Invoice(id, number, date, client, priceCode, save);
+    }
+
+    public int getNumber() {
+	return number;
+    }
+
+    public void setNumber(int number) {
+	this.number = number;
+    }
+
+    public String getDate() {
+	return date;
+    }
+
+    public void setDate(String date) {
+	this.date = date;
+    }
+
+    public Contact getClient() {
+	return client;
+    }
+
+    public void setClient(Contact client) {
+	this.client = client;
+    }
+
+    public String getPriceCode() {
+	return priceCode;
+    }
+
+    public void setPriceCode(String priceCode) {
+	this.priceCode = priceCode;
+    }
+
+    public double getSave() {
+	return save;
+    }
+
+    public void setSave(double save) {
+	this.save = save;
+    }
+
+    public void addItem(int rank, double amount, double save, Article article) {
+	items.put(rank, new InvoiceItem(article, rank, amount, save));
     }
     
     @Override

@@ -421,7 +421,7 @@ public class EditContactDialog extends javax.swing.JDialog {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try{
-	    if (txtFirma.getText().isEmpty()) {
+	    if (txtFirma.getText().isEmpty() && type == Contact.supplier || txtContact.getText().isEmpty() && type == Contact.client) {
 		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }

@@ -14,6 +14,7 @@ import database.models.RecipeModel;
 import database.tables.Article;
 import database.tables.BasicIngredient;
 import database.tables.Contact;
+import database.tables.Invoice;
 import database.tables.Recipe;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,19 +47,23 @@ public class Database {
     private Map<Integer, Recipe> recipesById;
     private Map<Integer, Article> articlesById;
     private Map<Integer, Contact> contactsById;
+    private Map<Integer, Invoice> invoicesById;
+    private Map<Integer, Invoice> invoicesByNumber;
     
     private Map<String, BasicIngredient> basicIngredientsByName;
     private Map<String, Recipe> recipesByName;
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
     private Map<String, Contact> contactsAlphabetically;
-
+    
     private Database() {
         try {
             basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
             recipesById = new TreeMap<Integer, Recipe>();
             articlesById = new TreeMap<Integer, Article>();
 	    contactsById = new TreeMap<Integer, Contact>();
+	    invoicesById = new TreeMap<Integer, Invoice>();
+	    invoicesByNumber = new TreeMap<Integer, Invoice>();
 	    
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
@@ -77,6 +82,7 @@ public class Database {
             loadRecipes();
             loadMunicipales();
 	    loadArticles();
+	    loadInvoices();
 
         } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,6 +99,35 @@ public class Database {
 
     public Connection getConnection() {
         return connection;
+    }
+    
+    private void loadInvoices() throws SQLException {
+        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV());
+        while (rs.next()) {
+	    Invoice inv = Invoice.createStub(
+		    rs.getInt("id"),
+		    rs.getInt("number"),
+		    rs.getString("date"),
+		    contactsById.get(rs.getInt("clientid")),
+		    rs.getString("pricecode"),
+		    rs.getDouble("save"));
+            invoicesById.put(inv.getPrimaryKeyValue(), inv);
+	    invoicesByNumber.put(inv.getNumber(), inv);
+        }
+
+	rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV_ART());
+        int links = 0;
+        while (rs.next()) {
+            int invoiceid = rs.getInt("invoiceid");
+            int articleid = rs.getInt("articleid");
+            int rank = rs.getInt("rank");
+            double amount = rs.getDouble("amount");
+            double save = rs.getDouble("save");
+            invoicesById.get(invoiceid).addItem(rank, amount, save, articlesById.get(articleid));
+            links++;
+        }
+	
+	MyLogger.log("Database driver:: loaded " + invoicesById.size() + " invoices (linked "+links+" articles)!", MyLogger.LOW);
     }
     
     private void loadContacts() throws SQLException {
@@ -502,6 +537,14 @@ public class Database {
 
     public Map<String, Integer> getMunicipales() {
         return municipales;
+    }
+    
+    public Map<Integer, Invoice> getInvoicesById(){
+	return invoicesById;
+    }
+    
+    public Map<Integer, Invoice> getInvoicesByNumber(){
+	return invoicesByNumber;
     }
     
     public boolean isArticleCodeUnique(String code){

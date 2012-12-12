@@ -12,6 +12,7 @@ import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.delegates.EditContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.contacts.dialogs.EditContactDialog;
+import gui.invoices.InvoiceTabbedViewController;
 import gui.utilities.list.ClientListModel;
 import java.awt.BorderLayout;
 import javax.swing.JMenu;
@@ -28,14 +29,17 @@ import tools.StringTools;
  */
 public class ClientViewController extends javax.swing.JPanel implements MasterDetailViewController<Contact>, AddContactDelegate, EditContactDelegate {
     
+    private final InvoiceTabbedViewController parent;
     private ClientListModel listModel;
     
     /**
      * Creates new form ClientViewController
      */
-    public ClientViewController() {
+    public ClientViewController(InvoiceTabbedViewController parent) {
 	initComponents();
 
+	this.parent = parent;
+	
 	listModel = new ClientListModel(Database.driver().getContactsAlphabetically());
 	
 	listOutlet.setModel(listModel);
@@ -347,6 +351,11 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
         invoices.setText("Facturen");
         invoices.setFocusable(false);
+        invoices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoicesActionPerformed(evt);
+            }
+        });
         jPanel2.add(invoices);
 
         edit.setText("Wijzigen...");
@@ -384,8 +393,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_addMenuItemActionPerformed
 
     private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
-//        editActionPerformed(null);
-	throw new UnsupportedOperationException("Not yet implemented.");
+        editActionPerformed(null);
     }//GEN-LAST:event_editMenuItemActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -397,6 +405,10 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	    }
 	});
     }//GEN-LAST:event_editActionPerformed
+
+    private void invoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoicesActionPerformed
+        if(listOutlet.getSelectedValue()!=null) parent.switchToInvoicesAndFilterByClient((Contact)listOutlet.getSelectedValue());
+    }//GEN-LAST:event_invoicesActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;

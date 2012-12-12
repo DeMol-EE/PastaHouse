@@ -4,6 +4,8 @@
  */
 package gui.invoices.controllers;
 
+import database.Database;
+import database.tables.Contact;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
 import gui.utilities.table.InvoiceTableModel;
@@ -24,8 +26,8 @@ import tools.Utilities;
 public class InvoiceViewController extends javax.swing.JPanel implements MasterDetailViewController<Invoice> {
 
     private Map<String, RowFilter<Object, Object>> filters;
-    
     private TableRowSorter<InvoiceTableModel> sorter;
+    private InvoiceTableModel tableModel;
     
     /**
      * Creates new form InvoiceViewController
@@ -33,19 +35,15 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     public InvoiceViewController() {
 	initComponents();
 	
-	InvoiceTableModel model = new InvoiceTableModel();
+	tableModel = new InvoiceTableModel(Database.driver().getInvoicesByNumber());
 	
-	invoiceTableOutlet.setModel(model);
+	invoiceTableOutlet.setModel(tableModel);
 	
 	filters = new HashMap<String, RowFilter<Object, Object>>();
-	sorter = new TableRowSorter<InvoiceTableModel>(model);
+	sorter = new TableRowSorter<InvoiceTableModel>(tableModel);
 	
 	invoiceTableOutlet.setRowSorter(sorter);
 	invoiceTableOutlet.setRowHeight(invoiceTableOutlet.getRowHeight()+Utilities.fontSize()-10);
-	
-	/*
-	 * TODO: add column filters dynamically based on the model Invoice
-	 */
     }
 
     /**
@@ -129,7 +127,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         jPanel1.add(filterPanel, java.awt.BorderLayout.CENTER);
 
-        jPanel4.add(jPanel1, java.awt.BorderLayout.SOUTH);
+        jPanel4.add(jPanel1, java.awt.BorderLayout.NORTH);
 
         add(jPanel4, java.awt.BorderLayout.NORTH);
 
@@ -260,6 +258,10 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JLabel noResultOutlet;
     // End of variables declaration//GEN-END:variables
 
+    public void filterByClient(Contact c){
+	System.out.println("Should filter on: "+c.getSortKey());
+    }
+    
     @Override
     public void updateDetail(Invoice value) {
 	throw new UnsupportedOperationException("Not supported yet.");

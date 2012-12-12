@@ -4,6 +4,7 @@
  */
 package gui.invoices;
 
+import database.tables.Contact;
 import gui.MasterDetailViewController;
 import gui.TabbedViewController;
 import gui.invoices.controllers.ArticleViewController;
@@ -40,7 +41,7 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
 	
 	tabs.put(invoicesTabIndex, new InvoiceViewController());
 	tabs.put(articlesTabIndex, new ArticleViewController());
-	tabs.put(clientsTabIndex, new ClientViewController());
+	tabs.put(clientsTabIndex, new ClientViewController(this));
 	
 	invoiceTab.add(tabs.get(invoicesTabIndex).view());
 	articleTab.add(tabs.get(articlesTabIndex).view());
@@ -142,6 +143,11 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
         tabController.setSelectedIndex(clientsTabIndex);
     }//GEN-LAST:event_clientMenuItemActionPerformed
 
+    public void switchToInvoicesAndFilterByClient(Contact c){
+	tabController.setSelectedIndex(invoicesTabIndex);
+	((InvoiceViewController)tabs.get(invoicesTabIndex)).filterByClient(c);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem articleMenuItem;
     private javax.swing.JPanel articleTab;

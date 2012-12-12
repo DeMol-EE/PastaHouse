@@ -27,6 +27,8 @@ public class Configuration {
     private final String DB_TABLE_CON_kp = "table_contacts";
     private final String DB_TABLE_MUNI_kp = "table_municipales";
     private final String DB_TABLE_ART_kp = "table_articles";
+    private final String DB_TABLE_INV_kp = "table_invoices";
+    private final String DB_TABLE_INV_ART_kp = "table_invoices_articles";
     
     // defaults
     private String DB_URL_d = "jdbc:sqlite:pastahouse.db";
@@ -37,6 +39,8 @@ public class Configuration {
     private String DB_TABLE_CON_d = "contacts";
     private String DB_TABLE_MUNI_d = "Gemeentes";
     private String DB_TABLE_ART_d = "articles";
+    private String DB_TABLE_INV_d = "invoices";
+    private String DB_TABLE_INV_ART_d = "invoicesarticles";
     
     // variables storing the actual values from the conf file
     private String DB_URL;
@@ -47,6 +51,8 @@ public class Configuration {
     private String DB_TABLE_CON;
     private String DB_TABLE_MUNI;
     private String DB_TABLE_ART;
+    private String DB_TABLE_INV;
+    private String DB_TABLE_INV_ART;
  
     private static Configuration center;
     
@@ -66,6 +72,8 @@ public class Configuration {
 		DB_TABLE_CON = DB_TABLE_CON_d;
                 DB_TABLE_MUNI = DB_TABLE_MUNI_d;
                 DB_TABLE_ART = DB_TABLE_ART_d;
+                DB_TABLE_INV = DB_TABLE_INV_d;
+                DB_TABLE_INV_ART = DB_TABLE_INV_ART_d;
     
 		// write the settings to the file
 		FileWriter fstream = new FileWriter(conf);
@@ -78,6 +86,8 @@ public class Configuration {
 		out.write(DB_TABLE_CON_kp+","+DB_TABLE_CON_d+"\n");
                 out.write(DB_TABLE_MUNI_kp+","+DB_TABLE_MUNI_d+"\n");
                 out.write(DB_TABLE_ART_kp+","+DB_TABLE_ART_d+"\n");
+                out.write(DB_TABLE_INV_kp+","+DB_TABLE_INV_d+"\n");
+                out.write(DB_TABLE_INV_ART_kp+","+DB_TABLE_INV_ART_d+"\n");
 		//Close the output stream
 		out.close();
 	    } else {
@@ -106,6 +116,8 @@ public class Configuration {
 		DB_TABLE_CON = values.containsKey(DB_TABLE_CON_kp) ? values.get(DB_TABLE_CON_kp) : DB_TABLE_CON_d;
                 DB_TABLE_MUNI = values.containsKey(DB_TABLE_MUNI_kp) ? values.get(DB_TABLE_MUNI_kp) : DB_TABLE_MUNI_d;
                 DB_TABLE_ART = values.containsKey(DB_TABLE_ART_kp) ? values.get(DB_TABLE_ART_kp) : DB_TABLE_ART_d;
+                DB_TABLE_INV = values.containsKey(DB_TABLE_INV_kp) ? values.get(DB_TABLE_INV_kp) : DB_TABLE_INV_d;
+                DB_TABLE_INV_ART = values.containsKey(DB_TABLE_INV_ART_kp) ? values.get(DB_TABLE_INV_ART_kp) : DB_TABLE_INV_ART_d;
 	    }
 	    
 	} catch(Exception e){
@@ -151,5 +163,13 @@ public class Configuration {
     
     public String getDB_TABLE_ART() {
 	return DB_TABLE_ART;
+    }
+    
+    public String getDB_TABLE_INV() {
+	return DB_TABLE_INV;
+    }
+    
+    public String getDB_TABLE_INV_ART() {
+	return DB_TABLE_INV_ART;
     }
 }
