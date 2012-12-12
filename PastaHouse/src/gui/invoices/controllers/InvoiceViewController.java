@@ -232,6 +232,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	    detail.removeAll();
 	    detail.add(results);
 	}
+	validate();
+	repaint();
     }
     
     private void numberFilterOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFilterOutletKeyReleased

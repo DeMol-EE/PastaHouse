@@ -7,6 +7,7 @@ package gui.contacts.controllers;
 import database.tables.Contact;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
+import gui.NoResultsPanel;
 import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.delegates.EditContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
@@ -118,6 +119,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         listOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
         detail = new javax.swing.JPanel();
+        results = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -218,6 +220,8 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
         detail.setLayout(new java.awt.BorderLayout());
 
+        results.setLayout(new java.awt.BorderLayout());
+
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 2));
@@ -232,7 +236,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         jPanel3.add(jPanel4, java.awt.BorderLayout.CENTER);
         jPanel3.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
-        detail.add(jPanel3, java.awt.BorderLayout.NORTH);
+        results.add(jPanel3, java.awt.BorderLayout.NORTH);
 
         container.setLayout(new java.awt.BorderLayout());
 
@@ -423,7 +427,9 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
         container.add(jPanel5, java.awt.BorderLayout.PAGE_END);
 
-        detail.add(container, java.awt.BorderLayout.CENTER);
+        results.add(container, java.awt.BorderLayout.CENTER);
+
+        detail.add(results, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(detail);
 
@@ -444,10 +450,22 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	} else {
 	    listModel.setFilter(filter.getText());
 	}
+	if (listModel.getSize()==0) {
+	    System.out.println("No results");
+	    detail.removeAll();
+	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+	    validate();
+	    repaint();
+	    return;
+	}
+	detail.removeAll();
+	detail.add(results);
 	listOutlet.setSelectedIndex(0);
 	if (listOutlet.getSelectedValue()!=null) {
 	    updateDetail((Contact)listOutlet.getSelectedValue());
 	}
+	validate();
+	repaint();
     }//GEN-LAST:event_filterKeyReleased
 
     private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
@@ -519,6 +537,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel municipalityOutlet;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JLabel pricecodeOutlet;
+    private javax.swing.JPanel results;
     private javax.swing.JMenuItem searchMenuItem;
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JLabel taxnrOutlet;

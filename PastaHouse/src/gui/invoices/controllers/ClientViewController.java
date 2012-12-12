@@ -345,7 +345,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
         container.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -367,7 +367,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         });
         jPanel2.add(edit);
 
-        jPanel1.add(jPanel2);
+        jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
 
         container.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
