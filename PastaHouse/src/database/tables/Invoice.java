@@ -80,6 +80,10 @@ public class Invoice extends Record{
 	items.put(rank, new InvoiceItem(article, rank, amount, save));
     }
     
+    public Map<Integer, InvoiceItem> items(){
+	return items;
+    }
+    
     @Override
     public boolean update() {
 	throw new UnsupportedOperationException("Not supported yet.");

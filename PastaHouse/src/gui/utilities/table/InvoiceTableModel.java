@@ -19,6 +19,10 @@ public class InvoiceTableModel extends AbstractTableModel{
     public InvoiceTableModel(Map<Integer, Invoice> data){
 	this.data = data;
     }
+    
+    public Invoice getInvoiceAtRow(int row) {
+	return (row>0 && row<data.size()) ? (Invoice)data.values().toArray()[row] : (Invoice)data.values().toArray()[0];
+    }
 
     @Override
     public String getColumnName(int column) {

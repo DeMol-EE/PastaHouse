@@ -69,6 +69,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         editMenu = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -98,7 +99,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         editMenu.setText("Edit");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        addMenuItem.setText("Add");
+        addMenuItem.setText("Toevoegen...");
         addMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMenuItemActionPerformed(evt);
@@ -107,13 +108,22 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         editMenu.add(addMenuItem);
 
         editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        editMenuItem.setText("Edit");
+        editMenuItem.setText("Wijzigen...");
         editMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMenuItemActionPerformed(evt);
             }
         });
         editMenu.add(editMenuItem);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Zoeken");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        editMenu.add(jMenuItem1);
 
         setLayout(new java.awt.BorderLayout());
 
@@ -264,10 +274,22 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	} else {
 	    listModel.setFilter(filter.getText());
 	}
+	if (listModel.getSize()==0) {
+	    System.out.println("No results");
+	    /*
+	     * TODO: set detail with "no results"
+	     */
+	    return;
+	}
+	listOutlet.setSelectedIndex(0);
 	if (listOutlet.getSelectedValue()!=null) {
 	    updateDetail((Article)listOutlet.getSelectedValue());
 	}
     }//GEN-LAST:event_filterKeyReleased
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        filter.requestFocus();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
@@ -286,6 +308,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

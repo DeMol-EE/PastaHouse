@@ -14,13 +14,13 @@ public class InvoiceItem {
     private Article article;
     private int rank;
     private double amount;
-    private double save;
+    private double taxes;
 
     public InvoiceItem(Article article, int rank, double amount, double save) {
 	this.article = article;
 	this.rank = rank;
 	this.amount = amount;
-	this.save = save;
+	this.taxes = save;
     }
 
     public Article getArticle() {
@@ -47,12 +47,12 @@ public class InvoiceItem {
 	this.amount = amount;
     }
 
-    public double getSave() {
-	return save;
+    public double getTaxes() {
+	return taxes;
     }
 
-    public void setSave(double save) {
-	this.save = save;
+    public void setTaxes(double taxes) {
+	this.taxes = taxes;
     }
     
     

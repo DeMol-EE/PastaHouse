@@ -122,8 +122,8 @@ public class Database {
             int articleid = rs.getInt("articleid");
             int rank = rs.getInt("rank");
             double amount = rs.getDouble("amount");
-            double save = rs.getDouble("save");
-            invoicesById.get(invoiceid).addItem(rank, amount, save, articlesById.get(articleid));
+            double taxes = rs.getDouble("taxes");
+            invoicesById.get(invoiceid).addItem(rank, amount, taxes, articlesById.get(articleid));
             links++;
         }
 	
