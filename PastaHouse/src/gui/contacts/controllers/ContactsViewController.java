@@ -257,6 +257,9 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	} else {
 	    listModel.setFilter(filter.getText());
 	}
+	if (listOutlet.getSelectedValue()!=null) {
+	    updateDetail((Contact)listOutlet.getSelectedValue());
+	}
     }//GEN-LAST:event_filterKeyReleased
 
     private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed

@@ -12,8 +12,8 @@ import gui.invoices.delegates.AddArticleDelegate;
 import gui.invoices.delegates.EditArticleDelegate;
 import gui.invoices.dialogs.AddArticleDialog;
 import gui.invoices.dialogs.EditArticleDialog;
+import gui.utilities.list.ArticleListModel;
 import gui.utilities.list.EditableListModel;
-import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
@@ -28,13 +28,17 @@ import javax.swing.event.ListSelectionListener;
  */
 public class ArticleViewController extends javax.swing.JPanel implements MasterDetailViewController<Article>, AddArticleDelegate, EditArticleDelegate {
 
+    private ArticleListModel listModel;
+    
     /**
      * Creates new form ArticleViewController
      */
     public ArticleViewController() {
 	initComponents();
 	
-	listOutlet.setModel(ListModelFactory.createArticleListModel(database.Database.driver().getArticlesAlphabetically()));
+	listModel = new ArticleListModel(database.Database.driver().getArticlesAlphabetically());
+	
+	listOutlet.setModel(listModel);
 	
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.addListSelectionListener(new ListSelectionListener() {
@@ -71,6 +75,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
+        filter = new javax.swing.JTextField();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         fixedfields = new javax.swing.JPanel();
@@ -133,6 +138,13 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
             }
         });
         master.add(add, java.awt.BorderLayout.SOUTH);
+
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+        master.add(filter, java.awt.BorderLayout.NORTH);
 
         jSplitPane1.setLeftComponent(master);
 
@@ -240,12 +252,23 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_editActionPerformed
 
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
-        // TODO add your handling code here:
+        addActionPerformed(null);
     }//GEN-LAST:event_addMenuItemActionPerformed
 
     private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
-        // TODO add your handling code here:
+        editActionPerformed(null);
     }//GEN-LAST:event_editMenuItemActionPerformed
+
+    private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
+        if (filter.getText().isEmpty()) {
+	    listModel.setFilter(null);
+	} else {
+	    listModel.setFilter(filter.getText());
+	}
+	if (listOutlet.getSelectedValue()!=null) {
+	    updateDetail((Article)listOutlet.getSelectedValue());
+	}
+    }//GEN-LAST:event_filterKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
@@ -256,6 +279,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JButton edit;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem editMenuItem;
+    private javax.swing.JTextField filter;
     private javax.swing.JPanel fixedfields;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -291,6 +315,8 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     
     @Override
     public void electFirstResponder() {
+	listModel.update();
+	
 	listOutlet.requestFocus();
     }
 

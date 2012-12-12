@@ -5,6 +5,7 @@
 package database.tables;
 
 import database.Database;
+import database.Filterable;
 import database.extra.Record;
 import database.models.ArticleModel;
 import tools.Configuration;
@@ -13,7 +14,7 @@ import tools.Configuration;
  *
  * @author Robin jr
  */
-public class Article extends Record{
+public class Article extends Record implements Filterable{
     private String code;
     private String name;
     private double priceA;
@@ -136,5 +137,10 @@ public class Article extends Record{
     @Override
     public boolean delete() {
 	throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String filterable() {
+	return code;
     }
 }
