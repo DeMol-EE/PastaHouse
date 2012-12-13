@@ -437,11 +437,11 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     }// </editor-fold>//GEN-END:initComponents
 
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
-        throw new UnsupportedOperationException("Not supported yet.");
+        addActionPerformed(null);
     }//GEN-LAST:event_addMenuItemActionPerformed
 
     private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
-        throw new UnsupportedOperationException("Not supported yet.");
+        editActionPerformed(null);
     }//GEN-LAST:event_editMenuItemActionPerformed
 
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased

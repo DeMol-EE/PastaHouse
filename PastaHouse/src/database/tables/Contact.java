@@ -212,7 +212,7 @@ public class Contact extends Record implements Filterable{
 
     @Override
     public String filterable(){
-	return firm+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email+";"+zipcode+";"+telephone2+";"+fax+";"+notes+";"+contact+";"+type;
+	return firm+";"+address+";"+municipality+";"+telephone+";"+cellphone+";"+email+";"+zipcode+";"+telephone2+";"+fax+";"+notes+";"+contact+";"+type+";"+(isSupplier()?"(L)":"(K)");
     }
     
     @Override
