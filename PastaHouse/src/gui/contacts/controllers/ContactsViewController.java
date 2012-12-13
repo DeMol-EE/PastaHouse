@@ -578,6 +578,15 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	 */
 	listModel.update();
 	
+	if (listModel.getSize()>0) {
+	    if (listModel.getSize() == 1) {
+		detail.removeAll();
+		detail.add(container);
+	    }
+	    listOutlet.setSelectedIndex(0);
+	    if(listOutlet.getSelectedValue()!=null)updateDetail((Contact)listOutlet.getSelectedValue());
+	}
+	
 	/*
 	 * Elect first responder
 	 */

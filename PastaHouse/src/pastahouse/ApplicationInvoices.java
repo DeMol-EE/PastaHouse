@@ -10,9 +10,11 @@ import gui.ingredients.RecipeTabbedViewController;
 import gui.invoices.InvoiceTabbedViewController;
 import java.awt.BorderLayout;
 import java.awt.Font;
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import resources.ImagePanelBean;
 import tools.Configuration;
 import tools.Utilities;
 

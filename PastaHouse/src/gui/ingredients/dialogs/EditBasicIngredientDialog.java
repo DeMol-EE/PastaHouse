@@ -60,6 +60,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
 	supplierBox = new AutocompleteCombobox(suppliers);
 	supplierParent.add(supplierBox, BorderLayout.CENTER);
+	supplierParent.add(addSupplier, BorderLayout.EAST);
 	
 	setLocationRelativeTo(null);
 	setTitle("Ingrediënt wijzigen");
@@ -140,9 +141,9 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         packagingOutlet = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        addSupplier = new javax.swing.JButton();
         supplierParent = new javax.swing.JPanel();
         supplierOutlet = new javax.swing.JComboBox();
+        addSupplier = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         pricePerUnitOutlet = new javax.swing.JTextField();
@@ -226,6 +227,13 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         jLabel4.setFocusable(false);
         jPanel10.add(jLabel4, java.awt.BorderLayout.CENTER);
 
+        fixedFields.add(jPanel10);
+
+        supplierParent.setLayout(new java.awt.BorderLayout());
+
+        supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        supplierParent.add(supplierOutlet, java.awt.BorderLayout.CENTER);
+
         addSupplier.setText("+");
         addSupplier.setToolTipText("Klik hier om een nieuwe leverancier toe te voegen.");
         addSupplier.setFocusable(false);
@@ -234,14 +242,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
                 addSupplierActionPerformed(evt);
             }
         });
-        jPanel10.add(addSupplier, java.awt.BorderLayout.EAST);
-
-        fixedFields.add(jPanel10);
-
-        supplierParent.setLayout(new java.awt.BorderLayout());
-
-        supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        supplierParent.add(supplierOutlet, java.awt.BorderLayout.CENTER);
+        supplierParent.add(addSupplier, java.awt.BorderLayout.EAST);
 
         fixedFields.add(supplierParent);
 
@@ -621,6 +622,11 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    } else {
 		supp = null;
 	    }
+	    
+	    if (supp == null) {
+		throw new Exception("Supplier was not found in the database!");
+	    }
+	    
 	    model.setSupplier(supp);
 	    model.setBrand(brandOutlet.getText());
 	    model.setPackaging(packagingOutlet.getText());

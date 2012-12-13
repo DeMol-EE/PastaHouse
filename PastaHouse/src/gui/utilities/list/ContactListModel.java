@@ -40,8 +40,7 @@ public class ContactListModel extends AbstractListModel{
      */
     public void setFilter(String filter){
 	this.filter = filter;
-	filterData();
-	fireContentsChanged(this, 0, filteredData.size());
+	update();
     }
     
     @Override
@@ -60,10 +59,10 @@ public class ContactListModel extends AbstractListModel{
     
     public void edit(Contact newObj, Contact oldObj) {
 	if (persistentData.get(oldObj.getSortKey())!=null) {
-	    persistentData.remove(oldObj.getFirm());
+	    persistentData.remove(oldObj.getSortKey());
 	    persistentData.put(newObj.getSortKey(), newObj);
 	}
-	fireContentsChanged(this, 0, getSize());
+	update();
     }
 
     private void filterData(){
@@ -73,11 +72,7 @@ public class ContactListModel extends AbstractListModel{
 	    filteredData = new TreeMap<String, Contact>();
 	    for (Contact contact : persistentData.values()) {
 		if (contact.filterable().toLowerCase().contains(filter.toLowerCase())) {
-		    if (contact.isSupplier()) {
-			filteredData.put(contact.getFirm(), contact);
-		    } else {
-			filteredData.put(contact.getContact(), contact);
-		    }
+		    filteredData.put(contact.getSortKey(), contact);
 		}
 	    }
 	}

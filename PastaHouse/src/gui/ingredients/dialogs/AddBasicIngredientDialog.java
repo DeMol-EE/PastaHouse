@@ -60,6 +60,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
 	supplierBox = new AutocompleteCombobox(suppliers);
 	supplierParent.add(supplierBox, BorderLayout.CENTER);
+	supplierParent.add(addSupplier, BorderLayout.EAST);
 	
 	taxesOutlet.setText(""+21.0);
 	taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(new Double(21.0))+" %");
@@ -107,9 +108,9 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
         packagingOutlet = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        addSupplier = new javax.swing.JButton();
         supplierParent = new javax.swing.JPanel();
         supplierOutlet = new javax.swing.JComboBox();
+        addSupplier = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         pricePerUnitOutlet = new javax.swing.JTextField();
@@ -172,6 +173,14 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
         jLabel4.setFocusable(false);
         jPanel7.add(jLabel4, java.awt.BorderLayout.CENTER);
 
+        fixedFields.add(jPanel7);
+
+        supplierParent.setFocusable(false);
+        supplierParent.setLayout(new java.awt.BorderLayout());
+
+        supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        supplierParent.add(supplierOutlet, java.awt.BorderLayout.CENTER);
+
         addSupplier.setText("+");
         addSupplier.setToolTipText("Klik hier om een nieuwe leverancier toe te voegen.");
         addSupplier.setFocusable(false);
@@ -180,15 +189,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
                 addSupplierActionPerformed(evt);
             }
         });
-        jPanel7.add(addSupplier, java.awt.BorderLayout.EAST);
-
-        fixedFields.add(jPanel7);
-
-        supplierParent.setFocusable(false);
-        supplierParent.setLayout(new java.awt.BorderLayout());
-
-        supplierOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        supplierParent.add(supplierOutlet, java.awt.BorderLayout.CENTER);
+        supplierParent.add(addSupplier, java.awt.BorderLayout.EAST);
 
         fixedFields.add(supplierParent);
 
@@ -419,7 +420,10 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 	    if (supplierBox.getSelectedItem() instanceof Contact) {
 		s = (Contact)supplierBox.getSelectedItem();
 	    } else if(supplierBox.getSelectedItem() instanceof String){
-		s = Database.driver().getSuppliersAlphabetically().get((String)supplierBox.getSelectedItem());
+		s = Database.driver().getSuppliersAlphabetically().get(((String)supplierBox.getSelectedItem()).toLowerCase());
+	    }
+	    if (s==null) {
+		throw new Exception("Supplier "+(String)supplierBox.getSelectedItem()+" was not found in the database.");
 	    }
 	    model.setSupplier(s);
 	    

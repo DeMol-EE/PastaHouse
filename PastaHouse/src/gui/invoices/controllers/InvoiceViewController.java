@@ -63,7 +63,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	
 	articleTableOutlet.setRowHeight(articleTableOutlet.getRowHeight()+Utilities.fontSize()-10);
 	
-	invoiceTableOutlet.setRowSelectionInterval(0, 0);
+//	invoiceTableOutlet.setRowSelectionInterval(0, 0);
 	
 	TextFieldAutoHighlighter.installHighlighter(clientFilterOutlet);
     }

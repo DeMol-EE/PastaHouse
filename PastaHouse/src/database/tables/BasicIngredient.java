@@ -172,10 +172,10 @@ public class BasicIngredient extends Ingredient {
 		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
 		+ "merk = "+(brand.length()>0 ?"\""+brand +"\"":"NULL")+", "
 		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "
-		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"NULL")+", "
-		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"NULL")+", "
-		+ "verliespercentage = "+(lossPercent>=0? "\""+lossPercent +"\"":"NULL")+", "
-		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"NULL")+", "
+		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"0")+", "
+		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"0")+", "
+		+ "verliespercentage = "+(lossPercent>=0? "\""+lossPercent +"\"":"0")+", "
+		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"0")+", "
 		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
 		+ "opmerking = "+(notes.length()>0 ? "\""+notes +"\"":"NULL"));
     }
