@@ -27,11 +27,13 @@ public class Utilities {
      * @param taxnr The tax number to be validated.
      * @return True if valid, false if not.
      */
+    
+    public static String getDigits(String taxnr){
+        taxnr = taxnr.replaceAll("[^0-9]", "");
+        return taxnr;
+    }
+    
     public static boolean validTaxNr(String taxnr){
-	taxnr = taxnr.replaceAll("\\.", "");
-	taxnr = taxnr.replaceAll(",", "");
-	taxnr = taxnr.replaceAll(";", "");
-	
 	if (taxnr.length()!=9) {
 	    System.out.println("Tax nr isn't 9 digits long ("+taxnr.length()+")");
 	    return false;

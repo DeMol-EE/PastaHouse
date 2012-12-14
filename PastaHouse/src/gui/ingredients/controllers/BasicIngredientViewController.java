@@ -39,128 +39,134 @@ import tools.StringTools;
  *
  * @author Warkst
  */
-public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>, AddBasicIngredientDelegate, EditBasicIngredientDelegate{
-
+public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>, AddBasicIngredientDelegate, EditBasicIngredientDelegate {
+    
     private RecipeTabbedViewController delegate;
-    
-    /** Creates new form BasicIngredientViewController */
+
+    /**
+     * Creates new form BasicIngredientViewController
+     */
     public BasicIngredientViewController(RecipeTabbedViewController application) {
-	this.delegate = application;
-	
-	initComponents();
-	
-	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	listOutlet.addListSelectionListener(new ListSelectionListener() {
+        this.delegate = application;
+        
+        initComponents();
+        notesOutlet.setBackground(new Color(213, 216, 222));
+        notesOutlet.setCaretPosition(0);
+        listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listOutlet.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    updateDetail((BasicIngredient) listOutlet.getSelectedValue());
+                }
+            }
+        });
 
-	    @Override
-	    public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-		    updateDetail((BasicIngredient)listOutlet.getSelectedValue());
-		}
-	    }
-	});
-	
-	// copy from the db
-	listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
-	listOutlet.setSelectedIndex(0);
+        // copy from the db
+        listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
+        listOutlet.setSelectedIndex(0);
 
-	/*
-	 * If there are no ingredients, hide the ugly right detail view
-	 */
-	if (Database.driver().getBasicIngredients().isEmpty()) {
-	    detail.remove(container);
-	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
-	}
+        /*
+         * If there are no ingredients, hide the ugly right detail view
+         */
+        if (Database.driver().getBasicIngredients().isEmpty()) {
+            detail.remove(container);
+            detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
+        }
     }
     
     @Override
-    public void updateDetail(BasicIngredient bi){
-	if(bi==null) {
-	    return;
-	}
-	
-	DecimalFormat threeFormatter = new DecimalFormat("0.000");
-	DecimalFormat twoFormatter = new DecimalFormat("0.00");
-	
-	supplierOutlet.setText( bi.getSupplier() != null ? StringTools.capitalize(bi.getSupplier().getFirm()) : "<geen>");
-	supplierOutlet.setForeground(Color.BLUE);
-	supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	supplierOutlet.addMouseListener(new MouseAdapter() {
-	    @Override
-	    public void mouseReleased(MouseEvent e) {
-		supplierOutletMouseReleased(e);
-	    }
-	    @Override
-	    public void mouseEntered(MouseEvent e) {
-		supplierOutletMouseEntered(e);
-	    }
-	    @Override
-	    public void mouseExited(MouseEvent e) {
-		supplierOutletMouseExited(e);
-	    }
-	});
-	
-	//€-sign?
-	nameOutlet.setText(StringTools.capitalize(bi.getName()));
-	brandOutlet.setText(StringTools.capitalize(bi.getBrand()));
-	packagingOutlet.setText(StringTools.capitalize(bi.getPackaging()));
-	pricePerUnitOutlet.setText(""+threeFormatter.format(bi.getPricePerUnit())+" euro / "+bi.getPackaging());
-	weightPerUnitOutlet.setText(""+threeFormatter.format(bi.getWeightPerUnit())+" kg / "+bi.getPackaging());
-	pricePerWeightOutlet.setText(""+threeFormatter.format(bi.getPricePerWeight())+" euro / kg");
-	lossPercentOutlet.setText(""+twoFormatter.format(bi.getLossPercent())+" %");
-	grossPriceOutlet.setText(""+threeFormatter.format(bi.getGrossPrice())+" euro / kg");
-	taxesOutlet.setText(""+twoFormatter.format(bi.getTaxes())+" %");
-	netPriceOutlet.setText(""+twoFormatter.format(bi.getNetPrice())+" euro / kg");
-	dateOutlet.setText(bi.getDate());
-	notesOutlet.setText(bi.getNotes());
+    public void updateDetail(BasicIngredient bi) {
+        if (bi == null) {
+            return;
+        }
+        
+        DecimalFormat threeFormatter = new DecimalFormat("0.000");
+        DecimalFormat twoFormatter = new DecimalFormat("0.00");
+        
+        supplierOutlet.setText(bi.getSupplier() != null ? StringTools.capitalize(bi.getSupplier().getFirm()) : "<geen>");
+        supplierOutlet.setForeground(Color.BLUE);
+        supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        supplierOutlet.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                supplierOutletMouseReleased(e);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                supplierOutletMouseEntered(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                supplierOutletMouseExited(e);
+            }
+        });
+
+        //€-sign?
+        nameOutlet.setText(StringTools.capitalize(bi.getName()));
+        brandOutlet.setText(StringTools.capitalize(bi.getBrand()));
+        packagingOutlet.setText(StringTools.capitalize(bi.getPackaging()));
+        pricePerUnitOutlet.setText("" + threeFormatter.format(bi.getPricePerUnit()) + " euro / " + bi.getPackaging());
+        weightPerUnitOutlet.setText("" + threeFormatter.format(bi.getWeightPerUnit()) + " kg / " + bi.getPackaging());
+        pricePerWeightOutlet.setText("" + threeFormatter.format(bi.getPricePerWeight()) + " euro / kg");
+        lossPercentOutlet.setText("" + twoFormatter.format(bi.getLossPercent()) + " %");
+        grossPriceOutlet.setText("" + threeFormatter.format(bi.getGrossPrice()) + " euro / kg");
+        taxesOutlet.setText("" + twoFormatter.format(bi.getTaxes()) + " %");
+        netPriceOutlet.setText("" + twoFormatter.format(bi.getNetPrice()) + " euro / kg");
+        dateOutlet.setText(bi.getDate());
+        notesOutlet.setText(bi.getNotes());
+        
+        notesOutlet.setCaretPosition(0);
     }
     
     @Override
-    public JPanel view(){
-	return this;
+    public JPanel view() {
+        return this;
     }
     
-    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {                                             
-	BasicIngredient selectedIngredient = (BasicIngredient)listOutlet.getSelectedValue();
-	delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
-    }                                            
-
-    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {                                            
-        supplierOutlet.setText("<html><u>"+supplierOutlet.getText()+"</u></html>");
-    }                                           
-
-    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {                                           
-        BasicIngredient bi = (BasicIngredient)listOutlet.getSelectedValue();
-	if (bi.getSupplier()!=null) {
-	    String firm = bi.getSupplier().getFirm();
-	    supplierOutlet.setText(firm.substring(0,1).toUpperCase()+firm.substring(1).toLowerCase());
-	}
-    }
+    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {        
+        BasicIngredient selectedIngredient = (BasicIngredient) listOutlet.getSelectedValue();
+        delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
+    }    
     
-    @Override
-    public void addBasicIngredient(BasicIngredient select){
-	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.update();
-	if (dlm.getSize() == 1) {
-	    detail.removeAll();
-	    detail.add(container);
-	}
-	listOutlet.setSelectedValue(select, true);
-	updateDetail(select);
+    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {        
+        supplierOutlet.setText("<html><u>" + supplierOutlet.getText() + "</u></html>");
+    }    
+    
+    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {        
+        BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
+        if (bi.getSupplier() != null) {
+            String firm = bi.getSupplier().getFirm();
+            supplierOutlet.setText(firm.substring(0, 1).toUpperCase() + firm.substring(1).toLowerCase());
+        }
     }
     
     @Override
-    public void editBasicIngredient(BasicIngredient n, BasicIngredient o){
-	EditableListModel<BasicIngredient> dlm = (EditableListModel)listOutlet.getModel();
-	dlm.edit(n, o);
-	listOutlet.setSelectedValue(n, true);
-	updateDetail(n);
+    public void addBasicIngredient(BasicIngredient select) {
+        EditableListModel<BasicIngredient> dlm = (EditableListModel) listOutlet.getModel();
+        dlm.update();
+        if (dlm.getSize() == 1) {
+            detail.removeAll();
+            detail.add(container);
+        }
+        listOutlet.setSelectedValue(select, true);
+        updateDetail(select);
+    }
+    
+    @Override
+    public void editBasicIngredient(BasicIngredient n, BasicIngredient o) {
+        EditableListModel<BasicIngredient> dlm = (EditableListModel) listOutlet.getModel();
+        dlm.edit(n, o);
+        listOutlet.setSelectedValue(n, true);
+        updateDetail(n);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -421,6 +427,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
         jScrollPane2.setFocusable(false);
 
+        notesOutlet.setBackground(new java.awt.Color(191, 205, 219));
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         notesOutlet.setRows(5);
@@ -467,33 +474,32 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }// </editor-fold>//GEN-END:initComponents
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditBasicIngredientDialog(null, true, this, (BasicIngredient)listOutlet.getSelectedValue()).setVisible(true);
+        new EditBasicIngredientDialog(null, true, this, (BasicIngredient) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
-
+    
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	new AddBasicIngredientDialog(null, true, this).setVisible(true);
+        new AddBasicIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
-
+    
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
         notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyPressed
-
+    
     private void notesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyReleased
         notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyReleased
-
+    
     private void notesOutletKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyTyped
         notesKeyEvent(evt);
     }//GEN-LAST:event_notesOutletKeyTyped
-
+    
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
         addActionPerformed(null);
     }//GEN-LAST:event_addMenuItemActionPerformed
-
+    
     private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
         editActionPerformed(null);
     }//GEN-LAST:event_editMenuItemActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JMenuItem addMenuItem;
@@ -540,13 +546,15 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
     @Override
     public void electFirstResponder() {
-	((EditableListModel)listOutlet.getModel()).update();
-	listOutlet.requestFocus();
-	if(listOutlet.getSelectedValue()!=null) updateDetail((BasicIngredient)listOutlet.getSelectedValue());
+        ((EditableListModel) listOutlet.getModel()).update();
+        listOutlet.requestFocus();
+        if (listOutlet.getSelectedValue() != null) {
+            updateDetail((BasicIngredient) listOutlet.getSelectedValue());
+        }
     }
     
-    private void notesKeyEvent(KeyEvent evt){
-	if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
+    private void notesKeyEvent(KeyEvent evt) {
+        if (!(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C)
                 && !(evt.getKeyCode() == KeyEvent.VK_F1)
                 && !(evt.getKeyCode() == KeyEvent.VK_F2)
                 && !(evt.getKeyCode() == KeyEvent.VK_F3)) {
@@ -557,9 +565,9 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
             listOutlet.requestFocus();
         }
     }
-
+    
     @Override
     public JMenu menu() {
-	return editMenu;
+        return editMenu;
     }
 }

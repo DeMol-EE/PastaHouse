@@ -14,6 +14,7 @@ import gui.contacts.dialogs.AddContactDialog;
 import gui.contacts.dialogs.EditContactDialog;
 import gui.utilities.list.SupplierListModel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -36,7 +37,8 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
      */
     public SupplierViewController() {
         initComponents();
-        
+        notesOutlet.setBackground(new Color(213,216,222));
+        notesOutlet.setCaretPosition(0);
 	listModel = new SupplierListModel(Database.driver().getContactsAlphabetically());
 	
         listOutlet.setModel(listModel);
@@ -76,6 +78,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 	    code = code.toUpperCase(); 
 	}
 	pricecodeOutlet.setText(code);
+        notesOutlet.setCaretPosition(0);
     }
     
     public void selectSupplier(Contact supplier) {
@@ -335,6 +338,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
         jScrollPane2.setFocusable(false);
 
+        notesOutlet.setBackground(new java.awt.Color(240, 240, 240));
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         notesOutlet.setLineWrap(true);

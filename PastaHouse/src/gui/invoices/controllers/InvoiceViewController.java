@@ -61,7 +61,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	invoiceTableOutlet.setRowSorter(sorter);
 	invoiceTableOutlet.setRowHeight(invoiceTableOutlet.getRowHeight()+Utilities.fontSize()-10);
 	
-	articleTableOutlet.setRowHeight(articleTableOutlet.getRowHeight()+Utilities.fontSize()-10);
+//	articleTableOutlet.setRowHeight(articleTableOutlet.getRowHeight()+Utilities.fontSize()-10);
 	
 //	invoiceTableOutlet.setRowSelectionInterval(0, 0);
 	
@@ -78,58 +78,20 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private void initComponents() {
 
         noResultOutlet = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        invoiceTableOutlet = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
         filterPanel = new javax.swing.JPanel();
         numberFilterOutlet = new javax.swing.JTextField();
         clientFilterOutlet = new javax.swing.JTextField();
-        detail = new javax.swing.JPanel();
-        results = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        invoiceTableOutlet = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        clientOutlet = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        dateOutlet = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        priceOutlet = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        articleTableOutlet = new javax.swing.JTable();
+        invoices = new javax.swing.JButton();
+        edit = new javax.swing.JButton();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
 
         setLayout(new java.awt.BorderLayout());
-
-        jPanel4.setLayout(new java.awt.BorderLayout());
-
-        jPanel3.setPreferredSize(new java.awt.Dimension(400, 150));
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        invoiceTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2"
-            }
-        ));
-        jScrollPane1.setViewportView(invoiceTableOutlet);
-
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jPanel4.add(jPanel3, java.awt.BorderLayout.CENTER);
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
 
         filterPanel.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -147,69 +109,49 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         });
         filterPanel.add(clientFilterOutlet);
 
-        jPanel1.add(filterPanel, java.awt.BorderLayout.CENTER);
+        add(filterPanel, java.awt.BorderLayout.NORTH);
+        filterPanel.getAccessibleContext().setAccessibleName("");
 
-        jPanel4.add(jPanel1, java.awt.BorderLayout.NORTH);
-
-        add(jPanel4, java.awt.BorderLayout.NORTH);
-
-        detail.setLayout(new java.awt.BorderLayout());
-
-        results.setLayout(new java.awt.BorderLayout());
-
-        jPanel7.setLayout(new java.awt.BorderLayout());
-
-        jPanel8.setLayout(new java.awt.BorderLayout());
-        jPanel8.add(jSeparator1, java.awt.BorderLayout.NORTH);
-
-        jPanel7.add(jPanel8, java.awt.BorderLayout.NORTH);
-
-        jPanel2.setLayout(new java.awt.GridLayout(3, 2));
-
-        jLabel2.setText("Klant");
-        jPanel2.add(jLabel2);
-
-        clientOutlet.setText("<hyperlink to client>");
-        jPanel2.add(clientOutlet);
-
-        jLabel4.setText("Datum");
-        jPanel2.add(jLabel4);
-
-        dateOutlet.setText("<dateOutlet>");
-        jPanel2.add(dateOutlet);
-
-        jLabel6.setText("Prijs");
-        jPanel2.add(jLabel6);
-
-        priceOutlet.setText("<priceOutlet>");
-        jPanel2.add(priceOutlet);
-
-        jPanel7.add(jPanel2, java.awt.BorderLayout.CENTER);
-
-        results.add(jPanel7, java.awt.BorderLayout.NORTH);
-
-        jPanel6.setLayout(new java.awt.BorderLayout());
-
-        articleTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
+        invoiceTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2"
             }
         ));
-        jScrollPane2.setViewportView(articleTableOutlet);
+        jScrollPane1.setViewportView(invoiceTableOutlet);
 
-        jPanel6.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        results.add(jPanel6, java.awt.BorderLayout.CENTER);
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        detail.add(results, java.awt.BorderLayout.CENTER);
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        add(detail, java.awt.BorderLayout.CENTER);
+        invoices.setText("Toevoegen...");
+        invoices.setFocusable(false);
+        invoices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoicesActionPerformed(evt);
+            }
+        });
+        jPanel2.add(invoices);
+
+        edit.setText("Details...");
+        edit.setFocusable(false);
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jPanel2.add(edit);
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
+
+        add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateFilter(){
@@ -223,15 +165,15 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	
 	sorter.setRowFilter(RowFilter.andFilter(filters_));
 		
-	if (invoiceTableOutlet.getRowCount() == 0) {
-	    System.out.println("There are no results");
-	    detail.remove(results);
-	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
-	} else {
-	    invoiceTableOutlet.setRowSelectionInterval(0, 0);
-	    detail.removeAll();
-	    detail.add(results);
-	}
+//	if (invoiceTableOutlet.getRowCount() == 0) {
+//	    System.out.println("There are no results");
+//	    detail.remove(results);
+//	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+//	} else {
+//	    invoiceTableOutlet.setRowSelectionInterval(0, 0);
+//	    detail.removeAll();
+//	    detail.add(results);
+//	}
 	validate();
 	repaint();
     }
@@ -257,31 +199,31 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	updateFilter();
     }//GEN-LAST:event_clientFilterOutletKeyReleased
 
+    private void invoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoicesActionPerformed
+//        if(listOutlet.getSelectedValue()!=null) parent.switchToInvoicesAndFilterByClient((Contact)listOutlet.getSelectedValue());
+    }//GEN-LAST:event_invoicesActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+//        final ClientViewController me = this;
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(listOutlet.getSelectedValue()!=null) EditContactDialog.createClientDialog(me, (Contact)listOutlet.getSelectedValue()).setVisible(true);
+//            }
+//        });
+    }//GEN-LAST:event_editActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable articleTableOutlet;
     private javax.swing.JTextField clientFilterOutlet;
-    private javax.swing.JLabel clientOutlet;
-    private javax.swing.JLabel dateOutlet;
-    private javax.swing.JPanel detail;
+    private javax.swing.JButton edit;
     private javax.swing.JPanel filterPanel;
     private javax.swing.JTable invoiceTableOutlet;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JButton invoices;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel noResultOutlet;
     private javax.swing.JTextField numberFilterOutlet;
-    private javax.swing.JLabel priceOutlet;
-    private javax.swing.JPanel results;
     // End of variables declaration//GEN-END:variables
 
     public void filterByClient(Contact c){
@@ -291,11 +233,11 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     
     @Override
     public void updateDetail(Invoice value) {
-	clientOutlet.setText(value.getClient().getSortKey());
-	dateOutlet.setText(value.getDate());
-	priceOutlet.setText(value.getPriceCode());
-	
-	articleTableOutlet.setModel(new InvoiceItemTableModel(value.items()));
+//	clientOutlet.setText(value.getClient().getSortKey());
+//	dateOutlet.setText(value.getDate());
+//	priceOutlet.setText(value.getPriceCode());
+//	
+//	articleTableOutlet.setModel(new InvoiceItemTableModel(value.items()));
     }
     
     @Override

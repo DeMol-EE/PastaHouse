@@ -382,7 +382,7 @@ public class EditContactDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -497,10 +497,16 @@ public class EditContactDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtGemeenteKeyReleased
 
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
-        if (!Utilities.validTaxNr(taxnrOutlet.getText())) {
-	    taxnrOutlet.setForeground(Color.red);
-	} else {
-	    taxnrOutlet.setForeground(Color.black);
+        String taxnr = taxnrOutlet.getText();
+        taxnr = Utilities.getDigits(taxnr);
+        if(taxnr.length() == 9){
+            if (!Utilities.validTaxNr(taxnr)) {
+                taxnrOutlet.setForeground(Color.red);
+            }
+        } else if (taxnr.length() > 9) {
+            taxnrOutlet.setForeground(Color.red);
+        } else {
+            taxnrOutlet.setForeground(Color.black);
 	}
     }//GEN-LAST:event_taxnrOutletKeyReleased
 

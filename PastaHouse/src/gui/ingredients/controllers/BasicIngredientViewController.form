@@ -515,6 +515,9 @@
                       <SubComponents>
                         <Component class="javax.swing.JTextArea" name="notesOutlet">
                           <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="db" green="cd" red="bf" type="rgb"/>
+                            </Property>
                             <Property name="columns" type="int" value="20"/>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Consolas" size="13" style="0"/>

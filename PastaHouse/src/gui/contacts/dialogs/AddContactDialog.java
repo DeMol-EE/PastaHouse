@@ -289,7 +289,7 @@ public class AddContactDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -406,10 +406,16 @@ public class AddContactDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtPostcodeKeyReleased
 
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
-        if (!Utilities.validTaxNr(taxnrOutlet.getText())) {
-	    taxnrOutlet.setForeground(Color.red);
-	} else {
-	    taxnrOutlet.setForeground(Color.black);
+        String taxnr = taxnrOutlet.getText();
+        taxnr = Utilities.getDigits(taxnr);
+        if(taxnr.length() == 9){
+            if (!Utilities.validTaxNr(taxnr)) {
+                taxnrOutlet.setForeground(Color.red);
+            }
+        } else if (taxnr.length() > 9) {
+            taxnrOutlet.setForeground(Color.red);
+        } else {
+            taxnrOutlet.setForeground(Color.black);
 	}
     }//GEN-LAST:event_taxnrOutletKeyReleased
 

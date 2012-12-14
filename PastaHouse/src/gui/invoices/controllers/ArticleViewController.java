@@ -14,6 +14,7 @@ import gui.invoices.dialogs.AddArticleDialog;
 import gui.invoices.dialogs.EditArticleDialog;
 import gui.utilities.list.ArticleListModel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -34,7 +35,8 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
      */
     public ArticleViewController() {
 	initComponents();
-	
+	jTextArea1.setBackground(new Color(213, 216, 222));
+        jTextArea1.setCaretPosition(0);
 	listModel = new ArticleListModel(database.Database.driver().getArticlesAlphabetically());
 	
 	listOutlet.setModel(listModel);
@@ -333,6 +335,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	priceBOutlet.setText(three.format(article.getPriceB())+" euro");
 	unitOutlet.setText(article.getUnit());
 	taxesOutlet.setText(new DecimalFormat("0.00").format(article.getTaxes())+" %");
+        jTextArea1.setCaretPosition(0);
     }
     
     @Override

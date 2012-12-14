@@ -20,6 +20,7 @@ import gui.utilities.list.EditableListModel;
 import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticRecipeTableModel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
@@ -42,11 +43,13 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
      */
     public RecipeViewController() {
 	initComponents();
-	
+	preparationOutlet.setBackground(new Color(213,216,222));
+        preparationOutlet.setCaretPosition(0);
 	recipeListOutlet.setModel(ListModelFactory.createRecipeListModel(Database.driver().getRecipesAlphabetically()));
 	recipeListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	recipeListOutlet.addListSelectionListener(new ListSelectionListener() {
 
+       
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
@@ -94,6 +97,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	ingredientsOutlet.setModel(new StaticRecipeTableModel(r.getComponents()));
 	
 //	ingredientListOutlet.setModel(ListModelFactory.createComponentListModel(r.getComponents()));
+        preparationOutlet.setCaretPosition(0);
     }
 
     /**
@@ -225,6 +229,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Bereiding:"));
         jScrollPane3.setFocusable(false);
 
+        preparationOutlet.setBackground(new java.awt.Color(240, 240, 240));
         preparationOutlet.setColumns(20);
         preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         preparationOutlet.setRows(5);

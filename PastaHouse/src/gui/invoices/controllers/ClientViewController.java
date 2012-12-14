@@ -15,6 +15,7 @@ import gui.contacts.dialogs.EditContactDialog;
 import gui.invoices.InvoiceTabbedViewController;
 import gui.utilities.list.ClientListModel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -38,6 +39,8 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
     public ClientViewController(InvoiceTabbedViewController parent) {
 	initComponents();
 
+        notesOutlet.setBackground(new Color(213, 216, 222));
+        notesOutlet.setCaretPosition(0);
 	this.parent = parent;
 	
 	listModel = new ClientListModel(Database.driver().getContactsAlphabetically());
@@ -475,6 +478,7 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	    code = code.toUpperCase(); 
 	}
 	pricecodeOutlet.setText(code);
+        notesOutlet.setCaretPosition(0);
     }
 
     @Override
