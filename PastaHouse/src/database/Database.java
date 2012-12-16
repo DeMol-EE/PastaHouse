@@ -54,7 +54,7 @@ public class Database {
     private Map<String, Recipe> recipesByName;
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
-    private Map<String, Contact> contactsAlphabetically;
+    private Map<String, Contact> contactsBySortKey;
     
     private Database() {
         try {
@@ -68,7 +68,7 @@ public class Database {
 	    basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
 	    recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
 	    articlesByName = new TreeMap<String, Article>(String.CASE_INSENSITIVE_ORDER);
-	    contactsAlphabetically = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
+	    contactsBySortKey = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
 	    
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
             // connect to db
@@ -126,7 +126,6 @@ public class Database {
             invoicesById.get(invoiceid).addItem(rank, amount, taxes, articlesById.get(articleid));
             links++;
         }
-	
 	MyLogger.log("Database driver:: loaded " + invoicesById.size() + " invoices (linked "+links+" articles)!", MyLogger.LOW);
     }
     
@@ -151,17 +150,14 @@ public class Database {
                     rs.getString("notes"),
 		    rs.getString("type"));
             contactsById.put(contact.getPrimaryKeyValue(), contact);
-	    contactsAlphabetically.put(contact.getSortKey().toLowerCase(), contact);
+	    contactsBySortKey.put(contact.getSortKey().toLowerCase(), contact);
         }
-
 	MyLogger.log("Database driver:: loaded " + contactsById.size() + " contacts ("+getSuppliersAlphabetically().size()+" suppliers and "+getClientsAlphabetically().size()+" clients)!", MyLogger.LOW);
     }
     
     public FunctionResult<Contact> addContact(ContactModel model) throws SQLException {
-        if (contactsAlphabetically.containsKey(model.getFirm().toLowerCase())) {
-	    return new FunctionResult<Contact>(4, null, "Er bestaat al een leverancier van deze firma.");
-	} else if (contactsAlphabetically.containsKey(model.getContact().toLowerCase())) {
-	    return new FunctionResult<Contact>(5, null, "Er bestaat al een klant van deze firma.");
+        if (contactsBySortKey.containsKey(model.getSortKey().toLowerCase())) {
+	    return new FunctionResult<Contact>(4, null, "Er bestaat al een contactpersoon met deze toonnaam.");
 	}
 	
 	String msg = "";
@@ -193,7 +189,7 @@ public class Database {
 	    if (rs.next()) {
 		newCon = Contact.createFromModel(rs.getInt("id"), model);
 		contactsById.put(newCon.getPrimaryKeyValue(), newCon);
-		contactsAlphabetically.put(newCon.getSortKey().toLowerCase(), newCon);
+		contactsBySortKey.put(newCon.getSortKey().toLowerCase(), newCon);
 	    } else {
 		code = 2;
 		msg = "Het toevoegen is geslaagd maar er is een probleem opgetreden. Herstart het programma.";
@@ -511,7 +507,7 @@ public class Database {
 //    
     public Map<String, Contact> getClientsAlphabetically() {
 	Map<String, Contact> clients = new TreeMap<String, Contact>();
-	for (Contact contact : contactsAlphabetically.values()) {
+	for (Contact contact : contactsBySortKey.values()) {
 	    if (!contact.isSupplier()) {
 		clients.put(contact.getSortKey().toLowerCase(), contact);
 	    }
@@ -531,7 +527,7 @@ public class Database {
 //    
     public Map<String, Contact> getSuppliersAlphabetically() {
 	Map<String, Contact> suppliers = new TreeMap<String, Contact>();
-	for (Contact contact : contactsAlphabetically.values()) {
+	for (Contact contact : contactsBySortKey.values()) {
 	    if (contact.isSupplier()) {
 		suppliers.put(contact.getSortKey().toLowerCase(), contact);
 	    }
@@ -611,7 +607,7 @@ public class Database {
     }
     
     public Map<String, Contact> getContactsAlphabetically() {
-	return contactsAlphabetically;
+	return contactsBySortKey;
     }
 
     /**

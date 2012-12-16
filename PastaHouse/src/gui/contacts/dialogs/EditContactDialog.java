@@ -175,7 +175,12 @@ public class EditContactDialog extends javax.swing.JDialog {
 
 //        jPanel2.addProxy(comboGemeentes, 9);
 	muniParent.add(comboGemeentes, BorderLayout.CENTER);
-        comboGemeentes.setSelectedItem(model.getMunicipality());
+//	System.out.println("mun: '"+model.getMunicipality()+"'");
+        if (items.contains(model.getMunicipality())) {
+	    comboGemeentes.setSelectedItem(model.getMunicipality());
+	} else {
+	    comboGemeentes.setSelectedIndex(0);
+	}
     }
     
     private void setMunicipal() {
@@ -429,6 +434,8 @@ public class EditContactDialog extends javax.swing.JDialog {
 		return;
 	    }
 	    
+	    System.out.println("\""+comboGemeentes.getSelectedItem()+"\"");
+	    
 	    model.setFirm(txtFirma.getText());
 	    model.setSortKey(sortkeyOutlet.getText());
 	    model.setContact(txtContact.getText());
@@ -458,7 +465,7 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    } else {
 		String msg;
 		switch(res.getCode()){
-		    case 1: case 2:
+		    case 1: case 2: case 3:
 			msg = res.getMessage();
 			break;
 		    default:
@@ -467,7 +474,7 @@ public class EditContactDialog extends javax.swing.JDialog {
 		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
 	} catch (Exception e){
-	    System.err.println("Error:\n");
+	    System.err.println("Error:");
 	    e.printStackTrace();
 	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
 	}

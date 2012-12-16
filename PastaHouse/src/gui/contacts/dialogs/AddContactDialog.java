@@ -343,6 +343,8 @@ public class AddContactDialog extends javax.swing.JDialog {
 		return;
 	    }
 	    
+	    System.out.println("\""+comboGemeentes.getSelectedItem()+"\"");
+	    
 	    model.setFirm(txtFirma.getText());
 	    model.setSortKey(sortkeyOutlet.getText());
 	    model.setAddress(txtAdres.getText());
