@@ -61,8 +61,8 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
     }
     
     public void selectAndSwitchToSupplier(Contact supplier){
-	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
 	tabController.setSelectedIndex(supplierTabIndex);
+	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
     }
     
     @Override

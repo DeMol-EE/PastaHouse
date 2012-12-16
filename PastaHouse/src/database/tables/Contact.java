@@ -228,26 +228,22 @@ public class Contact extends Record<Contact> implements Filterable{
     
     @Override
     public FunctionResult<Contact> update() {
-	if (database.Database.driver().getContactsAlphabetically().containsKey(sortkey.toLowerCase())) {
-	    return new FunctionResult<Contact>(3, this, "Er bestaat al een contactpersoon met deze toonnaam.");
-	} else {
-	    return database.Database.driver().executeUpdate(Configuration.center().getDB_TABLE_CON(), getPrimaryKey(), getPrimaryKeyValue(), 
-		"firm = "+ (firm.length()>0 ? "\""+ firm +"\"":"NULL")+", "
-		+ "sortkey = "+(sortkey.length()>0 ? "\""+ sortkey +"\"":"NULL")+", "
-		+ "contact = "+(contact.length()>0 ? "\""+ contact +"\"":"NULL")+", "
-		+ "address = "+(address.length()>0 ?"\""+address +"\"":"NULL")+", "
-		+ "zipcode = "+(zipcode.length()>0? "\""+zipcode +"\"":"NULL")+", "
-		+ "municipality = "+(municipality.length()>0? "\""+municipality +"\"":"NULL")+", "
-		+ "telephone = "+(telephone.length()>0? "\""+telephone +"\"":"NULL")+", "
-		+ "telephone2 = "+(telephone2.length()>0? "\""+telephone2 +"\"":"NULL")+", "
-		+ "cellphone = "+(cellphone.length()>0? "\""+cellphone +"\"":"NULL")+", "
-		+ "fax = "+(fax.length()>0? "\""+fax +"\"":"NULL")+", "
-		+ "email = "+(email.length()>0? "\""+email +"\"":"NULL")+", "
-		+ "taxnr = "+(taxnumber.length()>0? "\""+taxnumber +"\"":"NULL")+", "
-		+ "pricecode = "+((pricecode != null && pricecode.length()>0)? "\""+pricecode +"\"":"NULL")+", "
-		+ "notes = "+(notes.length()>0? "\""+notes +"\"":"NULL")+", "
-		+ "type = "+(type.length()>0 ? "\""+type +"\"":"NULL"));
-	}
+	return database.Database.driver().executeUpdate(Configuration.center().getDB_TABLE_CON(), getPrimaryKey(), getPrimaryKeyValue(), 
+	    "firm = "+ (firm.length()>0 ? "\""+ firm +"\"":"\"\"")+", "
+	    + "sortkey = "+(sortkey.length()>0 ? "\""+ sortkey +"\"":"NULL")+", "
+	    + "contact = "+(contact.length()>0 ? "\""+ contact +"\"":"\"\"")+", "
+	    + "address = "+(address.length()>0 ?"\""+address +"\"":"\"\"")+", "
+	    + "zipcode = "+(zipcode.length()>0? "\""+zipcode +"\"":"\"\"")+", "
+	    + "municipality = "+(municipality.length()>0? "\""+municipality +"\"":"\"\"")+", "
+	    + "telephone = "+(telephone.length()>0? "\""+telephone +"\"":"\"\"")+", "
+	    + "telephone2 = "+(telephone2.length()>0? "\""+telephone2 +"\"":"\"\"")+", "
+	    + "cellphone = "+(cellphone.length()>0? "\""+cellphone +"\"":"\"\"")+", "
+	    + "fax = "+(fax.length()>0? "\""+fax +"\"":"\"\"")+", "
+	    + "email = "+(email.length()>0? "\""+email +"\"":"\"\"")+", "
+	    + "taxnr = "+(taxnumber.length()>0? "\""+taxnumber +"\"":"\"\"")+", "
+	    + "pricecode = "+((pricecode != null && pricecode.length()>0)? "\""+pricecode +"\"":"\"\"")+", "
+	    + "notes = "+(notes.length()>0? "\""+notes +"\"":"\"\"")+", "
+	    + "type = "+(type.length()>0 ? "\""+type +"\"":"\"\""));
     }
 
     @Override

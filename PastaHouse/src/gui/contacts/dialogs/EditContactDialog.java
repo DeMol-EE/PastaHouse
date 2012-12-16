@@ -457,6 +457,13 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    } else if (type == Contact.client) {
 		model.setType("client");
 	    }
+	    
+	    if (!defaultModel.getSortKey().equalsIgnoreCase(model.getSortKey())) {
+		if (Database.driver().getContactsAlphabetically().containsKey(model.getSortKey().toLowerCase())) {
+		    JOptionPane.showMessageDialog(null, "Er is al een contactpersoon met deze toonnaam.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		    return;
+		}
+	    }
 
 	    FunctionResult res = model.update();
 	    if (res.getCode() == 0) {

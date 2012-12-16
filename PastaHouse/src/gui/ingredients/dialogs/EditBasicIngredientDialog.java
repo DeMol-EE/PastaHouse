@@ -636,6 +636,13 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
 	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
 
+	    if (!defaultModel.getName().equalsIgnoreCase(model.getName())) {
+		if (Database.driver().getBasicIngredientsAlphabetically().containsKey(model.getName().toLowerCase())) {
+		    JOptionPane.showMessageDialog(null, "Er is al een basisingrediënt met deze naam.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		    return;
+		}
+	    }
+	    
 	    FunctionResult res = model.update();
 	    if(res.getCode() == 0){
 		delegate.editBasicIngredient(model, defaultModel);

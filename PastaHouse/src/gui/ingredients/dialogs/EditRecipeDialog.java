@@ -397,6 +397,13 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 	    model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
 	    model.setPreparation(preparationOutlet.getText());
 	    
+	    if (!defaultModel.getName().equalsIgnoreCase(model.getName())) {
+		if (Database.driver().getRecipesAlphabetically().containsKey(model.getName().toLowerCase())) {
+		    JOptionPane.showMessageDialog(null, "Er is al een recept met deze naam.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		    return;
+		}
+	    }
+	    
 	    FunctionResult res = model.update();
 	    if(res.getCode() == 0){
 		delegate.editRecipe(model, defaultModel);

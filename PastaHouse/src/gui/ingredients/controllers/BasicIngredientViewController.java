@@ -84,7 +84,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         DecimalFormat threeFormatter = new DecimalFormat("0.000");
         DecimalFormat twoFormatter = new DecimalFormat("0.00");
         
-        supplierOutlet.setText(bi.getSupplier() != null ? StringTools.capitalize(bi.getSupplier().getFirm()) : "<geen>");
+        supplierOutlet.setText(bi.getSupplier() != null ? bi.getSupplier().toString() : "<geen>");
         supplierOutlet.setForeground(Color.BLUE);
         supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -489,7 +489,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseExited
         BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
         if (bi.getSupplier() != null) {
-            String firm = bi.getSupplier().getFirm();
+            String firm = bi.getSupplier().getSortKey();
             supplierOutlet.setText(firm.substring(0, 1).toUpperCase() + firm.substring(1).toLowerCase());
         }
     }//GEN-LAST:event_supplierOutletMouseExited
