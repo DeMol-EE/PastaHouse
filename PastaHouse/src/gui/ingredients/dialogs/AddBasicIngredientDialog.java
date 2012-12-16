@@ -433,8 +433,18 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 		disposeLater();
 	    } else {
 		// switch case error code
-		JOptionPane.showMessageDialog(null, "Het toevoegen van het basisingrediënt heeft foutcode "+res.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
-		disposeLater();
+		String msg;
+		switch(res.getCode()){
+		    case 1: 
+			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n"+res.getMessage();
+			break;
+		    case 4:
+			msg = res.getMessage();
+			break;
+		    default: msg = "Het toevoegen van het basisingrediënt is foutgelopen (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		}
+		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+//		disposeLater();
 	    }
 	} catch (Exception e){
 	    System.err.println("Error: \n"+e.getMessage());

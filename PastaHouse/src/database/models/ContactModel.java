@@ -12,6 +12,7 @@ import database.FunctionResult;
  */
 public class ContactModel implements Model{
 
+    private String sortkey;
     private String firm;
     private String contact;
     private String address;
@@ -139,6 +140,14 @@ public class ContactModel implements Model{
 	this.notes = notes;
     }
 
+    public String getSortKey() {
+	return sortkey;
+    }
+
+    public void setSortKey(String sortkey) {
+	this.sortkey = sortkey;
+    }
+
     public String getType() {
 	return type;
     }
@@ -158,7 +167,7 @@ public class ContactModel implements Model{
 	} catch (Exception e){
 	    System.err.println("Error caught");
 	    e.printStackTrace();
-	    return new FunctionResult(3, null);
+	    return new FunctionResult(3, null, e.getMessage());
 	}
     }
     

@@ -271,7 +271,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
-        save.setText("Opslaan");
+        save.setText("Aanmaken");
         save.setFocusable(false);
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,8 +383,20 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 		delegate.addRecipe(res.getObj());
                 disposeLater();
             } else {
-                JOptionPane.showMessageDialog(null, "Het toevoegen van het recept heeft foutcode "+res.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
-		disposeLater();
+		
+		String msg;
+		switch(res.getCode()){
+		    case 1: 
+			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n"+res.getMessage();
+			break;
+		    case 4:
+			msg = res.getMessage();
+			break;
+		    default: msg = "Het toevoegen van het basisingrediënt is foutgelopen (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		}
+		
+                JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+//		disposeLater();
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());

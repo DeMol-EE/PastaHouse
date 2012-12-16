@@ -135,6 +135,7 @@ public class Database {
         while (rs.next()) {
 	    Contact contact = Contact.loadWithValues(
 		    rs.getInt("id"),
+		    rs.getString("sortkey"),
 		    rs.getString("firm"),
                     rs.getString("contact"),
                     rs.getString("address"),
@@ -157,77 +158,90 @@ public class Database {
     }
     
     public FunctionResult<Contact> addContact(ContactModel model) throws SQLException {
-        int code = 0;
+        if (contactsAlphabetically.containsKey(model.getFirm().toLowerCase())) {
+	    return new FunctionResult<Contact>(4, null, "Er bestaat al een leverancier van deze firma.");
+	} else if (contactsAlphabetically.containsKey(model.getContact().toLowerCase())) {
+	    return new FunctionResult<Contact>(5, null, "Er bestaat al een klant van deze firma.");
+	}
+	
+	String msg = "";
+	int code = 0;
 	Contact newCon = null;
         String insertTableSQL = "INSERT INTO contacts"
-                + "(firm, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnr, pricecode, notes, type) VALUES"
-                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "(firm, sortkey, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnr, pricecode, notes, type) VALUES"
+                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
             preparedStatement.setString(1, model.getFirm());
-            preparedStatement.setString(2, model.getContact());
-            preparedStatement.setString(3, model.getAddress());
-            preparedStatement.setString(4, model.getZipcode());
-            preparedStatement.setString(5, model.getMunicipality());
-            preparedStatement.setString(6, model.getTelephone());
-            preparedStatement.setString(7, model.getTelephone2());
-            preparedStatement.setString(8, model.getCellphone());
-            preparedStatement.setString(9, model.getFax());
-	    preparedStatement.setString(10, model.getEmail());
-            preparedStatement.setString(11, model.getTaxnumber());
-            preparedStatement.setString(12, model.getPricecode());
-	    preparedStatement.setString(13, model.getNotes());
-            preparedStatement.setString(14, model.getType());
+            preparedStatement.setString(2, model.getSortKey());
+            preparedStatement.setString(3, model.getContact());
+            preparedStatement.setString(4, model.getAddress());
+            preparedStatement.setString(5, model.getZipcode());
+            preparedStatement.setString(6, model.getMunicipality());
+            preparedStatement.setString(7, model.getTelephone());
+            preparedStatement.setString(8, model.getTelephone2());
+            preparedStatement.setString(9, model.getCellphone());
+            preparedStatement.setString(10, model.getFax());
+	    preparedStatement.setString(11, model.getEmail());
+            preparedStatement.setString(12, model.getTaxnumber());
+            preparedStatement.setString(13, model.getPricecode());
+	    preparedStatement.setString(14, model.getNotes());
+            preparedStatement.setString(15, model.getType());
             preparedStatement.executeUpdate();
 	    
-	    ResultSet rs = model.isSupplier() ? statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CON()+" WHERE firm=\""+model.getFirm()+"\"") : statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CON()+" WHERE contact=\""+model.getContact()+"\"");
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_CON()+" WHERE sortkey=\""+model.getSortKey()+"\"");
 	    if (rs.next()) {
 		newCon = Contact.createFromModel(rs.getInt("id"), model);
 		contactsById.put(newCon.getPrimaryKeyValue(), newCon);
 		contactsAlphabetically.put(newCon.getSortKey().toLowerCase(), newCon);
 	    } else {
 		code = 2;
+		msg = "Het toevoegen is geslaagd maar er is een probleem opgetreden. Herstart het programma.";
 	    }
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
 	    code = 1;
+	    msg = ex.getMessage();
         } finally {
             preparedStatement.close();
         }
-        return new FunctionResult<Contact>(code, newCon);
+        return new FunctionResult<Contact>(code, newCon, msg);
     }
     
-    public FunctionResult<Article> addArticle(ArticleModel art) throws SQLException {
+    public FunctionResult<Article> addArticle(ArticleModel model) throws SQLException {
         int code = 0;
+	String msg = "";
 	Article newArt = null;
         String insertTableSQL = "INSERT INTO articles"
                 + "(name, code, pricea, priceb, unit, taxes) VALUES"
                 + "(?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
-            preparedStatement.setString(1, art.getName());
-            preparedStatement.setString(2, art.getCode());
-            preparedStatement.setDouble(3, art.getPriceA());
-            preparedStatement.setDouble(4, art.getPriceB());
-	    preparedStatement.setString(5, art.getUnit());
-            preparedStatement.setDouble(6, art.getTaxes());
+            preparedStatement.setString(1, model.getName());
+            preparedStatement.setString(2, model.getCode());
+            preparedStatement.setDouble(3, model.getPriceA());
+            preparedStatement.setDouble(4, model.getPriceB());
+	    preparedStatement.setString(5, model.getUnit());
+            preparedStatement.setDouble(6, model.getTaxes());
             preparedStatement.executeUpdate();
 	    
-	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_ART()+" WHERE name=\""+art.getName()+"\"");
+	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_ART()+" WHERE name=\""+model.getName()+"\"");
 	    if (rs.next()) {
-		newArt = Article.createFromModel(rs.getInt("id"), art);
+		newArt = Article.createFromModel(rs.getInt("id"), model);
 		articlesById.put(newArt.getPrimaryKeyValue(), newArt);
 		articlesByName.put(newArt.getName(), newArt);
 	    } else {
 		code = 2;
+		msg = "Er is iets verkeerd gegaan. Herstart het programma.";
 	    }
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
 	    code = 1;
+	    msg = ex.getMessage();
         } finally {
             preparedStatement.close();
         }
-        return new FunctionResult<Article>(code, newArt);
+        return new FunctionResult<Article>(code, newArt, msg);
     }
 
     private void loadBasicIngredients() throws SQLException {
@@ -246,7 +260,7 @@ public class Database {
                     rs.getString("datum"),
                     rs.getString("opmerking"));
             basicIngredientsById.put(b.getPrimaryKeyValue(), b);
-            basicIngredientsByName.put(b.getName(), b);
+            basicIngredientsByName.put(b.getName().toLowerCase(), b);
         }
 
 //        System.out.println("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!");
@@ -254,7 +268,12 @@ public class Database {
     }
 
     public FunctionResult<BasicIngredient> addBasicIngredient(BasicIngredientModel ingredient) throws SQLException {
+	if (basicIngredientsByName.containsKey(ingredient.getName().toLowerCase())) {
+	    return new FunctionResult<BasicIngredient>(4, null, "Er bestaat al een basisingrediënt met deze naam.");
+	}
+	
 	int code = 0;
+	String msg = "";
 	BasicIngredient newBI = null;
         String insertTableSQL = "INSERT INTO ingredients"
                 + "(firmaid, naam, merk, verpakking, prijsPerVerpakking, gewichtPerVerpakking, verliespercentage, BTW, datum, opmerking) VALUES"
@@ -280,14 +299,16 @@ public class Database {
 		basicIngredientsByName.put(newBI.getName(), newBI);
 	    } else {
 		code = 2;
+		msg = "Er is iets verkeerd gegaan. Herstart het programma.";
 	    }
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
 	    code = 1;
+	    msg = ex.getMessage();
         } finally {
             preparedStatement.close();
         }
-        return new FunctionResult<BasicIngredient>(code, newBI);
+        return new FunctionResult<BasicIngredient>(code, newBI, msg);
     }
 
     private void loadRecipes() throws SQLException {
@@ -300,7 +321,7 @@ public class Database {
                     rs.getString("bereiding"),
                     rs.getDouble("nettogewicht"));
             recipesById.put(r.getPrimaryKeyValue(), r);
-            recipesByName.put(r.getName(), r);
+            recipesByName.put(r.getName().toLowerCase(), r);
         }
         // also copy all linked ingredients and recipes
         rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_REC_INGR());
@@ -329,8 +350,13 @@ public class Database {
     }
 
     public FunctionResult<Recipe> addRecipe(RecipeModel recipe) throws SQLException {
+	if (recipesByName.containsKey(recipe.getName().toLowerCase())) {
+	    return new FunctionResult<Recipe>(4, null, "Er bestaat al een recept met deze naam");
+	}
+	
 	boolean autoComm = connection.getAutoCommit();
 	int code = 0;
+	String msg = "";
 	Recipe newRec = null;
         PreparedStatement stmt = null;
         try {
@@ -359,6 +385,7 @@ public class Database {
 		recipesByName.put(newRec.getName(), newRec);
 	    } else {
 		code = 2;
+		msg = "Er is iets verkeerd gegaan. Herstart het programma.";
 	    }
 	    
             Map<Integer, Component> ings = recipe.getComponents();
@@ -381,18 +408,19 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             connection.rollback();
 	    code = 1;
+	    msg = ex.getMessage();
         } finally {
 	    connection.setAutoCommit(autoComm);
             if (stmt != null) {
                 stmt.close();
             }
         }
-        return new FunctionResult<Recipe>(code, newRec);
+        return new FunctionResult<Recipe>(code, newRec, msg);
     }
 
-    public boolean updateRecipe(Recipe recipe) throws SQLException {
+    public FunctionResult<Recipe> updateRecipe(Recipe recipe) throws SQLException {
         boolean autoComm = connection.getAutoCommit();
-	boolean flag = true;
+	int code = 0;
         String insertrecrec = "INSERT INTO recipesrecipes"
                 + "(receptid, deelreceptid, rang, quantiteit) VALUES"
                 + "(?,?,?,?)";
@@ -433,14 +461,14 @@ public class Database {
             connection.commit();
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-            flag = false;
+            code = 1;
         } finally {
 	    connection.setAutoCommit(autoComm);
             if (stmt != null) {
                 stmt.close();
             }
         }
-        return flag;
+        return new FunctionResult<Recipe>(code, null, null);
     }
 
     private void loadMunicipales() throws SQLException {
@@ -597,18 +625,18 @@ public class Database {
      * @param values
      * @return
      */
-    public boolean executeUpdate(String table, String primaryKey, int primaryKeyValue, String values) {
+    public FunctionResult executeUpdate(String table, String primaryKey, int primaryKeyValue, String values) {
         try {
             statement.executeUpdate("UPDATE " + table + " SET " + values + " WHERE " + primaryKey + " = \"" + primaryKeyValue + "\"");
             System.out.println("DatabaseDriver::Executed update:\n"
                     + "UPDATE " + table + " SET " + values + " WHERE " + primaryKey + " = \"" + primaryKeyValue + "\" \nSUCCES!");
-            return true;
+            return new FunctionResult(0, null, null);
         } catch (Exception e) {
             // do logging
             System.err.println("DatabaseDriver::Update command: \n"
                     + "UPDATE " + table + " SET " + values + " WHERE " + primaryKey + " = \"" + primaryKeyValue + "\" \nFAILED:\n" + e.getMessage());
 
-            return false;
+            return new FunctionResult(1, null, StringTools.capitalize(e.getMessage()));
         }
     }
 

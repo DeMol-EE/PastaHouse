@@ -51,14 +51,6 @@ public class AddContactDialog extends javax.swing.JDialog {
         loadModel();
 	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
 	
-	if (type == Contact.supplier) {
-	    setTitle("Leverancier toevoegen");
-	    firmLabel.setText("Firma *");
-	} else {
-	    setTitle("Klant toevoegen");
-	    contactLabel.setText("Contactpersoon *");
-	}
-	
 	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 	
 	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
@@ -131,6 +123,8 @@ public class AddContactDialog extends javax.swing.JDialog {
         typeParent = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
+        sortkey = new javax.swing.JLabel();
+        sortkeyOutlet = new javax.swing.JTextField();
         firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
         contactLabel = new javax.swing.JLabel();
@@ -159,7 +153,6 @@ public class AddContactDialog extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
         add = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
@@ -185,7 +178,12 @@ public class AddContactDialog extends javax.swing.JDialog {
 
         jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
 
-        jPanel2.setLayout(new java.awt.GridLayout(12, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(13, 2));
+
+        sortkey.setText("Toonnaam *");
+        sortkey.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(sortkey);
+        jPanel2.add(sortkeyOutlet);
 
         firmLabel.setText("Firma");
         firmLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
@@ -282,26 +280,24 @@ public class AddContactDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 732, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 740, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
-        jPanel4.setPreferredSize(new java.awt.Dimension(200, 30));
-        jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
+        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
 
-        add.setText("OK");
+        add.setText("Aanmaken");
         add.setFocusable(false);
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -310,7 +306,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         });
         jPanel4.add(add);
 
-        cancel.setText("Cancel");
+        cancel.setText("Terug");
         cancel.setFocusable(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,12 +338,13 @@ public class AddContactDialog extends javax.swing.JDialog {
     
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         try {
-	    if (txtFirma.getText().isEmpty() && type == Contact.supplier || txtContact.getText().isEmpty() && type == Contact.client) {
+	    if (sortkeyOutlet.getText().isEmpty()) {
 		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    
 	    model.setFirm(txtFirma.getText());
+	    model.setSortKey(sortkeyOutlet.getText());
 	    model.setAddress(txtAdres.getText());
 	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
 	    model.setZipcode(txtPostcode.getText());
@@ -375,8 +372,19 @@ public class AddContactDialog extends javax.swing.JDialog {
 		disposeLater();
             } else {
                 // switch case the return code
-		JOptionPane.showMessageDialog(null, "Het toevoegen van de leverancier heeft foutcode "+result.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.", "Fout!", JOptionPane.ERROR_MESSAGE);
-		disposeLater();
+		String msg;
+		switch(result.getCode()){
+		    case 1: 
+			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n"+result.getMessage();
+			break;
+		    case 4: case 5:
+			msg = result.getMessage();
+			break;
+		    default: msg = "Het toevoegen van de contactpersoon is foutgelopen (code "+result.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		}		
+		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+		System.err.println("\"Het toevoegen van de contactpersoon heeft foutcode "+result.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.\"");
+//		disposeLater();
             }
         } catch (Exception ex) {
 	    System.err.println("Error caught");
@@ -424,7 +432,6 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JButton add;
     private javax.swing.JButton cancel;
     private javax.swing.JLabel contactLabel;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel firmLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -447,6 +454,8 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
+    private javax.swing.JLabel sortkey;
+    private javax.swing.JTextField sortkeyOutlet;
     private javax.swing.JTextField taxnrOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;

@@ -5,6 +5,7 @@
 package database.tables;
 
 import database.Database;
+import database.FunctionResult;
 import database.extra.Ingredient;
 import database.models.BasicIngredientModel;
 import java.sql.SQLException;
@@ -166,7 +167,7 @@ public class BasicIngredient extends Ingredient {
     }
     
     @Override
-    public boolean update(){
+    public FunctionResult<BasicIngredient> update(){
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
 		"firmaid = "+ (supplier == null ? "NULL" : supplier.getPrimaryKeyValue()) +", "
 		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "

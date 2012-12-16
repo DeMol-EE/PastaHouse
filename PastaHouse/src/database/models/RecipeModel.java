@@ -101,7 +101,7 @@ public class RecipeModel implements Model{
 	try {
 	    return Database.driver().addRecipe(this);
 	} catch (SQLException ex) {
-	    return new FunctionResult<Recipe>(3, null);
+	    return new FunctionResult<Recipe>(3, null, ex.getMessage());
 	}
     }
 }

@@ -125,7 +125,7 @@ public class BasicIngredientModel implements Model{
 	    return Database.driver().addBasicIngredient(this);
 	} catch (SQLException ex) {
 	    System.err.println("Exception:\n"+ex.getMessage());
-	    return new FunctionResult<BasicIngredient>(3, null);
+	    return new FunctionResult<BasicIngredient>(3, null, ex.getMessage());
 	}
     }
 }

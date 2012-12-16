@@ -4,6 +4,7 @@
  */
 package database.tables;
 
+import database.FunctionResult;
 import database.extra.InvoiceItem;
 import database.extra.Record;
 import java.util.Map;
@@ -14,7 +15,7 @@ import tools.Configuration;
  *
  * @author Robin jr
  */
-public class Invoice extends Record{
+public class Invoice extends Record<Invoice>{
     private int number;
     private String date;
     private Contact client;
@@ -85,7 +86,7 @@ public class Invoice extends Record{
     }
     
     @Override
-    public boolean update() {
+    public FunctionResult<Invoice> update() {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 

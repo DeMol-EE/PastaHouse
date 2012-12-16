@@ -4,11 +4,13 @@
  */
 package database.extra;
 
+import database.FunctionResult;
+
 /**
  *
  * @author Robin jr
  */
-public abstract class Record {
+public abstract class Record<Type extends Record> {
     
     private final String table;
     private final int primaryKey;
@@ -32,7 +34,7 @@ public abstract class Record {
     }
     
     // save changes to the db
-    public abstract boolean update();
+    public abstract FunctionResult<Type> update();
     
     // save changes to the db
     public abstract boolean delete();

@@ -87,22 +87,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         supplierOutlet.setText(bi.getSupplier() != null ? StringTools.capitalize(bi.getSupplier().getFirm()) : "<geen>");
         supplierOutlet.setForeground(Color.BLUE);
         supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        supplierOutlet.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                supplierOutletMouseReleased(e);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                supplierOutletMouseEntered(e);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                supplierOutletMouseExited(e);
-            }
-        });
 
         //€-sign?
         nameOutlet.setText(StringTools.capitalize(bi.getName()));
@@ -124,23 +108,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     @Override
     public JPanel view() {
         return this;
-    }
-    
-    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {        
-        BasicIngredient selectedIngredient = (BasicIngredient) listOutlet.getSelectedValue();
-        delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
-    }    
-    
-    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {        
-        supplierOutlet.setText("<html><u>" + supplierOutlet.getText() + "</u></html>");
-    }    
-    
-    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {        
-        BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
-        if (bi.getSupplier() != null) {
-            String firm = bi.getSupplier().getFirm();
-            supplierOutlet.setText(firm.substring(0, 1).toUpperCase() + firm.substring(1).toLowerCase());
-        }
     }
     
     @Override
@@ -321,6 +288,17 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         supplierOutlet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         supplierOutlet.setFocusable(false);
         supplierOutlet.setOpaque(true);
+        supplierOutlet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseReleased(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                supplierOutletMouseEntered(evt);
+            }
+        });
         fixedFields.add(supplierOutlet);
 
         jLabel10.setText("Prijs per verpakking (BTW excl)");
@@ -500,6 +478,29 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
         editActionPerformed(null);
     }//GEN-LAST:event_editMenuItemActionPerformed
+
+    private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseEntered
+	BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
+        if (bi.getSupplier() != null) {
+	    supplierOutlet.setText("<html><u>" + supplierOutlet.getText() + "</u></html>");
+	}
+    }//GEN-LAST:event_supplierOutletMouseEntered
+
+    private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseExited
+        BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
+        if (bi.getSupplier() != null) {
+            String firm = bi.getSupplier().getFirm();
+            supplierOutlet.setText(firm.substring(0, 1).toUpperCase() + firm.substring(1).toLowerCase());
+        }
+    }//GEN-LAST:event_supplierOutletMouseExited
+
+    private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseReleased
+        BasicIngredient selectedIngredient = (BasicIngredient) listOutlet.getSelectedValue();
+        if (selectedIngredient.getSupplier()!=null) {
+	    delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
+	}
+    }//GEN-LAST:event_supplierOutletMouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JMenuItem addMenuItem;

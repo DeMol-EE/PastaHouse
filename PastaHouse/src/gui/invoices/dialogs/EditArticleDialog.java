@@ -4,6 +4,7 @@
  */
 package gui.invoices.dialogs;
 
+import database.FunctionResult;
 import database.tables.Article;
 import gui.invoices.delegates.EditArticleDelegate;
 import gui.utilities.AcceleratorAdder;
@@ -321,11 +322,20 @@ public class EditArticleDialog extends javax.swing.JDialog {
             model.setUnit(unitOutlet.getText());
             model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
 
-	    if (model.update()) {
+	    FunctionResult<Article> res = model.update();
+	    if (res.getCode() == 0) {
 		delegate.editArticle(defaultModel, model);
 		disposeLater();
 	    } else {
-		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van dit artikel in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		String msg;
+		switch(res.getCode()){
+		    case 1: case 2:
+			msg = res.getMessage();
+			break;
+		    default:
+			msg = "Er is een fout opgetreden bij het opslaan van dit artikel in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		}
+		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
         } catch (Exception e){
             System.err.println("Error: \n"+e.getMessage());

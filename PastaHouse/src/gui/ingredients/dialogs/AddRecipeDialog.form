@@ -232,7 +232,7 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="save">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Opslaan"/>
+                    <Property name="text" type="java.lang.String" value="Aanmaken"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                   <Events>

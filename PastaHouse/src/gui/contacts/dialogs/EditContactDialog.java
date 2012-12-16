@@ -5,6 +5,7 @@
 package gui.contacts.dialogs;
 
 import database.Database;
+import database.FunctionResult;
 import database.tables.Contact;
 import gui.contacts.delegates.EditContactDelegate;
 import gui.utilities.AcceleratorAdder;
@@ -59,13 +60,6 @@ public class EditContactDialog extends javax.swing.JDialog {
 	
 	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 	
-	if (type == Contact.supplier) {
-	    setTitle("Leverancier wijzigen");
-	    firmLabel.setText("Firma *");
-	} else {
-	    setTitle("Klant wijzigen");
-	    contactLabel.setText("Contactpersoon *");
-	}
 	
 	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
 	    @Override
@@ -135,6 +129,7 @@ public class EditContactDialog extends javax.swing.JDialog {
 
     private void loadModel() {
         txtFirma.setText(model.getFirm());
+	sortkeyOutlet.setText(model.getSortKey());
         txtContact.setText(model.getContact());
         txtAdres.setText(model.getAddress());
         // copy municipale
@@ -212,6 +207,8 @@ public class EditContactDialog extends javax.swing.JDialog {
         typeParent = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
+        sortkey = new javax.swing.JLabel();
+        sortkeyOutlet = new javax.swing.JTextField();
         firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
         contactLabel = new javax.swing.JLabel();
@@ -266,7 +263,13 @@ public class EditContactDialog extends javax.swing.JDialog {
 
         jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
 
-        jPanel2.setLayout(new java.awt.GridLayout(12, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(13, 2));
+
+        sortkey.setText("Toonnaam *");
+        sortkey.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        sortkey.setFocusable(false);
+        jPanel2.add(sortkey);
+        jPanel2.add(sortkeyOutlet);
 
         firmLabel.setText("Firma");
         firmLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
@@ -375,14 +378,14 @@ public class EditContactDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 516, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 524, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -403,7 +406,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         });
         jPanel4.add(save);
 
-        cancel.setText("Cancel");
+        cancel.setText("Terug");
         cancel.setFocusable(false);
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -421,12 +424,13 @@ public class EditContactDialog extends javax.swing.JDialog {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try{
-	    if (txtFirma.getText().isEmpty() && type == Contact.supplier || txtContact.getText().isEmpty() && type == Contact.client) {
+	    if (sortkeyOutlet.getText().isEmpty()) {
 		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    
 	    model.setFirm(txtFirma.getText());
+	    model.setSortKey(sortkeyOutlet.getText());
 	    model.setContact(txtContact.getText());
 	    model.setAddress(txtAdres.getText());
 	    model.setZipcode(txtGemeente.getText());
@@ -447,11 +451,20 @@ public class EditContactDialog extends javax.swing.JDialog {
 		model.setType("client");
 	    }
 
-	    if (model.update()) {
+	    FunctionResult res = model.update();
+	    if (res.getCode() == 0) {
 		delegate.editContact(defaultModel, model);
 		disposeLater();
 	    } else {
-		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van deze contactpersoon in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		String msg;
+		switch(res.getCode()){
+		    case 1: case 2:
+			msg = res.getMessage();
+			break;
+		    default:
+			msg = "Er is een fout opgetreden bij het opslaan van deze contactpersoon in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		}
+		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
 	} catch (Exception e){
 	    System.err.println("Error:\n");
@@ -538,6 +551,8 @@ public class EditContactDialog extends javax.swing.JDialog {
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
     private javax.swing.JButton save;
+    private javax.swing.JLabel sortkey;
+    private javax.swing.JTextField sortkeyOutlet;
     private javax.swing.JTextField taxnrOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;

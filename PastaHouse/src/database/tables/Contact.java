@@ -5,19 +5,23 @@
 package database.tables;
 
 import database.Filterable;
+import database.FunctionResult;
 import database.extra.Record;
 import database.models.ContactModel;
 import tools.Configuration;
+import tools.StringTools;
 
 /**
  *
  * @author Robin jr
  */
-public class Contact extends Record implements Filterable{
+public class Contact extends Record<Contact> implements Filterable{
     
     public static final int both = 0;
     public static final int supplier = 1;
     public static final int client = 2;
+    
+    private String sortkey;
     
     private String firm;
     private String contact;
@@ -34,8 +38,9 @@ public class Contact extends Record implements Filterable{
     private String notes;
     private String type;
 
-    private Contact(int id, String firm, String contact, String address, String zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes, String type){
+    private Contact(int id, String sortKey, String firm, String contact, String address, String zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes, String type){
 	super(id, Configuration.center().getDB_TABLE_CON());
+	this.sortkey = sortKey;
 	this.firm = firm;
 	this.contact = contact;
 	this.address = address;
@@ -53,19 +58,20 @@ public class Contact extends Record implements Filterable{
     }
     
     public Contact(Contact copy){
-	this(copy.getPrimaryKeyValue(), copy.getFirm(), copy.getContact(), copy.getAddress(), copy.getZipcode(), copy.getMunicipality(), copy.getTelephone(), copy.getTelephone2(), copy.getCellphone(), copy.getFax(), copy.getEmail(), copy.getTaxnumber(), copy.getPricecode(), copy.getNotes(), copy.getType());
+	this(copy.getPrimaryKeyValue(), copy.getSortKey(), copy.getFirm(), copy.getContact(), copy.getAddress(), copy.getZipcode(), copy.getMunicipality(), copy.getTelephone(), copy.getTelephone2(), copy.getCellphone(), copy.getFax(), copy.getEmail(), copy.getTaxnumber(), copy.getPricecode(), copy.getNotes(), copy.getType());
     }
     
-    public static Contact loadWithValues(int id, String firm, String contact, String address, String zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes, String type){
-	return new Contact(id, firm, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnumber, pricecode, notes, type);
+    public static Contact loadWithValues(int id, String sortName, String firm, String contact, String address, String zipcode, String municipality, String telephone, String telephone2, String cellphone, String fax, String email, String taxnumber, String pricecode, String notes, String type){
+	return new Contact(id, sortName, firm, contact, address, zipcode, municipality, telephone, telephone2, cellphone, fax, email, taxnumber, pricecode, notes, type);
     }
     
     public static Contact createFromModel(int id, ContactModel model){
-	return new Contact(id, model.getFirm(), model.getContact(), model.getAddress(), model.getZipcode(), model.getMunicipality(), model.getTelephone(), model.getTelephone2(), model.getCellphone(), model.getFax(), model.getEmail(), model.getTaxnumber(), model.getPricecode(), model.getNotes(), model.getType());
+	return new Contact(id, model.getSortKey(), model.getFirm(), model.getContact(), model.getAddress(), model.getZipcode(), model.getMunicipality(), model.getTelephone(), model.getTelephone2(), model.getCellphone(), model.getFax(), model.getEmail(), model.getTaxnumber(), model.getPricecode(), model.getNotes(), model.getType());
     }
     
     public void copy(Contact copy){
 	firm = copy.getFirm();
+	sortkey = copy.getSortKey();
 	contact = copy.getContact();
 	address = copy.getAddress();
 	zipcode = copy.getZipcode(); 
@@ -198,16 +204,21 @@ public class Contact extends Record implements Filterable{
     }
     
     public String getSortKey(){
-	return isSupplier() ? firm : contact;
+	return sortkey;
+	//return StringTools.capitalizeEach(isSupplier() ? firm : contact);
+    }
+    
+    public void setSortKey(String sortKey){
+	this.sortkey = sortKey;
     }
     
     @Override
     public String toString(){
-	return getSortKey();
+	return StringTools.capitalizeEach(getSortKey());
     }
     
     public String getFullRepresentation(){
-	return isSupplier() ? firm+" (L)" : contact+" (K)";
+	return StringTools.capitalizeEach(getSortKey() + (isSupplier() ? " (L)" : " (K)"));
     }
 
     @Override
@@ -216,9 +227,10 @@ public class Contact extends Record implements Filterable{
     }
     
     @Override
-    public boolean update() {
+    public FunctionResult<Contact> update() {
 	return database.Database.driver().executeUpdate(Configuration.center().getDB_TABLE_CON(), getPrimaryKey(), getPrimaryKeyValue(), 
 		"firm = "+ (firm.length()>0 ? "\""+ firm +"\"":"NULL")+", "
+		+ "sortkey = "+(sortkey.length()>0 ? "\""+ sortkey +"\"":"NULL")+", "
 		+ "contact = "+(contact.length()>0 ? "\""+ contact +"\"":"NULL")+", "
 		+ "address = "+(address.length()>0 ?"\""+address +"\"":"NULL")+", "
 		+ "zipcode = "+(zipcode.length()>0? "\""+zipcode +"\"":"\"\"")+", "

@@ -6,6 +6,7 @@ package gui.ingredients.dialogs;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
+import database.FunctionResult;
 import database.tables.BasicIngredient;
 import database.tables.Contact;
 import gui.contacts.delegates.AddContactDelegate;
@@ -635,11 +636,20 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
 	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
 
-	    if(model.update()){
+	    FunctionResult res = model.update();
+	    if(res.getCode() == 0){
 		delegate.editBasicIngredient(model, defaultModel);
 		disposeLater();
 	    } else {
-		JOptionPane.showMessageDialog(null, "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank.", "Fout!", JOptionPane.ERROR_MESSAGE);
+		String msg;
+		switch(res.getCode()){
+		    case 1: case 2:
+			msg = res.getMessage();
+			break;
+		    default:
+			msg = "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		}
+		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
 	} catch (Exception ex) {
 	    System.err.println(ex.getMessage());

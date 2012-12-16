@@ -5,6 +5,7 @@
 package database.tables;
 
 import database.Database;
+import database.FunctionResult;
 import database.extra.Component;
 import database.extra.Ingredient;
 import database.models.RecipeModel;
@@ -145,12 +146,12 @@ public class Recipe extends Ingredient {
     }
     
     @Override
-    public boolean update(){
+    public FunctionResult<Recipe> update(){
         try {
             return Database.driver().updateRecipe(this);
         } catch (SQLException ex) {
             Logger.getLogger(Recipe.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            return new FunctionResult<Recipe>(2, null, ex.getMessage());
         }
     }
     

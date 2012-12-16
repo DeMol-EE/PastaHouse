@@ -13,10 +13,12 @@ import database.extra.Record;
 public class FunctionResult<Type extends Record> {
     private final int code;
     private final Type obj;
+    private final String msg;
 
-    public FunctionResult(int code, Type obj) {
+    public FunctionResult(int code, Type obj, String msg){
 	this.code = code;
 	this.obj = obj;
+	this.msg = msg;
     }
 
     public int getCode() {
@@ -25,5 +27,9 @@ public class FunctionResult<Type extends Record> {
 
     public Type getObj() {
 	return obj;
+    }
+    
+    public String getMessage(){
+	return msg;
     }
 }

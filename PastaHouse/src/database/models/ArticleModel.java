@@ -75,7 +75,7 @@ public class ArticleModel implements Model{
 	    return Database.driver().addArticle(this);
 	} catch (SQLException ex) {
 	    System.err.println("Exception:\n"+ex.getMessage());
-	    return new FunctionResult<Article>(3, null);
+	    return new FunctionResult<Article>(3, null, ex.getMessage());
 	}
     }
     

@@ -6,6 +6,7 @@ package database.tables;
 
 import database.Database;
 import database.Filterable;
+import database.FunctionResult;
 import database.extra.Record;
 import database.models.ArticleModel;
 import tools.Configuration;
@@ -14,7 +15,7 @@ import tools.Configuration;
  *
  * @author Robin jr
  */
-public class Article extends Record implements Filterable{
+public class Article extends Record<Article> implements Filterable{
     private String code;
     private String name;
     private double priceA;
@@ -124,7 +125,7 @@ public class Article extends Record implements Filterable{
     }
 
     @Override
-    public boolean update() {
+    public FunctionResult<Article> update() {
 	return Database.driver().executeUpdate(getTableName(), getPrimaryKey(), getPrimaryKeyValue(),  
 		"name = "+(name.length()>0 ? "\""+ name +"\"":"NULL")+", "
 		+ "code = "+(code.length()>0 ?"\""+code +"\"":"NULL")+", "
