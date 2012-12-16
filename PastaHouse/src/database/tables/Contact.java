@@ -218,7 +218,8 @@ public class Contact extends Record<Contact> implements Filterable{
     }
     
     public String getFullRepresentation(){
-	return StringTools.capitalizeEach(getSortKey() + (isSupplier() ? " (L)" : " (K)"));
+	return StringTools.capitalizeEach(getSortKey());
+//	return StringTools.capitalizeEach((isSupplier() ? "(L) " : "(K) ") + getSortKey());
     }
 
     @Override

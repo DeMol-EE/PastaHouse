@@ -71,20 +71,22 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 		JLabel label = new JLabel();
 		label.setOpaque(true);
 		
-		if (value instanceof Contact) {
-		    Contact c = (Contact) value;
-		    label.setText(c.getFullRepresentation());
-		} else {
-		    label.setText("Error: contact list cell renderer received non-contact value to display");
+		if (!(value instanceof Contact)) {
+		    label.setText("Error: contact list cell renderer received non-contact value to display");   
+		    return label;
 		}
 		
+		Contact c = (Contact) value;
+		label.setText(c.getFullRepresentation());
+		
 		label.setBorder(BorderFactory.createEmptyBorder());
+	
 		if (isSelected) {
 		    label.setForeground(list.getSelectionForeground());
 		    label.setBackground(list.getSelectionBackground());
 		} else {
 		    label.setForeground(list.getForeground());
-		    label.setBackground(Color.white);
+		    label.setBackground(c.isSupplier()? new Color(255, 229, 204) : new Color(204, 255, 204));
 		}
 		
 		return label;
