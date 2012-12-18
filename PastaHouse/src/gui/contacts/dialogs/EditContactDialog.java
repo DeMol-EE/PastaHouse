@@ -271,6 +271,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         jPanel2.setLayout(new java.awt.GridLayout(13, 2));
 
         sortkey.setText("Toonnaam *");
+        sortkey.setToolTipText("Het veld \"toonnaam\" wordt gebruikt om contactpersonen te sorteren. Het dient uniek te zijn. Contactpersonen zullen in alle lijsten verschijnen onder de waarde van dit attribuut.");
         sortkey.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         sortkey.setFocusable(false);
         jPanel2.add(sortkey);

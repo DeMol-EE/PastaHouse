@@ -13,6 +13,7 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import resources.ImagePanelBean;
 import tools.Configuration;
@@ -35,9 +36,13 @@ public class ApplicationInvoices extends javax.swing.JFrame {
      * Creates new form ApplicationInvoices
      */
     public ApplicationInvoices() {
-        initComponents();
+	initComponents();
         setLocationRelativeTo(null);
         setTitle("Pasta House");
+	
+	ToolTipManager.sharedInstance().setInitialDelay(0);
+	ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
+	ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
 	
 	rtvc = new RecipeTabbedViewController(this);
         itvc = new InvoiceTabbedViewController(this);

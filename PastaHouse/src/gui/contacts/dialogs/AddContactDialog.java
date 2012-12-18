@@ -181,6 +181,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         jPanel2.setLayout(new java.awt.GridLayout(13, 2));
 
         sortkey.setText("Toonnaam *");
+        sortkey.setToolTipText("Het veld \"toonnaam\" wordt gebruikt om contactpersonen te sorteren. Het dient uniek te zijn. Contactpersonen zullen in alle lijsten verschijnen onder de waarde van dit attribuut.");
         sortkey.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(sortkey);
         jPanel2.add(sortkeyOutlet);
@@ -271,6 +272,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         jScrollPane2.setName(""); // NOI18N
 
         notesOutlet.setColumns(20);
+        notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         notesOutlet.setRows(5);
         jScrollPane2.setViewportView(notesOutlet);
 
