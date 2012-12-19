@@ -5,25 +5,34 @@
 package gui.invoices.controllers;
 
 import database.Database;
-import database.tables.Contact;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
-import gui.NoResultsPanel;
-import gui.utilities.TextFieldAutoHighlighter;
-import gui.utilities.table.InvoiceItemTableModel;
+import gui.utilities.table.CustomColumnFactory;
+import gui.utilities.table.InvoiceFiltering;
+import gui.utilities.table.InvoiceRendering;
 import gui.utilities.table.InvoiceTableModel;
 import java.awt.BorderLayout;
-import java.util.ArrayList;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
-import tools.Utilities;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTableHeader;
+import org.jdesktop.beans.*;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import static org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
@@ -34,38 +43,24 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private Map<String, RowFilter<Object, Object>> filters;
     private TableRowSorter<InvoiceTableModel> sorter;
     private InvoiceTableModel tableModel;
-    
+    private JXTable table;
+    private JTextField filterField;
+    private InvoiceFiltering filterController;
+    private JPanel controlPanel;
+
     /**
      * Creates new form InvoiceViewController
      */
     public InvoiceViewController() {
-	initComponents();
-	
-	tableModel = new InvoiceTableModel(Database.driver().getInvoicesByNumber());
-	
-	invoiceTableOutlet.setModel(tableModel);
-	
-	invoiceTableOutlet.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-	    @Override
-	    public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-		    updateDetail(tableModel.getInvoiceAtRow(invoiceTableOutlet.getSelectedRow()));
-		}
-	    }
-	});
-	
-	filters = new HashMap<String, RowFilter<Object, Object>>();
-	sorter = new TableRowSorter<InvoiceTableModel>(tableModel);
-	
-	invoiceTableOutlet.setRowSorter(sorter);
-	invoiceTableOutlet.setRowHeight(invoiceTableOutlet.getRowHeight()+Utilities.fontSize()-10);
-	
-//	articleTableOutlet.setRowHeight(articleTableOutlet.getRowHeight()+Utilities.fontSize()-10);
-	
-//	invoiceTableOutlet.setRowSelectionInterval(0, 0);
-	
-	TextFieldAutoHighlighter.installHighlighter(clientFilterOutlet);
+        initComponents();
+        controlPanel = createControlPanel(); 
+        tablePanel.add(controlPanel, BorderLayout.NORTH);
+        table = createXTable();
+        JScrollPane scrollpane = new JScrollPane(table);
+        table.setName("invoiceTable");
+        tablePanel.add(scrollpane, BorderLayout.CENTER); 
+        configureDisplayProperties();
+        bind();
     }
 
     /**
@@ -79,10 +74,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         noResultOutlet = new javax.swing.JLabel();
         filterPanel = new javax.swing.JPanel();
-        numberFilterOutlet = new javax.swing.JTextField();
-        clientFilterOutlet = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        invoiceTableOutlet = new javax.swing.JTable();
+        tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         invoices = new javax.swing.JButton();
@@ -94,38 +86,11 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         setLayout(new java.awt.BorderLayout());
 
         filterPanel.setLayout(new java.awt.GridLayout(1, 2));
-
-        numberFilterOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                numberFilterOutletKeyReleased(evt);
-            }
-        });
-        filterPanel.add(numberFilterOutlet);
-
-        clientFilterOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                clientFilterOutletKeyReleased(evt);
-            }
-        });
-        filterPanel.add(clientFilterOutlet);
-
         add(filterPanel, java.awt.BorderLayout.NORTH);
         filterPanel.getAccessibleContext().setAccessibleName("");
 
-        invoiceTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2"
-            }
-        ));
-        jScrollPane1.setViewportView(invoiceTableOutlet);
-
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        tablePanel.setLayout(new java.awt.BorderLayout());
+        add(tablePanel, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -154,83 +119,21 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateFilter(){
-	List<RowFilter<Object, Object>> filters_ = new ArrayList<RowFilter<Object, Object>>();
-	
-	for (RowFilter<Object, Object> rowFilter : filters.values()) {
-	    if (rowFilter!=null) {
-		filters_.add(rowFilter);
-	    }
-	}
-	
-	sorter.setRowFilter(RowFilter.andFilter(filters_));
-		
-//	if (invoiceTableOutlet.getRowCount() == 0) {
-//	    System.out.println("There are no results");
-//	    detail.remove(results);
-//	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
-//	} else {
-//	    invoiceTableOutlet.setRowSelectionInterval(0, 0);
-//	    detail.removeAll();
-//	    detail.add(results);
-//	}
-	validate();
-	repaint();
-    }
-    
-    private void numberFilterOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFilterOutletKeyReleased
-        if (!numberFilterOutlet.getText().isEmpty()) {
-	    filters.put("date", RowFilter.regexFilter(numberFilterOutlet.getText(), 0));
-	} else {
-	    filters.put("date", null);
-	}
-	
-	updateFilter();
-	
-    }//GEN-LAST:event_numberFilterOutletKeyReleased
-
-    private void clientFilterOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clientFilterOutletKeyReleased
-        if (!clientFilterOutlet.getText().isEmpty()) {
-	    filters.put("client", RowFilter.regexFilter(clientFilterOutlet.getText(), 1));
-	} else {
-	    filters.put("client", null);
-	}
-	
-	updateFilter();
-    }//GEN-LAST:event_clientFilterOutletKeyReleased
-
     private void invoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoicesActionPerformed
-//        if(listOutlet.getSelectedValue()!=null) parent.switchToInvoicesAndFilterByClient((Contact)listOutlet.getSelectedValue());
     }//GEN-LAST:event_invoicesActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-//        final ClientViewController me = this;
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(listOutlet.getSelectedValue()!=null) EditContactDialog.createClientDialog(me, (Contact)listOutlet.getSelectedValue()).setVisible(true);
-//            }
-//        });
     }//GEN-LAST:event_editActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField clientFilterOutlet;
     private javax.swing.JButton edit;
     private javax.swing.JPanel filterPanel;
-    private javax.swing.JTable invoiceTableOutlet;
     private javax.swing.JButton invoices;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel noResultOutlet;
-    private javax.swing.JTextField numberFilterOutlet;
+    private javax.swing.JPanel tablePanel;
     // End of variables declaration//GEN-END:variables
 
-    public void filterByClient(Contact c){
-	clientFilterOutlet.setText(c.getSortKey());
-	clientFilterOutletKeyReleased(null);
-    }
-    
     @Override
     public void updateDetail(Invoice value) {
 //	clientOutlet.setText(value.getClient().getSortKey());
@@ -239,19 +142,101 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 //	
 //	articleTableOutlet.setModel(new InvoiceItemTableModel(value.items()));
     }
-    
-    @Override
-    public void electFirstResponder() {
-	invoiceTableOutlet.requestFocus();
-    }
 
     @Override
     public JPanel view() {
-	return this;
+        return this;
     }
 
     @Override
     public JMenu menu() {
-	return null;
+        return null;
+    }
+
+    private JXTable createXTable() {
+        JXTable table = new JXTable() {
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JXTableHeader(columnModel) {
+                    @Override
+                    public void updateUI() {
+                        super.updateUI();
+                        // need to do in updateUI to survive toggling of LAF 
+                        if (getDefaultRenderer() instanceof JLabel) {
+                            ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
+                        }
+                    }
+                    //                    </snip> 
+                };
+            }
+        };
+        return table;
+    }
+
+    protected JPanel createControlPanel() {
+        JPanel controlPanel = new JPanel();
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
+        controlPanel.setLayout(gridbag);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.insets = new Insets(20, 10, 0, 10);
+        c.anchor = GridBagConstraints.SOUTHWEST;
+        JLabel searchLabel = new JLabel();
+        searchLabel.setName("searchLabel");
+        controlPanel.add(searchLabel, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        c.weightx = 1.0;
+        c.insets.top = 0;
+        c.insets.bottom = 12;
+        c.anchor = GridBagConstraints.SOUTHWEST;
+        //c.fill = GridBagConstraints.HORIZONTAL; 
+        filterField = new JTextField(24);
+        controlPanel.add(filterField, c);
+
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        //c.insets.right = 24; 
+        //c.insets.left = 12; 
+        c.weightx = 0.0;
+        c.anchor = GridBagConstraints.EAST;
+        c.fill = GridBagConstraints.NONE;
+
+        return controlPanel;
+    }
+
+    private void bind() {
+        tableModel = new InvoiceTableModel(Database.driver().getInvoicesById());
+        table.setModel(tableModel);
+        filterController = new InvoiceFiltering(table);
+        BindingGroup filterGroup = new BindingGroup();
+        filterGroup.addBinding(Bindings.createAutoBinding(READ,
+                filterField, BeanProperty.create("text"),
+                filterController, BeanProperty.create("filterString")));
+        filterGroup.addBinding(Bindings.createAutoBinding(READ,
+                filterController, BeanProperty.create("filterString"),
+                this, BeanProperty.create("statusContent")));
+        filterGroup.bind();
+    }
+
+    @Override
+    public void electFirstResponder() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private void configureDisplayProperties() {
+        table.setColumnControlVisible(true);
+        table.setShowGrid(false, false);
+        table.addHighlighter(HighlighterFactory.createSimpleStriping());
+        table.setVisibleRowCount(10);
+        CustomColumnFactory factory = new CustomColumnFactory();
+        InvoiceRendering.configureColumnFactory(factory, getClass());
+        table.setColumnFactory(factory);
     }
 }
