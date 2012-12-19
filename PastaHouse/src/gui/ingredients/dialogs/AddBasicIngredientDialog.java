@@ -142,7 +142,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 
         fixedFields.setLayout(new java.awt.GridLayout(8, 2, -1, 0));
 
-        jLabel1.setText("Naam *");
+        jLabel1.setText("Ingrediënt *");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
@@ -168,7 +168,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 
         jPanel7.setLayout(new java.awt.BorderLayout());
 
-        jLabel4.setText("Leverancier");
+        jLabel4.setText("Leverancier *");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel4.setFocusable(false);
         jPanel7.add(jLabel4, java.awt.BorderLayout.CENTER);

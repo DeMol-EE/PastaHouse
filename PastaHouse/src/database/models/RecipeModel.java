@@ -93,7 +93,7 @@ public class RecipeModel implements Model{
 	}
 	
 //	return Math.abs(netWeight-0.0)>0.0001 ? returnMe/netWeight : 0.0;
-	return getGrossWeight()==0 ? 0 : returnMe/getGrossWeight();
+	return getNetWeight()==0 ? 0 : returnMe/getNetWeight();
     }
     
     @Override

@@ -192,7 +192,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 3));
 
-        jLabel1.setText("Naam *");
+        jLabel1.setText("Ingrediënt *");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
@@ -223,7 +223,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 
         jPanel10.setLayout(new java.awt.BorderLayout());
 
-        jLabel4.setText("Leverancier");
+        jLabel4.setText("Leverancier *");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel4.setFocusable(false);
         jPanel10.add(jLabel4, java.awt.BorderLayout.CENTER);

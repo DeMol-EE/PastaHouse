@@ -240,7 +240,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 2));
 
-        jLabel1.setText("Naam");
+        jLabel1.setText("Ingrediënt");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel1.setFocusable(false);
         fixedFields.add(jLabel1);
