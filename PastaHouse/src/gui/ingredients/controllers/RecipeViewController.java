@@ -123,9 +123,10 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel5 = new javax.swing.JPanel();
         nameOutlet = new javax.swing.JLabel();
         dateOutlet = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        preparationOutlet = new javax.swing.JTextArea();
+        jSplitPane2 = new javax.swing.JSplitPane();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        ingredientsOutlet = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         grossWeightOutlet = new javax.swing.JLabel();
@@ -133,13 +134,14 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         netWeightOutlet = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         pricePerWeightOutlet = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        preparationOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel2 = new javax.swing.JPanel();
         print = new javax.swing.JButton();
         edit = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        ingredientsOutlet = new javax.swing.JTable();
 
         editMenu.setText("Edit");
 
@@ -222,32 +224,32 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
         container.add(jPanel5, java.awt.BorderLayout.NORTH);
 
-        jPanel7.setFocusable(false);
-        jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
-        jPanel7.setLayout(new java.awt.BorderLayout());
+        jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
-        jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Bereiding:"));
-        jScrollPane3.setFocusable(false);
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
-        preparationOutlet.setBackground(new java.awt.Color(240, 240, 240));
-        preparationOutlet.setColumns(20);
-        preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        preparationOutlet.setRows(5);
-        preparationOutlet.setFocusable(false);
-        preparationOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                preparationOutletKeyTyped(evt);
-            }
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                preparationOutletKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                preparationOutletKeyReleased(evt);
-            }
-        });
-        jScrollPane3.setViewportView(preparationOutlet);
+        jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
+        jScrollPane4.setFocusable(false);
+        jScrollPane4.setMinimumSize(new java.awt.Dimension(33, 200));
 
-        jPanel7.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        ingredientsOutlet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        ingredientsOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        ingredientsOutlet.setFocusable(false);
+        ingredientsOutlet.setRowSelectionAllowed(false);
+        ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
+        jScrollPane4.setViewportView(ingredientsOutlet);
+
+        jPanel3.add(jScrollPane4, java.awt.BorderLayout.CENTER);
 
         jPanel6.setFocusable(false);
         jPanel6.setLayout(new java.awt.GridLayout(3, 2));
@@ -286,7 +288,36 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         pricePerWeightOutlet.setFocusable(false);
         jPanel6.add(pricePerWeightOutlet);
 
-        jPanel7.add(jPanel6, java.awt.BorderLayout.NORTH);
+        jPanel3.add(jPanel6, java.awt.BorderLayout.SOUTH);
+
+        jSplitPane2.setTopComponent(jPanel3);
+
+        jPanel7.setFocusable(false);
+        jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Bereiding:"));
+        jScrollPane3.setFocusable(false);
+
+        preparationOutlet.setBackground(new java.awt.Color(240, 240, 240));
+        preparationOutlet.setColumns(20);
+        preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
+        preparationOutlet.setRows(5);
+        preparationOutlet.setFocusable(false);
+        preparationOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                preparationOutletKeyTyped(evt);
+            }
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                preparationOutletKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                preparationOutletKeyReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(preparationOutlet);
+
+        jPanel7.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
         jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -319,29 +350,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        container.add(jPanel7, java.awt.BorderLayout.SOUTH);
+        jSplitPane2.setBottomComponent(jPanel7);
 
-        jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
-        jScrollPane4.setFocusable(false);
-
-        ingredientsOutlet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
-        ingredientsOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        ingredientsOutlet.setFocusable(false);
-        ingredientsOutlet.setRowSelectionAllowed(false);
-        ingredientsOutlet.setSurrendersFocusOnKeystroke(true);
-        jScrollPane4.setViewportView(ingredientsOutlet);
-
-        container.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        container.add(jSplitPane2, java.awt.BorderLayout.CENTER);
 
         detail.add(container, java.awt.BorderLayout.CENTER);
 
@@ -404,6 +415,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -411,6 +423,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JPanel master;
     private javax.swing.JLabel nameOutlet;
     private javax.swing.JLabel netWeightOutlet;

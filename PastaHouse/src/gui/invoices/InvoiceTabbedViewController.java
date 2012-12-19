@@ -145,7 +145,7 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
 
     public void switchToInvoicesAndFilterByClient(Contact c){
 	tabController.setSelectedIndex(invoicesTabIndex);
-	((InvoiceViewController)tabs.get(invoicesTabIndex)).filterByClient(c);
+	//((InvoiceViewController)tabs.get(invoicesTabIndex)).filterByClient(c);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
