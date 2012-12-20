@@ -43,70 +43,70 @@ public class AddContactDialog extends javax.swing.JDialog {
     private AddContactDialog(java.awt.Frame parent, boolean modal, AddContactDelegate delegate, int type) {
         super(parent, modal);
         initComponents();
-        
+
         this.setLocationRelativeTo(null);
         this.delegate = delegate;
-	this.model = new ContactModel("supplier");
-	this.type = type;
+        this.model = new ContactModel("supplier");
+        this.type = type;
         loadModel();
-	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
-	
-	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
-	
-	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		addActionPerformed(e);
-	    }
-	});
-	
-	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		cancelActionPerformed(e);
-	    }
-	});
+        this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+
+        typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
+
+        AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addActionPerformed(e);
+            }
+        });
+
+        AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancelActionPerformed(e);
+            }
+        });
     }
-    
+
     private AddContactDialog(java.awt.Frame parent, boolean modal, AddContactDelegate delegate) {
         super(parent, modal);
         initComponents();
         setTitle("Contactpersoon toevoegen");
         this.setLocationRelativeTo(null);
         this.delegate = delegate;
-	this.model = new ContactModel("supplier");
-	this.type = Contact.both;
+        this.model = new ContactModel("supplier");
+        this.type = Contact.both;
         loadModel();
-	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
-	typeParent.add(typeBox);
-	
-	AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		addActionPerformed(e);
-	    }
-	});
-	
-	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		cancelActionPerformed(e);
-	    }
-	});
+        this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+        typeParent.add(typeBox);
+
+        AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addActionPerformed(e);
+            }
+        });
+
+        AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancelActionPerformed(e);
+            }
+        });
     }
 
-    public static AddContactDialog createSupplierDialog(AddContactDelegate delegate){
-	return new AddContactDialog(null, true, delegate, Contact.supplier);
+    public static AddContactDialog createSupplierDialog(AddContactDelegate delegate) {
+        return new AddContactDialog(null, true, delegate, Contact.supplier);
     }
-    
-    public static AddContactDialog createClientDialog(AddContactDelegate delegate){
-	return new AddContactDialog(null, true, delegate, Contact.client);
+
+    public static AddContactDialog createClientDialog(AddContactDelegate delegate) {
+        return new AddContactDialog(null, true, delegate, Contact.client);
     }
-    
-    public static AddContactDialog createContactDialog(AddContactDelegate delegate){
-	return new AddContactDialog(null, true, delegate);
+
+    public static AddContactDialog createContactDialog(AddContactDelegate delegate) {
+        return new AddContactDialog(null, true, delegate);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -289,7 +289,7 @@ public class AddContactDialog extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -328,72 +328,73 @@ public class AddContactDialog extends javax.swing.JDialog {
         disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void disposeLater(){
-	SwingUtilities.invokeLater(new Runnable() {
-
-	    @Override
-	    public void run() {
-		dispose();
-	    }
-	});
+    private void disposeLater() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                dispose();
+            }
+        });
     }
-    
+
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         try {
-	    if (sortkeyOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-		return;
-	    }
-	    
-	    System.out.println("\""+comboGemeentes.getSelectedItem()+"\"");
-	    
-	    model.setFirm(txtFirma.getText());
-	    model.setSortKey(sortkeyOutlet.getText());
-	    model.setAddress(txtAdres.getText());
-	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
-	    model.setZipcode(txtPostcode.getText());
-	    model.setTelephone(txtTel.getText());
-	    model.setTelephone2(txtTel2.getText());
-	    model.setFax(txtFax.getText());
-	    model.setCellphone(txtGSM.getText());
-	    model.setEmail(txtEmail.getText());
-	    model.setContact(txtContact.getText());
-	    model.setNotes(notesOutlet.getText());
-	    model.setTaxnumber(taxnrOutlet.getText());
-	    model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
-	    if (type == Contact.both) {
-		model.setType(typeBox.getSelectedItem().toString());
-	    } else if (type == Contact.supplier) {
-		model.setType("supplier");
-	    } else if (type == Contact.client) {
-		model.setType("client");
-	    }
-	    
-	    FunctionResult<Contact> result = model.create();
+            if (sortkeyOutlet.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            System.out.println("\"" + comboGemeentes.getSelectedItem() + "\"");
+
+            model.setFirm(txtFirma.getText());
+            model.setSortKey(sortkeyOutlet.getText());
+            model.setAddress(txtAdres.getText());
+            model.setMunicipality(comboGemeentes.getSelectedItem().toString());
+            model.setZipcode(txtPostcode.getText());
+            model.setTelephone(txtTel.getText());
+            model.setTelephone2(txtTel2.getText());
+            model.setFax(txtFax.getText());
+            model.setCellphone(txtGSM.getText());
+            model.setEmail(txtEmail.getText());
+            model.setContact(txtContact.getText());
+            model.setNotes(notesOutlet.getText());
+            model.setTaxnumber(taxnrOutlet.getText());
+            model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
+            if (type == Contact.both) {
+                model.setType(typeBox.getSelectedItem().toString());
+            } else if (type == Contact.supplier) {
+                model.setType("supplier");
+            } else if (type == Contact.client) {
+                model.setType("client");
+            }
+
+            FunctionResult<Contact> result = model.create();
             if (result.getCode() == 0 && result.getObj() != null) {
 //		delegate.addAndSelect(result.getObj());
-		delegate.addContact(result.getObj());
-		disposeLater();
+                delegate.addContact(result.getObj());
+                disposeLater();
             } else {
                 // switch case the return code
-		String msg;
-		switch(result.getCode()){
-		    case 1: 
-			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n"+result.getMessage();
-			break;
-		    case 4: case 5:
-			msg = result.getMessage();
-			break;
-		    default: msg = "Het toevoegen van de contactpersoon is foutgelopen (code "+result.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
-		}		
-		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-		System.err.println("\"Het toevoegen van de contactpersoon heeft foutcode "+result.getCode()+" opgeleverd. Contacteer de ontwikkelaars met deze informatie.\"");
+                String msg;
+                switch (result.getCode()) {
+                    case 1:
+                        msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n" + result.getMessage();
+                        break;
+                    case 4:
+                    case 5:
+                        msg = result.getMessage();
+                        break;
+                    default:
+                        msg = "Het toevoegen van de contactpersoon is foutgelopen (code " + result.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
+                }
+                JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+                System.err.println("\"Het toevoegen van de contactpersoon heeft foutcode " + result.getCode() + " opgeleverd. Contacteer de ontwikkelaars met deze informatie.\"");
 //		disposeLater();
             }
         } catch (Exception ex) {
-	    System.err.println("Error caught");
-	    ex.printStackTrace();
-	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+            System.err.println("Error caught");
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_addActionPerformed
 
@@ -407,7 +408,9 @@ public class AddContactDialog extends javax.swing.JDialog {
                     if (munies.get(munie) == code) {
                         items.add(munie);
                     }
+                    
                 }
+                items.add("");
             }
 
         } else {
@@ -419,18 +422,12 @@ public class AddContactDialog extends javax.swing.JDialog {
 
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
         String taxnr = taxnrOutlet.getText();
-        taxnr = Utilities.getDigits(taxnr);
-        if(taxnr.length() == 9){
-            if (!Utilities.validTaxNr(taxnr)) {
-                taxnrOutlet.setForeground(Color.red);
-            }
-        } else if (taxnr.length() > 9) {
+        if (!Utilities.validTaxNr(taxnr)) {
             taxnrOutlet.setForeground(Color.red);
         } else {
             taxnrOutlet.setForeground(Color.black);
-	}
+        }
     }//GEN-LAST:event_taxnrOutletKeyReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HolderGemeentes;
     private javax.swing.JButton add;
@@ -488,13 +485,11 @@ public class AddContactDialog extends javax.swing.JDialog {
             }
         });
         comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-
-	    @Override
-	    public void keyReleased(KeyEvent e) {
-		setMunicipal();
-	    }
-	    
-	});
+            @Override
+            public void keyReleased(KeyEvent e) {
+                setMunicipal();
+            }
+        });
 
         HolderGemeentes.add(comboGemeentes);
 
@@ -504,7 +499,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         String munie = comboGemeentes.getSelectedItem().toString();
         if (munies.containsKey(munie)) {
-            txtPostcode.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
+            txtPostcode.setText(munies.get((String) comboGemeentes.getSelectedItem()).toString());
         } else {
             txtPostcode.setText("");
         }
