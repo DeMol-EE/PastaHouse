@@ -207,8 +207,17 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel10 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         nameOutlet = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        addComponent = new javax.swing.JButton();
+        removeComponent = new javax.swing.JButton();
+        newBasicIngredient = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         preparationOutlet = new javax.swing.JTextArea();
@@ -226,24 +235,83 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
         jPanel2 = new javax.swing.JPanel();
         save = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jPanel8 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        addComponent = new javax.swing.JButton();
-        removeComponent = new javax.swing.JButton();
-        newBasicIngredient = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 500));
         setPreferredSize(new java.awt.Dimension(462, 500));
+
+        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        jPanel10.setLayout(new java.awt.BorderLayout());
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
         nameOutlet.setText("<nameOutlet>");
         jPanel5.add(nameOutlet);
 
-        getContentPane().add(jPanel5, java.awt.BorderLayout.NORTH);
+        jPanel10.add(jPanel5, java.awt.BorderLayout.NORTH);
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
+
+        ingredientsOutlet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        ingredientsOutlet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        ingredientsOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ingredientsOutletKeyReleased(evt);
+            }
+        });
+        jScrollPane4.setViewportView(ingredientsOutlet);
+
+        jPanel4.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        jPanel8.setLayout(new java.awt.BorderLayout());
+
+        jPanel9.setLayout(new java.awt.GridLayout(1, 3));
+
+        addComponent.setText("Toevoegen");
+        addComponent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addComponentActionPerformed(evt);
+            }
+        });
+        jPanel9.add(addComponent);
+
+        removeComponent.setText("Verwijderen");
+        removeComponent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeComponentActionPerformed(evt);
+            }
+        });
+        jPanel9.add(removeComponent);
+
+        jPanel8.add(jPanel9, java.awt.BorderLayout.EAST);
+
+        newBasicIngredient.setText("Nieuw...");
+        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newBasicIngredientActionPerformed(evt);
+            }
+        });
+        jPanel8.add(newBasicIngredient, java.awt.BorderLayout.WEST);
+
+        jPanel4.add(jPanel8, java.awt.BorderLayout.SOUTH);
+
+        jPanel10.add(jPanel4, java.awt.BorderLayout.CENTER);
+
+        jSplitPane1.setLeftComponent(jPanel10);
 
         jPanel7.setPreferredSize(new java.awt.Dimension(176, 250));
         jPanel7.setLayout(new java.awt.BorderLayout());
@@ -316,66 +384,9 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        getContentPane().add(jPanel7, java.awt.BorderLayout.SOUTH);
+        jSplitPane1.setRightComponent(jPanel7);
 
-        jPanel4.setLayout(new java.awt.BorderLayout());
-
-        jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrediënten:"));
-
-        ingredientsOutlet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
-        ingredientsOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        ingredientsOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                ingredientsOutletKeyReleased(evt);
-            }
-        });
-        jScrollPane4.setViewportView(ingredientsOutlet);
-
-        jPanel4.add(jScrollPane4, java.awt.BorderLayout.CENTER);
-
-        jPanel8.setLayout(new java.awt.BorderLayout());
-
-        jPanel9.setLayout(new java.awt.GridLayout(1, 3));
-
-        addComponent.setText("Toevoegen");
-        addComponent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addComponentActionPerformed(evt);
-            }
-        });
-        jPanel9.add(addComponent);
-
-        removeComponent.setText("Verwijderen");
-        removeComponent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeComponentActionPerformed(evt);
-            }
-        });
-        jPanel9.add(removeComponent);
-
-        jPanel8.add(jPanel9, java.awt.BorderLayout.EAST);
-
-        newBasicIngredient.setText("Nieuw...");
-        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newBasicIngredientActionPerformed(evt);
-            }
-        });
-        jPanel8.add(newBasicIngredient, java.awt.BorderLayout.WEST);
-
-        jPanel4.add(jPanel8, java.awt.BorderLayout.SOUTH);
-
-        getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -499,6 +510,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -509,6 +521,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextField nameOutlet;
     private javax.swing.JLabel netWeightFormattedOutlet;
     private javax.swing.JTextField netWeightOutlet;
