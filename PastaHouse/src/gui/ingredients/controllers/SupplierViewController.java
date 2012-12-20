@@ -156,10 +156,10 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         ));
         jScrollPane3.setViewportView(jTable1);
 
-        editMenu.setText("Edit");
+        editMenu.setText("Acties");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        addMenuItem.setText("Add");
+        addMenuItem.setText("Toevoegen...");
         addMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMenuItemActionPerformed(evt);
@@ -168,7 +168,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         editMenu.add(addMenuItem);
 
         editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        editMenuItem.setText("Edit");
+        editMenuItem.setText("Wijzigen...");
         editMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMenuItemActionPerformed(evt);

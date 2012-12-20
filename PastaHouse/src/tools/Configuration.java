@@ -29,6 +29,7 @@ public class Configuration {
     private final String DB_TABLE_ART_kp = "table_articles";
     private final String DB_TABLE_INV_kp = "table_invoices";
     private final String DB_TABLE_INV_ART_kp = "table_invoices_articles";
+    private final String FONT_SIZE_kp = "font_size";
     
     // defaults
     private String DB_URL_d = "jdbc:sqlite:pastahouse.db";
@@ -41,6 +42,7 @@ public class Configuration {
     private String DB_TABLE_ART_d = "articles";
     private String DB_TABLE_INV_d = "invoices";
     private String DB_TABLE_INV_ART_d = "invoicesarticles";
+    private int FONT_SIZE_d = 16;
     
     // variables storing the actual values from the conf file
     private String DB_URL;
@@ -53,6 +55,7 @@ public class Configuration {
     private String DB_TABLE_ART;
     private String DB_TABLE_INV;
     private String DB_TABLE_INV_ART;
+    private int FONT_SIZE;
  
     private static Configuration center;
     
@@ -74,6 +77,7 @@ public class Configuration {
                 DB_TABLE_ART = DB_TABLE_ART_d;
                 DB_TABLE_INV = DB_TABLE_INV_d;
                 DB_TABLE_INV_ART = DB_TABLE_INV_ART_d;
+                FONT_SIZE = FONT_SIZE_d;
     
 		// write the settings to the file
 		FileWriter fstream = new FileWriter(conf);
@@ -88,6 +92,7 @@ public class Configuration {
                 out.write(DB_TABLE_ART_kp+","+DB_TABLE_ART_d+"\n");
                 out.write(DB_TABLE_INV_kp+","+DB_TABLE_INV_d+"\n");
                 out.write(DB_TABLE_INV_ART_kp+","+DB_TABLE_INV_ART_d+"\n");
+                out.write(FONT_SIZE_kp+","+FONT_SIZE_d+"\n");
 		//Close the output stream
 		out.close();
 	    } else {
@@ -108,16 +113,17 @@ public class Configuration {
 		}
 		
 		// set variables
-		DB_URL = values.containsKey(DB_URL_kp) ? values.get(DB_URL_kp) : DB_URL_d;
-		DB_TABLE_INGR = values.containsKey(DB_TABLE_INGR_kp) ? values.get(DB_TABLE_INGR_kp) : DB_TABLE_INGR_d;
-		DB_TABLE_REC = values.containsKey(DB_TABLE_REC_kp) ? values.get(DB_TABLE_REC_kp) : DB_TABLE_REC_d;
-		DB_TABLE_REC_INGR = values.containsKey(DB_TABLE_REC_INGR_kp) ? values.get(DB_TABLE_REC_INGR_kp) : DB_TABLE_REC_INGR_d;
-		DB_TABLE_REC_REC = values.containsKey(DB_TABLE_REC_REC_kp) ? values.get(DB_TABLE_REC_REC_kp) : DB_TABLE_REC_REC_d;
-		DB_TABLE_CON = values.containsKey(DB_TABLE_CON_kp) ? values.get(DB_TABLE_CON_kp) : DB_TABLE_CON_d;
-                DB_TABLE_MUNI = values.containsKey(DB_TABLE_MUNI_kp) ? values.get(DB_TABLE_MUNI_kp) : DB_TABLE_MUNI_d;
-                DB_TABLE_ART = values.containsKey(DB_TABLE_ART_kp) ? values.get(DB_TABLE_ART_kp) : DB_TABLE_ART_d;
-                DB_TABLE_INV = values.containsKey(DB_TABLE_INV_kp) ? values.get(DB_TABLE_INV_kp) : DB_TABLE_INV_d;
-                DB_TABLE_INV_ART = values.containsKey(DB_TABLE_INV_ART_kp) ? values.get(DB_TABLE_INV_ART_kp) : DB_TABLE_INV_ART_d;
+		DB_URL = values.containsKey(DB_URL_kp) ? values.get(DB_URL_kp) : getDB_URL_d();
+		DB_TABLE_INGR = values.containsKey(DB_TABLE_INGR_kp) ? values.get(DB_TABLE_INGR_kp) : getDB_TABLE_INGR_d();
+		DB_TABLE_REC = values.containsKey(DB_TABLE_REC_kp) ? values.get(DB_TABLE_REC_kp) : getDB_TABLE_REC_d();
+		DB_TABLE_REC_INGR = values.containsKey(DB_TABLE_REC_INGR_kp) ? values.get(DB_TABLE_REC_INGR_kp) : getDB_TABLE_REC_INGR_d();
+		DB_TABLE_REC_REC = values.containsKey(DB_TABLE_REC_REC_kp) ? values.get(DB_TABLE_REC_REC_kp) : getDB_TABLE_REC_REC_d();
+		DB_TABLE_CON = values.containsKey(DB_TABLE_CON_kp) ? values.get(DB_TABLE_CON_kp) : getDB_TABLE_CON_d();
+                DB_TABLE_MUNI = values.containsKey(DB_TABLE_MUNI_kp) ? values.get(DB_TABLE_MUNI_kp) : getDB_TABLE_MUNI_d();
+                DB_TABLE_ART = values.containsKey(DB_TABLE_ART_kp) ? values.get(DB_TABLE_ART_kp) : getDB_TABLE_ART_d();
+                DB_TABLE_INV = values.containsKey(DB_TABLE_INV_kp) ? values.get(DB_TABLE_INV_kp) : getDB_TABLE_INV_d();
+                DB_TABLE_INV_ART = values.containsKey(DB_TABLE_INV_ART_kp) ? values.get(DB_TABLE_INV_ART_kp) : getDB_TABLE_INV_ART_d();
+                FONT_SIZE = values.containsKey(FONT_SIZE_kp) ? Integer.parseInt(values.get(FONT_SIZE_kp)) : getFONT_SIZE_d();
 	    }
 	    
 	} catch(Exception e){
@@ -131,6 +137,61 @@ public class Configuration {
 	    center = new Configuration();
 	}
 	return center;
+    }
+
+    public String getDB_URL_d() {
+	System.err.println("Warning: loaded default value for DB_URL (DB_URL_KP not found in conf file)");
+	return DB_URL_d;
+    }
+
+    public String getDB_TABLE_INGR_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_INGR (DB_TABLE_INGR_KP not found in conf file)");
+	return DB_TABLE_INGR_d;
+    }
+
+    public String getDB_TABLE_REC_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_REC (DB_TABLE_REC_KP not found in conf file)");
+	return DB_TABLE_REC_d;
+    }
+
+    public String getDB_TABLE_REC_INGR_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_REC_INGR (DB_TABLE_REC_INGR_KP not found in conf file)");
+	return DB_TABLE_REC_INGR_d;
+    }
+
+    public String getDB_TABLE_REC_REC_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_REC_REC (DB_TABLE_REC_REC_KP not found in conf file)");
+	return DB_TABLE_REC_REC_d;
+    }
+
+    public String getDB_TABLE_CON_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_CON (DB_TABLE_CON_KP not found in conf file)");
+	return DB_TABLE_CON_d;
+    }
+
+    public String getDB_TABLE_MUNI_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_MUNI (DB_TABLE_MUNI_KP not found in conf file)");
+	return DB_TABLE_MUNI_d;
+    }
+
+    public String getDB_TABLE_ART_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_ART (DB_TABLE_ART_KP not found in conf file)");
+	return DB_TABLE_ART_d;
+    }
+
+    public String getDB_TABLE_INV_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_INV (DB_TABLE_INV_KP not found in conf file)");
+	return DB_TABLE_INV_d;
+    }
+
+    public String getDB_TABLE_INV_ART_d() {
+	System.err.println("Warning: loaded default value for DB_TABLE_INV_ART (DB_TABLE_INV_ART_KP not found in conf file)");
+	return DB_TABLE_INV_ART_d;
+    }
+
+    public int getFONT_SIZE_d() {
+	System.err.println("Warning: loaded default value for FONT_SIZE (FONT_SIZE_KP not found in conf file)");
+	return FONT_SIZE_d;
     }
 
     public String getDB_URL() {
@@ -171,5 +232,9 @@ public class Configuration {
     
     public String getDB_TABLE_INV_ART() {
 	return DB_TABLE_INV_ART;
+    }
+    
+    public int getFONT_SIZE() {
+	return FONT_SIZE;
     }
 }

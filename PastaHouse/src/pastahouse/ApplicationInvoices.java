@@ -93,13 +93,13 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         btnContacts = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        quitMenuItem = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
         homeMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         recipeMenuItem = new javax.swing.JMenuItem();
         invoiceMenuItem = new javax.swing.JMenuItem();
         contactsMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        quitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -198,6 +198,44 @@ public class ApplicationInvoices extends javax.swing.JFrame {
 
         jMenu1.setText("PastaHouse");
 
+        homeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
+        homeMenuItem.setText("Home");
+        homeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(homeMenuItem);
+        jMenu1.add(jSeparator2);
+
+        recipeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
+        recipeMenuItem.setText("Recepten");
+        recipeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recipeMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(recipeMenuItem);
+
+        invoiceMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
+        invoiceMenuItem.setText("Facturatie");
+        invoiceMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoiceMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(invoiceMenuItem);
+
+        contactsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, java.awt.event.InputEvent.SHIFT_MASK));
+        contactsMenuItem.setText("Adressenboek");
+        contactsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contactsMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(contactsMenuItem);
+        jMenu1.add(jSeparator1);
+
         quitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         quitMenuItem.setText("Quit");
         quitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -208,47 +246,6 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         jMenu1.add(quitMenuItem);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu3.setText("View");
-
-        homeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
-        homeMenuItem.setText("Home");
-        homeMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                homeMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu3.add(homeMenuItem);
-        jMenu3.add(jSeparator2);
-
-        recipeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
-        recipeMenuItem.setText("Recepten");
-        recipeMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recipeMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu3.add(recipeMenuItem);
-
-        invoiceMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
-        invoiceMenuItem.setText("Facturatie");
-        invoiceMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                invoiceMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu3.add(invoiceMenuItem);
-
-        contactsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, java.awt.event.InputEvent.SHIFT_MASK));
-        contactsMenuItem.setText("Adressenboek");
-        contactsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contactsMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu3.add(contactsMenuItem);
-
-        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -265,7 +262,6 @@ public class ApplicationInvoices extends javax.swing.JFrame {
     private void removeActiveMenus(){
 	jMenuBar1.removeAll();
 	jMenuBar1.add(jMenu1);
-	jMenuBar1.add(jMenu3);
     }
     
     private void addActiveMenus(){
@@ -384,9 +380,9 @@ public class ApplicationInvoices extends javax.swing.JFrame {
     private javax.swing.JMenuItem homeMenuItem;
     private javax.swing.JMenuItem invoiceMenuItem;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem recipeMenuItem;

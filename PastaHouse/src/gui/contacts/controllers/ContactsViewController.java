@@ -86,7 +86,8 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 		    label.setBackground(list.getSelectionBackground());
 		} else {
 		    label.setForeground(list.getForeground());
-		    label.setBackground(c.isSupplier()? new Color(255, 229, 204) : new Color(204, 255, 204));
+//		    label.setBackground(c.isSupplier()? new Color(255, 229, 204) : new Color(204, 255, 204));
+		    label.setBackground(Color.white);
 		}
 		
 		return label;
@@ -160,7 +161,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         jPanel5 = new javax.swing.JPanel();
         edit = new javax.swing.JButton();
 
-        editMenu.setText("Edit");
+        editMenu.setText("Acties");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         addMenuItem.setText("Toevoegen");

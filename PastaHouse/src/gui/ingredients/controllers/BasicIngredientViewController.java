@@ -25,8 +25,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -88,12 +86,18 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         supplierOutlet.setForeground(Color.BLUE);
         supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+	packagingOutlet.setText(StringTools.capitalize(bi.getPackaging()));
+	if (bi.isInBulk()) {
+	    pricePerUnitOutlet.setText("<n.v.t.>");
+	    weightPerUnitOutlet.setText("<n.v.t.>");
+	} else {
+	    pricePerUnitOutlet.setText(threeFormatter.format(bi.getPricePerUnit()) + " euro / " + bi.getPackaging());
+	    weightPerUnitOutlet.setText(threeFormatter.format(bi.getWeightPerUnit()) + " kg / " + bi.getPackaging());
+	}
+	
         //€-sign?
         nameOutlet.setText(StringTools.capitalize(bi.getName()));
         brandOutlet.setText(StringTools.capitalize(bi.getBrand()));
-        packagingOutlet.setText(StringTools.capitalize(bi.getPackaging()));
-        pricePerUnitOutlet.setText("" + threeFormatter.format(bi.getPricePerUnit()) + " euro / " + bi.getPackaging());
-        weightPerUnitOutlet.setText("" + threeFormatter.format(bi.getWeightPerUnit()) + " kg / " + bi.getPackaging());
         pricePerWeightOutlet.setText("" + threeFormatter.format(bi.getPricePerWeight()) + " euro / kg");
         lossPercentOutlet.setText("" + twoFormatter.format(bi.getLossPercent()) + " %");
         grossPriceOutlet.setText("" + threeFormatter.format(bi.getGrossPrice()) + " euro / kg");
@@ -154,14 +158,14 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         nameOutlet = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         brandOutlet = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        packagingOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         supplierOutlet = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        pricePerUnitOutlet = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        packagingOutlet = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         weightPerUnitOutlet = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        pricePerUnitOutlet = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         pricePerWeightOutlet = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -181,10 +185,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
 
-        editMenu.setText("Edit");
+        editMenu.setText("Acties");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        addMenuItem.setText("Add");
+        addMenuItem.setText("Toevoegen...");
         addMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMenuItemActionPerformed(evt);
@@ -193,7 +197,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu.add(addMenuItem);
 
         editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        editMenuItem.setText("Edit");
+        editMenuItem.setText("Wijzigen...");
         editMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMenuItemActionPerformed(evt);
@@ -264,21 +268,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         brandOutlet.setOpaque(true);
         fixedFields.add(brandOutlet);
 
-        jLabel6.setText("Verpakking");
-        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel6.setFocusable(false);
-        fixedFields.add(jLabel6);
-
-        packagingOutlet.setText("<packagingOutlet>");
-        packagingOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        packagingOutlet.setFocusable(false);
-        fixedFields.add(packagingOutlet);
-
         jLabel3.setBackground(new java.awt.Color(239, 239, 239));
         jLabel3.setText("Leverancier");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel3.setFocusable(false);
-        jLabel3.setOpaque(true);
         fixedFields.add(jLabel3);
 
         supplierOutlet.setBackground(new java.awt.Color(239, 239, 239));
@@ -287,7 +280,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         supplierOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         supplierOutlet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         supplierOutlet.setFocusable(false);
-        supplierOutlet.setOpaque(true);
         supplierOutlet.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 supplierOutletMouseReleased(evt);
@@ -301,29 +293,45 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         });
         fixedFields.add(supplierOutlet);
 
-        jLabel10.setText("Prijs per verpakking (BTW excl)");
-        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel10.setFocusable(false);
-        fixedFields.add(jLabel10);
+        jLabel6.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel6.setText("Verpakking");
+        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel6.setFocusable(false);
+        jLabel6.setOpaque(true);
+        fixedFields.add(jLabel6);
 
-        pricePerUnitOutlet.setText("<pricePerUnitOutlet>");
-        pricePerUnitOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        pricePerUnitOutlet.setFocusable(false);
-        fixedFields.add(pricePerUnitOutlet);
+        packagingOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        packagingOutlet.setText("<packagingOutlet>");
+        packagingOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        packagingOutlet.setFocusable(false);
+        packagingOutlet.setOpaque(true);
+        fixedFields.add(packagingOutlet);
 
         jLabel8.setBackground(new java.awt.Color(239, 239, 239));
         jLabel8.setText("Gewicht per verpakking");
         jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel8.setFocusable(false);
-        jLabel8.setOpaque(true);
         fixedFields.add(jLabel8);
 
         weightPerUnitOutlet.setBackground(new java.awt.Color(239, 239, 239));
         weightPerUnitOutlet.setText("<weightPerUnitOutlet>");
         weightPerUnitOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         weightPerUnitOutlet.setFocusable(false);
-        weightPerUnitOutlet.setOpaque(true);
         fixedFields.add(weightPerUnitOutlet);
+
+        jLabel10.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel10.setText("Prijs per verpakking (BTW excl)");
+        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel10.setFocusable(false);
+        jLabel10.setOpaque(true);
+        fixedFields.add(jLabel10);
+
+        pricePerUnitOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        pricePerUnitOutlet.setText("<pricePerUnitOutlet>");
+        pricePerUnitOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        pricePerUnitOutlet.setFocusable(false);
+        pricePerUnitOutlet.setOpaque(true);
+        fixedFields.add(pricePerUnitOutlet);
 
         jLabel12.setText("Prijs per kg (BTW excl)");
         jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
