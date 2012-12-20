@@ -14,17 +14,20 @@ import gui.contacts.dialogs.AddContactDialog;
 import gui.ingredients.delegates.EditBasicIngredientDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
+import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -35,26 +38,26 @@ import tools.Utilities;
  *
  * @author Robin jr
  */
-public class EditBasicIngredientDialog extends javax.swing.JDialog implements AddContactDelegate{
+public class EditBasicIngredientDialog extends javax.swing.JDialog implements AddContactDelegate {
 
     private final BasicIngredient model;
     private final BasicIngredient defaultModel;
     private final EditBasicIngredientDelegate delegate;
-    
     private final DatePicker dp;
     private final AutocompleteCombobox supplierBox;
-    
+    private final ButtonGroup buttons;
+
     /**
      * Creates new form EditBasicIngredientDialog
      */
     public EditBasicIngredientDialog(java.awt.Frame parent, boolean modal, EditBasicIngredientDelegate delegate, BasicIngredient model) {
 	super(parent, modal);
 	initComponents();
-	
+
 	this.delegate = delegate;
 	this.model = model;
 	this.defaultModel = new BasicIngredient(model);
-	
+
 	supplierParent.removeAll();
 	List suppliers = new ArrayList();
 	suppliers.add("");
@@ -62,101 +65,193 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	supplierBox = new AutocompleteCombobox(suppliers);
 	supplierParent.add(supplierBox, BorderLayout.CENTER);
 	supplierParent.add(addSupplier, BorderLayout.EAST);
-	
+
 	setLocationRelativeTo(null);
 	setTitle("Ingrediënt wijzigen");
-	
+
+	buttons = new ButtonGroup();
+	buttons.add(bulkOutlet);
+	buttons.add(perUnitOutlet);
+	bulkOutlet.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		updatePricePanel();
+	    }
+	});
+	perUnitOutlet.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		updatePricePanel();
+	    }
+	});
+
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliersAlphabetically().values().toArray()));
-	
+
 	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
 	fixedFields.add(dp);
-	
+
 	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		saveActionPerformed(e);
 	    }
 	});
-	
+
 	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		cancelActionPerformed(e);
 	    }
 	});
-	
+
 	loadModel();
-	
+
+	TextFieldAutoHighlighter.installHighlighter(taxesOutlet);
+	TextFieldAutoHighlighter.installHighlighter(lossOutlet);
+	TextFieldAutoHighlighter.installHighlighter(pricePerWeightOutlet);
+	TextFieldAutoHighlighter.installHighlighter(pricePerUnitOutlet);
+	TextFieldAutoHighlighter.installHighlighter(weightPerUnitOutlet);
+
 	/*
 	 * Hide the unformatted fields
 	 */
-	pricePerWeightOutlet.setVisible(false);
 	grossPriceOutlet.setVisible(false);
 	netPriceOutlet.setVisible(false);
+
+	ingredientOutlet.requestFocus();
     }
-    
-    private void loadModel(){
-	nameOutlet.setText(model.getName());
+
+    private void updatePricePanel() {
+	pricePerWeightOutlet.setForeground(Color.black);
+	pricePerWeightFormattedOutlet.setForeground(Color.black);
+
+	if (bulkOutlet.isSelected()) {
+	    pricePerWeightOutlet.setText("" + model.getPricePerWeight());
+	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight()) + " euro/kg");
+
+	    packagingOutlet.setEnabled(false);
+	    weightPerUnitOutlet.setEnabled(false);
+	    weightPerUnitOutlet.setText(null);
+	    pricePerUnitOutlet.setEnabled(false);
+	    pricePerUnitOutlet.setText(null);
+	    packagingOutlet.setText(null);
+
+	    packaging.setEnabled(false);
+	    weightPerUnit.setEnabled(false);
+	    pricePerUnit.setEnabled(false);
+
+	    weightPerUnitFormattedOutlet.setText("In bulk");
+	    pricePerUnitFormattedOutlet.setText("In bulk");
+	    weightPerUnitFormattedOutlet.setForeground(Color.black);
+	    pricePerUnitFormattedOutlet.setForeground(Color.black);
+
+	    pricePerWeightOutlet.setEnabled(true);
+
+	    pricePerWeightOutlet.requestFocus();
+	} else {
+	    pricePerWeightOutlet.setText("0.0");
+	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " euro/kg");
+	    pricePerWeightOutlet.setEnabled(false);
+
+	    packaging.setEnabled(true);
+	    weightPerUnit.setEnabled(true);
+	    pricePerUnit.setEnabled(true);
+
+	    packagingOutlet.setEnabled(true);
+	    weightPerUnitOutlet.setEnabled(true);
+	    pricePerUnitOutlet.setEnabled(true);
+	    packagingOutlet.setText(model.getPackaging());
+	    weightPerUnitOutlet.setText("" + 0.0);
+	    weightPerUnitOutlet.setForeground(Color.black);
+	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " kg/" + packagingOutlet.getText());
+	    weightPerUnitFormattedOutlet.setForeground(Color.black);
+	    pricePerUnitOutlet.setText("" + 0.0);
+	    pricePerUnitOutlet.setForeground(Color.black);
+	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " euro/" + packagingOutlet.getText());
+	    pricePerUnitFormattedOutlet.setForeground(Color.black);
+
+	    packagingOutlet.requestFocus();
+	}
+
+	updateGrossPriceOutlet();
+    }
+
+    private void loadModel() {
+	ingredientOutlet.setText(model.getName());
 	brandOutlet.setText(model.getBrand());
-	packagingOutlet.setText(model.getPackaging());
 //	supplierOutlet.setSelectedItem(model.getSupplier());
-	if(model.getSupplier()!=null){
+	if (model.getSupplier() != null) {
 	    supplierBox.setSelectedItem(model.getSupplier());
 	}
-	
-	// compound fields
+	packagingOutlet.setText(model.getPackaging());
+
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	DecimalFormat twoFormatter = new DecimalFormat("0.00");
-	pricePerUnitOutlet.setText(""+model.getPricePerUnit());
-	pricePerUnitFormattedOutlet.setText(threeFormatter.format(model.getPricePerUnit())+" euro/"+model.getPackaging());
-	weightPerUnitOutlet.setText(""+model.getWeightPerUnit());
-	weightPerUnitFormattedOutlet.setText(threeFormatter.format(model.getWeightPerUnit())+" kg/"+model.getPackaging());
-	pricePerWeightOutlet.setText(""+model.getPricePerWeight());
-	pricePerWeightFormattedOutlet.setText(threeFormatter.format(model.getPricePerWeight())+" euro/kg");
-	lossOutlet.setText(""+model.getLossPercent());
-	lossFormattedOutlet.setText(twoFormatter.format(model.getLossPercent())+" %");
-	grossPriceOutlet.setText(""+model.getGrossPrice());
-	grossPriceFormattedOutlet.setText(threeFormatter.format(model.getGrossPrice())+" euro");
-	taxesOutlet.setText(""+model.getTaxes());
-	taxesFormattedOutlet.setText(twoFormatter.format(model.getTaxes())+" %");
-	netPriceOutlet.setText(""+model.getNetPrice());
-	netPriceFormattedOutlet.setText(twoFormatter.format(model.getNetPrice())+" euro");
+
+	/*
+	 * check if it is bulk or not (bulk implies -1 for ppu and wpu)
+	 */
+	if (model.getPricePerUnit() >= 0 && model.getWeightPerUnit() >= 0) {
+	    perUnitOutlet.setSelected(true);
+	} else {
+	    bulkOutlet.setSelected(true);
+	}
+
+	// compound fields
+	lossOutlet.setText("" + model.getLossPercent());
+	lossFormattedOutlet.setText(twoFormatter.format(model.getLossPercent()) + " %");
+	grossPriceOutlet.setText("" + model.getGrossPrice());
+	grossPriceFormattedOutlet.setText(threeFormatter.format(model.getGrossPrice()) + " euro");
+	taxesOutlet.setText("" + model.getTaxes());
+	taxesFormattedOutlet.setText(twoFormatter.format(model.getTaxes()) + " %");
+	netPriceOutlet.setText("" + model.getNetPrice());
+	netPriceFormattedOutlet.setText(twoFormatter.format(model.getNetPrice()) + " euro");
 	notesOutlet.setText(model.getNotes());
+
+	updatePricePanel();
     }
 
     /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
-     * content of this method is always regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        jSeparator4 = new javax.swing.JSeparator();
         detail = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        nameOutlet = new javax.swing.JTextField();
+        ingredientOutlet = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         brandOutlet = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        packagingOutlet = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         supplierParent = new javax.swing.JPanel();
         supplierOutlet = new javax.swing.JComboBox();
         addSupplier = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        pricePerUnitOutlet = new javax.swing.JTextField();
-        pricePerUnitFormattedOutlet = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        bulkOutlet = new javax.swing.JRadioButton();
+        perUnitOutlet = new javax.swing.JRadioButton();
+        packaging = new javax.swing.JLabel();
+        packagingOutlet = new javax.swing.JTextField();
+        weightPerUnit = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         weightPerUnitOutlet = new javax.swing.JTextField();
         weightPerUnitFormattedOutlet = new javax.swing.JLabel();
+        pricePerUnit = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        pricePerUnitOutlet = new javax.swing.JTextField();
+        pricePerUnitFormattedOutlet = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        pricePerWeightOutlet = new javax.swing.JLabel();
+        pricePerWeightOutlet = new javax.swing.JTextField();
         pricePerWeightFormattedOutlet = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         lossOutlet = new javax.swing.JTextField();
@@ -190,36 +285,26 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         detail.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(12, 3));
+        fixedFields.setLayout(new java.awt.GridBagLayout());
+
+        jPanel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 5, 0));
+        jPanel11.setLayout(new java.awt.GridLayout(3, 2));
 
         jLabel1.setText("Ingrediënt *");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel1.setFocusable(false);
-        fixedFields.add(jLabel1);
+        jPanel11.add(jLabel1);
 
-        nameOutlet.setText("<nameOutlet>");
-        fixedFields.add(nameOutlet);
+        ingredientOutlet.setText("<ingredientOutlet>");
+        jPanel11.add(ingredientOutlet);
 
         jLabel2.setText("Merk");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel2.setFocusable(false);
-        fixedFields.add(jLabel2);
+        jPanel11.add(jLabel2);
 
         brandOutlet.setText("<brandOutlet>");
-        fixedFields.add(brandOutlet);
-
-        jLabel6.setText("Verpakking");
-        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel6.setFocusable(false);
-        fixedFields.add(jLabel6);
-
-        packagingOutlet.setText("<packagingOutlet>");
-        packagingOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                packagingOutletKeyReleased(evt);
-            }
-        });
-        fixedFields.add(packagingOutlet);
+        jPanel11.add(brandOutlet);
 
         jPanel10.setLayout(new java.awt.BorderLayout());
 
@@ -228,7 +313,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         jLabel4.setFocusable(false);
         jPanel10.add(jLabel4, java.awt.BorderLayout.CENTER);
 
-        fixedFields.add(jPanel10);
+        jPanel11.add(jPanel10);
 
         supplierParent.setLayout(new java.awt.BorderLayout());
 
@@ -245,32 +330,42 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         });
         supplierParent.add(addSupplier, java.awt.BorderLayout.EAST);
 
-        fixedFields.add(supplierParent);
+        jPanel11.add(supplierParent);
 
-        jLabel10.setText("Prijs per verpakking (BTW excl) *");
-        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel10.setFocusable(false);
-        fixedFields.add(jLabel10);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.3;
+        fixedFields.add(jPanel11, gridBagConstraints);
 
-        jPanel1.setLayout(new java.awt.GridLayout(1, 2));
+        jPanel12.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(102, 102, 102)));
+        jPanel12.setLayout(new java.awt.GridLayout(5, 2));
 
-        pricePerUnitOutlet.setText("<pricePerUnitOutlet>");
-        pricePerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+        bulkOutlet.setText("Bulk");
+        jPanel12.add(bulkOutlet);
+
+        perUnitOutlet.setText("Verpakking");
+        jPanel12.add(perUnitOutlet);
+
+        packaging.setText("Verpakking");
+        packaging.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        packaging.setFocusable(false);
+        jPanel12.add(packaging);
+
+        packagingOutlet.setText("<packagingOutlet>");
+        packagingOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                pricePerUnitOutletKeyReleased(evt);
+                packagingOutletKeyReleased(evt);
             }
         });
-        jPanel1.add(pricePerUnitOutlet);
+        jPanel12.add(packagingOutlet);
 
-        pricePerUnitFormattedOutlet.setText("<pricePerUnitFormattedOutlet>");
-        jPanel1.add(pricePerUnitFormattedOutlet);
-
-        fixedFields.add(jPanel1);
-
-        jLabel8.setText("Gewicht per verpakking *");
-        jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel8.setFocusable(false);
-        fixedFields.add(jLabel8);
+        weightPerUnit.setText("Gewicht per verpakking *");
+        weightPerUnit.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        weightPerUnit.setFocusable(false);
+        jPanel12.add(weightPerUnit);
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -285,27 +380,63 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         weightPerUnitFormattedOutlet.setText("<weightPerUnitFormattedOutlet>");
         jPanel2.add(weightPerUnitFormattedOutlet);
 
-        fixedFields.add(jPanel2);
+        jPanel12.add(jPanel2);
+
+        pricePerUnit.setText("Prijs per verpakking (BTW excl) *");
+        pricePerUnit.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        pricePerUnit.setFocusable(false);
+        jPanel12.add(pricePerUnit);
+
+        jPanel1.setLayout(new java.awt.GridLayout(1, 2));
+
+        pricePerUnitOutlet.setText("<pricePerUnitOutlet>");
+        pricePerUnitOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pricePerUnitOutletKeyReleased(evt);
+            }
+        });
+        jPanel1.add(pricePerUnitOutlet);
+
+        pricePerUnitFormattedOutlet.setText("<pricePerUnitFormattedOutlet>");
+        jPanel1.add(pricePerUnitFormattedOutlet);
+
+        jPanel12.add(jPanel1);
 
         jLabel12.setText("Prijs per kg (BTW excl)");
         jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel12.setFocusable(false);
-        fixedFields.add(jLabel12);
+        jPanel12.add(jLabel12);
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2));
 
         pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
+        pricePerWeightOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pricePerWeightOutletKeyReleased(evt);
+            }
+        });
         jPanel5.add(pricePerWeightOutlet);
 
         pricePerWeightFormattedOutlet.setText("<pricePerWeightFormattedOutlet>");
         jPanel5.add(pricePerWeightFormattedOutlet);
 
-        fixedFields.add(jPanel5);
+        jPanel12.add(jPanel5);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.3;
+        fixedFields.add(jPanel12, gridBagConstraints);
+
+        jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        jPanel13.setLayout(new java.awt.GridLayout(5, 2));
 
         jLabel14.setText("Verliespercentage *");
         jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel14.setFocusable(false);
-        fixedFields.add(jLabel14);
+        jPanel13.add(jLabel14);
 
         jPanel6.setLayout(new java.awt.GridLayout(1, 0));
 
@@ -320,12 +451,12 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         lossFormattedOutlet.setText("<lossFormattedOutlet>");
         jPanel6.add(lossFormattedOutlet);
 
-        fixedFields.add(jPanel6);
+        jPanel13.add(jPanel6);
 
         jLabel16.setText("Totaalprijs (BTW excl)");
         jLabel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel16.setFocusable(false);
-        fixedFields.add(jLabel16);
+        jPanel13.add(jLabel16);
 
         jPanel7.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -335,12 +466,12 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         grossPriceFormattedOutlet.setText("<grossPriceFormattedOutlet>");
         jPanel7.add(grossPriceFormattedOutlet);
 
-        fixedFields.add(jPanel7);
+        jPanel13.add(jPanel7);
 
         jLabel18.setText("BTW *");
         jLabel18.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel18.setFocusable(false);
-        fixedFields.add(jLabel18);
+        jPanel13.add(jLabel18);
 
         jPanel8.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -355,12 +486,12 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         taxesFormattedOutlet.setText("<taxesFormattedOutlet>");
         jPanel8.add(taxesFormattedOutlet);
 
-        fixedFields.add(jPanel8);
+        jPanel13.add(jPanel8);
 
         jLabel20.setText("Totaalprijs");
         jLabel20.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel20.setFocusable(false);
-        fixedFields.add(jLabel20);
+        jPanel13.add(jLabel20);
 
         jPanel9.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -370,12 +501,20 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         netPriceFormattedOutlet.setText("<netPriceFormattedOutlet>");
         jPanel9.add(netPriceFormattedOutlet);
 
-        fixedFields.add(jPanel9);
+        jPanel13.add(jPanel9);
 
         jLabel22.setText("Datum");
         jLabel22.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel22.setFocusable(false);
-        fixedFields.add(jLabel22);
+        jPanel13.add(jLabel22);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.3;
+        fixedFields.add(jPanel13, gridBagConstraints);
 
         detail.add(fixedFields, java.awt.BorderLayout.NORTH);
 
@@ -423,14 +562,93 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     }// </editor-fold>//GEN-END:initComponents
 
     private void weightPerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_weightPerUnitOutletKeyReleased
-	updatePricePerWeightOutlet();
+//	updatePricePerWeightOutlet();
+	try {
+	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(weightPerUnitOutlet.getText())) + " kg/" + packagingOutlet.getText());
+	    weightPerUnitFormattedOutlet.setForeground(Color.black);
+	    weightPerUnitOutlet.setForeground(Color.black);
+	} catch (Exception e) {
+	    weightPerUnitFormattedOutlet.setText("??? kg/" + packagingOutlet.getText());
+	    weightPerUnitFormattedOutlet.setForeground(Color.red);
+	    weightPerUnitOutlet.setForeground(Color.red);
+	    System.err.println("Exception: " + e.getMessage());
+	}
+	updatePricePerWeight();
     }//GEN-LAST:event_weightPerUnitOutletKeyReleased
 
     private void pricePerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pricePerUnitOutletKeyReleased
-	updatePricePerWeightOutlet();
+//	updatePricePerWeightOutlet();
+	try {
+	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerUnitOutlet.getText())) + " euro/" + packagingOutlet.getText());
+	    pricePerUnitFormattedOutlet.setForeground(Color.black);
+	    pricePerUnitOutlet.setForeground(Color.black);
+	} catch (Exception e) {
+	    pricePerUnitFormattedOutlet.setForeground(Color.red);
+	    pricePerUnitOutlet.setForeground(Color.red);
+	    pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
+	    System.err.println("Exception: " + e.getMessage());
+	}
+	updatePricePerWeight();
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
-    private void disposeLater(){
+    private void updatePricePerUnit() {
+	try {
+	    double wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+	    double ppw = Double.parseDouble(pricePerWeightOutlet.getText());
+	    double ppu = ppw * wpu;
+	    pricePerUnitOutlet.setText("" + ppu);
+	    pricePerUnitOutlet.setForeground(Color.black);
+	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) + " euro/" + packagingOutlet.getText());
+	    pricePerUnitFormattedOutlet.setForeground(Color.black);
+	} catch (Exception e) {
+	    pricePerUnitOutlet.setText("");
+	    pricePerUnitOutlet.setForeground(Color.red);
+	    pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
+	    pricePerUnitFormattedOutlet.setForeground(Color.red);
+	}
+    }
+
+    private void updatePricePerWeight() {
+	boolean failed = false;
+
+	double wpu;
+	try {
+	    wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+	} catch (Exception e) {
+	    pricePerWeightOutlet.setText("");
+	    pricePerWeightOutlet.setForeground(Color.red);
+	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
+	    pricePerWeightFormattedOutlet.setForeground(Color.red);
+
+	    failed = true;
+	    wpu = 1.0;
+	}
+
+	double ppu;
+	try {
+	    ppu = Double.parseDouble(pricePerUnitOutlet.getText());
+	} catch (Exception e) {
+	    pricePerWeightOutlet.setText("");
+	    pricePerWeightOutlet.setForeground(Color.red);
+	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
+	    pricePerWeightFormattedOutlet.setForeground(Color.red);
+
+	    failed = true;
+	    ppu = 0.0;
+	}
+
+	if (!failed) {
+	    double ppw = ppu / wpu;
+	    pricePerWeightOutlet.setText("" + ppw);
+	    pricePerWeightOutlet.setForeground(Color.black);
+	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw) + " euro/kg");
+	    pricePerWeightFormattedOutlet.setForeground(Color.black);
+	}
+
+	updateGrossPriceOutlet();
+    }
+
+    private void disposeLater() {
 	SwingUtilities.invokeLater(new Runnable() {
 	    @Override
 	    public void run() {
@@ -438,25 +656,25 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    }
 	});
     }
-    
+
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        model.copy(defaultModel);
+	model.copy(defaultModel);
 	disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void updatePricePerWeightOutlet(){
+    private void updatePricePerWeightOutlet() {
 	boolean failed = false;
-	
+
 	double ppu;
-	try{
+	try {
 	    ppu = Double.parseDouble(pricePerUnitOutlet.getText());
 	    pricePerUnitOutlet.setForeground(Color.black);
 	    pricePerUnitFormattedOutlet.setForeground(Color.black);
-	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) +" euro/"+packagingOutlet.getText());
-	} catch(Exception e){
+	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) + " euro/" + packagingOutlet.getText());
+	} catch (Exception e) {
 	    pricePerUnitOutlet.setForeground(Color.red);
 	    pricePerUnitFormattedOutlet.setForeground(Color.red);
-	    pricePerUnitFormattedOutlet.setText("??? euro/"+packagingOutlet.getText());
+	    pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
 	    pricePerWeightOutlet.setForeground(Color.red);
 	    pricePerWeightOutlet.setText("???");
 	    pricePerWeightFormattedOutlet.setForeground(Color.red);
@@ -465,17 +683,17 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    failed = true;
 	    ppu = 0.0;
 	}
-	
+
 	double wpu;
-	try{
+	try {
 	    wpu = Double.parseDouble(weightPerUnitOutlet.getText());
 	    weightPerUnitOutlet.setForeground(Color.black);
 	    weightPerUnitFormattedOutlet.setForeground(Color.black);
-	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(wpu) +" kg/"+packagingOutlet.getText());
-	} catch(Exception e){
+	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(wpu) + " kg/" + packagingOutlet.getText());
+	} catch (Exception e) {
 	    weightPerUnitOutlet.setForeground(Color.red);
 	    weightPerUnitFormattedOutlet.setForeground(Color.red);
-	    weightPerUnitFormattedOutlet.setText("??? kg/"+packagingOutlet.getText());
+	    weightPerUnitFormattedOutlet.setText("??? kg/" + packagingOutlet.getText());
 	    pricePerWeightOutlet.setForeground(Color.red);
 	    pricePerWeightOutlet.setText("???");
 	    pricePerWeightFormattedOutlet.setForeground(Color.red);
@@ -484,29 +702,29 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    failed = true;
 	    wpu = 0.0;
 	}
-	
+
 	if (failed) {
 	    return;
 	}
-	
-	pricePerWeightOutlet.setText(""+(ppu/wpu));
+
+	pricePerWeightOutlet.setText("" + (ppu / wpu));
 	pricePerWeightOutlet.setForeground(Color.BLACK);
-	pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu/wpu)+" euro/kg");
+	pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu / wpu) + " euro/kg");
 	pricePerWeightFormattedOutlet.setForeground(Color.BLACK);
-	
+
 	updateGrossPriceOutlet();
     }
-    
-    private void updateGrossPriceOutlet(){
+
+    private void updateGrossPriceOutlet() {
 	boolean failed = false;
-	
+
 	double loss;
-	try{
+	try {
 	    loss = Double.parseDouble(lossOutlet.getText());
 	    lossOutlet.setForeground(Color.black);
 	    lossFormattedOutlet.setForeground(Color.black);
-	    lossFormattedOutlet.setText(new DecimalFormat("0.00").format(loss)+" %");
-	} catch(Exception e){
+	    lossFormattedOutlet.setText(new DecimalFormat("0.00").format(loss) + " %");
+	} catch (Exception e) {
 	    lossOutlet.setForeground(Color.red);
 	    lossFormattedOutlet.setForeground(Color.red);
 	    lossFormattedOutlet.setText("??? %");
@@ -518,14 +736,14 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    failed = true;
 	    loss = 0.0;
 	}
-	
+
 	double ppw;
-	try{
+	try {
 	    ppw = Double.parseDouble(pricePerWeightOutlet.getText());
 	    pricePerWeightOutlet.setForeground(Color.black);
 	    pricePerWeightFormattedOutlet.setForeground(Color.black);
-	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw)+" euro/kg");
-	} catch(Exception e){
+	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw) + " euro/kg");
+	} catch (Exception e) {
 	    pricePerWeightOutlet.setForeground(Color.red);
 	    pricePerWeightFormattedOutlet.setForeground(Color.red);
 	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
@@ -537,29 +755,29 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    failed = true;
 	    ppw = 0.0;
 	}
-	
+
 	if (failed) {
 	    return;
 	}
-	
-	grossPriceOutlet.setText(""+(ppw/(1.0-(0.01*loss))));
+
+	grossPriceOutlet.setText("" + (ppw / (1.0 - (0.01 * loss))));
 	grossPriceOutlet.setForeground(Color.BLACK);
 	grossPriceFormattedOutlet.setForeground(Color.BLACK);
-	grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw/(1.0-(0.01*loss)))+" euro");
-	
+	grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw / (1.0 - (0.01 * loss))) + " euro");
+
 	updateNetPriceOutlet();
     }
-    
-    private void updateNetPriceOutlet(){
+
+    private void updateNetPriceOutlet() {
 	boolean failed = false;
-	
+
 	double taxes;
-	try{
+	try {
 	    taxes = Double.parseDouble(taxesOutlet.getText());
 	    taxesOutlet.setForeground(Color.black);
 	    taxesFormattedOutlet.setForeground(Color.black);
-	    taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(taxes)+" %");
-	} catch(Exception e){
+	    taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(taxes) + " %");
+	} catch (Exception e) {
 	    taxesOutlet.setForeground(Color.red);
 	    taxesFormattedOutlet.setForeground(Color.red);
 	    taxesFormattedOutlet.setText("??? %");
@@ -570,14 +788,14 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    failed = true;
 	    taxes = 0.0;
 	}
-	
+
 	double grossPrice;
-	try{
+	try {
 	    grossPrice = Double.parseDouble(grossPriceOutlet.getText());
 	    grossPriceOutlet.setForeground(Color.black);
 	    grossPriceFormattedOutlet.setForeground(Color.black);
-	    grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(grossPrice)+" euro");
-	} catch(Exception e){
+	    grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(grossPrice) + " euro");
+	} catch (Exception e) {
 	    grossPriceOutlet.setForeground(Color.red);
 	    grossPriceFormattedOutlet.setForeground(Color.red);
 	    grossPriceFormattedOutlet.setText("??? euro");
@@ -588,53 +806,57 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    failed = true;
 	    grossPrice = 0.0;
 	}
-	
+
 	if (failed) {
 	    return;
 	}
-	
-	netPriceOutlet.setText(""+grossPrice * (1.0 + 0.01*taxes));
+
+	netPriceOutlet.setText("" + grossPrice * (1.0 + 0.01 * taxes));
 	netPriceOutlet.setForeground(Color.BLACK);
-	netPriceFormattedOutlet.setText(new DecimalFormat("0.00").format(grossPrice * (1.0 + 0.01*taxes))+" euro");
+	netPriceFormattedOutlet.setText(new DecimalFormat("0.00").format(grossPrice * (1.0 + 0.01 * taxes)) + " euro");
 	netPriceFormattedOutlet.setForeground(Color.black);
     }
-    
+
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        try{
-	    
-	    if (nameOutlet.getText().isEmpty()
-		    || weightPerUnitOutlet.getText().isEmpty()
-		    || pricePerUnitOutlet.getText().isEmpty()
+	try {
+
+	    if (ingredientOutlet.getText().isEmpty()
+		    || pricePerWeightOutlet.getText().isEmpty()
 		    || taxesOutlet.getText().isEmpty()
 		    || lossOutlet.getText().isEmpty()) {
 		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
 	    
-	    model.setName(nameOutlet.getText());
+	    model.setName(ingredientOutlet.getText());
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
-	    model.setNotes(notesOutlet.getText());
-	    Contact supp;
-	    if (supplierBox.getSelectedItem() instanceof Contact) {
-		supp = (Contact)supplierBox.getSelectedItem();
-	    } else if (supplierBox.getSelectedItem() instanceof String) {
-		String s = (String)supplierBox.getSelectedItem();
-		supp = Database.driver().getSuppliersAlphabetically().get(s.toLowerCase());
+	    model.setBrand(brandOutlet.getText());
+	    if (bulkOutlet.isSelected()) {
+		model.setPackaging("Bulk");
+		model.setWeightPerUnit(-1);
+		model.setPricePerUnit(-1);
 	    } else {
-		supp = null;
+		model.setPackaging(packagingOutlet.getText());
+		model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
+		model.setPricePerUnit(Double.parseDouble(pricePerUnitOutlet.getText()));
 	    }
-	    
+	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
+	    model.setPricePerWeight(Double.parseDouble(pricePerWeightOutlet.getText()));
+	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+	    model.setNotes(notesOutlet.getText());
+
+	    Contact supp = null;
+	    if (supplierBox.getSelectedItem() instanceof Contact) {
+		supp = (Contact) supplierBox.getSelectedItem();
+	    } else if (supplierBox.getSelectedItem() instanceof String) {
+		String s = (String) supplierBox.getSelectedItem();
+		supp = Database.driver().getSuppliersAlphabetically().get(s.toLowerCase());
+	    }
 	    if (supp == null) {
 		throw new Exception("Supplier was not found in the database!");
 	    }
-	    
+
 	    model.setSupplier(supp);
-	    model.setBrand(brandOutlet.getText());
-	    model.setPackaging(packagingOutlet.getText());
-	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
-	    model.setPricePerUnit(Double.parseDouble(pricePerUnitOutlet.getText()));
-	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
-	    model.setWeightPerUnit(Double.parseDouble(weightPerUnitOutlet.getText()));
 
 	    if (!defaultModel.getName().equalsIgnoreCase(model.getName())) {
 		if (Database.driver().getBasicIngredientsAlphabetically().containsKey(model.getName().toLowerCase())) {
@@ -642,19 +864,20 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 		    return;
 		}
 	    }
-	    
+
 	    FunctionResult res = model.update();
-	    if(res.getCode() == 0){
+	    if (res.getCode() == 0) {
 		delegate.editBasicIngredient(model, defaultModel);
 		disposeLater();
 	    } else {
 		String msg;
-		switch(res.getCode()){
-		    case 1: case 2:
+		switch (res.getCode()) {
+		    case 1:
+		    case 2:
 			msg = res.getMessage();
 			break;
 		    default:
-			msg = "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+			msg = "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
 		}
 		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
 	    }
@@ -669,32 +892,47 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     }//GEN-LAST:event_lossOutletKeyReleased
 
     private void taxesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxesOutletKeyReleased
-        updateNetPriceOutlet();
+	updateNetPriceOutlet();
     }//GEN-LAST:event_taxesOutletKeyReleased
 
     private void packagingOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_packagingOutletKeyReleased
-        //update all the formatted labels that use packaging
+	//update all the formatted labels that use packaging
 	String cppu = pricePerUnitFormattedOutlet.getText();
-	pricePerUnitFormattedOutlet.setText(cppu.substring(0, cppu.lastIndexOf("/")+1)+packagingOutlet.getText());
+	pricePerUnitFormattedOutlet.setText(cppu.substring(0, cppu.lastIndexOf("/") + 1) + packagingOutlet.getText());
 	String cwpu = weightPerUnitFormattedOutlet.getText();
-	weightPerUnitFormattedOutlet.setText(cwpu.substring(0, cwpu.lastIndexOf("/")+1)+packagingOutlet.getText());
+	weightPerUnitFormattedOutlet.setText(cwpu.substring(0, cwpu.lastIndexOf("/") + 1) + packagingOutlet.getText());
     }//GEN-LAST:event_packagingOutletKeyReleased
 
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
-        AddContactDialog.createSupplierDialog(this).setVisible(true);
+	AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
 
+    private void pricePerWeightOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pricePerWeightOutletKeyReleased
+	try {
+	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerWeightOutlet.getText())) + " euro/kg");
+	    pricePerWeightFormattedOutlet.setForeground(Color.black);
+	    pricePerWeightOutlet.setForeground(Color.black);
+	} catch (Exception e) {
+	    pricePerWeightFormattedOutlet.setForeground(Color.red);
+	    pricePerWeightOutlet.setForeground(Color.red);
+	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
+	    System.err.println("Exception: " + e.getMessage());
+	}
+//	updatePricePerUnit();
+	updateGrossPriceOutlet();
+    }//GEN-LAST:event_pricePerWeightOutletKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addSupplier;
     private javax.swing.JTextField brandOutlet;
+    private javax.swing.JRadioButton bulkOutlet;
     private javax.swing.JButton cancel;
     private javax.swing.JPanel detail;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceFormattedOutlet;
     private javax.swing.JLabel grossPriceOutlet;
+    private javax.swing.JTextField ingredientOutlet;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;
@@ -703,10 +941,11 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -716,23 +955,27 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JLabel lossFormattedOutlet;
     private javax.swing.JTextField lossOutlet;
-    private javax.swing.JTextField nameOutlet;
     private javax.swing.JLabel netPriceFormattedOutlet;
     private javax.swing.JLabel netPriceOutlet;
     private javax.swing.JTextArea notesOutlet;
+    private javax.swing.JLabel packaging;
     private javax.swing.JTextField packagingOutlet;
+    private javax.swing.JRadioButton perUnitOutlet;
+    private javax.swing.JLabel pricePerUnit;
     private javax.swing.JLabel pricePerUnitFormattedOutlet;
     private javax.swing.JTextField pricePerUnitOutlet;
     private javax.swing.JLabel pricePerWeightFormattedOutlet;
-    private javax.swing.JLabel pricePerWeightOutlet;
+    private javax.swing.JTextField pricePerWeightOutlet;
     private javax.swing.JButton save;
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JComboBox supplierOutlet;
     private javax.swing.JPanel supplierParent;
     private javax.swing.JLabel taxesFormattedOutlet;
     private javax.swing.JTextField taxesOutlet;
+    private javax.swing.JLabel weightPerUnit;
     private javax.swing.JLabel weightPerUnitFormattedOutlet;
     private javax.swing.JTextField weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
@@ -749,7 +992,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	 * Select the newly created supplier
 	 */
 	supplierBox.setSelectedItem(s);
-	
+
 	pricePerUnitOutlet.requestFocus();
     }
 }

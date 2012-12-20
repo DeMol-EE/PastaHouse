@@ -149,6 +149,10 @@ public class BasicIngredient extends Ingredient {
 	return taxes;
     }
 
+    public void setPricePerWeight(double ppw){
+	this.pricePerWeight = ppw;
+    }
+    
     @Override
     public double getPricePerWeight() {
 	return pricePerWeight;
@@ -177,8 +181,9 @@ public class BasicIngredient extends Ingredient {
 		+ "naam = "+(getName().length()>0 ? "\""+ getName() +"\"":"NULL")+", "
 		+ "merk = "+(brand.length()>0 ?"\""+brand +"\"":"NULL")+", "
 		+ "verpakking = "+(packaging.length()>0? "\""+packaging +"\"":"NULL")+", "
-		+ "prijsPerVerpakking = "+(pricePerUnit>0? "\""+pricePerUnit +"\"":"0")+", "
-		+ "gewichtPerVerpakking = "+(weightPerUnit>0? "\""+weightPerUnit +"\"":"0")+", "
+		+ "prijsPerKilo = "+(pricePerWeight>0? "\""+pricePerWeight +"\"":"0")+", "
+		+ "prijsPerVerpakking = "+pricePerUnit+", "
+		+ "gewichtPerVerpakking = "+weightPerUnit+", "
 		+ "verliespercentage = "+(lossPercent>=0? "\""+lossPercent +"\"":"0")+", "
 		+ "BTW = "+(taxes>0? "\""+taxes +"\"":"0")+", "
 		+ "datum = "+(getDate().length()>0? "\""+getDate() +"\"":"NULL")+", "
@@ -188,6 +193,10 @@ public class BasicIngredient extends Ingredient {
     @Override
     public boolean delete(){
 	return false;
+    }
+    
+    public boolean isInBulk(){
+	return pricePerUnit<0 && weightPerUnit<0;
     }
     
     @Override
