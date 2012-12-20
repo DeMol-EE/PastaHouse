@@ -66,17 +66,6 @@ public class PrintableRecipe implements Printable{
 	
 	System.out.println("PrintableRecipe:: PRINTING PAGE "+pageIndex);
 	
-//	if (!weight) {
-//	    toMake = platters * recipe.getNetWeight();
-//	}
-	
-	/*
-	 * Calculate how much we need to make in total and for each ingredient
-	 */
-//	double grossToNet = recipe.getGrossWeight()/recipe.getNetWeight();
-//	double grossToMake = grossToNet * toMake;
-//	double grossToMakeToNet = grossToMake/recipe.getNetWeight();
-	
 	double toMakeToNet = getToMakeToNet();
 	
 	// The recipe should fit on one page
@@ -101,8 +90,7 @@ public class PrintableRecipe implements Printable{
 	
 	
 //	double pageHeight = pageFormat.getImageableHeight();
-
-//	int linesPerPage = ((int) pageHeight) / lineHeight);
+//	int linesPerPage = ((int) pageHeight) / lineHeight;
 //	int numBreaks = (textLines.length - 1) / linesPerPage;
 //	int[] pageBreaks = new int[numBreaks];
 //	for (int b = 0; b < numBreaks; b++) {
@@ -266,48 +254,7 @@ public class PrintableRecipe implements Printable{
 	
 	y+=lineHeight;
 	
-//	int prepLength = recipe.getPreparation().length();
-//	
-////	System.out.println("preparation: "+recipe.getPreparation());
-////	byte[] bytes = recipe.getPreparation().getBytes();
-////	System.out.println("length: "+prepLength+", bytes: "+bytes.length);
-//	int xOffset = 0;
-//	StringBuilder sb = new StringBuilder("");
-//	for (int i = 0; i < prepLength; i++) {
-//	    char toAppend = recipe.getPreparation().charAt(i);
-////	    char toAppend = (char)bytes[i];
-//	    
-////	    System.out.println("Writing char: "+toAppend + ", w="+metrics.charWidth(toAppend));
-//	    
-//	    if (toAppend == '\n') {
-//		xOffset = 0;
-//		graphics.drawString(sb.toString(), x, y);
-//		sb = new StringBuilder();   // carry char to next line
-//		y+=lineHeight;
-//		System.out.println("newline");
-//	    } else {
-//		if (xOffset + metrics.charWidth(toAppend) < imageableWidth) {
-//		    sb.append(toAppend);
-//		    xOffset += metrics.charWidth(toAppend);
-//		} else {
-//		    xOffset = 0;
-//		    graphics.drawString(sb.toString(), x, y);
-//		    sb = new StringBuilder("");	// carry char to next line
-//		    sb.append(toAppend);
-//		    y+=lineHeight;
-//		    System.out.println("newline");
-//		}
-//	    }
-//	}
-//	// empty the remaining buffer
-//	graphics.drawString(sb.toString(), x, y);
-//	y+=lineHeight;
-//	y+=lineHeight;
-	
-//	graphics.drawString(recipe.getPreparation(), x, y);
-
 	// tell the caller that this page is part of the printed document
 	return PAGE_EXISTS;
     }
-    
 }

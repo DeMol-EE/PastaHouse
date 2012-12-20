@@ -45,7 +45,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="print">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Printen"/>
+            <Property name="text" type="java.lang.String" value="Afdrukken"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
           <Events>

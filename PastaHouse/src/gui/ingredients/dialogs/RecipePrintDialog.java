@@ -136,7 +136,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         jPanel3.setFocusable(false);
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        print.setText("Printen");
+        print.setText("Afdrukken");
         print.setFocusable(false);
         print.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
