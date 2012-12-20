@@ -36,6 +36,8 @@ public class AddContactDialog extends javax.swing.JDialog {
     private final ContactModel model;
     private int type;
     private JComboBox typeBox;
+    private boolean flag = false;
+    private final TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
 
     /**
      * Creates new form AddContactDialog
@@ -399,25 +401,21 @@ public class AddContactDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_addActionPerformed
 
     private void txtPostcodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPostcodeKeyReleased
-        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+
         ArrayList items = new ArrayList();
-        if (!txtPostcode.getText().isEmpty()) {
+        if (txtPostcode.getText().length() == 4) {
             int code = Integer.parseInt(txtPostcode.getText());
             if (munies.containsValue(code)) {
                 for (String munie : munies.keySet()) {
                     if (munies.get(munie) == code) {
-                        items.add(munie);
+                        comboGemeentes.setSelectedItem(munie);
+                        break;
                     }
-                    
                 }
-                items.add("");
-            }
-
+            } 
         } else {
-            items.add("");
-            items.addAll(munies.keySet());
+            comboGemeentes.setSelectedItem("");
         }
-        comboGemeentes.setDataList(items);
     }//GEN-LAST:event_txtPostcodeKeyReleased
 
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
@@ -473,11 +471,11 @@ public class AddContactDialog extends javax.swing.JDialog {
     private AutocompleteCombobox comboGemeentes;
 
     private void loadModel() {
-        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
         items.add("");
         items.addAll(munies.keySet());
         comboGemeentes = new AutocompleteCombobox(items);
+
         comboGemeentes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -487,7 +485,12 @@ public class AddContactDialog extends javax.swing.JDialog {
         comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                setMunicipal();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtTel.requestFocus();
+                } else {
+                    setMunicipal();
+                }
+
             }
         });
 
@@ -496,7 +499,6 @@ public class AddContactDialog extends javax.swing.JDialog {
     }
 
     private void setMunicipal() {
-        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         String munie = comboGemeentes.getSelectedItem().toString();
         if (munies.containsKey(munie)) {
             txtPostcode.setText(munies.get((String) comboGemeentes.getSelectedItem()).toString());
