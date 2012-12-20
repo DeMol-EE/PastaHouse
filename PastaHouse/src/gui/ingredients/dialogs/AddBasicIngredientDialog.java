@@ -18,6 +18,7 @@ import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -30,6 +31,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import tools.Utilities;
 
 /**
  *
@@ -82,6 +84,8 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 	    }
 	});
 
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+	
 	taxesOutlet.setText("" + 21.0);
 	taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(new Double(21.0)) + " %");
 	lossOutlet.setText("" + 0.0);

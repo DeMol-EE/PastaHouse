@@ -24,6 +24,7 @@ import gui.utilities.list.ListModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
@@ -32,6 +33,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import tools.StringTools;
+import tools.Utilities;
 
 /**
  *
@@ -64,6 +66,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
         listOutlet.setSelectedIndex(0);
 
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+	
         /*
          * If there are no ingredients, hide the ugly right detail view
          */

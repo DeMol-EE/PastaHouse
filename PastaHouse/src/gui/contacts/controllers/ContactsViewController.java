@@ -17,6 +17,7 @@ import gui.utilities.list.ContactListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -27,6 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import tools.StringTools;
+import tools.Utilities;
 
 /**
  *
@@ -98,6 +100,8 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
+	
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
 	TextFieldAutoHighlighter.installHighlighter(filter);

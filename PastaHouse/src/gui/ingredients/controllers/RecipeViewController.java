@@ -21,6 +21,7 @@ import gui.utilities.list.ListModelFactory;
 import gui.utilities.table.StaticRecipeTableModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JMenu;
@@ -59,6 +60,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	});
 	
 	recipeListOutlet.setSelectedIndex(0);
+	
+	preparationOutlet.setFont(new Font(preparationOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
 	ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	

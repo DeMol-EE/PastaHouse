@@ -13,6 +13,7 @@ import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -55,6 +56,8 @@ public class AddContactDialog extends javax.swing.JDialog {
 
         typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+	
         AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
