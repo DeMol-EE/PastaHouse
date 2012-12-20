@@ -88,7 +88,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliersAlphabetically().values().toArray()));
 
 	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
-	fixedFields.add(dp);
+	datePanel.add(dp, BorderLayout.CENTER);
 
 	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
 	    @Override
@@ -149,8 +149,6 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 
 	    pricePerWeightOutlet.requestFocus();
 	} else {
-	    pricePerWeightOutlet.setText("0.0");
-	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " euro/kg");
 	    pricePerWeightOutlet.setEnabled(false);
 
 	    packaging.setEnabled(true);
@@ -160,17 +158,34 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    packagingOutlet.setEnabled(true);
 	    weightPerUnitOutlet.setEnabled(true);
 	    pricePerUnitOutlet.setEnabled(true);
-	    packagingOutlet.setText(model.getPackaging());
-	    weightPerUnitOutlet.setText("" + 0.0);
+	    
 	    weightPerUnitOutlet.setForeground(Color.black);
-	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " kg/" + packagingOutlet.getText());
 	    weightPerUnitFormattedOutlet.setForeground(Color.black);
-	    pricePerUnitOutlet.setText("" + 0.0);
+	    
 	    pricePerUnitOutlet.setForeground(Color.black);
-	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " euro/" + packagingOutlet.getText());
 	    pricePerUnitFormattedOutlet.setForeground(Color.black);
 
-	    packagingOutlet.requestFocus();
+	    if (model.isInBulk()) {
+		packagingOutlet.setText("");
+		weightPerUnitOutlet.setText("" + 0.0);
+		pricePerUnitOutlet.setText("" + 0.0);
+		weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " kg/" + packagingOutlet.getText());
+		pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " euro/" + packagingOutlet.getText());
+		pricePerWeightOutlet.setText("0.0");
+		pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(0.0) + " euro/kg");
+		
+		packagingOutlet.requestFocus();
+	    } else {
+		packagingOutlet.setText(model.getPackaging());
+		weightPerUnitOutlet.setText(""+model.getWeightPerUnit());
+		pricePerUnitOutlet.setText("" +model.getPricePerUnit());
+		weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getWeightPerUnit()) + " kg/" + packagingOutlet.getText());
+		pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerUnit()) + " euro/" + packagingOutlet.getText());
+		pricePerWeightOutlet.setText(""+model.getPricePerWeight());
+		pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight()) + " euro/kg");
+		
+		weightPerUnitOutlet.requestFocus();
+	    }
 	}
 
 	updateGrossPriceOutlet();
@@ -269,6 +284,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         netPriceOutlet = new javax.swing.JLabel();
         netPriceFormattedOutlet = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        datePanel = new javax.swing.JPanel();
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
@@ -507,6 +523,9 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         jLabel22.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel22.setFocusable(false);
         jPanel13.add(jLabel22);
+
+        datePanel.setLayout(new java.awt.BorderLayout());
+        jPanel13.add(datePanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -926,6 +945,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     private javax.swing.JTextField brandOutlet;
     private javax.swing.JRadioButton bulkOutlet;
     private javax.swing.JButton cancel;
+    private javax.swing.JPanel datePanel;
     private javax.swing.JPanel detail;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;

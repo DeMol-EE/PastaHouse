@@ -473,6 +473,10 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
+                <Container class="javax.swing.JPanel" name="datePanel">
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                </Container>
               </SubComponents>
             </Container>
           </SubComponents>
