@@ -15,6 +15,7 @@ import gui.contacts.dialogs.EditContactDialog;
 import gui.utilities.list.SupplierListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import tools.StringTools;
+import tools.Utilities;
 
 /**
  *
@@ -53,6 +55,8 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         });
 	listOutlet.setSelectedIndex(0);
         
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+	
 	if (listModel.getSize() == 0) {
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);

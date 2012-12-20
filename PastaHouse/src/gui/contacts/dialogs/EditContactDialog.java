@@ -13,11 +13,11 @@ import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JComboBox;
@@ -61,7 +61,8 @@ public class EditContactDialog extends javax.swing.JDialog {
 
         typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 
-
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+	
         AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
             @Override
             public void actionPerformed(ActionEvent e) {

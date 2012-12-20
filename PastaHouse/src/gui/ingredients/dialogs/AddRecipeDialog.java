@@ -21,6 +21,7 @@ import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableRecipeTableModel;
 import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -94,6 +95,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);
 	this.ingredientsOutlet.setTransferHandler(new TableRowTransferHandler(this.ingredientsOutlet)); 
 	
+	preparationOutlet.setFont(new Font(preparationOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
 	nameOutlet.setText("");
 	nameLabel.setForeground(Color.red);

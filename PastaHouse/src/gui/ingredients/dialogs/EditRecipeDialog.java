@@ -21,6 +21,7 @@ import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.EditableRecipeTableModel;
 import gui.utilities.table.TableRowTransferHandler;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -91,7 +92,8 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 	    }
 	});
 	
-
+	preparationOutlet.setFont(new Font(preparationOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+	
 	List ingredients = new ArrayList();
 	ingredients.add("");
 	/*

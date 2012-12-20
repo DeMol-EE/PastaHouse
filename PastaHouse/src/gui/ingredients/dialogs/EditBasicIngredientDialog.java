@@ -19,6 +19,7 @@ import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.combobox.ComboBoxModelFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -84,6 +85,8 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 		updatePricePanel();
 	    }
 	});
+	
+	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 
 	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliersAlphabetically().values().toArray()));
 
