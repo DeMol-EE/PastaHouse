@@ -228,9 +228,9 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
-        newBasicIngredient = new javax.swing.JButton();
         addComponent = new javax.swing.JButton();
         removeComponent = new javax.swing.JButton();
+        newBasicIngredient = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 500));
@@ -266,7 +266,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
         jLabel4.setText("  Gewicht na bereiding *");
         jPanel6.add(jLabel4);
 
-        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         netWeightOutlet.setText("<netWeightOutlet>");
         netWeightOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -345,14 +345,6 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 
         jPanel9.setLayout(new java.awt.GridLayout(1, 3));
 
-        newBasicIngredient.setText("Nieuw...");
-        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newBasicIngredientActionPerformed(evt);
-            }
-        });
-        jPanel9.add(newBasicIngredient);
-
         addComponent.setText("Toevoegen");
         addComponent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -370,6 +362,14 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
         jPanel9.add(removeComponent);
 
         jPanel8.add(jPanel9, java.awt.BorderLayout.EAST);
+
+        newBasicIngredient.setText("Nieuw...");
+        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newBasicIngredientActionPerformed(evt);
+            }
+        });
+        jPanel8.add(newBasicIngredient, java.awt.BorderLayout.WEST);
 
         jPanel4.add(jPanel8, java.awt.BorderLayout.SOUTH);
 
@@ -396,6 +396,30 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
 	    model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
 	    model.setPreparation(preparationOutlet.getText());
+	    
+	    for (Component component : model.getComponents().values()) {
+		if (component.getIngredient() == null) {
+		    JOptionPane.showMessageDialog(null, "Ingrediënt <Kies een item> is ongeldig!", "Fout!", JOptionPane.WARNING_MESSAGE);
+		    
+		    /*
+		     * Select invalid row
+		     */
+		    
+		    ingredientsOutlet.setRowSelectionInterval(component.getRank()-1, component.getRank()-1);
+		    
+		    /*
+		     * Eventueel: delete alle null-rows?
+		     */
+		    
+		    return;
+		}
+		
+		if (component.getQuantity() <= 0) {
+		    JOptionPane.showMessageDialog(null, "Hoeveelheid "+component.getQuantity()+" is ongeldig!", "Fout!", JOptionPane.WARNING_MESSAGE);
+		    ingredientsOutlet.setRowSelectionInterval(component.getRank()-1, component.getRank()-1);
+		    return;
+		}
+	    }
 	    
 	    if (!defaultModel.getName().equalsIgnoreCase(model.getName())) {
 		if (Database.driver().getRecipesAlphabetically().containsKey(model.getName().toLowerCase())) {

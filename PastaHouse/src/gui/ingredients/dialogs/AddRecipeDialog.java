@@ -81,7 +81,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 	List ingredients = new ArrayList();
 	ingredients.add("");
 	ingredients.addAll(Database.driver().getIngredients());
-	this.model.setIngredients(components);
+	this.model.setComponents(components);
 	@SuppressWarnings("LeakingThisInConstructor")
 	TableCellEditor ce = CellEditorFactory.createComboBoxEditor(ingredients, this);
 	this.ingredientsOutlet.setDefaultEditor(Ingredient.class, ce);
@@ -188,9 +188,9 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
-        newBasicIngredient = new javax.swing.JButton();
         addComponent = new javax.swing.JButton();
         removeComponent = new javax.swing.JButton();
+        newBasicIngredient = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(300, 256));
@@ -323,15 +323,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 
         jPanel8.setLayout(new java.awt.BorderLayout());
 
-        jPanel9.setLayout(new java.awt.GridLayout(1, 3));
-
-        newBasicIngredient.setText("Nieuw...");
-        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newBasicIngredientActionPerformed(evt);
-            }
-        });
-        jPanel9.add(newBasicIngredient);
+        jPanel9.setLayout(new java.awt.GridLayout(1, 2));
 
         addComponent.setText("Toevoegen");
         addComponent.setFocusable(false);
@@ -353,6 +345,14 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 
         jPanel8.add(jPanel9, java.awt.BorderLayout.EAST);
 
+        newBasicIngredient.setText("Nieuw...");
+        newBasicIngredient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newBasicIngredientActionPerformed(evt);
+            }
+        });
+        jPanel8.add(newBasicIngredient, java.awt.BorderLayout.WEST);
+
         jPanel4.add(jPanel8, java.awt.BorderLayout.SOUTH);
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -372,11 +372,36 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
 		return;
 	    }
+	    
+	    for (Component component : components.values()) {
+		if (component.getIngredient() == null) {
+		    JOptionPane.showMessageDialog(null, "Ingrediënt <Kies een item> is ongeldig!", "Fout!", JOptionPane.WARNING_MESSAGE);
+		    
+		    /*
+		     * Select invalid row
+		     */
+		    
+		    ingredientsOutlet.setRowSelectionInterval(component.getRank()-1, component.getRank()-1);
+		    
+		    /*
+		     * Eventueel: delete alle null-rows?
+		     */
+		    
+		    return;
+		}
+		
+		if (component.getQuantity() <= 0) {
+		    JOptionPane.showMessageDialog(null, "Hoeveelheid "+component.getQuantity()+" is ongeldig!", "Fout!", JOptionPane.WARNING_MESSAGE);
+		    ingredientsOutlet.setRowSelectionInterval(component.getRank()-1, component.getRank()-1);
+		    return;
+		}
+	    }
+	    
             model.setName(nameOutlet.getText());
 	    model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
             model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
             model.setPreparation(preparationOutlet.getText());
-	    model.setIngredients(components);
+	    model.setComponents(components);
 
             FunctionResult<Recipe> res = model.create();
 	    if (res.getCode() == 0 && res.getObj() != null) {
@@ -400,6 +425,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
+	    ex.printStackTrace();
             JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveActionPerformed

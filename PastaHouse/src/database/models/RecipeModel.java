@@ -64,8 +64,8 @@ public class RecipeModel implements Model{
 	return components;
     }
 
-    public void setIngredients(Map<Integer, Component> ingredients) {
-	this.components = ingredients;
+    public void setComponents(Map<Integer, Component> components) {
+	this.components = components;
     }
     
     /**

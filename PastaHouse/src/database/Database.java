@@ -378,7 +378,7 @@ public class Database {
 	    if (rs.next()) {
 		newRec = Recipe.createFromModel(rs.getInt("id"), recipe);
 		recipesById.put(newRec.getPrimaryKeyValue(), newRec);
-		recipesByName.put(newRec.getName(), newRec);
+		recipesByName.put(newRec.getName().toLowerCase(), newRec);
 	    } else {
 		code = 2;
 		msg = "Er is iets verkeerd gegaan. Herstart het programma.";
