@@ -1,4 +1,4 @@
-package gui.utilities.table;
+package gui.utilities.table.invoicetable;
 
 import database.tables.Invoice;
 import java.awt.Component;

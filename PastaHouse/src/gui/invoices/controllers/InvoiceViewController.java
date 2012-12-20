@@ -7,14 +7,19 @@ package gui.invoices.controllers;
 import database.Database;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
-import gui.utilities.table.CustomColumnFactory;
-import gui.utilities.table.InvoiceFiltering;
-import gui.utilities.table.InvoiceRendering;
-import gui.utilities.table.InvoiceTableModel;
+import gui.utilities.table.invoicetable.CustomColumnFactory;
+import gui.utilities.table.invoicetable.InvoiceFiltering;
+import gui.utilities.table.invoicetable.InvoiceRendering;
+import gui.utilities.table.invoicetable.InvoiceTableModel;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -23,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.SwingWorker;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.JXTable;
@@ -44,7 +50,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private TableRowSorter<InvoiceTableModel> sorter;
     private InvoiceTableModel tableModel;
     private JXTable table;
-    private JTextField filterField;
+    private JTextField clientField;
     private InvoiceFiltering filterController;
     private JPanel controlPanel;
 
@@ -196,8 +202,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         c.insets.bottom = 12;
         c.anchor = GridBagConstraints.SOUTHWEST;
         //c.fill = GridBagConstraints.HORIZONTAL; 
-        filterField = new JTextField(24);
-        controlPanel.add(filterField, c);
+        clientField = new JTextField(24);
+        controlPanel.add(clientField, c);
 
         c.gridx = 1;
         c.gridy = 2;
@@ -215,15 +221,35 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         tableModel = new InvoiceTableModel(Database.driver().getInvoicesById());
         table.setModel(tableModel);
         filterController = new InvoiceFiltering(table);
-        BindingGroup filterGroup = new BindingGroup();
-        filterGroup.addBinding(Bindings.createAutoBinding(READ,
-                filterField, BeanProperty.create("text"),
-                filterController, BeanProperty.create("filterString")));
-        filterGroup.addBinding(Bindings.createAutoBinding(READ,
-                filterController, BeanProperty.create("filterString"),
-                this, BeanProperty.create("statusContent")));
-        filterGroup.bind();
+//        BindingGroup filterGroup = new BindingGroup();
+//        filterGroup.addBinding(Bindings.createAutoBinding(READ,
+//                clientField, BeanProperty.create("text"),
+//                filterController, BeanProperty.create("clientString")));
+//        System.out.println("binded!");
+//        filterGroup.addBinding(Bindings.createAutoBinding(READ,  
+//                 filterController, BeanProperty.create("clientString"), 
+//                 this, BeanProperty.create("statusContent"))); 
+//        filterGroup.bind();
+        clientField.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                filterController.setClientString(clientField.getText());
+            }
+        });
+
+        
     }
+    
+    
 
     @Override
     public void electFirstResponder() {
@@ -239,4 +265,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         InvoiceRendering.configureColumnFactory(factory, getClass());
         table.setColumnFactory(factory);
     }
+
+    
+    
+    
 }
