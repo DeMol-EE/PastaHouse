@@ -133,10 +133,10 @@ public class AddContactDialog extends javax.swing.JDialog {
         txtContact = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtAdres = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        txtPostcode = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         HolderGemeentes = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtPostcode = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -160,6 +160,9 @@ public class AddContactDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(null);
+        setMinimumSize(new java.awt.Dimension(600, 700));
+        setModal(true);
         setPreferredSize(new java.awt.Dimension(600, 700));
 
         jPanel5.setLayout(new java.awt.BorderLayout());
@@ -203,6 +206,13 @@ public class AddContactDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel13);
         jPanel2.add(txtAdres);
 
+        jLabel12.setText("Gemeente");
+        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
+        jPanel2.add(jLabel12);
+
+        HolderGemeentes.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(HolderGemeentes);
+
         jLabel1.setText("Postcode");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel1);
@@ -213,13 +223,6 @@ public class AddContactDialog extends javax.swing.JDialog {
             }
         });
         jPanel2.add(txtPostcode);
-
-        jLabel12.setText("Gemeente");
-        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
-        jPanel2.add(jLabel12);
-
-        HolderGemeentes.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(HolderGemeentes);
 
         jLabel9.setText("Telefoon");
         jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
@@ -401,8 +404,6 @@ public class AddContactDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_addActionPerformed
 
     private void txtPostcodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPostcodeKeyReleased
-
-        ArrayList items = new ArrayList();
         if (txtPostcode.getText().length() == 4) {
             int code = Integer.parseInt(txtPostcode.getText());
             if (munies.containsValue(code)) {
@@ -414,6 +415,7 @@ public class AddContactDialog extends javax.swing.JDialog {
                 }
             } 
         } else {
+            flag = true;
             comboGemeentes.setSelectedItem("");
         }
     }//GEN-LAST:event_txtPostcodeKeyReleased
@@ -479,14 +481,19 @@ public class AddContactDialog extends javax.swing.JDialog {
         comboGemeentes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(!flag){
                 setMunicipal();
+                } else {
+                    flag = false;
+                }
+                
             }
         });
         comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    txtTel.requestFocus();
+                    txtPostcode.requestFocus();
                 } else {
                     setMunicipal();
                 }
