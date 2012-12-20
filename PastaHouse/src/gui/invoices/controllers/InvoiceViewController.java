@@ -259,7 +259,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private void configureDisplayProperties() {
         table.setColumnControlVisible(true);
         table.setShowGrid(false, false);
-        table.addHighlighter(HighlighterFactory.createSimpleStriping());
+        table.addHighlighter(HighlighterFactory.createAlternateStriping());
         table.setVisibleRowCount(10);
         CustomColumnFactory factory = new CustomColumnFactory();
         InvoiceRendering.configureColumnFactory(factory, getClass());
