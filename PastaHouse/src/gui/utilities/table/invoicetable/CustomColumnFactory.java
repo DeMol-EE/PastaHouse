@@ -2,7 +2,7 @@
   * Created on 29.02.2008 
   * 
   */ 
- package gui.utilities.table; 
+ package gui.utilities.table.invoicetable; 
   
  import java.util.ArrayList; 
  import java.util.Comparator; 

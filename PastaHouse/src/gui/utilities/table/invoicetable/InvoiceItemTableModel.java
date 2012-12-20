@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.utilities.table;
+package gui.utilities.table.invoicetable;
 
 import database.extra.InvoiceItem;
 import java.util.Map;

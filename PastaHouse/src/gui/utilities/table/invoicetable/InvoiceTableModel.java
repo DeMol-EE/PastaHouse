@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.utilities.table;
+package gui.utilities.table.invoicetable;
 
 import database.tables.Invoice;
 import java.util.Map;
@@ -69,7 +69,7 @@ public class InvoiceTableModel extends AbstractTableModel {
         }
     }
 
-    public Invoice getInvoice(int number) {
-        return data.get(number);
+    public Invoice getInvoice(int id) {
+        return data.get(id);
     }
 }
