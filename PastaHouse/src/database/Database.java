@@ -248,6 +248,7 @@ public class Database {
                     contactsById.get(rs.getInt("firmaid")),
                     rs.getString("merk"),
                     rs.getString("verpakking"),
+                    rs.getDouble("prijsPerKilo"),
                     rs.getDouble("prijsPerVerpakking"),
                     rs.getDouble("gewichtPerVerpakking"),
                     rs.getDouble("verliespercentage"),
@@ -272,20 +273,21 @@ public class Database {
 	String msg = "";
 	BasicIngredient newBI = null;
         String insertTableSQL = "INSERT INTO ingredients"
-                + "(firmaid, naam, merk, verpakking, prijsPerVerpakking, gewichtPerVerpakking, verliespercentage, BTW, datum, opmerking) VALUES"
-                + "(?,?,?,?,?,?,?,?,?,?)";
+                + "(firmaid, naam, merk, verpakking, prijsPerKilo, prijsPerVerpakking, gewichtPerVerpakking, verliespercentage, BTW, datum, opmerking) VALUES"
+                + "(?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
             preparedStatement.setInt(1, ingredient.getSupplier().getPrimaryKeyValue());
             preparedStatement.setString(2, ingredient.getName());
             preparedStatement.setString(3, ingredient.getBrand());
             preparedStatement.setString(4, ingredient.getPackaging());
-            preparedStatement.setDouble(5, ingredient.getPricePerUnit());
-            preparedStatement.setDouble(6, ingredient.getWeightPerUnit());
-            preparedStatement.setDouble(7, ingredient.getLossPercent());
-            preparedStatement.setDouble(8, ingredient.getTaxes());
-            preparedStatement.setString(9, ingredient.getDate());
-            preparedStatement.setString(10, ingredient.getNotes());
+            preparedStatement.setDouble(5, ingredient.getPricePerWeight());
+            preparedStatement.setDouble(6, ingredient.getPricePerUnit());
+            preparedStatement.setDouble(7, ingredient.getWeightPerUnit());
+            preparedStatement.setDouble(8, ingredient.getLossPercent());
+            preparedStatement.setDouble(9, ingredient.getTaxes());
+            preparedStatement.setString(10, ingredient.getDate());
+            preparedStatement.setString(11, ingredient.getNotes());
             preparedStatement.executeUpdate();
 	    
 	    ResultSet rs = statement.executeQuery("SELECT id FROM "+Configuration.center().getDB_TABLE_INGR()+" WHERE naam=\""+ingredient.getName()+"\"");

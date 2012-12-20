@@ -21,6 +21,7 @@ public class BasicIngredientModel implements Model{
     private Contact supplier; // Foreign key, references Suppliers
     private String brand;
     private String packaging;
+    private double pricePerWeight;
     private double pricePerUnit;
     private double weightPerUnit;
     private double lossPercent;
@@ -107,12 +108,16 @@ public class BasicIngredientModel implements Model{
 	this.notes = notes;
     }
     
+    public void setPricePerWeight(double pricePerWeight){
+	this.pricePerWeight = pricePerWeight;
+    }
+    
     public double getPricePerWeight() {
-	return pricePerUnit/weightPerUnit;
+	return pricePerWeight;
     }
 
     public double getGrossPrice() {
-	return getPricePerWeight()/(1.0-(0.01*lossPercent));
+	return pricePerWeight/(1.0-(0.01*lossPercent));
     }
 
     public double getNetPrice() {

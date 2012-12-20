@@ -21,6 +21,7 @@ public class BasicIngredient extends Ingredient {
     private Contact supplier; // Foreign key, references Suppliers
     private String brand;
     private String packaging;
+    private double pricePerWeight;
     private double pricePerUnit;
     private double weightPerUnit;
     private double lossPercent;
@@ -29,11 +30,12 @@ public class BasicIngredient extends Ingredient {
     
     // derived variables
     
-    private BasicIngredient(int id, Contact supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+    private BasicIngredient(int id, Contact supplier, String brand, String packaging, double pricePerWeight, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
 	super(name, date, id, Configuration.center().getDB_TABLE_INGR());
 	this.supplier = supplier;
 	this.brand = brand;
 	this.packaging = packaging;
+	this.pricePerWeight = pricePerWeight;
 	this.pricePerUnit = pricePerUnit;
 	this.weightPerUnit = weightPerUnit;
 	this.lossPercent = lossPercent;
@@ -46,6 +48,7 @@ public class BasicIngredient extends Ingredient {
 	this.supplier = b.getSupplier();
 	this.brand = b.getBrand();
 	this.packaging = b.getPackaging();
+	this.pricePerWeight = b.getPricePerWeight();
 	this.pricePerUnit = b.getPricePerUnit();
 	this.weightPerUnit = b.getWeightPerUnit();
 	this.lossPercent = b.getLossPercent();
@@ -58,6 +61,7 @@ public class BasicIngredient extends Ingredient {
 	this.supplier = b.getSupplier();
 	this.brand = b.getBrand();
 	this.packaging = b.getPackaging();
+	this.pricePerWeight = b.getPricePerWeight();
 	this.pricePerUnit = b.getPricePerUnit();
 	this.weightPerUnit = b.getWeightPerUnit();
 	this.lossPercent = b.getLossPercent();
@@ -65,8 +69,8 @@ public class BasicIngredient extends Ingredient {
 	this.notes = b.getNotes();
     }
     
-    public static BasicIngredient loadWithValues(int id, Contact supplier, String brand, String packaging, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
-	return new BasicIngredient(id, supplier, brand, packaging, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
+    public static BasicIngredient loadWithValues(int id, Contact supplier, String brand, String packaging, double pricePerWeight, double pricePerUnit, double weightPerUnit, double lossPercent, double taxes, String name, String date, String notes) {
+	return new BasicIngredient(id, supplier, brand, packaging, pricePerWeight, pricePerUnit, weightPerUnit, lossPercent, taxes, name, date, notes);
     }
     
     public static BasicIngredient createFromModel(int id, BasicIngredientModel model) throws SQLException{
@@ -147,11 +151,11 @@ public class BasicIngredient extends Ingredient {
 
     @Override
     public double getPricePerWeight() {
-	return pricePerUnit/weightPerUnit;
+	return pricePerWeight;
     }
 
     public double getGrossPrice() {
-	return getPricePerWeight()/(1.0-(0.01*lossPercent));
+	return pricePerWeight/(1.0-(0.01*lossPercent));
     }
 
     public double getNetPrice() {
