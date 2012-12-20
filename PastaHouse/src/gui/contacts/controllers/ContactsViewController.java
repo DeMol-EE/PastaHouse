@@ -86,7 +86,8 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 		    label.setBackground(list.getSelectionBackground());
 		} else {
 		    label.setForeground(list.getForeground());
-		    label.setBackground(c.isSupplier()? new Color(255, 229, 204) : new Color(204, 255, 204));
+//		    label.setBackground(c.isSupplier()? new Color(255, 229, 204) : new Color(204, 255, 204));
+		    label.setBackground(Color.white);
 		}
 		
 		return label;

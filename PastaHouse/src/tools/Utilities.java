@@ -14,7 +14,7 @@ public class Utilities {
     public static final String incompleteFormMessage = "Vul alle vereiste velden (aangegeven met een asterisk) in.";
 
     public static int fontSize() {
-        return 16;
+        return Configuration.center().getFONT_SIZE();
     }
 
     /**

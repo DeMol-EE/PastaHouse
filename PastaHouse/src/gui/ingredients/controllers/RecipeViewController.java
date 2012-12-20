@@ -224,6 +224,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
         container.add(jPanel5, java.awt.BorderLayout.NORTH);
 
+        jSplitPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
