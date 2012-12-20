@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -35,10 +36,10 @@ public class EditContactDialog extends javax.swing.JDialog {
     private final EditContactDelegate delegate;
     private final Contact model;
     private final Contact defaultModel;
-    
     private int type;
     private JComboBox typeBox;
-
+    private boolean flag = false;
+    private final TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
 
     /**
      * Creates new form EditContactDialog
@@ -52,30 +53,30 @@ public class EditContactDialog extends javax.swing.JDialog {
 
         this.delegate = delegate;
         this.model = model;
-	this.defaultModel = new Contact(model);
-	this.type = type;
+        this.defaultModel = new Contact(model);
+        this.type = type;
 
         loadModel();
-	this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
-	
-	typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
-	
-	
-	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		saveActionPerformed(e);
-	    }
-	});
-	
-	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		cancelActionPerformed(e);
-	    }
-	});
+        this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+
+        typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
+
+
+        AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveActionPerformed(e);
+            }
+        });
+
+        AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancelActionPerformed(e);
+            }
+        });
     }
-    
+
     private EditContactDialog(java.awt.Frame parent, boolean modal, EditContactDelegate delegate, Contact model) {
         super(parent, modal);
         initComponents();
@@ -88,66 +89,64 @@ public class EditContactDialog extends javax.swing.JDialog {
         this.delegate = delegate;
         this.model = model;
         this.defaultModel = new Contact(model);
-	this.type = Contact.both;
+        this.type = Contact.both;
 
         loadModel();
-	
-	typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
-	if (model.isSupplier()) {
-	    typeBox.setSelectedIndex(0);
-	} else {
-	    typeBox.setSelectedIndex(1);
-	}
-	typeParent.add(typeBox);
-	
-	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		saveActionPerformed(e);
-	    }
-	});
-	
-	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		cancelActionPerformed(e);
-	    }
-	});
+
+        typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+        if (model.isSupplier()) {
+            typeBox.setSelectedIndex(0);
+        } else {
+            typeBox.setSelectedIndex(1);
+        }
+        typeParent.add(typeBox);
+
+        AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveActionPerformed(e);
+            }
+        });
+
+        AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancelActionPerformed(e);
+            }
+        });
     }
-    
-    public static EditContactDialog createSupplierDialog(EditContactDelegate delegate, Contact model){
-	return new EditContactDialog(null, true, delegate, model, Contact.supplier);
+
+    public static EditContactDialog createSupplierDialog(EditContactDelegate delegate, Contact model) {
+        return new EditContactDialog(null, true, delegate, model, Contact.supplier);
     }
-    
-    public static EditContactDialog createClientDialog(EditContactDelegate delegate, Contact model){
-	return new EditContactDialog(null, true, delegate, model, Contact.client);
+
+    public static EditContactDialog createClientDialog(EditContactDelegate delegate, Contact model) {
+        return new EditContactDialog(null, true, delegate, model, Contact.client);
     }
-    
-    public static EditContactDialog createContactDialog(EditContactDelegate delegate, Contact model){
-	return new EditContactDialog(null, true, delegate, model);
+
+    public static EditContactDialog createContactDialog(EditContactDelegate delegate, Contact model) {
+        return new EditContactDialog(null, true, delegate, model);
     }
 
     private void loadModel() {
         txtFirma.setText(model.getFirm());
-	sortkeyOutlet.setText(model.getSortKey());
+        sortkeyOutlet.setText(model.getSortKey());
         txtContact.setText(model.getContact());
         txtAdres.setText(model.getAddress());
         // copy municipale
-	
+
         txtTel.setText(model.getTelephone());
-	txttel2.setText(model.getTelephone2());
+        txttel2.setText(model.getTelephone2());
         txtGSM.setText(model.getCellphone());
         txtFax.setText(model.getFax());
         txtEmail.setText(model.getEmail());
         notesOutlet.setText(model.getNotes());
-        txtGemeente.setText(""+model.getZipcode());
-	
-	taxnrOutlet.setText(model.getTaxnumber());
-	if (model.getPricecode() != null) {
-	    pricecodeOutlet.setSelectedItem(model.getPricecode());
-	}
+        txtPostcode.setText("" + model.getZipcode());
 
-        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
+        taxnrOutlet.setText(model.getTaxnumber());
+        if (model.getPricecode() != null) {
+            pricecodeOutlet.setSelectedItem(model.getPricecode());
+        }
         ArrayList items = new ArrayList();
         items.add("");
         items.addAll(munies.keySet());
@@ -158,41 +157,45 @@ public class EditContactDialog extends javax.swing.JDialog {
                 setMunicipal();
             }
         });
-        comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+        comboGemeentes.addActionListener(new ActionListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void actionPerformed(ActionEvent e) {
+                if(!flag){
+                setMunicipal();
+                } else {
+                    flag = false;
+                }
+                
             }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
+        });
+        comboGemeentes.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                setMunicipal();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtPostcode.requestFocus();
+                } else {
+                    setMunicipal();
+                }
+
             }
         });
 
 //        jPanel2.addProxy(comboGemeentes, 9);
-	muniParent.add(comboGemeentes, BorderLayout.CENTER);
+        muniParent.add(comboGemeentes, BorderLayout.CENTER);
 //	System.out.println("mun: '"+model.getMunicipality()+"'");
         if (items.contains(model.getMunicipality())) {
-	    comboGemeentes.setSelectedItem(model.getMunicipality());
-	} else {
-	    comboGemeentes.setSelectedIndex(0);
-	}
-    }
-    
-    private void setMunicipal() {
-        TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
-        if(comboGemeentes.getSelectedItem() == null){
-	    return;
-	}
-	String munie = comboGemeentes.getSelectedItem().toString();
-        if (munies.containsKey(munie)) {
-            txtGemeente.setText(munies.get((String)comboGemeentes.getSelectedItem()).toString());
+            comboGemeentes.setSelectedItem(model.getMunicipality());
         } else {
-            txtGemeente.setText("");
+            comboGemeentes.setSelectedIndex(0);
+        }
+    }
+
+    private void setMunicipal() {
+        String munie = comboGemeentes.getSelectedItem().toString();
+        if (munies.containsKey(munie)) {
+            txtPostcode.setText(munies.get((String) comboGemeentes.getSelectedItem()).toString());
+        } else {
+            txtPostcode.setText("");
         }
     }
 
@@ -220,10 +223,10 @@ public class EditContactDialog extends javax.swing.JDialog {
         txtContact = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtAdres = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        txtGemeente = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         muniParent = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtPostcode = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -248,6 +251,8 @@ public class EditContactDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(null);
+        setMinimumSize(new java.awt.Dimension(600, 700));
         setPreferredSize(new java.awt.Dimension(600, 700));
 
         jPanel5.setLayout(new java.awt.BorderLayout());
@@ -295,18 +300,6 @@ public class EditContactDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel13);
         jPanel2.add(txtAdres);
 
-        jLabel1.setText("Postcode");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jLabel1.setFocusable(false);
-        jPanel2.add(jLabel1);
-
-        txtGemeente.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtGemeenteKeyReleased(evt);
-            }
-        });
-        jPanel2.add(txtGemeente);
-
         jLabel12.setText("Gemeente");
         jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jLabel12.setFocusable(false);
@@ -314,6 +307,18 @@ public class EditContactDialog extends javax.swing.JDialog {
 
         muniParent.setLayout(new java.awt.BorderLayout());
         jPanel2.add(muniParent);
+
+        jLabel1.setText("Postcode");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jLabel1.setFocusable(false);
+        jPanel2.add(jLabel1);
+
+        txtPostcode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPostcodeKeyReleased(evt);
+            }
+        });
+        jPanel2.add(txtPostcode);
 
         jLabel9.setText("Telefoon");
         jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
@@ -429,86 +434,88 @@ public class EditContactDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        try{
-	    if (sortkeyOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-		return;
-	    }
-	    
-	    System.out.println("\""+comboGemeentes.getSelectedItem()+"\"");
-	    
-	    model.setFirm(txtFirma.getText());
-	    model.setSortKey(sortkeyOutlet.getText());
-	    model.setContact(txtContact.getText());
-	    model.setAddress(txtAdres.getText());
-	    model.setZipcode(txtGemeente.getText());
-	    model.setMunicipality(comboGemeentes.getSelectedItem().toString());
-	    model.setTelephone(txtTel.getText());
-	    model.setTelephone2(txttel2.getText());
-	    model.setCellphone(txtGSM.getText());
-	    model.setFax(txtFax.getText());
-	    model.setEmail(txtEmail.getText());
-	    model.setNotes(notesOutlet.getText());
-	    model.setTaxnumber(taxnrOutlet.getText());
-	    model.setPricecode(pricecodeOutlet.getSelectedIndex() == 0 ? null : pricecodeOutlet.getSelectedItem().toString());
-	    if (type == Contact.both) {
-		model.setType(typeBox.getSelectedIndex() == 0? "supplier" : "client");
-	    } else if (type == Contact.supplier) {
-		model.setType("supplier");
-	    } else if (type == Contact.client) {
-		model.setType("client");
-	    }
-	    
-	    if (!defaultModel.getSortKey().equalsIgnoreCase(model.getSortKey())) {
-		if (Database.driver().getContactsAlphabetically().containsKey(model.getSortKey().toLowerCase())) {
-		    JOptionPane.showMessageDialog(null, "Er is al een contactpersoon met deze toonnaam.", "Fout!", JOptionPane.ERROR_MESSAGE);
-		    return;
-		}
-	    }
+        try {
+            if (sortkeyOutlet.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-	    FunctionResult res = model.update();
-	    if (res.getCode() == 0) {
-		delegate.editContact(defaultModel, model);
-		disposeLater();
-	    } else {
-		String msg;
-		switch(res.getCode()){
-		    case 1: case 2: case 3:
-			msg = res.getMessage();
-			break;
-		    default:
-			msg = "Er is een fout opgetreden bij het opslaan van deze contactpersoon in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
-		}
-		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-	    }
-	} catch (Exception e){
-	    System.err.println("Error:");
-	    e.printStackTrace();
-	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
-	}
-        
+            System.out.println("\"" + comboGemeentes.getSelectedItem() + "\"");
+
+            model.setFirm(txtFirma.getText());
+            model.setSortKey(sortkeyOutlet.getText());
+            model.setContact(txtContact.getText());
+            model.setAddress(txtAdres.getText());
+            model.setZipcode(txtPostcode.getText());
+            model.setMunicipality(comboGemeentes.getSelectedItem().toString());
+            model.setTelephone(txtTel.getText());
+            model.setTelephone2(txttel2.getText());
+            model.setCellphone(txtGSM.getText());
+            model.setFax(txtFax.getText());
+            model.setEmail(txtEmail.getText());
+            model.setNotes(notesOutlet.getText());
+            model.setTaxnumber(taxnrOutlet.getText());
+            model.setPricecode(pricecodeOutlet.getSelectedIndex() == 0 ? null : pricecodeOutlet.getSelectedItem().toString());
+            if (type == Contact.both) {
+                model.setType(typeBox.getSelectedIndex() == 0 ? "supplier" : "client");
+            } else if (type == Contact.supplier) {
+                model.setType("supplier");
+            } else if (type == Contact.client) {
+                model.setType("client");
+            }
+
+            if (!defaultModel.getSortKey().equalsIgnoreCase(model.getSortKey())) {
+                if (Database.driver().getContactsAlphabetically().containsKey(model.getSortKey().toLowerCase())) {
+                    JOptionPane.showMessageDialog(null, "Er is al een contactpersoon met deze toonnaam.", "Fout!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            FunctionResult res = model.update();
+            if (res.getCode() == 0) {
+                delegate.editContact(defaultModel, model);
+                disposeLater();
+            } else {
+                String msg;
+                switch (res.getCode()) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        msg = res.getMessage();
+                        break;
+                    default:
+                        msg = "Er is een fout opgetreden bij het opslaan van deze contactpersoon in de databank (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
+                }
+                JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            System.err.println("Error:");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_saveActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // reset values to default
         model.copy(defaultModel);
-	disposeLater();
+        disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void disposeLater(){
-	SwingUtilities.invokeLater(new Runnable() {
-	    @Override
-	    public void run() {
-		dispose();
-	    }
-	});
+    private void disposeLater() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                dispose();
+            }
+        });
     }
-    
-    private void txtGemeenteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGemeenteKeyReleased
+
+    private void txtPostcodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPostcodeKeyReleased
         TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
         ArrayList items = new ArrayList();
-        if (!txtGemeente.getText().isEmpty()) {
-            int code = Integer.parseInt(txtGemeente.getText());
+        if (!txtPostcode.getText().isEmpty()) {
+            int code = Integer.parseInt(txtPostcode.getText());
             if (munies.containsValue(code)) {
                 for (String munie : munies.keySet()) {
                     if (munies.get(munie) == code) {
@@ -522,7 +529,7 @@ public class EditContactDialog extends javax.swing.JDialog {
             items.addAll(munies.keySet());
         }
         comboGemeentes.setDataList(items);
-    }//GEN-LAST:event_txtGemeenteKeyReleased
+    }//GEN-LAST:event_txtPostcodeKeyReleased
 
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
         String taxnr = taxnrOutlet.getText();
@@ -532,7 +539,6 @@ public class EditContactDialog extends javax.swing.JDialog {
             taxnrOutlet.setForeground(Color.black);
         }
     }//GEN-LAST:event_taxnrOutletKeyReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JLabel contactLabel;
@@ -570,7 +576,7 @@ public class EditContactDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtFax;
     private javax.swing.JTextField txtFirma;
     private javax.swing.JTextField txtGSM;
-    private javax.swing.JTextField txtGemeente;
+    private javax.swing.JTextField txtPostcode;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txttel2;
     private javax.swing.JPanel typeParent;
