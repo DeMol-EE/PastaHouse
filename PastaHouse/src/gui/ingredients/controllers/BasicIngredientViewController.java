@@ -185,10 +185,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
 
-        editMenu.setText("Edit");
+        editMenu.setText("Acties");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        addMenuItem.setText("Add");
+        addMenuItem.setText("Toevoegen...");
         addMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMenuItemActionPerformed(evt);
@@ -197,7 +197,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu.add(addMenuItem);
 
         editMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        editMenuItem.setText("Edit");
+        editMenuItem.setText("Wijzigen...");
         editMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMenuItemActionPerformed(evt);
