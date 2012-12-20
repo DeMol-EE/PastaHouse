@@ -4,6 +4,7 @@
  */
 package gui.invoices.controllers;
 
+import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
@@ -12,33 +13,26 @@ import gui.utilities.table.invoicetable.InvoiceFiltering;
 import gui.utilities.table.invoicetable.InvoiceRendering;
 import gui.utilities.table.invoicetable.InvoiceTableModel;
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
+import java.beans.PropertyVetoException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.SwingWorker;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
-import org.jdesktop.beans.*;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import static org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -50,23 +44,32 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private TableRowSorter<InvoiceTableModel> sorter;
     private InvoiceTableModel tableModel;
     private JXTable table;
-    private JTextField clientField;
+    private Map<Integer, Invoice> invoicesByID;
+    private JXDatePicker from;
+    private JXDatePicker to;
     private InvoiceFiltering filterController;
-    private JPanel controlPanel;
 
     /**
      * Creates new form InvoiceViewController
      */
     public InvoiceViewController() {
+
         initComponents();
-        controlPanel = createControlPanel(); 
+        invoicesByID = Database.driver().getInvoicesById();
         tablePanel.add(controlPanel, BorderLayout.NORTH);
         table = createXTable();
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
-        tablePanel.add(scrollpane, BorderLayout.CENTER); 
+        tablePanel.add(scrollpane, BorderLayout.CENTER);
         configureDisplayProperties();
+        from = new JXDatePicker();
+        from.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        to = new JXDatePicker();
+        to.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        fromOutlet.add(from);
+        toOutlet.add(to);
         bind();
+
     }
 
     /**
@@ -77,13 +80,28 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         noResultOutlet = new javax.swing.JLabel();
-        filterPanel = new javax.swing.JPanel();
+        controlPanel = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        numberField = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        clientField = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        fromOutlet = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        toOutlet = new javax.swing.JPanel();
         tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         invoices = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        afdrukken = new javax.swing.JButton();
         edit = new javax.swing.JButton();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -91,16 +109,80 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         setLayout(new java.awt.BorderLayout());
 
-        filterPanel.setLayout(new java.awt.GridLayout(1, 2));
-        add(filterPanel, java.awt.BorderLayout.NORTH);
-        filterPanel.getAccessibleContext().setAccessibleName("");
+        controlPanel.setLayout(new java.awt.GridLayout(1, 3));
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
+        jPanel4.setLayout(new java.awt.GridLayout(2, 1));
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Nummer");
+        jPanel4.add(jLabel1);
+
+        numberField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                numberFieldKeyReleased(evt);
+            }
+        });
+        jPanel4.add(numberField);
+
+        controlPanel.add(jPanel4);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
+        jPanel5.setLayout(new java.awt.GridLayout(2, 1));
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Klant");
+        jPanel5.add(jLabel2);
+        jPanel5.add(clientField);
+
+        controlPanel.add(jPanel5);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
+        jPanel3.setLayout(new java.awt.GridLayout(2, 1));
+
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Van");
+        jLabel3.setVerifyInputWhenFocusTarget(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel6.add(jLabel3, gridBagConstraints);
+
+        fromOutlet.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 5.0;
+        jPanel6.add(fromOutlet, gridBagConstraints);
+
+        jPanel3.add(jPanel6);
+
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Tot");
+        jLabel4.setVerifyInputWhenFocusTarget(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel7.add(jLabel4, gridBagConstraints);
+
+        toOutlet.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 5.0;
+        jPanel7.add(toOutlet, gridBagConstraints);
+
+        jPanel3.add(jPanel7);
+
+        controlPanel.add(jPanel3);
+
+        add(controlPanel, java.awt.BorderLayout.NORTH);
+        controlPanel.getAccessibleContext().setAccessibleName("");
 
         tablePanel.setLayout(new java.awt.BorderLayout());
         add(tablePanel, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
-
-        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         invoices.setText("Toevoegen...");
         invoices.setFocusable(false);
@@ -109,7 +191,17 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
                 invoicesActionPerformed(evt);
             }
         });
-        jPanel2.add(invoices);
+        jPanel1.add(invoices, java.awt.BorderLayout.WEST);
+
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+
+        afdrukken.setText("Afdrukken...");
+        afdrukken.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                afdrukkenActionPerformed(evt);
+            }
+        });
+        jPanel2.add(afdrukken);
 
         edit.setText("Details...");
         edit.setFocusable(false);
@@ -130,14 +222,40 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
     }//GEN-LAST:event_editActionPerformed
+
+    private void numberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFieldKeyReleased
+        filterController.setNumberString(numberField.getText());
+    }//GEN-LAST:event_numberFieldKeyReleased
+
+    private void afdrukkenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afdrukkenActionPerformed
+        List<Invoice> invoices = new ArrayList<Invoice>();
+        int[] rijen = table.getSelectedRows();
+        for (int i : rijen) {
+            invoices.add(tableModel.getInvoiceAtRow(i));
+        }
+    }//GEN-LAST:event_afdrukkenActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton afdrukken;
+    private javax.swing.JTextField clientField;
+    private javax.swing.JPanel controlPanel;
     private javax.swing.JButton edit;
-    private javax.swing.JPanel filterPanel;
+    private javax.swing.JPanel fromOutlet;
     private javax.swing.JButton invoices;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JLabel noResultOutlet;
+    private javax.swing.JTextField numberField;
     private javax.swing.JPanel tablePanel;
+    private javax.swing.JPanel toOutlet;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -180,45 +298,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         return table;
     }
 
-    protected JPanel createControlPanel() {
-        JPanel controlPanel = new JPanel();
-        GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        controlPanel.setLayout(gridbag);
-
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridheight = 1;
-        c.insets = new Insets(20, 10, 0, 10);
-        c.anchor = GridBagConstraints.SOUTHWEST;
-        JLabel searchLabel = new JLabel();
-        searchLabel.setName("searchLabel");
-        controlPanel.add(searchLabel, c);
-
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 1.0;
-        c.insets.top = 0;
-        c.insets.bottom = 12;
-        c.anchor = GridBagConstraints.SOUTHWEST;
-        //c.fill = GridBagConstraints.HORIZONTAL; 
-        clientField = new JTextField(24);
-        controlPanel.add(clientField, c);
-
-        c.gridx = 1;
-        c.gridy = 2;
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        //c.insets.right = 24; 
-        //c.insets.left = 12; 
-        c.weightx = 0.0;
-        c.anchor = GridBagConstraints.EAST;
-        c.fill = GridBagConstraints.NONE;
-
-        return controlPanel;
-    }
-
     private void bind() {
-        tableModel = new InvoiceTableModel(Database.driver().getInvoicesById());
+        tableModel = new InvoiceTableModel(invoicesByID);
         table.setModel(tableModel);
         filterController = new InvoiceFiltering(table);
 //        BindingGroup filterGroup = new BindingGroup();
@@ -231,7 +312,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 //                 this, BeanProperty.create("statusContent"))); 
 //        filterGroup.bind();
         clientField.addKeyListener(new KeyListener() {
-
             @Override
             public void keyTyped(KeyEvent e) {
             }
@@ -246,10 +326,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
             }
         });
 
-        
+
     }
-    
-    
 
     @Override
     public void electFirstResponder() {
@@ -265,8 +343,4 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         InvoiceRendering.configureColumnFactory(factory, getClass());
         table.setColumnFactory(factory);
     }
-
-    
-    
-    
 }
