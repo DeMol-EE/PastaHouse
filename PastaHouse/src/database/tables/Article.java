@@ -101,6 +101,16 @@ public class Article extends Record<Article> implements Filterable{
     public void setPriceB(double priceB) {
 	this.priceB = priceB;
     }
+    
+    public double getPriceForCode(String code){
+	if (code.equalsIgnoreCase("A")) {
+	    return priceA;
+	} else if(code.equalsIgnoreCase("B")) {
+	    return priceB;
+	} else {
+	    return -1;
+	}
+    }
 
     public String getUnit() {
 	return unit;

@@ -296,7 +296,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 
 		@Override
 		public void run() {
-		    Printer.driver().setPrintJob(model);
+		    Printer.driver().setPrintableJob(model);
 		    Printer.driver().tryPrint();
 		}
 	    }).start();

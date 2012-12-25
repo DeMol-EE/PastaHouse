@@ -4,6 +4,7 @@
  */
 package printer;
 
+import java.awt.print.Book;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 
@@ -27,7 +28,21 @@ public class Printer {
 	return instance;
     }
     
-    public void setPrintJob(Printable pj){
+    /**
+     * Sets a book of printables as print task for the printer.
+     * 
+     * @param b The book (sequence of printables) to print.
+     */
+    public void setPrintableBook(Book b){
+	job.setPageable(b);
+    }
+    
+    /**
+     * Sets a single printable as print task for the printer.
+     * 
+     * @param pj The printable to print.
+     */
+    public void setPrintableJob(Printable pj){
 	job.setPrintable(pj);
     }
     

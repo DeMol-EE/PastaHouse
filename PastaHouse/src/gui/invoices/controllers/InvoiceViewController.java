@@ -4,7 +4,6 @@
  */
 package gui.invoices.controllers;
 
-import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
@@ -15,13 +14,13 @@ import gui.utilities.table.invoicetable.InvoiceTableModel;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.PropertyVetoException;
+import java.awt.print.Book;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -33,6 +32,7 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.JXDatePicker;
+import printer.PrintableInvoice;
 
 /**
  *
@@ -228,11 +228,23 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_numberFieldKeyReleased
 
     private void afdrukkenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afdrukkenActionPerformed
-        List<Invoice> invoices = new ArrayList<Invoice>();
+        List<PrintableInvoice> invoices = new ArrayList<PrintableInvoice>();
         int[] rijen = table.getSelectedRows();
         for (int i : rijen) {
-            invoices.add(tableModel.getInvoiceAtRow(i));
+            invoices.add(new PrintableInvoice(tableModel.getInvoiceAtRow(i)));
         }
+	
+	Book b = new Book();
+	PageFormat pf = new PageFormat();
+	pf.setPaper(new A4());
+	
+	for (PrintableInvoice printableInvoice : invoices) {
+	    b.append(printableInvoice, pf);
+	}
+	
+	printer.Printer.driver().setPrintableBook(b);
+//	printer.Printer.driver().setPrintableJob(new PrintableInvoiceList(invoices));
+	printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_afdrukkenActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton afdrukken;
@@ -342,5 +354,13 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         CustomColumnFactory factory = new CustomColumnFactory();
         InvoiceRendering.configureColumnFactory(factory, getClass());
         table.setColumnFactory(factory);
+    }
+    
+    private class A4 extends Paper {
+	public A4() {
+	    super();
+	    setSize(594.992125984252, 841.8897637795276);
+	    setImageableArea(36.0, 36.0, 522.99212598425197, 769.8897637795276);
+	}
     }
 }
