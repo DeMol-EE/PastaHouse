@@ -91,10 +91,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jLabel2 = new javax.swing.JLabel();
         clientField = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         fromOutlet = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         toOutlet = new javax.swing.JPanel();
         tablePanel = new javax.swing.JPanel();
@@ -138,41 +136,45 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         controlPanel.add(jPanel5);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
-        jPanel3.setLayout(new java.awt.GridLayout(2, 1));
-
-        jPanel6.setLayout(new java.awt.GridBagLayout());
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Van");
         jLabel3.setVerifyInputWhenFocusTarget(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel6.add(jLabel3, gridBagConstraints);
+        jPanel3.add(jLabel3, gridBagConstraints);
 
         fromOutlet.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 5.0;
-        jPanel6.add(fromOutlet, gridBagConstraints);
-
-        jPanel3.add(jPanel6);
-
-        jPanel7.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(fromOutlet, gridBagConstraints);
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Tot");
         jLabel4.setVerifyInputWhenFocusTarget(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel7.add(jLabel4, gridBagConstraints);
+        jPanel3.add(jLabel4, gridBagConstraints);
 
         toOutlet.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 5.0;
-        jPanel7.add(toOutlet, gridBagConstraints);
-
-        jPanel3.add(jPanel7);
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(toOutlet, gridBagConstraints);
 
         controlPanel.add(jPanel3);
 
@@ -262,8 +264,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JLabel noResultOutlet;
     private javax.swing.JTextField numberField;
     private javax.swing.JPanel tablePanel;
