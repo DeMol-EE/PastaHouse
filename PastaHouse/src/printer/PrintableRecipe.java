@@ -27,6 +27,9 @@ public class PrintableRecipe implements Printable{
     private double toMake;
     private boolean isWeight;
     
+    int[] pageBreaks;
+    String[] lines;
+    
     public PrintableRecipe(Recipe recipe){
 	this(recipe, 1.0, false);
     }
@@ -80,6 +83,21 @@ public class PrintableRecipe implements Printable{
 //	int charWidth = metrics.getWidths()[0]; // monospaced font has same width for all chars
 //	int[] charWidths = metrics.getWidths();
 	int charWidth = 7;
+	
+	
+	
+//	if (pageBreaks == null) {
+//	    // split ERRYTHING in lines
+//	    
+//	    
+//	    // calculate page breaks
+//	    int linesPerPage = (int)(pageFormat.getImageableHeight()/lineHeight);
+//            int numBreaks = (lines.length-1)/linesPerPage;
+//            pageBreaks = new int[numBreaks];
+//            for (int b=0; b<numBreaks; b++) {
+//                pageBreaks[b] = (b+1)*linesPerPage; 
+//            }
+//	}
 
 	int ingrNameLength = 30;
 	int[] tabs = new int[]{5,ingrNameLength*charWidth,50*charWidth,68*charWidth};
@@ -88,28 +106,21 @@ public class PrintableRecipe implements Printable{
 	DecimalFormat three = new DecimalFormat("0.000");
 	DecimalFormat two = new DecimalFormat("0.00");
 	
-	
-//	double pageHeight = pageFormat.getImageableHeight();
-//	int linesPerPage = ((int) pageHeight) / lineHeight;
-//	int numBreaks = (textLines.length - 1) / linesPerPage;
-//	int[] pageBreaks = new int[numBreaks];
-//	for (int b = 0; b < numBreaks; b++) {
-//	    pageBreaks[b] = (b + 1) * linesPerPage;
-//	}
-
-	// User (0,0) is typically outside the
-	// imageable area, so we must translate
-	// by the X and Y values in the PageFormat
-	// to avoid clipping.
-//	int oldX = (int)pageFormat.getImageableX();
 	Graphics2D g2d = (Graphics2D) graphics;
 	g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-//	int newX = (int)pageFormat.getImageableX();
-//	int imageableWidth = (int)(pageFormat.getImageableWidth()-2*Math.abs(newX-oldX));
 	int imageableWidth = (int)pageFormat.getImageableWidth() - 50;
 
-	// Set the printing font to the monospaced font
 	graphics.setFont(mono);
+	
+//	int y = 0; 
+//        int start = (pageIndex == 0) ? 0 : pageBreaks[pageIndex-1];
+//        int end   = (pageIndex == pageBreaks.length)
+//                         ? lines.length : pageBreaks[pageIndex];
+//        for (int line=start; line<end; line++) {
+//            y += lineHeight;
+//            graphics.drawString(lines[line], 0, y);
+//        }
+
 	
 	// Now we perform our rendering
 //	graphics.drawString("Hello world!", 100, 100);
@@ -155,7 +166,8 @@ public class PrintableRecipe implements Printable{
 //	    graphics.drawString(StringTools.capitalize(StringTools.padClip(component.getIngredient().getName(), '.', ingrNameLength-1)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), x+tabs[0], y);
 	    graphics.drawString(StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), x+tabs[1], y);
-	    graphics.drawString(two.format(component.getUnits()), x+tabs[2], y);
+//	    graphics.drawString(two.format(component.getUnits()), x+tabs[2], y);
+	    graphics.drawString(component.getFormattedUnits(), x+tabs[2], y);
 //	    double quantity = component.getGrossQuantity()*toMakeToNet;
 	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
@@ -176,83 +188,85 @@ public class PrintableRecipe implements Printable{
 	graphics.drawString(three.format(sum), x+tabs[3]-chars*charWidth, y);
 	y+=lineHeight;
 	
-	/*
-	 * Print the preparation
-	 */
-	y+=lineHeight;
-	y+=lineHeight;
-	graphics.drawString("BEREIDINGSWIJZE:", x+charWidth*10, y);
-	y+=lineHeight;
-	y+=lineHeight;
-	
-	
-	/*
-	 * Split into paragraphs, separated by '\n'
-	 */
-	String[] paragraphs = recipe.getPreparation().split("\n");
-	System.out.println("PrintableRecipe:: Split into "+paragraphs.length+" paragraphs!");
-	
-	for (String paragraph : paragraphs) {
-	    String[] words = paragraph.split(" ");
-	    
+	if (!recipe.getPreparation().isEmpty()) {
 	    /*
-	     * Data structure for the words to print in this paragraph
-	     */
-	    Stack<String> wordsToPrint = new Stack<String>();
-	    // add all words to a stack in the correct order (first word on top)
-	    for (int i = words.length - 1 ; i >= 0; i--) {
-		wordsToPrint.push(words[i]);
-	    }
-	    
-	    System.out.println("PrintableRecipe::  Split line into "+words.length+" words!");
-	    
-	    int xOffset = 0;
-	    StringBuilder builder = new StringBuilder();
-	    
-	    /*
-	     * Handle words in paragraph in order
-	     */
-	    while (!wordsToPrint.isEmpty()){
-		String word = wordsToPrint.pop();
-		int length = metrics.charsWidth(word.toCharArray(), 0, word.length());
-		
-		System.out.println("PrintableRecipe::\t Handling word: "+word+", l="+length);
-		
-		/*
-		 * If the word does not fit the line, split it.
-		 * (I honestly don't care about proper hyphenation -.-)
-		 */
-		if (length > imageableWidth) {
-		    int spaceLeftOnLine = (imageableWidth-metrics.charWidth('-')) - xOffset;	// save 1 charWidth for hyphen
-		    String part1 = word.substring(0, spaceLeftOnLine);
-		    String part2 = word.substring(spaceLeftOnLine);
-		    builder.append(part1).append('-');
-		    wordsToPrint.push(part2);
-		    builder = new StringBuilder();
-		    xOffset = 0;
-		    y += lineHeight;
-		    System.out.println("PrintableRecipe:: Split a word...");
-		} else {
-		    if (xOffset + length <= imageableWidth) {
-			builder.append(word).append(" ");
-			xOffset += length+charWidth;
-		    } else {
-			graphics.drawString(builder.toString(), x, y);
-			y+=lineHeight;
-			builder = new StringBuilder(word+" ");
-			xOffset = length+charWidth;
-			System.out.println("PrintableRecipe:: NEW LINE!");
-		    }
-		}
-	    }
-	    
-	    // empty the buffer
-	    graphics.drawString(builder.toString(), x, y);
-	    y+=lineHeight; // new line
-	    System.out.println("PrintableRecipe:: NEW LINE!");
+	    * Print the preparation
+	    */
+	   y+=lineHeight;
+	   y+=lineHeight;
+	   graphics.drawString("BEREIDINGSWIJZE:", x+charWidth*10, y);
+	   y+=lineHeight;
+	   y+=lineHeight;
+
+
+	   /*
+	    * Split into paragraphs, separated by '\n'
+	    */
+	   String[] paragraphs = recipe.getPreparation().split("\n");
+	   System.out.println("PrintableRecipe:: Split into "+paragraphs.length+" paragraphs!");
+
+	   for (String paragraph : paragraphs) {
+	       String[] words = paragraph.split(" ");
+
+	       /*
+		* Data structure for the words to print in this paragraph
+		*/
+	       Stack<String> wordsToPrint = new Stack<String>();
+	       // add all words to a stack in the correct order (first word on top)
+	       for (int i = words.length - 1 ; i >= 0; i--) {
+		   wordsToPrint.push(words[i]);
+	       }
+
+	       System.out.println("PrintableRecipe::  Split line into "+words.length+" words!");
+
+	       int xOffset = 0;
+	       StringBuilder builder = new StringBuilder();
+
+	       /*
+		* Handle words in paragraph in order
+		*/
+	       while (!wordsToPrint.isEmpty()){
+		   String word = wordsToPrint.pop();
+		   int length = metrics.charsWidth(word.toCharArray(), 0, word.length());
+
+		   System.out.println("PrintableRecipe::\t Handling word: "+word+", l="+length);
+
+		   /*
+		    * If the word does not fit the line, split it.
+		    * (I honestly don't care about proper hyphenation -.-)
+		    */
+		   if (length > imageableWidth) {
+		       int spaceLeftOnLine = (imageableWidth-metrics.charWidth('-')) - xOffset;	// save 1 charWidth for hyphen
+		       String part1 = word.substring(0, spaceLeftOnLine);
+		       String part2 = word.substring(spaceLeftOnLine);
+		       builder.append(part1).append('-');
+		       wordsToPrint.push(part2);
+		       builder = new StringBuilder();
+		       xOffset = 0;
+		       y += lineHeight;
+		       System.out.println("PrintableRecipe:: Split a word...");
+		   } else {
+		       if (xOffset + length <= imageableWidth) {
+			   builder.append(word).append(" ");
+			   xOffset += length+charWidth;
+		       } else {
+			   graphics.drawString(builder.toString(), x, y);
+			   y+=lineHeight;
+			   builder = new StringBuilder(word+" ");
+			   xOffset = length+charWidth;
+			   System.out.println("PrintableRecipe:: NEW LINE!");
+		       }
+		   }
+	       }
+
+	       // empty the buffer
+	       graphics.drawString(builder.toString(), x, y);
+	       y+=lineHeight; // new line
+	       System.out.println("PrintableRecipe:: NEW LINE!");
+	   }
+
+	   y+=lineHeight;
 	}
-	
-	y+=lineHeight;
 	
 	// tell the caller that this page is part of the printed document
 	return PAGE_EXISTS;

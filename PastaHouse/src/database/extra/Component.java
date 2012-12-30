@@ -41,7 +41,6 @@ public class Component {
 	if (ingredient == null) {
 	    return "Geen ingrediënt";
 	} else {
-//	    return ingredient.isInBulk() ? "<n.v.t.>" : new DecimalFormat("0.00").format(getUnits());
 	    return ingredient.isInBulk() ? "Bulk" : new DecimalFormat("0.00").format(getUnits());
 	}
     }

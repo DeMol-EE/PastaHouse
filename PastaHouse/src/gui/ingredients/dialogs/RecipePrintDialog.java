@@ -41,7 +41,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	
 	setLocationRelativeTo(null);
 	
-	setResizable(false);
+//	setResizable(false);
 	
 	buttonGroup1.add(pieces);
 	buttonGroup1.add(weight);
@@ -131,7 +131,8 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         priceTotalOutlet = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(462, 370));
+        setMinimumSize(new java.awt.Dimension(600, 500));
+        setPreferredSize(new java.awt.Dimension(600, 500));
 
         jPanel3.setFocusable(false);
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
