@@ -12,16 +12,15 @@ import java.awt.Graphics;
  */
 public class PrintableNewline implements PrintableObject{
 
-    private final int x, y;
+    private final int y;
     
-    public PrintableNewline(int x, int y){
-	this.x=x;
+    public PrintableNewline(int y){
 	this.y=y;
     }
     
     @Override
     public void print(Graphics g) {
-	g.drawString("", x, y);
+	g.drawString("", 0, y);
     }
     
 }
