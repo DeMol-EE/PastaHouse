@@ -4,6 +4,8 @@
  */
 package database.extra;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author Robin jr
@@ -35,6 +37,15 @@ public class Component {
 	return quantity;
     }
     
+    public String getFormattedUnits(){
+	if (ingredient == null) {
+	    return "Geen ingrediënt";
+	} else {
+//	    return ingredient.isInBulk() ? "<n.v.t.>" : new DecimalFormat("0.00").format(getUnits());
+	    return ingredient.isInBulk() ? "Bulk" : new DecimalFormat("0.00").format(getUnits());
+	}
+    }
+    
     /**
      * Returns the used amount of units of this ingredient, calculated using the
      * gross needed weight of the ingredient to get the desired entered net
@@ -43,7 +54,8 @@ public class Component {
      * @return The needed amount of units of this ingredient.
      */
     public double getUnits() {
-	double d = (quantity / (1.0 - 0.01 * ingredient.getLossPercent()) )* ingredient.getWeightPerUnit();
+//	double d = (quantity / (1.0 - 0.01 * ingredient.getLossPercent()) )* ingredient.getWeightPerUnit();
+	double d = quantity/ingredient.getWeightPerUnit();
 	return d * Math.signum(d);
     }
 

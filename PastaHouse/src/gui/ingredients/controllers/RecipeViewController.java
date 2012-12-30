@@ -93,7 +93,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	preparationOutlet.setText(r.getPreparation());
 	
 	ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer());
-	ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+//	ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+	ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
 	ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createIngredientCellRenderer());
 	ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	

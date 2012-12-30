@@ -195,6 +195,7 @@ public class BasicIngredient extends Ingredient {
 	return false;
     }
     
+    @Override
     public boolean isInBulk(){
 	return pricePerUnit<0 && weightPerUnit<0;
     }

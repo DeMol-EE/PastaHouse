@@ -52,4 +52,6 @@ public abstract class Ingredient extends Record implements Comparable<Ingredient
     public abstract double getLossPercent();
     
     public abstract boolean isBasicIngredient();
+    
+    public abstract boolean isInBulk();
 }

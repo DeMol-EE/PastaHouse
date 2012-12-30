@@ -90,6 +90,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
 	
 	this.ingredientsOutlet.setDragEnabled(true);
 	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);
@@ -197,10 +198,10 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(300, 256));
-        setPreferredSize(new java.awt.Dimension(600, 500));
+        setMinimumSize(new java.awt.Dimension(400, 500));
+        setPreferredSize(new java.awt.Dimension(600, 700));
 
-        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setDividerLocation(300);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         jPanel11.setLayout(new java.awt.BorderLayout());

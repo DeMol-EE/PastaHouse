@@ -41,7 +41,8 @@ public class StaticRecipeTableModel extends AbstractTableModel{
 	    case 2:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    case 3:
-		return ((Component)data.values().toArray()[rowIndex]).getUnits();
+//		return ((Component)data.values().toArray()[rowIndex]).getUnits();
+		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
 	    default:
 		return "<empty>";
 	}
@@ -76,6 +77,7 @@ public class StaticRecipeTableModel extends AbstractTableModel{
 		return Component.class;
 	    case 3:
 		return Double.class;
+//		return String.class;
 	    default:
 		return Object.class;
 	}
