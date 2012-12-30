@@ -4,11 +4,17 @@
  */
 package database.tables;
 
+import database.Database;
 import database.FunctionResult;
 import database.extra.InvoiceItem;
 import database.extra.Record;
+import database.models.InvoiceModel;
+import database.models.RecipeModel;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tools.Configuration;
 
 /**
@@ -35,6 +41,10 @@ public class Invoice extends Record<Invoice>{
     
     public static Invoice createStub(int id, int number, String date, Contact client, String priceCode, double save){
 	return new Invoice(id, number, date, client, priceCode, save);
+    }
+    
+    public static Invoice createFromModel(int id, InvoiceModel model){
+	return new Invoice(id, model.getNumber(), model.getDate(), model.getClient(), model.getPriceCode(), model.getSave());
     }
 
     public int getNumber() {
@@ -87,7 +97,12 @@ public class Invoice extends Record<Invoice>{
     
     @Override
     public FunctionResult<Invoice> update() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	try {
+            return Database.driver().updateInvoice(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(Recipe.class.getName()).log(Level.SEVERE, null, ex);
+            return new FunctionResult<Invoice>(2, null, ex.getMessage());
+        }
     }
 
     @Override
