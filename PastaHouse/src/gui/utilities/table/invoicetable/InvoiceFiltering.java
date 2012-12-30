@@ -6,6 +6,7 @@ package gui.utilities.table.invoicetable;
 
 import database.tables.Invoice;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.RowFilter;
@@ -21,9 +22,12 @@ public class InvoiceFiltering extends AbstractBean {
     private JXTable invoiceTable;
     private String clientString;
     private String numberString;
+    private Date fromDate;
+    private Date toDate;
     private RowFilter<Object, Object> clientFilter;
     private RowFilter<Object, Object> numberFilter;
-    private RowFilter<Object, Object> dateFilter;
+    private RowFilter<Object, Object> fromDateFilter;
+    private RowFilter<Object, Object> toDateFilter;
 
     public InvoiceFiltering(JXTable invoiceTable) {
         this.invoiceTable = invoiceTable;
@@ -34,6 +38,14 @@ public class InvoiceFiltering extends AbstractBean {
     }
 
     public boolean isFilteringByNumber() {
+        return !isEmpty(getNumberString());
+    }
+
+    public boolean isFilteringByFromDate() {
+        return !isEmpty(getNumberString());
+    }
+
+    public boolean isFilteringByToDate() {
         return !isEmpty(getNumberString());
     }
 
@@ -52,7 +64,21 @@ public class InvoiceFiltering extends AbstractBean {
         String oldValue = getClientString();
         this.numberString = filterString;
         updateNumberFilter();
-        firePropertyChange("filterString", oldValue, getClientString());
+        firePropertyChange("numberString", oldValue, getNumberString());
+    }
+
+    public void setFromDate(Date date) {
+        Date oldValue = getFromDate();
+        this.fromDate = date;
+        updateFromDateFilter();
+        firePropertyChange("numberString", oldValue, getFromDate());
+    }
+
+    public void setToDate(Date date) {
+        Date oldValue = getToDate();
+        this.toDate = date;
+        updateToDateFilter();
+        firePropertyChange("toDate", oldValue, getToDate());
     }
 
     public String getClientString() {
@@ -61,6 +87,14 @@ public class InvoiceFiltering extends AbstractBean {
 
     public String getNumberString() {
         return numberString;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
     }
 
     private void updateClientFilter() {
@@ -81,16 +115,37 @@ public class InvoiceFiltering extends AbstractBean {
         updateFilters();
     }
 
+    private void updateToDateFilter() {
+        if (toDate != null) {
+            toDateFilter = (createToDateFilter(toDate));
+        } else {
+            toDateFilter = null;
+        }
+        updateFilters();
+    }
+
+    private void updateFromDateFilter() {
+        if (fromDate != null) {
+            fromDateFilter = (createFromDateFilter(fromDate));
+        } else {
+            fromDateFilter = null;
+        }
+        updateFilters();
+    }
+
     private void updateFilters() {
         List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>(2);
-        if(clientFilter != null){
+        if (clientFilter != null) {
             filters.add(clientFilter);
         }
-        if(numberFilter != null){
+        if (numberFilter != null) {
             filters.add(numberFilter);
         }
-        if(dateFilter != null){
-            filters.add(dateFilter);
+        if (fromDateFilter != null) {
+            filters.add(fromDateFilter);
+        }
+        if (toDateFilter != null) {
+            filters.add(toDateFilter);
         }
         RowFilter<Object, Object> comboFilter = RowFilter.andFilter(filters);
         invoiceTable.setRowFilter(comboFilter);
@@ -120,6 +175,38 @@ public class InvoiceFiltering extends AbstractBean {
                 Pattern p = Pattern.compile(filterString, Pattern.CASE_INSENSITIVE);
                 if (number != null) {
                     matches = p.matcher(number).matches();
+                }
+                return matches;
+            }
+        };
+    }
+
+    private RowFilter<Object, Object> createToDateFilter(final Date filterdate) {
+        return new RowFilter<Object, Object>() {
+            @Override
+            public boolean include(RowFilter.Entry<? extends Object, ? extends Object> entry) {
+                String stringdate = entry.getStringValue(2);
+                Date date = new Date(stringdate);
+                boolean matches = false;
+                int test = filterdate.compareTo(date);
+                if (test >= 0) {
+                    matches = true;
+                }
+                return matches;
+            }
+        };
+    }
+
+    private RowFilter<Object, Object> createFromDateFilter(final Date filterdate) {
+        return new RowFilter<Object, Object>() {
+            @Override
+            public boolean include(RowFilter.Entry<? extends Object, ? extends Object> entry) {
+                String stringdate = entry.getStringValue(2);
+                Date date = new Date(stringdate);
+                boolean matches = false;
+                int test = filterdate.compareTo(date);
+                if (test <= 0) {
+                    matches = true;
                 }
                 return matches;
             }
