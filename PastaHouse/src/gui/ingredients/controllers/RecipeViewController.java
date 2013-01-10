@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import printer.PrintableRecipe;
+import printer.printables.PrintableRecipe;
 import tools.StringTools;
 import tools.Utilities;
 

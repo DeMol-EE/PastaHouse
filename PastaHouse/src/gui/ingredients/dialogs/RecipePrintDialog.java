@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
-import printer.PrintableRecipe;
+import printer.printables.PrintableRecipe;
 import printer.Printer;
 import tools.StringTools;
 import tools.Utilities;

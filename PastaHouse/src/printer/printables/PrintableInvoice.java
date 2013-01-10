@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package printer;
+package printer.printables;
 
 import database.extra.InvoiceItem;
 import database.tables.Invoice;

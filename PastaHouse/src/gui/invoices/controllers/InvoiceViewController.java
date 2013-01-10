@@ -35,7 +35,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import printer.PrintableInvoiceNew;
+import printer.printables.PrintableInvoiceNew;
 
 /**
  *

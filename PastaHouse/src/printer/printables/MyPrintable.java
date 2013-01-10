@@ -1,6 +1,8 @@
-package printer;
+package printer.printables;
 
 
+import printer.adts.PrintableNewline;
+import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;

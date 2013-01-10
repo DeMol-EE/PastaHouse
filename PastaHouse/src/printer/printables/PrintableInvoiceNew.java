@@ -2,8 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package printer;
+package printer.printables;
 
+import printer.adts.PrintableString;
+import printer.adts.PrintableMulti;
+import printer.adts.PrintableLine;
+import printer.adts.PrintableNewline;
+import printer.adts.PrintableHorizontalLineObject;
 import database.extra.InvoiceItem;
 import database.tables.Invoice;
 import java.awt.Font;

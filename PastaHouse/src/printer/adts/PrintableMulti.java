@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package printer;
+package printer.adts;
 
+import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Graphics;
 import java.util.List;
 
