@@ -10,19 +10,24 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public class PrintableLine implements PrintableObject{
+public class PrintableLine implements PrintableHorizontalLineObject{
 
-    private final int x1, y1, x2, y2;
+    private final int x1, x2;
     
-    public PrintableLine(int x1, int y1, int x2, int y2){
+    public PrintableLine(int x1, int x2){
 	this.x1=x1;
-	this.y1=y1;
 	this.x2=x2;
-	this.y2=y2;
     }
     
     @Override
-    public void print(Graphics g) {
-	g.drawLine(x1, y1, x2, y2);
+    public void print(Graphics g, int y) {
+	g.drawLine(x1, y, x2, y);
     }
+
+    @Override
+    public String toString() {
+	return " --- LINE ("+x1+", "+x2+") ---";
+    }
+    
+    
 }

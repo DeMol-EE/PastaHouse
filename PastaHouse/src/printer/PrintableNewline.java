@@ -10,17 +10,16 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public class PrintableNewline implements PrintableObject{
-
-    private final int y;
-    
-    public PrintableNewline(int y){
-	this.y=y;
-    }
+public class PrintableNewline implements PrintableHorizontalLineObject{
     
     @Override
-    public void print(Graphics g) {
+    public void print(Graphics g, int y) {
 	g.drawString("", 0, y);
+    }
+
+    @Override
+    public String toString() {
+	return " ";
     }
     
 }

@@ -9,7 +9,6 @@ import database.FunctionResult;
 import database.extra.InvoiceItem;
 import database.extra.Record;
 import database.models.InvoiceModel;
-import database.models.RecipeModel;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;

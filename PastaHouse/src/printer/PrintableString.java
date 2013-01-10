@@ -10,20 +10,25 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public class PrintableString implements PrintableObject{
+public class PrintableString implements PrintableHorizontalLineObject{
 
     private final String line;
     private final int x;
-    private final int y;
     
-    public PrintableString(String line, int x, int y){
+    public PrintableString(String line, int x){
 	this.line = line;
 	this.x = x;
-	this.y = y;
     }
     
     @Override
-    public void print(Graphics g) {
+    public void print(Graphics g, int y) {
 	g.drawString(line, x, y);
     }
+
+    @Override
+    public String toString() {
+	return line;
+    }
+    
+    
 }

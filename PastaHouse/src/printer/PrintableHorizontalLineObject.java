@@ -10,6 +10,6 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public interface PrintableObject {
-    public void print(Graphics g);
+public interface PrintableHorizontalLineObject {
+    public void print(Graphics g, int y);
 }
