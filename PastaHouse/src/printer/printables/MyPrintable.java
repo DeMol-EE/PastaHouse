@@ -40,8 +40,12 @@ public abstract class MyPrintable implements Printable{
     @Override
     public final int print(Graphics g, PageFormat pf, int pageIndex) throws PrinterException {
 	System.out.println("Received print request for page: "+pageIndex);
+	/*
+	 * Prepare the "canvas"
+	 */
 	Graphics2D g2d = (Graphics2D)g;
         g2d.translate(pf.getImageableX(), pf.getImageableY());
+	g.setFont(font);
 	
 	int lineHeight = g.getFontMetrics(font).getHeight();
 	
@@ -76,11 +80,13 @@ public abstract class MyPrintable implements Printable{
 	    for (int line = 0; line < printModelBody.size(); line++) {
 		printModel.add(printModelBody.get(line));
 	    }
-	    while (printModel.size() < totalGrossLines-printModelFooter.size()) {
-		printModel.add(new PrintableNewline());
-	    }
-	    for (int footerLine = 0; footerLine < printModelFooter.size(); footerLine++) {
-		printModel.add(printModelFooter.get(footerLine));
+	    if (!printModelFooter.isEmpty()) {
+		while (printModel.size() < totalGrossLines-printModelFooter.size()) {
+		    printModel.add(new PrintableNewline());
+		}
+		for (int footerLine = 0; footerLine < printModelFooter.size(); footerLine++) {
+		    printModel.add(printModelFooter.get(footerLine));
+		}
 	    }
 	    
 	    /*

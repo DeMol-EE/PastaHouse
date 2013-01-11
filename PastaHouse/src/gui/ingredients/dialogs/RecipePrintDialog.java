@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import printer.printables.PrintableRecipe;
 import printer.Printer;
+import printer.printables.PrintableRecipeNew;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -26,7 +27,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 
     private static RecipePrintDialog reused;
     
-    private PrintableRecipe model;
+    private PrintableRecipeNew model;
     private PrintableTableModel tableModel;
     private Map<Integer, Component> originalComponents;
     
@@ -60,7 +61,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	return reused;
     }
     
-    public void showDialog(PrintableRecipe model){
+    public void showDialog(PrintableRecipeNew model){
 	setModel(model);
 	updateTable();
 	setVisible(true);
@@ -70,7 +71,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
      * Private methods follow
      */
     
-    private void setModel(PrintableRecipe model){
+    private void setModel(PrintableRecipeNew model){
 	this.model = model;
 	this.originalComponents = new TreeMap<Integer, Component>();
 	for (Map.Entry<Integer, Component> entry : model.getRecipe().getComponents().entrySet()) {
