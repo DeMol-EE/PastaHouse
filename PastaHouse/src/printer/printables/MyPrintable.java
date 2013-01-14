@@ -1,8 +1,6 @@
 package printer.printables;
 
 
-import printer.adts.PrintableNewline;
-import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -12,6 +10,8 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.List;
+import printer.adts.PrintableHorizontalLineObject;
+import printer.adts.PrintableNewline;
 
 /*
  * To change this template, choose Tools | Templates
@@ -28,10 +28,13 @@ public abstract class MyPrintable implements Printable{
      * Calculated once and used for printing callbacks.
      * 
      */
-//    private PrintableHorizontalLineObject[] printModel;
     private List<PrintableHorizontalLineObject> printModel;
     private final Font font;
     private int[] pageBreaks;
+    
+    public MyPrintable() {
+	this(new Font("Serif", Font.PLAIN, 12));
+    }
     
     public MyPrintable(Font font) {
 	this.font = font;
