@@ -4,11 +4,6 @@
  */
 package printer.printables;
 
-import printer.adts.PrintableString;
-import printer.adts.PrintableMulti;
-import printer.adts.PrintableLine;
-import printer.adts.PrintableNewline;
-import printer.adts.PrintableHorizontalLineObject;
 import database.extra.InvoiceItem;
 import database.tables.Invoice;
 import java.awt.Font;
@@ -19,6 +14,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import printer.adts.PrintableHorizontalLineObject;
+import printer.adts.PrintableLine;
+import printer.adts.PrintableMulti;
+import printer.adts.PrintableNewline;
+import printer.adts.PrintableString;
 
 /**
  *
@@ -37,7 +37,7 @@ public class PrintableInvoiceNew extends MyPrintable{
     }
     
     @Override
-    public List<PrintableHorizontalLineObject> transformBody(int width, FontMetrics fontMetrics) {
+    public List<PrintableHorizontalLineObject> transformBody(int width, int margin, FontMetrics fontMetrics) {
 	/*
 	 * Formatting variables
 	 */
@@ -137,7 +137,7 @@ public class PrintableInvoiceNew extends MyPrintable{
     }
 
     @Override
-    public List<PrintableHorizontalLineObject> transformFooter(int width, FontMetrics fontMetrics) {
+    public List<PrintableHorizontalLineObject> transformFooter(int width, int margin, FontMetrics fontMetrics) {
 	/*
 	 * Incremental print model
 	 */

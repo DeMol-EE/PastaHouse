@@ -4,7 +4,6 @@
  */
 package printer.adts;
 
-import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Graphics;
 
 /**

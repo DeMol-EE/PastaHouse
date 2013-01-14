@@ -58,8 +58,8 @@ public abstract class MyPrintable implements Printable{
 	    /*
 	     * Transform the data model to the printing model
 	     */
-	    List<PrintableHorizontalLineObject> printModelBody = transformBody((int)pf.getImageableWidth(), g.getFontMetrics(font));
-	    List<PrintableHorizontalLineObject> printModelFooter = transformFooter((int)pf.getImageableWidth(), g.getFontMetrics(font));
+	    List<PrintableHorizontalLineObject> printModelBody = transformBody((int)pf.getImageableWidth(), (int)pf.getImageableX(), g.getFontMetrics(font));
+	    List<PrintableHorizontalLineObject> printModelFooter = transformFooter((int)pf.getImageableWidth(), (int)pf.getImageableY(), g.getFontMetrics(font));
 	    
 	    /*
 	     * Calculate the amount of needed pages
@@ -140,10 +140,11 @@ public abstract class MyPrintable implements Printable{
      * line breaking properly.
      * 
      * @param width To easy the implementation, the width of the page is given as a parameter.
+     * @param margin To easy the implementation, the left margin of the page is given as a parameter.
      * @param fontMetrics To easy the implementation, the font metrics for the font used for printing is given as a parameter.
      * @return Returns an array of PrintableObjects representing the data model in a printer-friendly format.
      */
-    public abstract List<PrintableHorizontalLineObject> transformBody(int width, FontMetrics fontMetrics);
+    public abstract List<PrintableHorizontalLineObject> transformBody(int width, int margin, FontMetrics fontMetrics);
     
-    public abstract List<PrintableHorizontalLineObject> transformFooter(int width, FontMetrics fontMetrics);
+    public abstract List<PrintableHorizontalLineObject> transformFooter(int width, int margin, FontMetrics fontMetrics);
 }
