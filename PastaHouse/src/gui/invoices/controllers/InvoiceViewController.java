@@ -10,6 +10,7 @@ import gui.MasterDetailViewController;
 import gui.invoices.delegates.AddInvoiceDelegate;
 import gui.invoices.delegates.EditInvoiceDelegate;
 import gui.invoices.dialogs.AddInvoiceDialog;
+import gui.invoices.dialogs.InvoiceDetailsDialog;
 import gui.utilities.table.invoicetable.CustomColumnFactory;
 import gui.utilities.table.invoicetable.InvoiceFiltering;
 import gui.utilities.table.invoicetable.InvoiceRendering;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -230,6 +232,10 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_invoicesActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        int row = table.getSelectedRow();
+        int index = table.convertRowIndexToModel(row);
+        Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
+        new InvoiceDetailsDialog(null, true, inv).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void numberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFieldKeyReleased

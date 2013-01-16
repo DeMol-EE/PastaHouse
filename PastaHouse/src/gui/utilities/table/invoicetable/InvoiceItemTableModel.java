@@ -12,47 +12,71 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Warkst
  */
-public class InvoiceItemTableModel extends AbstractTableModel{
+public class InvoiceItemTableModel extends AbstractTableModel {
 
     private final Map<Integer, InvoiceItem> data;
-    
-    public InvoiceItemTableModel(Map<Integer, InvoiceItem> data){
-	this.data = data;
+
+    public InvoiceItemTableModel(Map<Integer, InvoiceItem> data) {
+        this.data = data;
     }
-    
+
     @Override
     public int getRowCount() {
-	return data.size();
+        return data.size();
     }
 
     @Override
     public int getColumnCount() {
-	return 3;
+        return 5;
     }
 
     @Override
     public String getColumnName(int column) {
-	switch(column){
-	    case 0: return "Artikel";
-	    case 1: return "Hoeveelheid";
-	    case 2: return "BTW";
-	    default: return "ERROR";
-	}
+        switch (column) {
+            case 0:
+                return "Artikel";
+            case 1:
+                return "BTW";
+            case 2:
+                return "Hoeveelheid";
+            case 3:
+                return "Prijs";
+            case 4:
+                return "Totaal";
+            default:
+                return "ERROR";
+        }
     }
 
     @Override
     public boolean isCellEditable(int arg0, int arg1) {
-	return false;
+        return false;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-	switch(columnIndex){
-	    case 0: return ((InvoiceItem)data.values().toArray()[rowIndex]).getArticle().getName();
-	    case 1: return ((InvoiceItem)data.values().toArray()[rowIndex]).getAmount();
-	    case 2: return ((InvoiceItem)data.values().toArray()[rowIndex]).getTaxes();
-	    default: return "Error";
-	}
+        InvoiceItem item = (InvoiceItem) data.values().toArray()[rowIndex];
+        double price;
+        String code = item.getArticle().getCode();
+        if (code.equals("A")) {
+            price = item.getArticle().getPriceA();
+        } else {
+            price = item.getArticle().getPriceB();
+        }
+        switch (columnIndex) {
+            case 0:
+                return item.getArticle().getName();
+            case 1:
+                return item.getAmount();
+            case 2:
+                return item.getTaxes();
+            case 3:
+                return price;
+            case 4:
+                return price * item.getAmount() * 1+(item.getTaxes()/100);
+
+            default:
+                return "Error";
+        }
     }
-    
 }

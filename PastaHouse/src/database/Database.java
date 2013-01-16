@@ -24,7 +24,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -741,6 +744,28 @@ public class Database {
 
             return new FunctionResult(1, null, StringTools.capitalize(e.getMessage()));
         }
+    }
+
+    public int getInvoiceNumber() {
+        int currentnumber = 0;
+        try {
+            ResultSet rs = statement.executeQuery("select number\n"
+                    + "from invoices\n"
+                    + "where number=(select max(number) from invoices)");
+            while (rs.next()) {
+                currentnumber = rs.getInt("number");
+            }
+            DateFormat dateFormat = new SimpleDateFormat("yy");
+            Date date = new Date();
+            int year = Integer.parseInt(dateFormat.format(date));
+            int numberyear = currentnumber / 10000;
+            if (year != numberyear) {
+                currentnumber = year * 10000;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return currentnumber + 1;
     }
 
     /**
