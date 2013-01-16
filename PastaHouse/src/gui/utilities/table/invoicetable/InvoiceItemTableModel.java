@@ -8,6 +8,7 @@ import database.extra.InvoiceItem;
 import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 
+
 /**
  *
  * @author Warkst
@@ -16,6 +17,7 @@ public class InvoiceItemTableModel extends AbstractTableModel {
 
     private final Map<Integer, InvoiceItem> data;
 
+   
     public InvoiceItemTableModel(Map<Integer, InvoiceItem> data) {
         this.data = data;
     }

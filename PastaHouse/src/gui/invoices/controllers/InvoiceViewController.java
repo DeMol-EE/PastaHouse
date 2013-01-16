@@ -11,6 +11,7 @@ import gui.invoices.delegates.AddInvoiceDelegate;
 import gui.invoices.delegates.EditInvoiceDelegate;
 import gui.invoices.dialogs.AddInvoiceDialog;
 import gui.invoices.dialogs.InvoiceDetailsDialog;
+import gui.utilities.DatePickerFactory;
 import gui.utilities.table.invoicetable.CustomColumnFactory;
 import gui.utilities.table.invoicetable.InvoiceFiltering;
 import gui.utilities.table.invoicetable.InvoiceRendering;
@@ -66,10 +67,11 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
         tablePanel.add(scrollpane, BorderLayout.CENTER);
+        DatePickerFactory dpfactory = new DatePickerFactory();
         configureDisplayProperties();
-        fromPicker = new JXDatePicker();
+        fromPicker = dpfactory.makeStandardDatePicker();
         fromPicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        toPicker = new JXDatePicker();
+        toPicker = dpfactory.makeStandardDatePicker();
         toPicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
         fromOutlet.add(fromPicker);
         toOutlet.add(toPicker);
@@ -374,9 +376,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     private void configureDisplayProperties() {
         table.setColumnControlVisible(true);
-        table.setShowGrid(false, false);
+        table.setShowHorizontalLines(true);
         table.addHighlighter(HighlighterFactory.createAlternateStriping());
-        table.setVisibleRowCount(10);
         CustomColumnFactory factory = new CustomColumnFactory();
         InvoiceRendering.configureColumnFactory(factory, getClass());
         table.setColumnFactory(factory);
