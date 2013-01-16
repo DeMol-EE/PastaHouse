@@ -14,6 +14,7 @@ import gui.ingredients.delegates.AddRecipeDelegate;
 import gui.ingredients.delegates.EditRecipeDelegate;
 import gui.ingredients.dialogs.AddRecipeDialog;
 import gui.ingredients.dialogs.EditRecipeDialog;
+import gui.ingredients.dialogs.RecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.EditableListModel;
@@ -367,7 +368,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-	new AddRecipeDialog(null, true, this).setVisible(true);
+//	new AddRecipeDialog(null, true, this).setVisible(true);
+	
+	new RecipeDialog(null, true).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
