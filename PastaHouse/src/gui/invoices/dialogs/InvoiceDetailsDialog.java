@@ -4,6 +4,10 @@
  */
 package gui.invoices.dialogs;
 
+import database.tables.Invoice;
+import gui.utilities.table.invoicetable.InvoiceItemTableModel;
+import java.text.DecimalFormat;
+
 /**
  *
  * @author Hannes
@@ -13,9 +17,18 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     /**
      * Creates new form InvoiceDetailsDialog
      */
-    public InvoiceDetailsDialog(java.awt.Frame parent, boolean modal) {
+    public InvoiceDetailsDialog(java.awt.Frame parent, boolean modal, Invoice invoice) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
+        lblNummer.setText("" + invoice.getNumber());
+        lblKlasse.setText(invoice.getPriceCode());
+        lblDate.setText(invoice.getDate());
+        
+        lblSave.setText(new DecimalFormat("0.00").format(invoice.getSave())+" %");
+        this.setTitle("Factuur - " + invoice.getNumber());
+        InvoiceItemTableModel model = new InvoiceItemTableModel(invoice.items());
+        articleTableOutlet.setModel(model);
     }
 
     /**
@@ -28,35 +41,40 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         detail = new javax.swing.JPanel();
-        results = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        lblNummer = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         clientOutlet = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        dateOutlet = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        priceOutlet = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        lblKlasse = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         articleTableOutlet = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        lblSave = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lblPrice = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         detail.setLayout(new java.awt.BorderLayout());
 
-        results.setLayout(new java.awt.BorderLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(0, 2));
 
-        jPanel7.setLayout(new java.awt.BorderLayout());
+        jLabel6.setText("Nummer");
+        jPanel2.add(jLabel6);
+        jPanel2.add(lblNummer);
 
-        jPanel8.setLayout(new java.awt.BorderLayout());
-        jPanel8.add(jSeparator1, java.awt.BorderLayout.NORTH);
-
-        jPanel7.add(jPanel8, java.awt.BorderLayout.NORTH);
-
-        jPanel2.setLayout(new java.awt.GridLayout(3, 2));
+        jLabel4.setText("Datum");
+        jPanel2.add(jLabel4);
+        jPanel2.add(lblDate);
 
         jLabel2.setText("Klant");
         jPanel2.add(jLabel2);
@@ -64,23 +82,11 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         clientOutlet.setText("<hyperlink to client>");
         jPanel2.add(clientOutlet);
 
-        jLabel4.setText("Datum");
-        jPanel2.add(jLabel4);
+        jLabel3.setText("Prijsklasse");
+        jPanel2.add(jLabel3);
+        jPanel2.add(lblKlasse);
 
-        dateOutlet.setText("<dateOutlet>");
-        jPanel2.add(dateOutlet);
-
-        jLabel6.setText("Prijs");
-        jPanel2.add(jLabel6);
-
-        priceOutlet.setText("<priceOutlet>");
-        jPanel2.add(priceOutlet);
-
-        jPanel7.add(jPanel2, java.awt.BorderLayout.CENTER);
-
-        results.add(jPanel7, java.awt.BorderLayout.NORTH);
-
-        jPanel6.setLayout(new java.awt.BorderLayout());
+        detail.add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
         articleTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -95,32 +101,35 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         ));
         jScrollPane2.setViewportView(articleTableOutlet);
 
-        jPanel6.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        detail.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        results.add(jPanel6, java.awt.BorderLayout.CENTER);
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2));
 
-        detail.add(results, java.awt.BorderLayout.CENTER);
+        jLabel5.setText("Korting");
+        jPanel1.add(jLabel5);
+        jPanel1.add(lblSave);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 629, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(detail, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 403, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(detail, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        jLabel1.setText("Prijs");
+        jPanel1.add(jLabel1);
+        jPanel1.add(lblPrice);
+
+        detail.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+        getContentPane().add(detail, java.awt.BorderLayout.CENTER);
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
+
+        jButton1.setText("Wijzig...");
+        jPanel4.add(jButton1);
+
+        jButton2.setText("Terug");
+        jPanel4.add(jButton2);
+
+        jPanel3.add(jPanel4, java.awt.BorderLayout.EAST);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -128,18 +137,24 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable articleTableOutlet;
     private javax.swing.JLabel clientOutlet;
-    private javax.swing.JLabel dateOutlet;
     private javax.swing.JPanel detail;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel priceOutlet;
-    private javax.swing.JPanel results;
+    private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblKlasse;
+    private javax.swing.JLabel lblNummer;
+    private javax.swing.JLabel lblPrice;
+    private javax.swing.JLabel lblSave;
     // End of variables declaration//GEN-END:variables
 }
