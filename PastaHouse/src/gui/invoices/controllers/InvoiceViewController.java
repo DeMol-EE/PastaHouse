@@ -20,13 +20,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JLabel;
@@ -36,11 +33,11 @@ import javax.swing.JScrollPane;
 import javax.swing.RowFilter;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import org.jdesktop.swingx.JXDatePicker;
-import printer.PrintableInvoice;
+import printer.printables.PrintableInvoiceNew;
 
 /**
  *
@@ -242,22 +239,17 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_numberFieldKeyReleased
 
     private void afdrukkenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afdrukkenActionPerformed
-        List<PrintableInvoice> invoices = new ArrayList<PrintableInvoice>();
-        int[] rijen = table.getSelectedRows();
-        for (int i : rijen) {
-            invoices.add(new PrintableInvoice(tableModel.getInvoiceAtRow(i)));
-        }
-
+	int[] rijen = table.getSelectedRows();
         Book b = new Book();
         PageFormat pf = new PageFormat();
         pf.setPaper(new A4());
 
-        for (PrintableInvoice printableInvoice : invoices) {
-            b.append(printableInvoice, pf);
+	for (int i : rijen) {
+//            b.append(new PrintableInvoice(tableModel.getInvoiceAtRow(i)), pf);
+            b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
         }
 
         printer.Printer.driver().setPrintableBook(b);
-//	printer.Printer.driver().setPrintableJob(new PrintableInvoiceList(invoices));
         printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_afdrukkenActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

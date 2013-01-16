@@ -36,7 +36,10 @@ public class Recipe extends Ingredient {
 	netWeight = r.getNetWeight();
 	preparation = r.getPreparation();
 	components = new TreeMap<Integer, Component>();
-	components.putAll(r.getComponents());
+	// deep copy components map
+	for (Map.Entry<Integer, Component> entry : r.getComponents().entrySet()) {
+	    components.put(entry.getKey(), new Component(entry.getValue().getIngredient(), entry.getValue().getRank(), entry.getValue().getQuantity()));
+	}
     }
     
     /**
@@ -182,6 +185,11 @@ public class Recipe extends Ingredient {
     
     @Override
     public boolean isBasicIngredient(){
+	return false;
+    }
+    
+    @Override
+    public boolean isInBulk(){
 	return false;
     }
 

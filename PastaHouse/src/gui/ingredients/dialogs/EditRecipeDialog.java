@@ -24,6 +24,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 import javax.swing.DropMode;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -66,6 +69,16 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 	
 	setTitle("Recept wijzigen");
 	setLocationRelativeTo(null);
+	
+	this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	this.addWindowListener(new WindowAdapter() {
+
+	    @Override
+	    public void windowClosing(WindowEvent e) {
+		cancelActionPerformed(null);
+	    }
+	    
+	});
 	
 	this.delegate = delegate;
 	this.model = model;
@@ -116,6 +129,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
 	
 	this.ingredientsOutlet.setDragEnabled(true);
 	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);
@@ -238,9 +252,9 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 500));
-        setPreferredSize(new java.awt.Dimension(462, 500));
+        setPreferredSize(new java.awt.Dimension(600, 700));
 
-        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setDividerLocation(300);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         jPanel10.setLayout(new java.awt.BorderLayout());

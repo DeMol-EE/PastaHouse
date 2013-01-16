@@ -13,8 +13,9 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
-import printer.PrintableRecipe;
+import printer.printables.PrintableRecipe;
 import printer.Printer;
+import printer.printables.PrintableRecipeNew;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -26,7 +27,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 
     private static RecipePrintDialog reused;
     
-    private PrintableRecipe model;
+    private PrintableRecipeNew model;
     private PrintableTableModel tableModel;
     private Map<Integer, Component> originalComponents;
     
@@ -41,7 +42,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	
 	setLocationRelativeTo(null);
 	
-	setResizable(false);
+//	setResizable(false);
 	
 	buttonGroup1.add(pieces);
 	buttonGroup1.add(weight);
@@ -60,7 +61,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	return reused;
     }
     
-    public void showDialog(PrintableRecipe model){
+    public void showDialog(PrintableRecipeNew model){
 	setModel(model);
 	updateTable();
 	setVisible(true);
@@ -70,7 +71,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
      * Private methods follow
      */
     
-    private void setModel(PrintableRecipe model){
+    private void setModel(PrintableRecipeNew model){
 	this.model = model;
 	this.originalComponents = new TreeMap<Integer, Component>();
 	for (Map.Entry<Integer, Component> entry : model.getRecipe().getComponents().entrySet()) {
@@ -131,7 +132,8 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         priceTotalOutlet = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(462, 370));
+        setMinimumSize(new java.awt.Dimension(600, 500));
+        setPreferredSize(new java.awt.Dimension(600, 500));
 
         jPanel3.setFocusable(false);
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));

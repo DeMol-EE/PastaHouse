@@ -32,7 +32,11 @@ public class CellRendererFactory {
     }
     
     public static TableCellRenderer createCapitalizedStringCellRenderer(){
-	return new CapitalizedStringCellRenderer();
+	return createCapitalizedStringCellRenderer(false);
+    }
+    
+    public static TableCellRenderer createCapitalizedStringCellRenderer(boolean centered){
+	return new CapitalizedStringCellRenderer(centered);
     }
     
     public static TableCellRenderer createComboBoxCellRenderer(){
@@ -120,8 +124,9 @@ public class CellRendererFactory {
     
     private static class CapitalizedStringCellRenderer extends JLabel implements TableCellRenderer{
 
-	public CapitalizedStringCellRenderer(){
+	public CapitalizedStringCellRenderer(boolean centered){
 	    setOpaque(true);
+	    if(centered)setHorizontalAlignment(JLabel.CENTER);
 	}
 	
 	@Override

@@ -42,7 +42,8 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 	    case 1:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    case 2:
-		return ((Component)data.values().toArray()[rowIndex]).getPieces();
+//		return ((Component)data.values().toArray()[rowIndex]).getPieces();
+		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
 	    default:
 		return "<ERROR>";
 	}
@@ -72,7 +73,8 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 	    case 1:
 		return Double.class;
 	    case 2:
-		return Component.class;
+//		return Component.class;
+		return String.class;
 	    default:
 		return Object.class;
 	}
