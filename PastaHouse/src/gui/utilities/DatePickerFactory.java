@@ -16,7 +16,7 @@ import org.jdesktop.swingx.calendar.DateSelectionModel.SelectionMode;
  */
 public class DatePickerFactory {
     
-    public JXDatePicker makeStandardDatePicker(){
+    public static JXDatePicker makeStandardDatePicker(){
         JXDatePicker dp = new JXDatePicker();
         dp.getLinkPanel().setVisible(false);
         JXMonthView mv = dp.getMonthView();

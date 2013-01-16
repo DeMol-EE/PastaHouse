@@ -10,6 +10,7 @@ import database.extra.Component;
 import database.extra.Ingredient;
 import database.models.RecipeModel;
 import database.tables.Recipe;
+import gui.utilities.DatePickerFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.EditableRecipeTableModel;
@@ -32,7 +33,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTitledPanel;
 import tools.Utilities;
 
@@ -44,7 +45,7 @@ public class RecipeDialog extends javax.swing.JDialog {
     private final RecipeModel model;
     private final Map<Integer, Component> components;
     private final EditableRecipeTableModel tableModel;
-    
+    private final JXDatePicker datePicker;
     private AutocompleteCombobox componentSelectionBox;
     
     /**
@@ -57,40 +58,6 @@ public class RecipeDialog extends javax.swing.JDialog {
 	this.model = new RecipeModel();
 	this.components = new TreeMap<Integer, Component>();
 	this.tableModel = new EditableRecipeTableModel(components);
-	
-	JXTable iTable = new JXTable();
-	iTable.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
-	iTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	iTable.setModel(tableModel);
-	iTable.getModel().addTableModelListener(new TableModelListener() {
-
-	    @Override
-	    public void tableChanged(TableModelEvent e) {
-		updateGrossWeightOutlet();
-		updatePricePerWeightOutlet();
-	    }
-	});
-	
-	iTable.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
-	iTable.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
-	iTable.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
-	iTable.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
-	
-	iTable.setDragEnabled(true);
-	iTable.setDropMode(DropMode.INSERT_ROWS);
-	iTable.setTransferHandler(new TableRowTransferHandler(this.ingredientsOutlet)); 
-	
-	iTable.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
-	iTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	
-	iTable.setShowGrid(true, true);
-	iTable.setFillsViewportHeight(true);
-	
-//	jPanel4.remove(jScrollPane4);
-//	jPanel4.add(iTable, BorderLayout.CENTER);
-//	jScrollPane4.remove(ingredientsOutlet);
-//	jScrollPane4.add(iTable);
-//	jScrollPane4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -135,6 +102,10 @@ public class RecipeDialog extends javax.swing.JDialog {
 	this.componentSelectionBox = new AutocompleteCombobox(ingredients);
 	this.componentSelectionBox.setOpaque(true);
 	jPanel14.add(componentSelectionBox, BorderLayout.CENTER);
+	
+	datePicker = DatePickerFactory.makeStandardDatePicker();
+	datePicker.setDate(new Date());
+	dateParent.add(datePicker);
 	
 	setLocationRelativeTo(null);
     }
