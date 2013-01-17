@@ -35,6 +35,400 @@
         </MenuItem>
       </SubComponents>
     </Container>
+    <Container class="javax.swing.JPanel" name="fixedFields">
+      <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="2"/>
+        <Property name="rows" type="int" value="12"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Ingredi&#xeb;nt"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="nameOutlet">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;nameOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel2">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Merk"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="brandOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;brandOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel3">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Leverancier"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="supplierOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="0" red="0" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;supplierOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierOutletMouseReleased"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierOutletMouseExited"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierOutletMouseEntered"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel6">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Verpakking"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="packagingOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;packagingOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel8">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Gewicht per verpakking"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="weightPerUnitOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;weightPerUnitOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel10">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Prijs per verpakking (BTW excl)"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="pricePerUnitOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;pricePerUnitOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel12">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Prijs per kg (BTW excl)"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="pricePerWeightOutlet">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;pricePerWeightOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel14">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Verliespercentage"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lossPercentOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;lossPercentOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel16">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Totaalprijs (BTW excl)"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="grossPriceOutlet">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;grossPriceOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel18">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="BTW"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="taxesOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;taxesOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel20">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Totaalprijs"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="netPriceOutlet">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;netPriceOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel22">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Datum"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="5" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="dateOutlet">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="ef" red="ef" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;dateOutlet&gt;"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                <EmptyBorder bottom="3" left="0" right="0" top="3"/>
+              </Border>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="stretchableFields">
+      <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+              <BorderConstraints direction="Center"/>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="notesOutlet">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="db" green="cd" red="bf" type="rgb"/>
+                </Property>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Consolas" size="13" style="0"/>
+                </Property>
+                <Property name="rows" type="int" value="5"/>
+                <Property name="focusable" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="notesOutletKeyTyped"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="notesOutletKeyPressed"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="notesOutletKeyReleased"/>
+              </Events>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
   </NonVisualComponents>
   <Properties>
     <Property name="focusable" type="boolean" value="false"/>
@@ -146,412 +540,6 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
               <SubComponents>
-                <Container class="javax.swing.JPanel" name="fixedFields">
-                  <Properties>
-                    <Property name="focusable" type="boolean" value="false"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                      <BorderConstraints direction="North"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="2"/>
-                    <Property name="rows" type="int" value="12"/>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JLabel" name="jLabel1">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Ingredi&#xeb;nt"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="nameOutlet">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;nameOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel2">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Merk"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="brandOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;brandOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel3">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Leverancier"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="supplierOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="0" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;supplierOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                          <Color id="Hand Cursor"/>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierOutletMouseReleased"/>
-                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierOutletMouseExited"/>
-                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierOutletMouseEntered"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel6">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Verpakking"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="packagingOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;packagingOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel8">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Gewicht per verpakking"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="weightPerUnitOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;weightPerUnitOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel10">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Prijs per verpakking (BTW excl)"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="pricePerUnitOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;pricePerUnitOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel12">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Prijs per kg (BTW excl)"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="pricePerWeightOutlet">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;pricePerWeightOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel14">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Verliespercentage"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="lossPercentOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;lossPercentOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel16">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Totaalprijs (BTW excl)"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="grossPriceOutlet">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;grossPriceOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel18">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="BTW"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="taxesOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;taxesOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel20">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Totaalprijs"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="netPriceOutlet">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;netPriceOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel22">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Datum"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="dateOutlet">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ef" green="ef" red="ef" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="&lt;dateOutlet&gt;"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="stretchableFields">
-                  <Properties>
-                    <Property name="focusable" type="boolean" value="false"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                      <BorderConstraints direction="Center"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
-                  <SubComponents>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="Opmerking:"/>
-                          </Border>
-                        </Property>
-                        <Property name="focusable" type="boolean" value="false"/>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                      </AuxValues>
-                      <Constraints>
-                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                          <BorderConstraints direction="Center"/>
-                        </Constraint>
-                      </Constraints>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Component class="javax.swing.JTextArea" name="notesOutlet">
-                          <Properties>
-                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="db" green="cd" red="bf" type="rgb"/>
-                            </Property>
-                            <Property name="columns" type="int" value="20"/>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Consolas" size="13" style="0"/>
-                            </Property>
-                            <Property name="rows" type="int" value="5"/>
-                            <Property name="focusable" type="boolean" value="false"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="notesOutletKeyTyped"/>
-                            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="notesOutletKeyPressed"/>
-                            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="notesOutletKeyReleased"/>
-                          </Events>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                  </SubComponents>
-                </Container>
                 <Container class="javax.swing.JPanel" name="jPanel1">
                   <Properties>
                     <Property name="focusable" type="boolean" value="false"/>

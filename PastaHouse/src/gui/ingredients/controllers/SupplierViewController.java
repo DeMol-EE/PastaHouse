@@ -23,6 +23,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -61,6 +62,9 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
+	
+	container.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
+	container.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
     }
     
     @Override
@@ -109,9 +113,6 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         editMenu = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        detail = new javax.swing.JPanel();
-        container = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         firmOutlet = new javax.swing.JLabel();
@@ -140,6 +141,9 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         edit = new javax.swing.JButton();
         master = new javax.swing.JPanel();
@@ -179,17 +183,6 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
             }
         });
         editMenu.add(editMenuItem);
-
-        setFocusable(false);
-        setLayout(new java.awt.BorderLayout());
-
-        jSplitPane1.setDividerLocation(200);
-        jSplitPane1.setFocusable(false);
-
-        detail.setFocusable(false);
-        detail.setLayout(new java.awt.BorderLayout());
-
-        container.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 2));
@@ -334,12 +327,10 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         pricecodeOutlet.setOpaque(true);
         fixedFields.add(pricecodeOutlet);
 
-        container.add(fixedFields, java.awt.BorderLayout.NORTH);
-
         stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
         jScrollPane2.setFocusable(false);
 
         notesOutlet.setBackground(new java.awt.Color(240, 240, 240));
@@ -364,7 +355,16 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        setFocusable(false);
+        setLayout(new java.awt.BorderLayout());
+
+        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setFocusable(false);
+
+        detail.setFocusable(false);
+        detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 

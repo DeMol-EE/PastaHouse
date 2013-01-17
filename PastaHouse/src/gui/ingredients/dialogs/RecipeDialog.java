@@ -280,8 +280,10 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 		    return false;
 		}
 		if (!nameOutlet.getText().equalsIgnoreCase(defaultModel.getName())) {
-		    if (Database.driver().getRecipesAlphabetically().containsKey(nameOutlet.getText().toLowerCase())) {
-			return false;
+		    for (Ingredient ingredient : Database.driver().getIngredients()) {
+			if (ingredient.getName().equalsIgnoreCase(nameOutlet.getText().toLowerCase())) {
+			    return false;
+			}
 		    }
 		}
 		return true;

@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -75,6 +76,9 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
             detail.remove(container);
             detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
         }
+	
+	container.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
+	container.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
     }
     
     @Override
@@ -150,13 +154,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        master = new javax.swing.JPanel();
-        add = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listOutlet = new javax.swing.JList();
-        detail = new javax.swing.JPanel();
-        container = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         nameOutlet = new javax.swing.JLabel();
@@ -185,6 +182,13 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        master = new javax.swing.JPanel();
+        add = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listOutlet = new javax.swing.JList();
+        detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
@@ -208,42 +212,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
             }
         });
         editMenu.add(editMenuItem);
-
-        setFocusable(false);
-        setLayout(new java.awt.BorderLayout());
-
-        jSplitPane1.setDividerLocation(200);
-        jSplitPane1.setFocusable(false);
-
-        master.setFocusable(false);
-        master.setLayout(new java.awt.BorderLayout());
-
-        add.setText("Toevoegen...");
-        add.setFocusable(false);
-        add.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addActionPerformed(evt);
-            }
-        });
-        master.add(add, java.awt.BorderLayout.SOUTH);
-
-        jScrollPane1.setFocusable(false);
-
-        listOutlet.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(listOutlet);
-
-        master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jSplitPane1.setLeftComponent(master);
-
-        detail.setFocusable(false);
-        detail.setLayout(new java.awt.BorderLayout());
-
-        container.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 2));
@@ -409,12 +377,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         dateOutlet.setOpaque(true);
         fixedFields.add(dateOutlet);
 
-        container.add(fixedFields, java.awt.BorderLayout.NORTH);
-
         stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
         jScrollPane2.setFocusable(false);
 
         notesOutlet.setBackground(new java.awt.Color(191, 205, 219));
@@ -437,7 +403,41 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        setFocusable(false);
+        setLayout(new java.awt.BorderLayout());
+
+        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setFocusable(false);
+
+        master.setFocusable(false);
+        master.setLayout(new java.awt.BorderLayout());
+
+        add.setText("Toevoegen...");
+        add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
+
+        jScrollPane1.setFocusable(false);
+
+        listOutlet.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listOutlet);
+
+        master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jSplitPane1.setLeftComponent(master);
+
+        detail.setFocusable(false);
+        detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
