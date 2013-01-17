@@ -28,7 +28,6 @@ import java.text.DecimalFormat;
 import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -121,7 +120,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     public void updateDetail(Recipe r){
 	
 	nameOutlet.setText(StringTools.capitalize(r.getName()));
-	dateOutlet.setText(r.getDate());
+	dateOutlet.setText("Laatste update: "+r.getDate());
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	grossWeightOutlet.setText(threeFormatter.format(r.getGrossWeight())+" kg");
@@ -390,7 +389,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
         dateOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         dateOutlet.setText("<dateOutlet>");
-        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         dateOutlet.setFocusable(false);
         jPanel1.add(dateOutlet, java.awt.BorderLayout.WEST);
 

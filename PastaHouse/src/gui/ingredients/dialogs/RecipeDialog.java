@@ -521,19 +521,8 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try {
 	    /*
-	     * Errors
+	     * Errors: check validity
 	     */
-//            if (nameOutlet.getText().isEmpty()
-//                || netWeightOutlet.getText().isEmpty()) {
-//                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-//                return;
-//            }
-//	    if (Double.parseDouble(netWeightOutlet.getText())<=0) {
-//		JOptionPane.showMessageDialog(null, "Het nettogewicht mag niet 0 zijn", "Fout!", JOptionPane.ERROR_MESSAGE);
-//		netWeightOutlet.requestFocus();
-//                return;
-//	    }
-	    
 	    if (!valid()) {
 		return;
 	    }
@@ -549,6 +538,11 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 		}
 	    }
 	    
+	    /*
+	     * Save changes 
+	     * (note that the model's components are already set due to the fact 
+	     * the table model uses the model's components map as a data model)
+	     */
             model.setName(nameOutlet.getText());
             model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
             model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
