@@ -111,7 +111,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         grossPriceOutlet.setText("" + threeFormatter.format(bi.getGrossPrice()) + " euro / kg");
         taxesOutlet.setText("" + twoFormatter.format(bi.getTaxes()) + " %");
         netPriceOutlet.setText("" + twoFormatter.format(bi.getNetPrice()) + " euro / kg");
-        dateOutlet.setText(bi.getDate());
+        dateOutlet.setText("Laatste update: "+bi.getDate());
         notesOutlet.setText(bi.getNotes());
         
         notesOutlet.setCaretPosition(0);
@@ -177,8 +177,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         taxesOutlet = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         netPriceOutlet = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        dateOutlet = new javax.swing.JLabel();
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
@@ -190,8 +188,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         edit = new javax.swing.JButton();
+        dateOutlet = new javax.swing.JLabel();
 
         editMenu.setText("Acties");
 
@@ -214,7 +212,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu.add(editMenuItem);
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(12, 2));
+        fixedFields.setLayout(new java.awt.GridLayout(11, 2));
 
         jLabel1.setText("Ingrediënt");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
@@ -363,20 +361,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         netPriceOutlet.setFocusable(false);
         fixedFields.add(netPriceOutlet);
 
-        jLabel22.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel22.setText("Datum");
-        jLabel22.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel22.setFocusable(false);
-        jLabel22.setOpaque(true);
-        fixedFields.add(jLabel22);
-
-        dateOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        dateOutlet.setText("<dateOutlet>");
-        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        dateOutlet.setFocusable(false);
-        dateOutlet.setOpaque(true);
-        fixedFields.add(dateOutlet);
-
         stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
@@ -442,9 +426,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        filler1.setFocusable(false);
-        jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
-
         edit.setText("Wijzigen...");
         edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
@@ -453,6 +434,12 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
             }
         });
         jPanel1.add(edit, java.awt.BorderLayout.EAST);
+
+        dateOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        dateOutlet.setText("<dateOutlet>");
+        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        dateOutlet.setFocusable(false);
+        jPanel1.add(dateOutlet, java.awt.BorderLayout.WEST);
 
         container.add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
@@ -523,7 +510,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JButton edit;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem editMenuItem;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
     private javax.swing.JLabel jLabel1;
@@ -534,7 +520,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;

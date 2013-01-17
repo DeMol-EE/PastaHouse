@@ -172,7 +172,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(430, 380));
-        setPreferredSize(new java.awt.Dimension(500, 500));
+        setPreferredSize(new java.awt.Dimension(500, 700));
 
         fixedFields.setLayout(new java.awt.GridBagLayout());
 
@@ -296,7 +296,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
         jPanel10.add(jLabel8);
 
         jPanel8.setFocusable(false);
-        jPanel8.setLayout(new java.awt.GridLayout());
+        jPanel8.setLayout(new java.awt.GridLayout(1, 0));
 
         pricePerWeightOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {

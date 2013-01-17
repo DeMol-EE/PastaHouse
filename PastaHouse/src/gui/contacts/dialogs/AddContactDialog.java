@@ -166,7 +166,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         setMaximumSize(null);
         setMinimumSize(new java.awt.Dimension(600, 700));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(600, 700));
+        setPreferredSize(new java.awt.Dimension(600, 800));
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 

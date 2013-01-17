@@ -528,9 +528,9 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
         dateParent.setLayout(new java.awt.BorderLayout());
         detailContainer.add(dateParent);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 600));
-        setPreferredSize(new java.awt.Dimension(800, 600));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
 
         jPanel10.setLayout(new java.awt.GridBagLayout());
 

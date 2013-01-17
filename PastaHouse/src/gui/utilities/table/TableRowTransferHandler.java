@@ -66,6 +66,7 @@ public class TableRowTransferHandler extends TransferHandler {
 		return true;
 	    }
 	} catch (Exception e) {
+//	    System.out.println("TETJES");
 	    System.err.println(e.getMessage());
 	}
 	return false;
