@@ -9,8 +9,14 @@ import database.FunctionResult;
 import database.extra.Component;
 import database.extra.Ingredient;
 import database.models.RecipeModel;
+import database.tables.BasicIngredient;
 import database.tables.Recipe;
+import gui.ingredients.delegates.AddBasicIngredientDelegate;
+import gui.ingredients.delegates.AddRecipeDelegate;
+import gui.ingredients.delegates.RecipeDelegate;
 import gui.utilities.DatePickerFactory;
+import gui.utilities.TextFieldAutoHighlighter;
+import gui.utilities.TextFieldValidator;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.EditableRecipeTableModel;
@@ -18,14 +24,16 @@ import gui.utilities.table.TableRowTransferHandler;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -35,29 +43,30 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTitledPanel;
+import tools.StringTools;
 import tools.Utilities;
 
 /**
  *
  * @author Warkst
  */
-public class RecipeDialog extends javax.swing.JDialog {
+public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredientDelegate{
+    private final RecipeDelegate delegate;
     private final RecipeModel model;
-    private final Map<Integer, Component> components;
     private final EditableRecipeTableModel tableModel;
     private final JXDatePicker datePicker;
     private AutocompleteCombobox componentSelectionBox;
+    private boolean editing;
     
-    /**
-     * Creates new form RecipeDialog
-     */
-    public RecipeDialog(java.awt.Frame parent, boolean modal) {
+    private RecipeDialog(java.awt.Frame parent, boolean modal, RecipeDelegate delegate, RecipeModel model) {
 	super(parent, modal);
 	initComponents();
 	
-	this.model = new RecipeModel();
-	this.components = new TreeMap<Integer, Component>();
-	this.tableModel = new EditableRecipeTableModel(components);
+	this.delegate = delegate;
+	
+	this.editing = true;
+	this.model = model;
+	this.tableModel = new EditableRecipeTableModel(model.getComponents());
 	
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -75,6 +84,7 @@ public class RecipeDialog extends javax.swing.JDialog {
 	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
+	this.ingredientsOutlet.setDefaultRenderer(Integer.class, CellRendererFactory.createIndexCellRenderer());
 	
 	this.ingredientsOutlet.setDragEnabled(true);
 	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);
@@ -90,11 +100,11 @@ public class RecipeDialog extends javax.swing.JDialog {
 
 	preparationOutlet.setFont(new Font(preparationOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
-	jPanel5.add(new JXTitledPanel("Ingrediënten", jPanel4), BorderLayout.CENTER);
-	jPanel5.add(new JXTitledPanel("Totaal", jPanel6), BorderLayout.SOUTH);
+	jPanel5.add(new JXTitledPanel("Ingrediënten", componentContainer), BorderLayout.CENTER);
+	jPanel5.add(new JXTitledPanel("Totaal", totalContainer), BorderLayout.SOUTH);
 	
-	jPanel7.add(new JXTitledPanel("Detail", jPanel11), BorderLayout.NORTH);
-	jPanel7.add(new JXTitledPanel("Bereiding", jScrollPane3), BorderLayout.CENTER);
+	jPanel7.add(new JXTitledPanel("Detail", detailContainer), BorderLayout.NORTH);
+	jPanel7.add(new JXTitledPanel("Bereiding", preparationContainer), BorderLayout.CENTER);
 	
 	List ingredients = new ArrayList();
 	ingredients.add("");
@@ -103,11 +113,84 @@ public class RecipeDialog extends javax.swing.JDialog {
 	this.componentSelectionBox.setOpaque(true);
 	jPanel14.add(componentSelectionBox, BorderLayout.CENTER);
 	
+	this.componentSelectionBox.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		quantityOutlet.requestFocus();
+	    }
+	});
+	
+	quantityOutlet.addFocusListener(new FocusListener() {
+
+	    @Override
+	    public void focusGained(FocusEvent e) {
+		quantityOutlet.getInputVerifier().verify(quantityOutlet);
+	    }
+
+	    @Override
+	    public void focusLost(FocusEvent e) {
+		//throw new UnsupportedOperationException("Not supported yet.");
+	    }
+	});
+	
 	datePicker = DatePickerFactory.makeStandardDatePicker();
 	datePicker.setDate(new Date());
 	dateParent.add(datePicker);
 	
+	/*
+	 * Add validators
+	 */
+	TextFieldValidator.installQuantityValidator(this, quantityOutlet, componentSelectionBox);
+	TextFieldValidator.installPositiveDoubleValidator(this, netWeightOutlet);
+	TextFieldValidator.installUniqueIngredientValidator(this, nameOutlet);
+	
+	/*
+	 * Add highlighters to the textfields
+	 */
+	TextFieldAutoHighlighter.installHighlighter(quantityOutlet); 
+	TextFieldAutoHighlighter.installHighlighter(netWeightOutlet); 
+	
+	/*
+	 * Set dialog properties
+	 */
+	loadModel();
+	setTitle("Recept toevoegen");
 	setLocationRelativeTo(null);
+    }
+    
+    /**
+     * Creates new form RecipeDialog
+     */
+    private RecipeDialog(java.awt.Frame parent, boolean modal, RecipeDelegate delegate) {
+	this(parent, modal, delegate, new RecipeModel());
+	this.editing = false;
+    }
+    
+    /*
+     * Field initialisation
+     */
+    
+    private void loadModel(){
+	nameOutlet.setText(StringTools.capitalizeEach(model.getName()));
+	quantityOutlet.setText(""+model.getNetWeight());
+	preparationOutlet.setText(model.getPreparation());
+	netWeightOutlet.setText(""+0);
+	
+	updateGrossWeightOutlet();
+	updateNetWeightFormattedOutlet();
+	updatePricePerWeightOutlet();
+    }
+    
+    /*
+     * Public methods
+     */
+    
+    public static void showAddRecipeDialog(RecipeDelegate delegate){
+	new RecipeDialog(null, true, delegate).setVisible(true);
+    }
+    
+    public static void showEditRecipeDialog(RecipeDelegate delegate, Recipe model){
+	new RecipeDialog(null, true, delegate, new RecipeModel(model)).setVisible(true);
     }
 
     /**
@@ -120,7 +203,7 @@ public class RecipeDialog extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel4 = new javax.swing.JPanel();
+        componentContainer = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
@@ -133,7 +216,7 @@ public class RecipeDialog extends javax.swing.JDialog {
         jPanel15 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel6 = new javax.swing.JPanel();
+        totalContainer = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         grossWeightOutlet = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -142,9 +225,9 @@ public class RecipeDialog extends javax.swing.JDialog {
         netWeightFormattedOutlet = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         pricePerWeightOutlet = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        preparationContainer = new javax.swing.JScrollPane();
         preparationOutlet = new javax.swing.JTextArea();
-        jPanel11 = new javax.swing.JPanel();
+        detailContainer = new javax.swing.JPanel();
         nameLabel = new javax.swing.JLabel();
         nameOutlet = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -158,12 +241,12 @@ public class RecipeDialog extends javax.swing.JDialog {
         save = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
 
-        jPanel4.setLayout(new java.awt.BorderLayout());
+        componentContainer.setLayout(new java.awt.BorderLayout());
 
         jPanel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 0, 0, 0));
         jPanel8.setLayout(new java.awt.BorderLayout());
 
-        jPanel12.setLayout(new java.awt.GridLayout());
+        jPanel12.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel14.setLayout(new java.awt.BorderLayout());
 
@@ -179,6 +262,11 @@ public class RecipeDialog extends javax.swing.JDialog {
         jPanel12.add(jPanel14);
 
         quantityOutlet.setText("<quantityOutlet>");
+        quantityOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                quantityOutletKeyReleased(evt);
+            }
+        });
         jPanel12.add(quantityOutlet);
 
         jPanel8.add(jPanel12, java.awt.BorderLayout.CENTER);
@@ -209,7 +297,7 @@ public class RecipeDialog extends javax.swing.JDialog {
 
         jPanel8.add(jPanel13, java.awt.BorderLayout.SOUTH);
 
-        jPanel4.add(jPanel8, java.awt.BorderLayout.SOUTH);
+        componentContainer.add(jPanel8, java.awt.BorderLayout.SOUTH);
 
         jPanel15.setLayout(new java.awt.BorderLayout());
 
@@ -238,23 +326,23 @@ public class RecipeDialog extends javax.swing.JDialog {
         jPanel15.add(jScrollPane4, java.awt.BorderLayout.CENTER);
         jPanel15.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
-        jPanel4.add(jPanel15, java.awt.BorderLayout.CENTER);
+        componentContainer.add(jPanel15, java.awt.BorderLayout.CENTER);
 
-        jPanel6.setMinimumSize(new java.awt.Dimension(50, 84));
-        jPanel6.setLayout(new java.awt.GridLayout(3, 2));
+        totalContainer.setMinimumSize(new java.awt.Dimension(50, 84));
+        totalContainer.setLayout(new java.awt.GridLayout(3, 2));
 
         jLabel2.setText("Totaalgewicht ingrediënten");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPanel6.add(jLabel2);
+        totalContainer.add(jLabel2);
 
         grossWeightOutlet.setText("<grossWeightOutlet>");
-        jPanel6.add(grossWeightOutlet);
+        totalContainer.add(grossWeightOutlet);
 
         jLabel4.setText("Gewicht na bereiding *");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPanel6.add(jLabel4);
+        totalContainer.add(jLabel4);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         netWeightOutlet.setText("<netWeightOutlet>");
         netWeightOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -268,45 +356,40 @@ public class RecipeDialog extends javax.swing.JDialog {
         netWeightFormattedOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         jPanel3.add(netWeightFormattedOutlet);
 
-        jPanel6.add(jPanel3);
+        totalContainer.add(jPanel3);
 
         jLabel7.setText("Kostprijs per kg (BTW excl)");
         jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPanel6.add(jLabel7);
+        totalContainer.add(jLabel7);
 
         pricePerWeightOutlet.setText("<pricePerWeightOutlet>");
-        jPanel6.add(pricePerWeightOutlet);
+        totalContainer.add(pricePerWeightOutlet);
 
-        jScrollPane3.setBorder(null);
-        jScrollPane3.setMinimumSize(new java.awt.Dimension(400, 20));
+        preparationContainer.setBorder(null);
+        preparationContainer.setMinimumSize(new java.awt.Dimension(400, 20));
 
         preparationOutlet.setColumns(50);
         preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         preparationOutlet.setLineWrap(true);
         preparationOutlet.setRows(5);
         preparationOutlet.setWrapStyleWord(true);
-        jScrollPane3.setViewportView(preparationOutlet);
+        preparationContainer.setViewportView(preparationOutlet);
 
-        jPanel11.setLayout(new java.awt.GridLayout(2, 2));
+        detailContainer.setLayout(new java.awt.GridLayout(2, 2));
 
         nameLabel.setText("Naam *");
         nameLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPanel11.add(nameLabel);
+        detailContainer.add(nameLabel);
 
         nameOutlet.setText("<nameOutlet>");
-        nameOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                nameOutletKeyReleased(evt);
-            }
-        });
-        jPanel11.add(nameOutlet);
+        detailContainer.add(nameOutlet);
 
         jLabel1.setText("Datum");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPanel11.add(jLabel1);
+        detailContainer.add(jLabel1);
 
         dateParent.setLayout(new java.awt.BorderLayout());
-        jPanel11.add(dateParent);
+        detailContainer.add(dateParent);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -340,7 +423,7 @@ public class RecipeDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         save.setText("Aanmaken");
         save.setFocusable(false);
@@ -390,7 +473,21 @@ public class RecipeDialog extends javax.swing.JDialog {
 	    if (i==null) {
 		throw new Exception("Ingredient not found");
 	    }
+	    
+	    if (Double.parseDouble(this.quantityOutlet.getText())<=0) {
+		throw new Exception("Invalid quantity");
+	    }
+	    
+	    /*
+	     * No errors: add component and update UI
+	     */
+	    
 	    tableModel.addComponent(i, Double.parseDouble(this.quantityOutlet.getText()));
+	    
+	    updateGrossWeightOutlet();
+	    componentSelectionBox.setSelectedIndex(0);
+	    quantityOutlet.setText("");
+	    componentSelectionBox.requestFocus();
 	} catch(Exception e){
 	    JOptionPane.showMessageDialog(null, "Selecteer een geldig ingrediënt om toe te voegen!", "Error", JOptionPane.ERROR_MESSAGE);
 	    componentSelectionBox.transferFocus();
@@ -409,7 +506,7 @@ public class RecipeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_removeComponentActionPerformed
 
     private void newBasicIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newBasicIngredientActionPerformed
-//        new AddBasicIngredientDialog(null, true, this).setVisible(true);
+        new AddBasicIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_newBasicIngredientActionPerformed
 
     private void netWeightOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_netWeightOutletKeyReleased
@@ -419,62 +516,78 @@ public class RecipeDialog extends javax.swing.JDialog {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try {
-            if (nameOutlet.getText().isEmpty()
-                || netWeightOutlet.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+	    /*
+	     * Errors
+	     */
+//            if (nameOutlet.getText().isEmpty()
+//                || netWeightOutlet.getText().isEmpty()) {
+//                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+//                return;
+//            }
+//	    if (Double.parseDouble(netWeightOutlet.getText())<=0) {
+//		JOptionPane.showMessageDialog(null, "Het nettogewicht mag niet 0 zijn", "Fout!", JOptionPane.ERROR_MESSAGE);
+//		netWeightOutlet.requestFocus();
+//                return;
+//	    }
+	    
+	    if (!valid()) {
+		return;
+	    }
 
-            for (Component component : components.values()) {
-                if (component.getIngredient() == null) {
-                    JOptionPane.showMessageDialog(null, "Ingrediënt <Kies een item> is ongeldig!", "Fout!", JOptionPane.WARNING_MESSAGE);
-
-                    /*
-                    * Select invalid row
-                    */
-
-                    ingredientsOutlet.setRowSelectionInterval(component.getRank()-1, component.getRank()-1);
-
-                    /*
-                    * Eventueel: delete alle null-rows?
-                    */
-
-                    return;
-                }
-
-                if (component.getQuantity() <= 0) {
-                    JOptionPane.showMessageDialog(null, "Hoeveelheid "+component.getQuantity()+" is ongeldig!", "Fout!", JOptionPane.WARNING_MESSAGE);
-                    ingredientsOutlet.setRowSelectionInterval(component.getRank()-1, component.getRank()-1);
-                    return;
-                }
-            }
-
+	    /*
+	     * Warnings
+	     */
+	    if (Double.parseDouble(netWeightOutlet.getText())>model.getGrossWeight()) {
+		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat het netto gewicht hoger is dan het bruto gewicht?", "Waarschuwing!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
+		if (result!=0) {
+		    netWeightOutlet.requestFocus();
+		    return;
+		}
+	    }
+	    
             model.setName(nameOutlet.getText());
             model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
             model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
             model.setPreparation(preparationOutlet.getText());
-            model.setComponents(components);
 
-            FunctionResult<Recipe> res = model.create();
-            if (res.getCode() == 0 && res.getObj() != null) {
-//                delegate.addRecipe(res.getObj());
-                disposeLater();
-            } else {
+	    if (!editing) {
+		FunctionResult<Recipe> res = model.create();
+		if (res.getCode() == 0 && res.getObj() != null) {
+		    delegate.addRecipe(res.getObj());
+		    disposeLater();
+		} else {
 
-                String msg;
-                switch(res.getCode()){
-                    case 1:
-                    msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n"+res.getMessage();
-                    break;
-                    case 4:
-                    msg = res.getMessage();
-                    break;
-                    default: msg = "Het toevoegen van het basisingrediënt is foutgelopen (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
-                }
+		    String msg;
+		    switch(res.getCode()){
+			case 1:
+			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n"+res.getMessage();
+			break;
+			case 4:
+			msg = res.getMessage();
+			break;
+			default: msg = "Het toevoegen van het recept is foutgelopen (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		    }
 
-                JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-                //		disposeLater();
-            }
+		    JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+		    //		disposeLater();
+		}
+	    } else {
+//		FunctionResult res = model.update();
+//		if(res.getCode() == 0){
+//		    delegate.editRecipe(model, defaultModel);
+//		    disposeLater();
+//		} else {
+//		    String msg;
+//		    switch(res.getCode()){
+//			case 1: case 2:
+//			    msg = res.getMessage();
+//			    break;
+//			default:
+//			    msg = "Er is een fout opgetreden bij het opslaan van dit recept in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+//		    }
+//		    JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+//		}
+	    }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
             ex.printStackTrace();
@@ -525,18 +638,46 @@ public class RecipeDialog extends javax.swing.JDialog {
         disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void nameOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameOutletKeyReleased
-        if (nameOutlet.getText().isEmpty()) {
-            nameLabel.setForeground(Color.red);
-        } else {
-            nameLabel.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_nameOutletKeyReleased
+    private void quantityOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityOutletKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+	    addComponentActionPerformed(null);
+	}
+    }//GEN-LAST:event_quantityOutletKeyReleased
 
+    @Override
+    public void addBasicIngredient(BasicIngredient bi) {
+	/*
+	 * Update the ingredient selection combo box's model
+	 */
+	List ingredients = new ArrayList();
+	ingredients.add("");
+	ingredients.addAll(Database.driver().getIngredients());
+	this.componentSelectionBox.setDataList(ingredients);
+	this.componentSelectionBox.setSelectedItem(bi);
+    }
+    
+    private boolean valid(){
+	if (!nameOutlet.getInputVerifier().verify(nameOutlet)) {
+	    JOptionPane.showMessageDialog(null, "De naam van het recept moet uniek en niet leeg zijn!", "Fout!", JOptionPane.WARNING_MESSAGE);
+	    nameOutlet.requestFocus();
+	    return false;
+	}
+	
+	if (!netWeightOutlet.getInputVerifier().verify(netWeightOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Kijk het nettogewicht na!", "Fout!", JOptionPane.WARNING_MESSAGE);
+	    netWeightOutlet.requestFocus();
+	    return false;
+	}
+	
+	return true;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addComponent;
     private javax.swing.JButton cancel;
+    private javax.swing.JPanel componentContainer;
     private javax.swing.JPanel dateParent;
+    private javax.swing.JPanel detailContainer;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel grossWeightOutlet;
     private final javax.swing.JTable ingredientsOutlet = new javax.swing.JTable();
@@ -546,20 +687,16 @@ public class RecipeDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel nameLabel;
@@ -567,10 +704,13 @@ public class RecipeDialog extends javax.swing.JDialog {
     private javax.swing.JLabel netWeightFormattedOutlet;
     private javax.swing.JTextField netWeightOutlet;
     private javax.swing.JButton newBasicIngredient;
+    private javax.swing.JScrollPane preparationContainer;
     private javax.swing.JTextArea preparationOutlet;
     private javax.swing.JLabel pricePerWeightOutlet;
     private javax.swing.JTextField quantityOutlet;
     private javax.swing.JButton removeComponent;
     private javax.swing.JButton save;
+    private javax.swing.JPanel totalContainer;
     // End of variables declaration//GEN-END:variables
+
 }

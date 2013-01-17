@@ -24,6 +24,17 @@ public class RecipeModel implements Model{
     private String preparation;
     private Map<Integer, Component> components;
 
+    public RecipeModel(Recipe r){
+	this.name = r.getName();
+	this.date = r.getDate();
+	this.netWeight = r.getNetWeight();
+	this.preparation = r.getPreparation();
+	this.components = new TreeMap<Integer, Component>();
+	for (Map.Entry<Integer, Component> entry : r.getComponents().entrySet()) {
+	    this.components.put(entry.getKey(), new Component(entry.getValue().getIngredient(), entry.getValue().getRank(), entry.getValue().getQuantity()));
+	}
+    }
+    
     public RecipeModel(){
 	components = new TreeMap<Integer, Component>();
     }
