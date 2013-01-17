@@ -11,7 +11,6 @@ import database.tables.Recipe;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
 import gui.ingredients.delegates.RecipeDelegate;
-import gui.ingredients.dialogs.EditRecipeDialog;
 import gui.ingredients.dialogs.RecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
 import gui.utilities.cell.CellRendererFactory;
@@ -124,7 +123,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	grossWeightOutlet.setText(threeFormatter.format(r.getGrossWeight())+" kg");
-	netWeightOutlet.setText(threeFormatter.format(r.getNetWeight())+" kg");
+	netWeightOutlet.setText(new DecimalFormat("0.00").format(r.getNetWeight())+" kg");
 	pricePerWeightOutlet.setText(threeFormatter.format(r.getPricePerWeight())+" euro / kg");
 	
 	preparationOutlet.setText(r.getPreparation());
@@ -294,7 +293,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         preparationOutlet.setBackground(new java.awt.Color(240, 240, 240));
         preparationOutlet.setColumns(20);
         preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
+        preparationOutlet.setLineWrap(true);
         preparationOutlet.setRows(5);
+        preparationOutlet.setWrapStyleWord(true);
         preparationOutlet.setFocusable(false);
         preparationOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -411,7 +412,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue(), this).setVisible(true);
+//        new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue(), this).setVisible(true);
+	RecipeDialog.showEditRecipeDialog(this, (Recipe)recipeListOutlet.getSelectedValue());
     }//GEN-LAST:event_editActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed

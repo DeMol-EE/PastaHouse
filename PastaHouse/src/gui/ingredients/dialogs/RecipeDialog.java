@@ -12,15 +12,17 @@ import database.models.RecipeModel;
 import database.tables.BasicIngredient;
 import database.tables.Recipe;
 import gui.ingredients.delegates.AddBasicIngredientDelegate;
-import gui.ingredients.delegates.AddRecipeDelegate;
 import gui.ingredients.delegates.RecipeDelegate;
+import gui.utilities.AcceleratorAdder;
 import gui.utilities.DatePickerFactory;
+import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.TextFieldValidator;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.EditableRecipeTableModel;
 import gui.utilities.table.TableRowTransferHandler;
+import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -29,14 +31,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import javax.swing.DropMode;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
@@ -51,23 +61,24 @@ import tools.Utilities;
  * @author Warkst
  */
 public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredientDelegate{
-    private final RecipeDelegate delegate;
+    /*
+     * Add functionality
+     */
     private final RecipeModel model;
+    
+    /*
+     * Edit functionality
+     */
+    private final Recipe fullModel;
+    private final Recipe defaultModel;
+    
+    private final RecipeDelegate delegate;
     private final EditableRecipeTableModel tableModel;
     private final JXDatePicker datePicker;
     private AutocompleteCombobox componentSelectionBox;
-    private boolean editing;
+    private final boolean editing;
     
-    private RecipeDialog(java.awt.Frame parent, boolean modal, RecipeDelegate delegate, RecipeModel model) {
-	super(parent, modal);
-	initComponents();
-	
-	this.delegate = delegate;
-	
-	this.editing = true;
-	this.model = model;
-	this.tableModel = new EditableRecipeTableModel(model.getComponents());
-	
+    private void prepareComponents(){
 	this.ingredientsOutlet.setRowHeight(ingredientsOutlet.getRowHeight()+Utilities.fontSize()-10);
 	this.ingredientsOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	this.ingredientsOutlet.setModel(tableModel);
@@ -106,11 +117,6 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	jPanel7.add(new JXTitledPanel("Detail", detailContainer), BorderLayout.NORTH);
 	jPanel7.add(new JXTitledPanel("Bereiding", preparationContainer), BorderLayout.CENTER);
 	
-	List ingredients = new ArrayList();
-	ingredients.add("");
-	ingredients.addAll(Database.driver().getIngredients());
-	this.componentSelectionBox = new AutocompleteCombobox(ingredients);
-	this.componentSelectionBox.setOpaque(true);
 	jPanel14.add(componentSelectionBox, BorderLayout.CENTER);
 	
 	this.componentSelectionBox.addActionListener(new ActionListener() {
@@ -133,6 +139,82 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	    }
 	});
 	
+	/*
+	 * Add highlighters to the textfields
+	 */
+	TextFieldAutoHighlighter.installHighlighter(quantityOutlet); 
+	TextFieldAutoHighlighter.installHighlighter(netWeightOutlet); 
+	
+	/*
+	 * Add accelerators
+	 */
+	AcceleratorAdder.addAccelerator(addComponent, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		componentSelectionBox.requestFocus();
+	    }
+	});
+	AcceleratorAdder.addAccelerator(removeComponent, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		removeComponentActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		saveActionPerformed(e);
+	    }
+	});
+	
+	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelActionPerformed(e);
+	    }
+	});
+	
+	/*
+	 * Set fields
+	 */
+	
+	loadModel();
+	
+	/*
+	 * Dialog properties
+	 */
+	
+	setLocationRelativeTo(null);
+	this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	this.addWindowListener(new WindowAdapter() {
+
+	    @Override
+	    public void windowClosing(WindowEvent e) {
+		cancelActionPerformed(null);
+	    }
+	    
+	});
+    }
+    
+    private RecipeDialog(java.awt.Frame parent, boolean modal, RecipeDelegate delegate) {
+	super(parent, modal);
+	initComponents();
+	
+	this.delegate = delegate;
+	this.editing = false;
+	this.fullModel = null;
+	this.defaultModel = null;
+	this.model = new RecipeModel();
+	this.tableModel = new EditableRecipeTableModel(model.getComponents());
+	
+	List ingredients = new ArrayList();
+	ingredients.add("");
+	ingredients.addAll(Database.driver().getIngredients());
+	this.componentSelectionBox = new AutocompleteCombobox(ingredients);
+	this.componentSelectionBox.setOpaque(true);
+	
+	
 	datePicker = DatePickerFactory.makeStandardDatePicker();
 	datePicker.setDate(new Date());
 	dateParent.add(datePicker);
@@ -144,26 +226,74 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	TextFieldValidator.installPositiveDoubleValidator(this, netWeightOutlet);
 	TextFieldValidator.installUniqueIngredientValidator(this, nameOutlet);
 	
-	/*
-	 * Add highlighters to the textfields
-	 */
-	TextFieldAutoHighlighter.installHighlighter(quantityOutlet); 
-	TextFieldAutoHighlighter.installHighlighter(netWeightOutlet); 
+	prepareComponents();
+	
 	
 	/*
 	 * Set dialog properties
 	 */
-	loadModel();
 	setTitle("Recept toevoegen");
-	setLocationRelativeTo(null);
     }
     
-    /**
-     * Creates new form RecipeDialog
-     */
-    private RecipeDialog(java.awt.Frame parent, boolean modal, RecipeDelegate delegate) {
-	this(parent, modal, delegate, new RecipeModel());
-	this.editing = false;
+    private RecipeDialog(java.awt.Frame parent, boolean modal, RecipeDelegate delegate, Recipe model) {
+	super(parent, modal);
+	initComponents();
+	
+	this.delegate = delegate;
+	this.editing = true;
+	this.fullModel = model;
+	this.defaultModel = new Recipe(model);
+	this.model = null;
+	this.tableModel = new EditableRecipeTableModel(fullModel.getComponents());
+	
+	List ingredients = new ArrayList();
+	ingredients.add("");
+	/*
+	 * Add all ingredients and recipes that are not and do not contain the model to prevent loops in recipes
+	 */
+	Collection<Ingredient> c = new TreeSet<Ingredient>();
+	for (Ingredient ingredient : Database.driver().getIngredients()) {
+	    if (ingredient.isBasicIngredient() ||
+		    (!ingredient.isBasicIngredient() && !((Recipe)ingredient).containsRecipe(model))) {
+		c.add(ingredient);
+	    }
+	}
+	
+	ingredients.addAll(c);
+	this.componentSelectionBox = new AutocompleteCombobox(ingredients);
+	this.componentSelectionBox.setOpaque(true);
+	
+	datePicker = DatePickerFactory.makeStandardDatePicker();
+	datePicker.setDate(new Date());
+	dateParent.add(datePicker);
+	
+	/*
+	 * Add validators
+	 */
+	TextFieldValidator.installQuantityValidator(this, quantityOutlet, componentSelectionBox);
+	TextFieldValidator.installPositiveDoubleValidator(this, netWeightOutlet);
+	nameOutlet.setInputVerifier(new AbstractValidator(this, nameOutlet, "Deze waarde moet uniek en niet leeg zijn!") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (nameOutlet.getText().isEmpty()) {
+		    return false;
+		}
+		if (!nameOutlet.getText().equalsIgnoreCase(defaultModel.getName())) {
+		    if (Database.driver().getRecipesAlphabetically().containsKey(nameOutlet.getText().toLowerCase())) {
+			return false;
+		    }
+		}
+		return true;
+	    }
+	});
+	
+	prepareComponents();
+	
+	/*
+	 * Set dialog properties
+	 */
+	setTitle("Recept Wijzigen");
     }
     
     /*
@@ -171,11 +301,16 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
      */
     
     private void loadModel(){
-	nameOutlet.setText(StringTools.capitalizeEach(model.getName()));
-	quantityOutlet.setText(""+model.getNetWeight());
-	preparationOutlet.setText(model.getPreparation());
-	netWeightOutlet.setText(""+0);
-	
+	if (!editing) {
+	    nameOutlet.setText(StringTools.capitalizeEach(model.getName()));
+	    preparationOutlet.setText(model.getPreparation());
+	    netWeightOutlet.setText(""+model.getNetWeight());
+	} else {
+	    nameOutlet.setText(StringTools.capitalizeEach(fullModel.getName()));
+	    preparationOutlet.setText(fullModel.getPreparation());
+	    netWeightOutlet.setText(""+fullModel.getNetWeight());
+	}
+	quantityOutlet.setText("");
 	updateGrossWeightOutlet();
 	updateNetWeightFormattedOutlet();
 	updatePricePerWeightOutlet();
@@ -190,7 +325,7 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     }
     
     public static void showEditRecipeDialog(RecipeDelegate delegate, Recipe model){
-	new RecipeDialog(null, true, delegate, new RecipeModel(model)).setVisible(true);
+	new RecipeDialog(null, true, delegate, model).setVisible(true);
     }
 
     /**
@@ -530,7 +665,8 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	    /*
 	     * Warnings
 	     */
-	    if (Double.parseDouble(netWeightOutlet.getText())>model.getGrossWeight()) {
+	    double gW = editing? fullModel.getGrossWeight() : model.getGrossWeight();
+	    if (Double.parseDouble(netWeightOutlet.getText())>gW) {
 		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat het netto gewicht hoger is dan het bruto gewicht?", "Waarschuwing!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
 		if (result!=0) {
 		    netWeightOutlet.requestFocus();
@@ -543,12 +679,12 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	     * (note that the model's components are already set due to the fact 
 	     * the table model uses the model's components map as a data model)
 	     */
-            model.setName(nameOutlet.getText());
-            model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-            model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
-            model.setPreparation(preparationOutlet.getText());
-
 	    if (!editing) {
+		model.setName(nameOutlet.getText());
+		model.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		model.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
+		model.setPreparation(preparationOutlet.getText());
+		model.setComponents(tableModel.getData());
 		FunctionResult<Recipe> res = model.create();
 		if (res.getCode() == 0 && res.getObj() != null) {
 		    delegate.addRecipe(res.getObj());
@@ -570,21 +706,26 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 		    //		disposeLater();
 		}
 	    } else {
-//		FunctionResult res = model.update();
-//		if(res.getCode() == 0){
-//		    delegate.editRecipe(model, defaultModel);
-//		    disposeLater();
-//		} else {
-//		    String msg;
-//		    switch(res.getCode()){
-//			case 1: case 2:
-//			    msg = res.getMessage();
-//			    break;
-//			default:
-//			    msg = "Er is een fout opgetreden bij het opslaan van dit recept in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
-//		    }
-//		    JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-//		}
+		fullModel.setName(nameOutlet.getText());
+		fullModel.setDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		fullModel.setNetWeight(Double.parseDouble(netWeightOutlet.getText()));
+		fullModel.setPreparation(preparationOutlet.getText());
+		fullModel.setComponents(tableModel.getData());
+		FunctionResult res = fullModel.update();
+		if(res.getCode() == 0){
+		    delegate.editRecipe(fullModel, defaultModel);
+		    disposeLater();
+		} else {
+		    String msg;
+		    switch(res.getCode()){
+			case 1: case 2:
+			    msg = res.getMessage();
+			    break;
+			default:
+			    msg = "Er is een fout opgetreden bij het opslaan van dit recept in de databank (code "+res.getCode()+"). Contacteer de ontwikkelaars met deze informatie.";
+		    }
+		    JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+		}
 	    }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
@@ -594,13 +735,15 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     }//GEN-LAST:event_saveActionPerformed
 
     private void updateGrossWeightOutlet(){
-	grossWeightOutlet.setText(new DecimalFormat("0.000").format(model.getGrossWeight())+" kg");
+	double gW = editing? fullModel.getGrossWeight() : model.getGrossWeight();
+	grossWeightOutlet.setText(new DecimalFormat("0.000").format(gW)+" kg");
     }
     
     private void updatePricePerWeightOutlet(){
 	try{
 	    Double.parseDouble(netWeightOutlet.getText());
-	    pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
+	    double ppw = editing? fullModel.getPricePerWeight() : model.getPricePerWeight();
+	    pricePerWeightOutlet.setText(new DecimalFormat("0.000").format(ppw)+" euro/kg");
 	    pricePerWeightOutlet.setForeground(Color.black);
 	} catch (Exception e){
 	    pricePerWeightOutlet.setText("???");
@@ -621,7 +764,11 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     private void updateNetWeightFormattedOutlet(){
 	try {
 	    double d = Double.parseDouble(netWeightOutlet.getText());
-	    model.setNetWeight(d);
+	    if (editing) {
+		fullModel.setNetWeight(d);
+	    } else {
+		model.setNetWeight(d);
+	    }
 	    netWeightFormattedOutlet.setText(new DecimalFormat("0.00").format(d)+" kg");
 	    netWeightFormattedOutlet.setForeground(Color.black);
 	    netWeightOutlet.setForeground(Color.black);
@@ -633,7 +780,14 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     }
     
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        disposeLater();
+        if (editing) {
+	    /*
+	     * Reset model to defaults
+	     */
+	    fullModel.copy(defaultModel);
+	}
+	
+	disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void quantityOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityOutletKeyReleased
@@ -649,7 +803,22 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	 */
 	List ingredients = new ArrayList();
 	ingredients.add("");
-	ingredients.addAll(Database.driver().getIngredients());
+	if (editing) {
+	    /*
+	     * Add all ingredients and recipes that are not and do not contain the model to prevent loops in recipes
+	     */
+	    Collection<Ingredient> c = new TreeSet<Ingredient>();
+	    for (Ingredient ingredient : Database.driver().getIngredients()) {
+	        if (ingredient.isBasicIngredient() ||
+	 	        (!ingredient.isBasicIngredient() && !((Recipe)ingredient).containsRecipe(fullModel))) {
+ 	 	    c.add(ingredient);
+	        }
+	    }
+
+	    ingredients.addAll(c);
+	} else {
+	    ingredients.addAll(Database.driver().getIngredients());
+	}
 	this.componentSelectionBox.setDataList(ingredients);
 	this.componentSelectionBox.setSelectedItem(bi);
     }
@@ -661,7 +830,8 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	    return false;
 	}
 	
-	if (model.getComponents().isEmpty()) {
+	Map c = editing? fullModel.getComponents() : model.getComponents();
+	if (c.isEmpty()) {
 	    JOptionPane.showMessageDialog(null, "Het recept moet minstens 1 ingrediënt bevatten", "Fout!", JOptionPane.WARNING_MESSAGE);
 	    componentSelectionBox.requestFocus();
 	    return false;
