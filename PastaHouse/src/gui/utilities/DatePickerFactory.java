@@ -5,6 +5,7 @@
 package gui.utilities;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
@@ -18,6 +19,7 @@ public class DatePickerFactory {
     
     public static JXDatePicker makeStandardDatePicker(){
         JXDatePicker dp = new JXDatePicker();
+        dp.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
         dp.getLinkPanel().setVisible(false);
         JXMonthView mv = dp.getMonthView();
         mv.setSelectionMode(SelectionMode.SINGLE_SELECTION);

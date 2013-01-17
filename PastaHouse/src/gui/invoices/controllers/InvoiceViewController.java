@@ -67,12 +67,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
         tablePanel.add(scrollpane, BorderLayout.CENTER);
-        DatePickerFactory dpfactory = new DatePickerFactory();
         configureDisplayProperties();
-        fromPicker = dpfactory.makeStandardDatePicker();
-        fromPicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        toPicker = dpfactory.makeStandardDatePicker();
-        toPicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        fromPicker = DatePickerFactory.makeStandardDatePicker();
+        toPicker = DatePickerFactory.makeStandardDatePicker();
         fromOutlet.add(fromPicker);
         toOutlet.add(toPicker);
         bind();
