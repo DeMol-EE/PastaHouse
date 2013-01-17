@@ -471,11 +471,15 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
                 }
             }
 	    if (i==null) {
-		throw new Exception("Ingredient not found");
+		JOptionPane.showMessageDialog(null, "Selecteer een geldig ingrediënt om toe te voegen!", "Error", JOptionPane.ERROR_MESSAGE);
+		componentSelectionBox.requestFocus();
+		return;
 	    }
 	    
 	    if (Double.parseDouble(this.quantityOutlet.getText())<=0) {
-		throw new Exception("Invalid quantity");
+		JOptionPane.showMessageDialog(null, "Voer een geldige hoeveelheid in.", "Error", JOptionPane.ERROR_MESSAGE);
+		quantityOutlet.requestFocus();
+		return;
 	    }
 	    
 	    /*
@@ -489,8 +493,8 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	    quantityOutlet.setText("");
 	    componentSelectionBox.requestFocus();
 	} catch(Exception e){
-	    JOptionPane.showMessageDialog(null, "Selecteer een geldig ingrediënt om toe te voegen!", "Error", JOptionPane.ERROR_MESSAGE);
-	    componentSelectionBox.transferFocus();
+	    JOptionPane.showMessageDialog(null, "Voeg een geldige hoeveelheid in.", "Error", JOptionPane.ERROR_MESSAGE);
+	    quantityOutlet.transferFocus();
 	}
     }//GEN-LAST:event_addComponentActionPerformed
 
@@ -660,6 +664,12 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	if (!nameOutlet.getInputVerifier().verify(nameOutlet)) {
 	    JOptionPane.showMessageDialog(null, "De naam van het recept moet uniek en niet leeg zijn!", "Fout!", JOptionPane.WARNING_MESSAGE);
 	    nameOutlet.requestFocus();
+	    return false;
+	}
+	
+	if (model.getComponents().isEmpty()) {
+	    JOptionPane.showMessageDialog(null, "Het recept moet minstens 1 ingrediënt bevatten", "Fout!", JOptionPane.WARNING_MESSAGE);
+	    componentSelectionBox.requestFocus();
 	    return false;
 	}
 	
