@@ -34,6 +34,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.Utilities;
 
 /**
@@ -159,6 +160,9 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 	    }
 	});
 	
+	add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
+	add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
+	
 	updatePricePanel();
 	
 	nameOutlet.requestFocus();
@@ -219,10 +223,6 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
         jPanel4 = new javax.swing.JPanel();
         add = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(430, 380));
-        setPreferredSize(new java.awt.Dimension(600, 700));
 
         fixedFields.setLayout(new java.awt.GridBagLayout());
 
@@ -423,22 +423,24 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
         gridBagConstraints.weighty = 0.3;
         fixedFields.add(jPanel11, gridBagConstraints);
 
-        getContentPane().add(fixedFields, java.awt.BorderLayout.NORTH);
-
         stretchableFields.setFocusable(false);
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerkingen:"));
+        jScrollPane1.setBorder(null);
         jScrollPane1.setFocusable(false);
 
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        notesOutlet.setRows(5);
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
         jScrollPane1.setViewportView(notesOutlet);
 
         stretchableFields.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(stretchableFields, java.awt.BorderLayout.CENTER);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(430, 380));
+        setPreferredSize(new java.awt.Dimension(600, 700));
 
         jPanel3.setFocusable(false);
         jPanel3.setLayout(new java.awt.BorderLayout());

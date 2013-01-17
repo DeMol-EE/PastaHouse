@@ -36,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DateFormatter;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.Utilities;
 
 /**
@@ -165,6 +166,9 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	    }
 	});
 	
+	detail.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
+	detail.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
+	
 	/*
 	 * Hide the unformatted fields
 	 */
@@ -290,7 +294,6 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         java.awt.GridBagConstraints gridBagConstraints;
 
         jSeparator4 = new javax.swing.JSeparator();
-        detail = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -341,17 +344,12 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        detail = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         save = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(400, 412));
-        setPreferredSize(new java.awt.Dimension(600, 700));
-
-        detail.setLayout(new java.awt.BorderLayout());
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridBagLayout());
@@ -588,20 +586,24 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
         gridBagConstraints.weighty = 0.3;
         fixedFields.add(jPanel13, gridBagConstraints);
 
-        detail.add(fixedFields, java.awt.BorderLayout.NORTH);
-
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
 
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        notesOutlet.setRows(5);
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
         jScrollPane2.setViewportView(notesOutlet);
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        detail.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(400, 412));
+        setPreferredSize(new java.awt.Dimension(600, 700));
+
+        detail.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 

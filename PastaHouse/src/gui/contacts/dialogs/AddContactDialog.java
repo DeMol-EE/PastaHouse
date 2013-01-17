@@ -12,6 +12,8 @@ import gui.contacts.delegates.AddContactDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
+import gui.utilities.validation.AbstractValidator;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -21,10 +23,12 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.Utilities;
 
 /**
@@ -71,6 +75,25 @@ public class AddContactDialog extends javax.swing.JDialog {
                 cancelActionPerformed(e);
             }
         });
+	
+	sortkeyOutlet.setInputVerifier(new AbstractValidator(this, sortkeyOutlet, "De toonnaam moet uniek en niet leeg zijn!") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (sortkeyOutlet.getText().isEmpty()) {
+		    return false;
+		}
+		for (String sortkey : Database.driver().getContactsAlphabetically().keySet()) {
+		    if (sortkey.equalsIgnoreCase(sortkeyOutlet.getText())) {
+			return false;
+		    }
+		}
+		return true;
+	    }
+	});
+	
+	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
+	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
 
     private AddContactDialog(java.awt.Frame parent, boolean modal, AddContactDelegate delegate) {
@@ -98,6 +121,25 @@ public class AddContactDialog extends javax.swing.JDialog {
                 cancelActionPerformed(e);
             }
         });
+	
+	sortkeyOutlet.setInputVerifier(new AbstractValidator(this, sortkeyOutlet, "De toonnaam moet uniek en niet leeg zijn!") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (sortkeyOutlet.getText().isEmpty()) {
+		    return false;
+		}
+		for (String sortkey : Database.driver().getContactsAlphabetically().keySet()) {
+		    if (sortkey.equalsIgnoreCase(sortkeyOutlet.getText())) {
+			return false;
+		    }
+		}
+		return true;
+	    }
+	});
+	
+	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
+	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
 
     public static AddContactDialog createSupplierDialog(AddContactDelegate delegate) {
@@ -121,7 +163,7 @@ public class AddContactDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel5 = new javax.swing.JPanel();
+        detailsContainer = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         typeTF = new javax.swing.JLabel();
@@ -154,7 +196,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         taxnrOutlet = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         pricecodeOutlet = new javax.swing.JComboBox();
-        jPanel3 = new javax.swing.JPanel();
+        notesContainer = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
@@ -162,13 +204,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         add = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(null);
-        setMinimumSize(new java.awt.Dimension(600, 700));
-        setModal(true);
-        setPreferredSize(new java.awt.Dimension(600, 800));
-
-        jPanel5.setLayout(new java.awt.BorderLayout());
+        detailsContainer.setLayout(new java.awt.BorderLayout());
 
         jPanel6.setLayout(new java.awt.BorderLayout());
 
@@ -184,7 +220,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
         jPanel6.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
-        jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
+        detailsContainer.add(jPanel6, java.awt.BorderLayout.NORTH);
 
         jPanel2.setLayout(new java.awt.GridLayout(13, 2));
 
@@ -271,37 +307,28 @@ public class AddContactDialog extends javax.swing.JDialog {
         pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
         jPanel2.add(pricecodeOutlet);
 
-        jPanel5.add(jPanel2, java.awt.BorderLayout.CENTER);
+        detailsContainer.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel5, java.awt.BorderLayout.NORTH);
+        notesContainer.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking"));
+        jScrollPane2.setBorder(null);
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 600));
         jScrollPane2.setName(""); // NOI18N
 
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        notesOutlet.setRows(5);
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
         jScrollPane2.setViewportView(notesOutlet);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 748, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        notesContainer.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(null);
+        setMinimumSize(new java.awt.Dimension(600, 700));
+        setModal(true);
+        setPreferredSize(new java.awt.Dimension(600, 800));
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -347,10 +374,12 @@ public class AddContactDialog extends javax.swing.JDialog {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         try {
-            if (sortkeyOutlet.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+	    /*
+	     * Validity check
+	     */
+	    if (!valid()) {
+		return;
+	    }
 
             System.out.println("\"" + comboGemeentes.getSelectedItem() + "\"");
 
@@ -436,6 +465,7 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JButton add;
     private javax.swing.JButton cancel;
     private javax.swing.JLabel contactLabel;
+    private javax.swing.JPanel detailsContainer;
     private javax.swing.JLabel firmLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -449,13 +479,12 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel notesContainer;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
     private javax.swing.JLabel sortkey;
@@ -515,5 +544,14 @@ public class AddContactDialog extends javax.swing.JDialog {
         } else {
             txtPostcode.setText("");
         }
+    }
+    
+    private boolean valid(){
+	if (!sortkeyOutlet.getInputVerifier().verify(sortkeyOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Geef een geldige toonnaam in. Die dient uniek te zijn en mag niet leeg zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    sortkeyOutlet.requestFocus();
+	    return false;
+	}
+	return true;
     }
 }

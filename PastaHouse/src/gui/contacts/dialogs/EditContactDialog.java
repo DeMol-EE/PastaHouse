@@ -11,6 +11,7 @@ import gui.contacts.delegates.EditContactDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
+import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -27,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.Utilities;
 
 /**
@@ -78,6 +80,27 @@ public class EditContactDialog extends javax.swing.JDialog {
                 cancelActionPerformed(e);
             }
         });
+	
+	sortkeyOutlet.setInputVerifier(new AbstractValidator(this, sortkeyOutlet, "De toonnaam moet uniek en niet leeg zijn!") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (sortkeyOutlet.getText().isEmpty()) {
+		    return false;
+		}
+		if (!defaultModel.getSortKey().equalsIgnoreCase(sortkeyOutlet.getText())) {
+		    for (String sortkey : Database.driver().getContactsAlphabetically().keySet()) {
+			if (sortkey.equalsIgnoreCase(sortkeyOutlet.getText())) {
+			    return false;
+			}
+		    }
+		}
+		return true;
+	    }
+	});
+	
+	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
+	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
 
     private EditContactDialog(java.awt.Frame parent, boolean modal, EditContactDelegate delegate, Contact model) {
@@ -117,6 +140,27 @@ public class EditContactDialog extends javax.swing.JDialog {
                 cancelActionPerformed(e);
             }
         });
+	
+	sortkeyOutlet.setInputVerifier(new AbstractValidator(this, sortkeyOutlet, "De toonnaam moet uniek en niet leeg zijn!") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (sortkeyOutlet.getText().isEmpty()) {
+		    return false;
+		}
+		if (!defaultModel.getSortKey().equalsIgnoreCase(sortkeyOutlet.getText())) {
+		    for (String sortkey : Database.driver().getContactsAlphabetically().keySet()) {
+			if (sortkey.equalsIgnoreCase(sortkeyOutlet.getText())) {
+			    return false;
+			}
+		    }
+		}
+		return true;
+	    }
+	});
+	
+	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
+	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
 
     public static EditContactDialog createSupplierDialog(EditContactDelegate delegate, Contact model) {
@@ -211,7 +255,7 @@ public class EditContactDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel5 = new javax.swing.JPanel();
+        detailsContainer = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         typeTF = new javax.swing.JLabel();
@@ -244,7 +288,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         taxnrOutlet = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         pricecodeOutlet = new javax.swing.JComboBox();
-        jPanel3 = new javax.swing.JPanel();
+        notesContainer = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
@@ -252,12 +296,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         save = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(null);
-        setMinimumSize(new java.awt.Dimension(600, 700));
-        setPreferredSize(new java.awt.Dimension(600, 800));
-
-        jPanel5.setLayout(new java.awt.BorderLayout());
+        detailsContainer.setLayout(new java.awt.BorderLayout());
 
         jPanel6.setLayout(new java.awt.BorderLayout());
 
@@ -273,7 +312,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
         jPanel6.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
-        jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
+        detailsContainer.add(jPanel6, java.awt.BorderLayout.NORTH);
 
         jPanel2.setLayout(new java.awt.GridLayout(13, 2));
 
@@ -370,43 +409,45 @@ public class EditContactDialog extends javax.swing.JDialog {
         pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
         jPanel2.add(pricecodeOutlet);
 
-        jPanel5.add(jPanel2, java.awt.BorderLayout.CENTER);
+        detailsContainer.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel5, java.awt.BorderLayout.NORTH);
+        notesContainer.setPreferredSize(new java.awt.Dimension(528, 300));
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(528, 300));
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 300));
         jScrollPane2.setName(""); // NOI18N
 
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        notesOutlet.setRows(5);
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
         jScrollPane2.setViewportView(notesOutlet);
 
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout notesContainerLayout = new org.jdesktop.layout.GroupLayout(notesContainer);
+        notesContainer.setLayout(notesContainerLayout);
+        notesContainerLayout.setHorizontalGroup(
+            notesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, notesContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 532, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+        notesContainerLayout.setVerticalGroup(
+            notesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, notesContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(null);
+        setMinimumSize(new java.awt.Dimension(600, 700));
+        setPreferredSize(new java.awt.Dimension(600, 800));
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setPreferredSize(new java.awt.Dimension(200, 30));
         jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
 
         save.setText("Opslaan");
@@ -436,10 +477,9 @@ public class EditContactDialog extends javax.swing.JDialog {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         try {
-            if (sortkeyOutlet.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            if (!valid()) {
+		return;
+	    }
 
             System.out.println("\"" + comboGemeentes.getSelectedItem() + "\"");
 
@@ -465,12 +505,12 @@ public class EditContactDialog extends javax.swing.JDialog {
                 model.setType("client");
             }
 
-            if (!defaultModel.getSortKey().equalsIgnoreCase(model.getSortKey())) {
-                if (Database.driver().getContactsAlphabetically().containsKey(model.getSortKey().toLowerCase())) {
-                    JOptionPane.showMessageDialog(null, "Er is al een contactpersoon met deze toonnaam.", "Fout!", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
+//            if (!defaultModel.getSortKey().equalsIgnoreCase(model.getSortKey())) {
+//                if (Database.driver().getContactsAlphabetically().containsKey(model.getSortKey().toLowerCase())) {
+//                    JOptionPane.showMessageDialog(null, "Er is al een contactpersoon met deze toonnaam.", "Fout!", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//            }
 
             FunctionResult res = model.update();
             if (res.getCode() == 0) {
@@ -532,6 +572,15 @@ public class EditContactDialog extends javax.swing.JDialog {
         comboGemeentes.setDataList(items);
     }//GEN-LAST:event_txtPostcodeKeyReleased
 
+    private boolean valid(){
+	if (!sortkeyOutlet.getInputVerifier().verify(sortkeyOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Geef een geldige toonnaam in. Die dient uniek te zijn en mag niet leeg zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    sortkeyOutlet.requestFocus();
+	    return false;
+	}
+	return true;
+    }
+    
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
         
 	taxnrOutlet.setInputVerifier(new InputVerifier() {
@@ -559,6 +608,7 @@ public class EditContactDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JLabel contactLabel;
+    private javax.swing.JPanel detailsContainer;
     private javax.swing.JLabel firmLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -572,14 +622,13 @@ public class EditContactDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel muniParent;
+    private javax.swing.JPanel notesContainer;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
     private javax.swing.JButton save;
