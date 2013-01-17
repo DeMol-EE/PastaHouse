@@ -222,7 +222,7 @@ public class AddBasicIngredientDialog extends javax.swing.JDialog implements Add
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(430, 380));
-        setPreferredSize(new java.awt.Dimension(500, 700));
+        setPreferredSize(new java.awt.Dimension(600, 700));
 
         fixedFields.setLayout(new java.awt.GridBagLayout());
 

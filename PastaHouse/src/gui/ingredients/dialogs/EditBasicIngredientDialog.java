@@ -349,7 +349,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 412));
-        setPreferredSize(new java.awt.Dimension(500, 700));
+        setPreferredSize(new java.awt.Dimension(600, 700));
 
         detail.setLayout(new java.awt.BorderLayout());
 
