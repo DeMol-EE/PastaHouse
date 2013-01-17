@@ -144,8 +144,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 	List<PrintableHorizontalLineObject> printModel = new ArrayList<PrintableHorizontalLineObject>();
 	
 	/*
+	 * Formatting variables
+	 */
+//	int[] tabs = new int[]{0};
+	
+	/*
 	 * Actual transformation
 	 * Print savings at bottom: set y from bottom upwards
+	 * Group the invoice items per tax value
 	 */
 	
 	Map<Double, List<InvoiceItem>> categories = new HashMap<Double, List<InvoiceItem>>();
@@ -160,6 +166,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    }
 	}
 	
+	int[] tabs = new int[categories.size()+3];
+	tabs[0] = 0;
+	for (int i = 0; i < categories.size(); i++) {
+	    tabs[i+1] = 30*(i+1);
+	}
+	tabs[tabs.length-2] = 4*width/5;
+	tabs[tabs.length-1] = width;
+	
 	if (model.getSave()>0) {
 	    
 	    printModel.add(0, new PrintableNewline());
@@ -169,32 +183,78 @@ public class PrintableInvoiceNew extends MyPrintable{
 	     */
 	}
 	
+	printModel.add(new PrintableLine(0, width));
+	printModel.add(new PrintableNewline());
+	ArrayList<PrintableHorizontalLineObject> savingsCategories = new ArrayList<PrintableHorizontalLineObject>();
+	savingsCategories.add(new PrintableString("BTW %", 0));
+	int index = 1;
+	for (Double savings : categories.keySet()) {
+	    savingsCategories.add(new PrintableString(savings+" %", tabs[index]));
+	    index++;
+	}
+	printModel.add(new PrintableMulti(savingsCategories));
+	
+	printModel.add(new PrintableNewline());
+	ArrayList<PrintableHorizontalLineObject> prices = new ArrayList<PrintableHorizontalLineObject>();
+	prices.add(new PrintableString("Excl.", 0));
+	index = 1;
+	double pricesTot = 0.0;
+	for (List<InvoiceItem> list : categories.values()) {
+	    double price = 0;
+	    for (InvoiceItem invoiceItem : list) {
+		price += invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount();
+	    }
+	    pricesTot+= price;
+	    String pr = new DecimalFormat("0.000").format(price);
+	    prices.add(new PrintableString(pr, tabs[index]-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length())));
+	    index++;
+	}
+	prices.add(new PrintableString("Tot. Excl.", tabs[tabs.length-2]));
+	String prTot = new DecimalFormat("0.000").format(pricesTot);
+	prices.add(new PrintableString(prTot, tabs[tabs.length-1]-fontMetrics.charsWidth(prTot.toCharArray(), 0, prTot.length())));
+	printModel.add(new PrintableMulti(prices));
+	
+	printModel.add(new PrintableNewline());
+	ArrayList<PrintableHorizontalLineObject> taxes = new ArrayList<PrintableHorizontalLineObject>();
+	taxes.add(new PrintableString("BTW", 0));
+	index = 1;
+	double taxesTot = 0.0;
+	for (Map.Entry<Double, List<InvoiceItem>> entry : categories.entrySet()) {
+	    double price = 0;
+	    for (InvoiceItem invoiceItem : entry.getValue()) {
+		price += invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount();
+	    }
+	    double tax = price * entry.getKey();
+	    taxesTot+= tax;
+	    String t = new DecimalFormat("0.000").format(tax);
+	    taxes.add(new PrintableString(t, tabs[index]-fontMetrics.charsWidth(t.toCharArray(), 0, t.length())));
+	    index++;
+	}
+	taxes.add(new PrintableString("BTW", tabs[tabs.length-2]));
+	String tTot = new DecimalFormat("0.000").format(taxesTot);
+	taxes.add(new PrintableString(tTot, tabs[tabs.length-1]-fontMetrics.charsWidth(tTot.toCharArray(), 0, tTot.length())));
+	printModel.add(new PrintableMulti(taxes));
 	
 	printModel.add(new PrintableLine(0, width));
 	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableString("BTW %", 0));
-	for (Double savings : categories.keySet()) {
-	    
+	ArrayList<PrintableHorizontalLineObject> totals = new ArrayList<PrintableHorizontalLineObject>();
+	totals.add(new PrintableString("Totaal", 0));
+	double total = 0.0;
+	for (Map.Entry<Double, List<InvoiceItem>> entry : categories.entrySet()) {
+	    double price = 0;
+	    for (InvoiceItem invoiceItem : entry.getValue()) {
+		price += invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount();
+	    }
+	    double tot = price * (1.0+entry.getKey());
+	    total+=tot;
+	    String t = new DecimalFormat("0.00").format(tot);
+	    totals.add(new PrintableString(t, tabs[index]-fontMetrics.charsWidth((t+"0").toCharArray(), 0, t.length()+1)));
+	    index++;
 	}
-	
-	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableString("Excl.", 0));
-	for (Double savings : categories.keySet()) {
-	    
-	}
-	
-	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableString("BTW", 0));
-	for (Double savings : categories.keySet()) {
-	    
-	}
-	
-	printModel.add(new PrintableLine(0, width));
-	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableString("Totaal", 0));
-	for (Double savings : categories.keySet()) {
-	    
-	}
+	totals.add(new PrintableString("TOTAAL", tabs[tabs.length-2]));
+	String tot = new DecimalFormat("0.00").format(total);
+	totals.add(new PrintableString(tot, tabs[tabs.length-1]-fontMetrics.charsWidth((tot+"0").toCharArray(), 0, tot.length()+1)));
+	printModel.add(new PrintableMulti(totals));
 	
 	printModel.add(new PrintableLine(0, width));
 	
