@@ -20,7 +20,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -40,7 +42,7 @@ public class EditContactDialog extends javax.swing.JDialog {
     private JComboBox typeBox;
     private boolean flag = false;
     private final TreeMap<String, Integer> munies = (TreeMap<String, Integer>) Database.driver().getMunicipales();
-
+    
     /**
      * Creates new form EditContactDialog
      */
@@ -246,7 +248,6 @@ public class EditContactDialog extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel4 = new javax.swing.JPanel();
         save = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
@@ -404,7 +405,6 @@ public class EditContactDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(filler1, java.awt.BorderLayout.CENTER);
 
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 30));
         jPanel4.setLayout(new java.awt.GridLayout(1, 2, 0, 5));
@@ -533,7 +533,23 @@ public class EditContactDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtPostcodeKeyReleased
 
     private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
-        String taxnr = taxnrOutlet.getText();
+        
+	taxnrOutlet.setInputVerifier(new InputVerifier() {
+
+	    @Override
+	    public boolean verify(JComponent input) {
+		try{
+		    Integer.parseInt(taxnrOutlet.getText());
+		    System.out.println("erear");
+		    return true;
+		} catch (Exception e){
+		    System.out.println("erwqer");
+		    return false;
+		}
+	    }
+	});
+	
+	String taxnr = taxnrOutlet.getText();
         if (!Utilities.validTaxNr(taxnr)) {
             taxnrOutlet.setForeground(Color.red);
         } else {
@@ -543,7 +559,6 @@ public class EditContactDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JLabel contactLabel;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel firmLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;

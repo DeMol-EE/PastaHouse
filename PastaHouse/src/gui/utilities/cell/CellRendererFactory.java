@@ -47,6 +47,10 @@ public class CellRendererFactory {
 	return new ButtonCellRenderer();
     }
     
+    public static TableCellRenderer createIndexCellRenderer(){
+	return new IndexCellRenderer();
+    }
+    
     private static class TwoDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer{
 
 	public TwoDecimalDoubleCellRenderer(){
@@ -182,6 +186,34 @@ public class CellRendererFactory {
 	    setBackground(defaultComponent.getBackground());
 	    
 	    setText("Verwijderen");
+	    
+	    return this;
+	}
+	
+    }
+    
+    private static class IndexCellRenderer extends JLabel implements TableCellRenderer{
+
+	public IndexCellRenderer(){
+	    setOpaque(true);
+//	    setHorizontalAlignment(JLabel.LEFT);
+	    setHorizontalAlignment(JLabel.CENTER);
+	}
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
+//	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	    
+	    if (isSelected) {
+		setForeground(table.getSelectionForeground());
+		setBackground(table.getSelectionBackground());
+	    } else {
+		setForeground(table.getForeground());
+		setBackground(table.getBackground());
+	    }
+	    
+	    setText(value.toString());
 	    
 	    return this;
 	}

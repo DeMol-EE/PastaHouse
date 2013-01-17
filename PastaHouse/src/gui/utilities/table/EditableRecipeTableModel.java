@@ -24,6 +24,10 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 	this.data = data;
     }
     
+    public Map<Integer, Component> getData(){
+	return data;
+    }
+    
     @Override
     public int getRowCount() {
 	return data.size();
@@ -31,17 +35,19 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 
     @Override
     public int getColumnCount() {
-	return 3;
+	return 4;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
 	switch(columnIndex){
 	    case 0:
-		return ((Component)data.values().toArray()[rowIndex]).getIngredient();
+		return ((Component)data.values().toArray()[rowIndex]).getRank();
 	    case 1:
-		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
+		return ((Component)data.values().toArray()[rowIndex]).getIngredient();
 	    case 2:
+		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
+	    case 3:
 //		return ((Component)data.values().toArray()[rowIndex]).getPieces();
 		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
 	    default:
@@ -53,10 +59,12 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
     public String getColumnName(int column) {
 	switch(column){
 	    case 0:
-		return "Ingredient";
+		return "Nr";
 	    case 1:
-		return "Hoeveelheid";
+		return "Ingredient";
 	    case 2:
+		return "Hoeveelheid";
+	    case 3:
 		return "Stuks";
 	    default:
 		return "<ERROR>";
@@ -69,11 +77,12 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
     public Class<?> getColumnClass(int columnIndex) {
 	switch(columnIndex){
 	    case 0:
-		return Ingredient.class;
+		return Integer.class;
 	    case 1:
-		return Double.class;
+		return Ingredient.class;
 	    case 2:
-//		return Component.class;
+		return Double.class;
+	    case 3:
 		return String.class;
 	    default:
 		return Object.class;
@@ -85,33 +94,33 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 	return col!=2;
     }
     
-    @Override
-    public void setValueAt(Object value, int row, int col) {
-	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
-	try{
-	    switch(col){
-		case 0:
-		    if (value instanceof String) {
-			((Component)data.values().toArray()[row]).setIngredient(null);
-		    } else {
-			((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
-		    }
-		    break;
-		case 1:
-		    ((Component)data.values().toArray()[row]).setQuantity(Double.parseDouble(value.toString()));
-		    break;
-    //	    case 2:
-    //		// nothing
-    //		break;
-		default:
-		    break;
-	    }
-
-	    fireTableCellUpdated(row, col);
-	} catch (Exception e){
-	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());
-	}
-    }
+//    @Override
+//    public void setValueAt(Object value, int row, int col) {
+//	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
+//	try{
+//	    switch(col){
+//		case 0:
+//		    if (value instanceof String) {
+//			((Component)data.values().toArray()[row]).setIngredient(null);
+//		    } else {
+//			((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
+//		    }
+//		    break;
+//		case 1:
+//		    ((Component)data.values().toArray()[row]).setQuantity(Double.parseDouble(value.toString()));
+//		    break;
+//    //	    case 2:
+//    //		// nothing
+//    //		break;
+//		default:
+//		    break;
+//	    }
+//
+//	    fireTableCellUpdated(row, col);
+//	} catch (Exception e){
+//	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());
+//	}
+//    }
     
     public void removeRow(int row){
 	data.remove((Integer)data.keySet().toArray()[row]);
@@ -131,6 +140,7 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 	fireTableRowsDeleted(row, row);
     }
     
+    @Deprecated
     public void addRow(){
 	Component c = new Component();
 	c.setQuantity(0.0);
@@ -143,6 +153,16 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 //	c.setIngredient((Ingredient)Database.driver().getIngredients().values().toArray()[0]);
 	c.setIngredient(null);
 	data.put(key, c);
+	
+	fireTableRowsInserted(0, data.size());
+    }
+    
+    public void addComponent(Ingredient ingredient, double quantity){
+	int key = 1;
+	if(data.size()>0) {
+	    key = Collections.max(data.keySet())+1;
+	}
+	data.put(key, new Component(ingredient, key, quantity));
 	
 	fireTableRowsInserted(0, data.size());
     }
