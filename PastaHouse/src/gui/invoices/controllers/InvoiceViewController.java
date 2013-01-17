@@ -24,9 +24,7 @@ import java.awt.event.KeyEvent;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
-import java.text.SimpleDateFormat;
 import java.util.Map;
-import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -37,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
+import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import printer.printables.PrintableInvoiceNew;
 
@@ -54,6 +53,8 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private JXDatePicker fromPicker;
     private JXDatePicker toPicker;
     private InvoiceFiltering filterController;
+    private JXTitledPanel filterpanel;
+    private JXTitledPanel invoicespanel;
 
     /**
      * Creates new form InvoiceViewController
@@ -66,15 +67,18 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         table = createXTable();
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
-        tablePanel.add(scrollpane, BorderLayout.CENTER);
-        DatePickerFactory dpfactory = new DatePickerFactory();
+        
         configureDisplayProperties();
-        fromPicker = dpfactory.makeStandardDatePicker();
-        fromPicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        toPicker = dpfactory.makeStandardDatePicker();
-        toPicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        fromPicker = DatePickerFactory.makeStandardDatePicker();
+        toPicker = DatePickerFactory.makeStandardDatePicker();
         fromOutlet.add(fromPicker);
         toOutlet.add(toPicker);
+        filterpanel = new JXTitledPanel("Filter");
+        invoicespanel = new JXTitledPanel("Facturen");
+        filterpanel.add(controlPanel);
+        tablePanel.add(filterpanel, BorderLayout.NORTH);
+        tablePanel.add(invoicespanel, BorderLayout.CENTER);
+        invoicespanel.add(scrollpane, BorderLayout.CENTER);
         bind();
 
     }
@@ -94,7 +98,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         numberField = new javax.swing.JTextField();
-        jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         clientField = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
@@ -102,6 +105,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         fromOutlet = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         toOutlet = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        btnAdjustFilters = new javax.swing.JButton();
+        btnClearFilters = new javax.swing.JButton();
         tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         invoices = new javax.swing.JButton();
@@ -112,45 +118,63 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
 
-        setLayout(new java.awt.BorderLayout());
-
-        controlPanel.setLayout(new java.awt.GridLayout(1, 3));
+        controlPanel.setLayout(new java.awt.GridLayout());
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
-        jPanel4.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Nummer");
-        jPanel4.add(jLabel1);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(jLabel1, gridBagConstraints);
 
+        numberField.setVerifyInputWhenFocusTarget(false);
         numberField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 numberFieldKeyReleased(evt);
             }
         });
-        jPanel4.add(numberField);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 10.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(numberField, gridBagConstraints);
+
+        jLabel2.setText("Klant");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(jLabel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 5.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(clientField, gridBagConstraints);
 
         controlPanel.add(jPanel4);
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
-        jPanel5.setLayout(new java.awt.GridLayout(2, 1));
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Klant");
-        jPanel5.add(jLabel2);
-        jPanel5.add(clientField);
-
-        controlPanel.add(jPanel5);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setText("Van");
         jLabel3.setVerifyInputWhenFocusTarget(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(jLabel3, gridBagConstraints);
@@ -164,12 +188,13 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(fromOutlet, gridBagConstraints);
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("Tot");
         jLabel4.setVerifyInputWhenFocusTarget(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(jLabel4, gridBagConstraints);
@@ -185,8 +210,29 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         controlPanel.add(jPanel3);
 
-        add(controlPanel, java.awt.BorderLayout.NORTH);
+        jPanel5.setLayout(new java.awt.GridLayout(2, 1));
+
+        btnAdjustFilters.setText("Pas toe");
+        btnAdjustFilters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdjustFiltersActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnAdjustFilters);
+
+        btnClearFilters.setText("Wis filters");
+        btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearFiltersActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnClearFilters);
+
+        controlPanel.add(jPanel5);
+
         controlPanel.getAccessibleContext().setAccessibleName("");
+
+        setLayout(new java.awt.BorderLayout());
 
         tablePanel.setLayout(new java.awt.BorderLayout());
         add(tablePanel, java.awt.BorderLayout.CENTER);
@@ -254,8 +300,26 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         printer.Printer.driver().setPrintableBook(b);
         printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_afdrukkenActionPerformed
+
+    private void btnAdjustFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdjustFiltersActionPerformed
+        filterController.setClientString(clientField.getText());
+        filterController.setNumberString(numberField.getText());
+        filterController.setFromDate(fromPicker.getDate());
+        filterController.setToDate(toPicker.getDate());
+    }//GEN-LAST:event_btnAdjustFiltersActionPerformed
+
+    private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
+        clientField.setText("");
+        numberField.setText("");
+        fromPicker.setDate(null);
+        toPicker.setDate(null);
+        filterController.clearFilters();
+    }//GEN-LAST:event_btnClearFiltersActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton afdrukken;
+    private javax.swing.JButton btnAdjustFilters;
+    private javax.swing.JButton btnClearFilters;
     private javax.swing.JTextField clientField;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton edit;
@@ -329,41 +393,41 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 //                 filterController, BeanProperty.create("clientString"), 
 //                 this, BeanProperty.create("statusContent"))); 
 //        filterGroup.bind();
-        clientField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    filterController.setClientString(clientField.getText());
-                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && clientField.getText().equals("")) {
-                    filterController.setClientString(clientField.getText());
-                }
-            }
-        });
-
-        numberField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    filterController.setNumberString(numberField.getText());
-                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && numberField.getText().equals("")) {
-                    filterController.setNumberString(numberField.getText());
-                }
-            }
-        });
-
-        fromPicker.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filterController.setFromDate(fromPicker.getDate());
-            }
-        });
-
-        toPicker.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filterController.setToDate(toPicker.getDate());
-            }
-        });
+//        clientField.addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+//                    filterController.setClientString(clientField.getText());
+//                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && clientField.getText().equals("")) {
+//                    filterController.setClientString(clientField.getText());
+//                }
+//            }
+//        });
+//
+//        numberField.addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+//                    filterController.setNumberString(numberField.getText());
+//                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && numberField.getText().equals("")) {
+//                    filterController.setNumberString(numberField.getText());
+//                }
+//            }
+//        });
+//
+//        fromPicker.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                filterController.setFromDate(fromPicker.getDate());
+//            }
+//        });
+//
+//        toPicker.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                filterController.setToDate(toPicker.getDate());
+//            }
+//        });
 
 
 

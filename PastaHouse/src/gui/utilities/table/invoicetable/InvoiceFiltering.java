@@ -4,7 +4,6 @@
  */
 package gui.utilities.table.invoicetable;
 
-import database.tables.Invoice;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -211,5 +210,10 @@ public class InvoiceFiltering extends AbstractBean {
                 return matches;
             }
         };
+    }
+    
+    public void clearFilters(){
+        invoiceTable.setRowFilter(null);
+        
     }
 }
