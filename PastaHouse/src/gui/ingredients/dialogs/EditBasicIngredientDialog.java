@@ -7,6 +7,7 @@ package gui.ingredients.dialogs;
 import com.michaelbaranov.microba.calendar.DatePicker;
 import database.Database;
 import database.FunctionResult;
+import database.extra.Ingredient;
 import database.tables.BasicIngredient;
 import database.tables.Contact;
 import gui.contacts.delegates.AddContactDelegate;
@@ -17,6 +18,7 @@ import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.combobox.ComboBoxModelFactory;
+import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -115,6 +118,53 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	TextFieldAutoHighlighter.installHighlighter(pricePerUnitOutlet);
 	TextFieldAutoHighlighter.installHighlighter(weightPerUnitOutlet);
 
+	ingredientOutlet.setInputVerifier(new AbstractValidator(this, ingredientOutlet, "De naam moet uniek en niet leeg zijn!") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		try{
+		    if (ingredientOutlet.getText().isEmpty()) {
+			return false;
+		    }
+		    if (!ingredientOutlet.getText().equalsIgnoreCase(defaultModel.getName())) {
+			List<Ingredient> ingrs = database.Database.driver().getIngredients();
+			for (Ingredient ingredient : ingrs) {
+			    if (ingredient.getName().equalsIgnoreCase(ingredientOutlet.getText())) {
+				return false;
+			    }
+			}
+		    }
+		    return true;
+		} catch(Exception e){
+		    return false;
+		}
+	    }
+	});
+	lossOutlet.setInputVerifier(new AbstractValidator(this, lossOutlet, "Gelieve een geldige waarde tussen 0.0 en 100.0 (%) in te voeren.") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		try{
+		    double d = Double.parseDouble(lossOutlet.getText());
+		    return d>=0 && d<100;
+		} catch (Exception e){
+		    return false;
+		}
+	    }
+	});
+	taxesOutlet.setInputVerifier(new AbstractValidator(this, taxesOutlet, "Gelieve een geldige, positieve waarde in te geven.") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		try{
+		    double d = Double.parseDouble(taxesOutlet.getText());
+		    return d>=0;
+		} catch (Exception e){
+		    return false;
+		}
+	    }
+	});
+	
 	/*
 	 * Hide the unformatted fields
 	 */
@@ -841,15 +891,32 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
 	try {
-
-	    if (ingredientOutlet.getText().isEmpty()
-		    || pricePerWeightOutlet.getText().isEmpty()
-		    || taxesOutlet.getText().isEmpty()
-		    || lossOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, tools.Utilities.incompleteFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+	    /*
+	     * Validity test
+	     */
+	    if (!valid()) {
 		return;
 	    }
 	    
+	    /*
+	     * Warnings
+	     */
+	    double ppw = Double.parseDouble(pricePerWeightOutlet.getText());
+	    if (ppw==0) {
+		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat de prijs 0 is?", "Opgelet!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
+		if (result!=0) {
+		    if (bulkOutlet.isSelected()) {
+			pricePerWeightOutlet.requestFocus();
+		    } else {
+			pricePerUnitOutlet.requestFocus();
+		    }
+		    return;
+		}
+	    }
+
+	    /*
+	     * Set values on the model
+	     */
 	    model.setName(ingredientOutlet.getText());
 	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
 	    model.setBrand(brandOutlet.getText());
@@ -1017,5 +1084,81 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	supplierBox.setSelectedItem(s);
 
 	pricePerUnitOutlet.requestFocus();
+    }
+    
+    private boolean valid(){
+	if (!ingredientOutlet.getInputVerifier().verify(ingredientOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Gelieve een geldige naam in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    ingredientOutlet.requestFocus();
+	    return false;
+	}
+	
+	if (supplierBox.getSelectedIndex()==0) {
+	    JOptionPane.showMessageDialog(null, "Gelieve een geldige leverancier te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    supplierBox.requestFocus();
+	    return false;
+	}
+	
+	if (!bulkOutlet.isSelected()) {
+	    /*
+	     * Test packaging
+	     */
+	    if (packagingOutlet.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, "Gelieve een geldige verpakking in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
+		packagingOutlet.requestFocus();
+		return false;
+	    }
+	    /*
+	     * Test PPU
+	     */
+	    try{
+		double ppu = Double.parseDouble(pricePerUnitOutlet.getText());
+		if (ppu<0) {
+		    throw new Exception("derp");
+		}
+	    } catch(Exception e){
+		JOptionPane.showMessageDialog(null, "Gelieve een geldige, positieve prijs per eenheid in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
+		pricePerUnitOutlet.requestFocus();
+		return false;
+	    }
+	    /*
+	     * Test WPU
+	     */
+	    try{
+		double wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+		if (wpu<=0) {
+		    throw new Exception("derp");
+		}
+	    } catch(Exception e){
+		JOptionPane.showMessageDialog(null, "Gelieve een geldige, strikt positief gewicht per eenheid in te geven!\n(Gewicht mag niet 0.0 zijn)", "Fout!", JOptionPane.ERROR_MESSAGE);
+		weightPerUnitOutlet.requestFocus();
+		return false;
+	    }
+	} else {
+	    /*
+	     * Test PPW
+	     */
+	    try{
+		double d = Double.parseDouble(pricePerWeightOutlet.getText());
+		if (d<0.0) throw new Exception("Derp");
+	    } catch(Exception e){
+		JOptionPane.showMessageDialog(null, "Gelieve een geldige, positieve bulkprijs in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
+		pricePerWeightOutlet.requestFocus();
+		return false;
+	    }
+	}
+	
+	if (!lossOutlet.getInputVerifier().verify(lossOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Kijk het verliespercentage na!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    lossOutlet.requestFocus();
+	    return false;
+	}
+	
+	if (!taxesOutlet.getInputVerifier().verify(taxesOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Kijk het BTWpercentage na!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    ingredientOutlet.requestFocus();
+	    return false;
+	}
+	return true;
     }
 }

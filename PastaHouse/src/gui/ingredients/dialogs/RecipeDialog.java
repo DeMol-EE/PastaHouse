@@ -669,7 +669,7 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	     */
 	    double gW = editing? fullModel.getGrossWeight() : model.getGrossWeight();
 	    if (Double.parseDouble(netWeightOutlet.getText())>gW) {
-		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat het netto gewicht hoger is dan het bruto gewicht?", "Waarschuwing!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
+		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat het netto gewicht hoger is dan het bruto gewicht?", "Opgelet!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
 		if (result!=0) {
 		    netWeightOutlet.requestFocus();
 		    return;
@@ -827,20 +827,20 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     
     private boolean valid(){
 	if (!nameOutlet.getInputVerifier().verify(nameOutlet)) {
-	    JOptionPane.showMessageDialog(null, "De naam van het recept moet uniek en niet leeg zijn!", "Fout!", JOptionPane.WARNING_MESSAGE);
+	    JOptionPane.showMessageDialog(null, "De naam van het recept moet uniek en niet leeg zijn!", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    nameOutlet.requestFocus();
 	    return false;
 	}
 	
 	Map c = editing? fullModel.getComponents() : model.getComponents();
 	if (c.isEmpty()) {
-	    JOptionPane.showMessageDialog(null, "Het recept moet minstens 1 ingrediënt bevatten", "Fout!", JOptionPane.WARNING_MESSAGE);
+	    JOptionPane.showMessageDialog(null, "Het recept moet minstens 1 ingrediënt bevatten", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    componentSelectionBox.requestFocus();
 	    return false;
 	}
 	
 	if (!netWeightOutlet.getInputVerifier().verify(netWeightOutlet)) {
-	    JOptionPane.showMessageDialog(null, "Kijk het nettogewicht na!", "Fout!", JOptionPane.WARNING_MESSAGE);
+	    JOptionPane.showMessageDialog(null, "Kijk het nettogewicht na!", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    netWeightOutlet.requestFocus();
 	    return false;
 	}

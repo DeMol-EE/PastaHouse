@@ -104,7 +104,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	}
 	
         //€-sign?
-        nameOutlet.setText(StringTools.capitalize(bi.getName()));
         brandOutlet.setText(StringTools.capitalize(bi.getBrand()));
         pricePerWeightOutlet.setText("" + threeFormatter.format(bi.getPricePerWeight()) + " euro / kg");
         lossPercentOutlet.setText("" + twoFormatter.format(bi.getLossPercent()) + " %");
@@ -155,8 +154,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
         fixedFields = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        nameOutlet = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         brandOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -212,17 +209,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu.add(editMenuItem);
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(11, 2));
-
-        jLabel1.setText("Ingrediënt");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel1.setFocusable(false);
-        fixedFields.add(jLabel1);
-
-        nameOutlet.setText("<nameOutlet>");
-        nameOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        nameOutlet.setFocusable(false);
-        fixedFields.add(nameOutlet);
+        fixedFields.setLayout(new java.awt.GridLayout(10, 2));
 
         jLabel2.setBackground(new java.awt.Color(239, 239, 239));
         jLabel2.setText("Merk");
@@ -512,7 +499,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JMenuItem editMenuItem;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
@@ -530,7 +516,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JList listOutlet;
     private javax.swing.JLabel lossPercentOutlet;
     private javax.swing.JPanel master;
-    private javax.swing.JLabel nameOutlet;
     private javax.swing.JLabel netPriceOutlet;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JLabel packagingOutlet;
