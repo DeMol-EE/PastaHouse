@@ -5,14 +5,24 @@
 package gui.invoices.dialogs;
 
 import database.Database;
+import database.extra.InvoiceItem;
 import database.tables.Contact;
 import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.invoices.delegates.AddInvoiceDelegate;
 import gui.utilities.combobox.AutocompleteCombobox;
+import gui.utilities.table.invoicetable.InvoiceItemTableModel;
+import java.awt.BorderLayout;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.table.JTableHeader;
 import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTableHeader;
 
 /**
  *
@@ -22,6 +32,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
     private AutocompleteCombobox clientBox;
     private JXDatePicker datepicker = new JXDatePicker();
+    private JXTable table;
+    private Map<Integer, InvoiceItem> data = new TreeMap<Integer, InvoiceItem>();
 
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
@@ -32,7 +44,12 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         datepicker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
         datepicker.setDate(new Date());
         txtNumber.setText(""+Database.driver().getInvoiceNumber());
-        
+        table = createXTable();
+        InvoiceItemTableModel tablemodel = new InvoiceItemTableModel(data);
+        table.setModel(tablemodel);
+        JScrollPane scrollpane = new JScrollPane(table);
+        table.setName("invoiceTable");
+        artikelspanel.add(scrollpane, BorderLayout.CENTER);
         setLocationRelativeTo(null);
     }
 
@@ -56,8 +73,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         addSupplier = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         comboPriceClass = new javax.swing.JComboBox();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        articleTableOutlet = new javax.swing.JTable();
+        artikelspanel = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         btnReduction = new javax.swing.JTextField();
@@ -107,20 +124,10 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         detail.add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
-        articleTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(articleTableOutlet);
+        artikelspanel.setLayout(new java.awt.BorderLayout());
+        artikelspanel.add(jPanel6, java.awt.BorderLayout.PAGE_END);
 
-        detail.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        detail.add(artikelspanel, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2));
 
@@ -138,7 +145,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         btnSave.setText("Opslaan");
         jPanel4.add(btnSave);
@@ -161,7 +168,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private javax.swing.JPanel ClientOutlet;
     private javax.swing.JPanel DateOutlet;
     private javax.swing.JButton addSupplier;
-    private javax.swing.JTable articleTableOutlet;
+    private javax.swing.JPanel artikelspanel;
     private javax.swing.JButton btnBack;
     private javax.swing.JTextField btnReduction;
     private javax.swing.JButton btnSave;
@@ -177,7 +184,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel lblPrice;
     private javax.swing.JTextField txtNumber;
     // End of variables declaration//GEN-END:variables
@@ -185,5 +192,26 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     @Override
     public void addContact(Contact c) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+        private JXTable createXTable() {
+        JXTable table = new JXTable() {
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JXTableHeader(columnModel) {
+                    @Override
+                    public void updateUI() {
+                        super.updateUI();
+                        // need toPicker do in updateUI toPicker survive toggling of LAF 
+                        if (getDefaultRenderer() instanceof JLabel) {
+                            ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
+                        }
+                    }
+                    //                    </snip> 
+                };
+            }
+        };
+        return table;
     }
 }
