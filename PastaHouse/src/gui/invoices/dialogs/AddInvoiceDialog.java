@@ -14,8 +14,8 @@ import gui.utilities.DatePickerFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import java.awt.BorderLayout;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JLabel;
@@ -62,6 +62,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         
         artikelspanel.add(scrollpane, BorderLayout.CENTER);
         
+	clientBox = new AutocompleteCombobox(new ArrayList<Contact>(Database.driver().getClientsAlphabetically().values()));
+	ClientOutlet.add(clientBox, BorderLayout.CENTER);
+	
         this.pack();
         setLocationRelativeTo(null);
     }
