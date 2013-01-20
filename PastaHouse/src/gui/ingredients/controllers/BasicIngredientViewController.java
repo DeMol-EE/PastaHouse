@@ -357,7 +357,9 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         notesOutlet.setBackground(new java.awt.Color(191, 205, 219));
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        notesOutlet.setRows(5);
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
         notesOutlet.setFocusable(false);
         notesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {

@@ -412,6 +412,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         detailsContainer.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         notesContainer.setPreferredSize(new java.awt.Dimension(528, 300));
+        notesContainer.setLayout(new java.awt.BorderLayout());
 
         jScrollPane2.setBorder(null);
         jScrollPane2.setMinimumSize(new java.awt.Dimension(800, 300));
@@ -424,22 +425,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         notesOutlet.setWrapStyleWord(true);
         jScrollPane2.setViewportView(notesOutlet);
 
-        org.jdesktop.layout.GroupLayout notesContainerLayout = new org.jdesktop.layout.GroupLayout(notesContainer);
-        notesContainer.setLayout(notesContainerLayout);
-        notesContainerLayout.setHorizontalGroup(
-            notesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, notesContainerLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 532, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        notesContainerLayout.setVerticalGroup(
-            notesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, notesContainerLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        notesContainer.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(null);

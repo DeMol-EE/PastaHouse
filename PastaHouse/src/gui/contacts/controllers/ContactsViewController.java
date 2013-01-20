@@ -27,6 +27,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -101,6 +102,9 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
 	
+	container.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
+	container.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
+	
 	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
@@ -120,21 +124,13 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
         searchMenuItem = new javax.swing.JMenuItem();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        master = new javax.swing.JPanel();
-        filter = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listOutlet = new javax.swing.JList();
-        add = new javax.swing.JButton();
-        detail = new javax.swing.JPanel();
-        results = new javax.swing.JPanel();
+        fixedFields = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         typeOutlet = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        container = new javax.swing.JPanel();
-        fixedFields = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         firmTitleOutlet = new javax.swing.JLabel();
         firmOutlet = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -162,6 +158,15 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        master = new javax.swing.JPanel();
+        filter = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listOutlet = new javax.swing.JList();
+        add = new javax.swing.JButton();
+        detail = new javax.swing.JPanel();
+        results = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         edit = new javax.swing.JButton();
 
@@ -193,6 +198,197 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
             }
         });
         editMenu.add(searchMenuItem);
+
+        fixedFields.setFocusable(false);
+        fixedFields.setLayout(new java.awt.BorderLayout());
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel2.setText("Type");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
+        jPanel4.add(jLabel2);
+
+        typeOutlet.setText("<typeOutlet>");
+        jPanel4.add(typeOutlet);
+
+        jPanel3.add(jPanel4, java.awt.BorderLayout.CENTER);
+        jPanel3.add(jSeparator1, java.awt.BorderLayout.SOUTH);
+
+        fixedFields.add(jPanel3, java.awt.BorderLayout.NORTH);
+
+        jPanel1.setLayout(new java.awt.GridLayout(12, 2));
+
+        firmTitleOutlet.setText("Firma");
+        firmTitleOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        firmTitleOutlet.setFocusable(false);
+        jPanel1.add(firmTitleOutlet);
+
+        firmOutlet.setText("<firmOutlet>");
+        firmOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        firmOutlet.setFocusable(false);
+        jPanel1.add(firmOutlet);
+
+        jLabel4.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel4.setText("Contactpersoon");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel4.setFocusable(false);
+        jLabel4.setOpaque(true);
+        jPanel1.add(jLabel4);
+
+        contactOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        contactOutlet.setText("<contactOutlet>");
+        contactOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        contactOutlet.setFocusable(false);
+        contactOutlet.setOpaque(true);
+        jPanel1.add(contactOutlet);
+
+        jLabel12.setText("Adres");
+        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel12.setFocusable(false);
+        jPanel1.add(jLabel12);
+
+        addressOutlet.setText("<addressOutlet>");
+        addressOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        addressOutlet.setFocusable(false);
+        jPanel1.add(addressOutlet);
+
+        jLabel10.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel10.setText("Postcode");
+        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel10.setOpaque(true);
+        jPanel1.add(jLabel10);
+
+        zipcodeOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        zipcodeOutlet.setText("<zipcodeOutlet>");
+        zipcodeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        zipcodeOutlet.setOpaque(true);
+        jPanel1.add(zipcodeOutlet);
+
+        jLabel13.setText("Gemeente");
+        jLabel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel13.setFocusable(false);
+        jPanel1.add(jLabel13);
+
+        municipalityOutlet.setText("<municipalityOutlet>");
+        municipalityOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        municipalityOutlet.setFocusable(false);
+        jPanel1.add(municipalityOutlet);
+
+        jLabel5.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel5.setText("Telefoon");
+        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel5.setFocusable(false);
+        jLabel5.setOpaque(true);
+        jPanel1.add(jLabel5);
+
+        telephoneOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        telephoneOutlet.setText("<telephoneOutlet>");
+        telephoneOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        telephoneOutlet.setFocusable(false);
+        telephoneOutlet.setOpaque(true);
+        jPanel1.add(telephoneOutlet);
+
+        jLabel9.setText("Telefoon 2");
+        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jPanel1.add(jLabel9);
+
+        telephone2Outlet.setText("<telephone2Outlet>");
+        telephone2Outlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        jPanel1.add(telephone2Outlet);
+
+        jLabel6.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel6.setText("GSM");
+        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel6.setFocusable(false);
+        jLabel6.setOpaque(true);
+        jPanel1.add(jLabel6);
+
+        cellphoneOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        cellphoneOutlet.setText("<cellphoneOutlet>");
+        cellphoneOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        cellphoneOutlet.setFocusable(false);
+        cellphoneOutlet.setOpaque(true);
+        jPanel1.add(cellphoneOutlet);
+
+        jLabel7.setText("Fax");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel7.setFocusable(false);
+        jPanel1.add(jLabel7);
+
+        faxOutlet.setText("<faxOutlet>");
+        faxOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        faxOutlet.setFocusable(false);
+        jPanel1.add(faxOutlet);
+
+        jLabel8.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel8.setText("Email");
+        jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel8.setFocusable(false);
+        jLabel8.setOpaque(true);
+        jPanel1.add(jLabel8);
+
+        emailOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        emailOutlet.setText("<emailOutlet>");
+        emailOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        emailOutlet.setFocusable(false);
+        emailOutlet.setOpaque(true);
+        jPanel1.add(emailOutlet);
+
+        jLabel11.setText("BTWNummer");
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel11.setFocusable(false);
+        jPanel1.add(jLabel11);
+
+        taxnrOutlet.setText("<taxnrOutlet>");
+        taxnrOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        taxnrOutlet.setFocusable(false);
+        jPanel1.add(taxnrOutlet);
+
+        jLabel14.setBackground(new java.awt.Color(239, 239, 239));
+        jLabel14.setText("Prijscode");
+        jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel14.setFocusable(false);
+        jLabel14.setOpaque(true);
+        jPanel1.add(jLabel14);
+
+        pricecodeOutlet.setBackground(new java.awt.Color(239, 239, 239));
+        pricecodeOutlet.setText("<pricecodeOutlet>");
+        pricecodeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        pricecodeOutlet.setFocusable(false);
+        pricecodeOutlet.setOpaque(true);
+        jPanel1.add(pricecodeOutlet);
+
+        fixedFields.add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        stretchableFields.setFocusable(false);
+        stretchableFields.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setFocusable(false);
+
+        notesOutlet.setBackground(new java.awt.Color(240, 240, 240));
+        notesOutlet.setColumns(20);
+        notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
+        notesOutlet.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        notesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                notesOutletKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                notesOutletKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                notesOutletKeyTyped(evt);
+            }
+        });
+        jScrollPane2.setViewportView(notesOutlet);
+
+        stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         setLayout(new java.awt.BorderLayout());
 
@@ -230,198 +426,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
         results.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
-
-        jLabel2.setText("Type");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
-        jPanel4.add(jLabel2);
-
-        typeOutlet.setText("<typeOutlet>");
-        jPanel4.add(typeOutlet);
-
-        jPanel3.add(jPanel4, java.awt.BorderLayout.CENTER);
-        jPanel3.add(jSeparator1, java.awt.BorderLayout.SOUTH);
-
-        results.add(jPanel3, java.awt.BorderLayout.NORTH);
-
         container.setLayout(new java.awt.BorderLayout());
-
-        fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(12, 2));
-
-        firmTitleOutlet.setText("Firma");
-        firmTitleOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        firmTitleOutlet.setFocusable(false);
-        fixedFields.add(firmTitleOutlet);
-
-        firmOutlet.setText("<firmOutlet>");
-        firmOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        firmOutlet.setFocusable(false);
-        fixedFields.add(firmOutlet);
-
-        jLabel4.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel4.setText("Contactpersoon");
-        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel4.setFocusable(false);
-        jLabel4.setOpaque(true);
-        fixedFields.add(jLabel4);
-
-        contactOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        contactOutlet.setText("<contactOutlet>");
-        contactOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        contactOutlet.setFocusable(false);
-        contactOutlet.setOpaque(true);
-        fixedFields.add(contactOutlet);
-
-        jLabel12.setText("Adres");
-        jLabel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel12.setFocusable(false);
-        fixedFields.add(jLabel12);
-
-        addressOutlet.setText("<addressOutlet>");
-        addressOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        addressOutlet.setFocusable(false);
-        fixedFields.add(addressOutlet);
-
-        jLabel10.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel10.setText("Postcode");
-        jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel10.setOpaque(true);
-        fixedFields.add(jLabel10);
-
-        zipcodeOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        zipcodeOutlet.setText("<zipcodeOutlet>");
-        zipcodeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        zipcodeOutlet.setOpaque(true);
-        fixedFields.add(zipcodeOutlet);
-
-        jLabel13.setText("Gemeente");
-        jLabel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel13.setFocusable(false);
-        fixedFields.add(jLabel13);
-
-        municipalityOutlet.setText("<municipalityOutlet>");
-        municipalityOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        municipalityOutlet.setFocusable(false);
-        fixedFields.add(municipalityOutlet);
-
-        jLabel5.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel5.setText("Telefoon");
-        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel5.setFocusable(false);
-        jLabel5.setOpaque(true);
-        fixedFields.add(jLabel5);
-
-        telephoneOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        telephoneOutlet.setText("<telephoneOutlet>");
-        telephoneOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        telephoneOutlet.setFocusable(false);
-        telephoneOutlet.setOpaque(true);
-        fixedFields.add(telephoneOutlet);
-
-        jLabel9.setText("Telefoon 2");
-        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        fixedFields.add(jLabel9);
-
-        telephone2Outlet.setText("<telephone2Outlet>");
-        telephone2Outlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        fixedFields.add(telephone2Outlet);
-
-        jLabel6.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel6.setText("GSM");
-        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel6.setFocusable(false);
-        jLabel6.setOpaque(true);
-        fixedFields.add(jLabel6);
-
-        cellphoneOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        cellphoneOutlet.setText("<cellphoneOutlet>");
-        cellphoneOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        cellphoneOutlet.setFocusable(false);
-        cellphoneOutlet.setOpaque(true);
-        fixedFields.add(cellphoneOutlet);
-
-        jLabel7.setText("Fax");
-        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel7.setFocusable(false);
-        fixedFields.add(jLabel7);
-
-        faxOutlet.setText("<faxOutlet>");
-        faxOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        faxOutlet.setFocusable(false);
-        fixedFields.add(faxOutlet);
-
-        jLabel8.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel8.setText("Email");
-        jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel8.setFocusable(false);
-        jLabel8.setOpaque(true);
-        fixedFields.add(jLabel8);
-
-        emailOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        emailOutlet.setText("<emailOutlet>");
-        emailOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        emailOutlet.setFocusable(false);
-        emailOutlet.setOpaque(true);
-        fixedFields.add(emailOutlet);
-
-        jLabel11.setText("BTWNummer");
-        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel11.setFocusable(false);
-        fixedFields.add(jLabel11);
-
-        taxnrOutlet.setText("<taxnrOutlet>");
-        taxnrOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        taxnrOutlet.setFocusable(false);
-        fixedFields.add(taxnrOutlet);
-
-        jLabel14.setBackground(new java.awt.Color(239, 239, 239));
-        jLabel14.setText("Prijscode");
-        jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jLabel14.setFocusable(false);
-        jLabel14.setOpaque(true);
-        fixedFields.add(jLabel14);
-
-        pricecodeOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        pricecodeOutlet.setText("<pricecodeOutlet>");
-        pricecodeOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        pricecodeOutlet.setFocusable(false);
-        pricecodeOutlet.setOpaque(true);
-        fixedFields.add(pricecodeOutlet);
-
-        container.add(fixedFields, java.awt.BorderLayout.NORTH);
-
-        stretchableFields.setFocusable(false);
-        stretchableFields.setLayout(new java.awt.BorderLayout());
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
-        jScrollPane2.setFocusable(false);
-
-        notesOutlet.setBackground(new java.awt.Color(240, 240, 240));
-        notesOutlet.setColumns(20);
-        notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
-        notesOutlet.setLineWrap(true);
-        notesOutlet.setRows(5);
-        notesOutlet.setWrapStyleWord(true);
-        notesOutlet.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        notesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                notesOutletKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                notesOutletKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                notesOutletKeyTyped(evt);
-            }
-        });
-        jScrollPane2.setViewportView(notesOutlet);
-
-        stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
-
-        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
@@ -434,7 +439,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         });
         jPanel5.add(edit, java.awt.BorderLayout.EAST);
 
-        container.add(jPanel5, java.awt.BorderLayout.PAGE_END);
+        container.add(jPanel5, java.awt.BorderLayout.SOUTH);
 
         results.add(container, java.awt.BorderLayout.CENTER);
 
@@ -534,6 +539,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;

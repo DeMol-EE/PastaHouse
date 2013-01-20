@@ -337,7 +337,7 @@ public class SupplierViewController extends javax.swing.JPanel implements Master
         notesOutlet.setColumns(20);
         notesOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         notesOutlet.setLineWrap(true);
-        notesOutlet.setRows(5);
+        notesOutlet.setRows(1);
         notesOutlet.setWrapStyleWord(true);
         notesOutlet.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         notesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {

@@ -294,7 +294,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         preparationOutlet.setColumns(20);
         preparationOutlet.setFont(new java.awt.Font("Consolas", 0, 13)); // NOI18N
         preparationOutlet.setLineWrap(true);
-        preparationOutlet.setRows(5);
+        preparationOutlet.setRows(1);
         preparationOutlet.setWrapStyleWord(true);
         preparationOutlet.setFocusable(false);
         preparationOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
