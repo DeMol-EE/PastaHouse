@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 
 /**
@@ -61,6 +62,9 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
+	
+	container.add(new JXTitledPanel("Details", fixedWrapper), BorderLayout.NORTH);
+	container.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
     }
 
     /**
@@ -75,13 +79,6 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         editMenu = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        master = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listOutlet = new javax.swing.JList();
-        add = new javax.swing.JButton();
-        detail = new javax.swing.JPanel();
-        container = new javax.swing.JPanel();
         fixedWrapper = new javax.swing.JPanel();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -111,6 +108,13 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        master = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listOutlet = new javax.swing.JList();
+        add = new javax.swing.JButton();
+        detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         invoices = new javax.swing.JButton();
@@ -135,42 +139,6 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
             }
         });
         editMenu.add(editMenuItem);
-
-        setFocusable(false);
-        setLayout(new java.awt.BorderLayout());
-
-        jSplitPane1.setDividerLocation(200);
-        jSplitPane1.setFocusable(false);
-
-        master.setFocusable(false);
-        master.setLayout(new java.awt.BorderLayout());
-
-        jScrollPane1.setFocusable(false);
-
-        listOutlet.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(listOutlet);
-
-        master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        add.setText("Toevoegen...");
-        add.setFocusable(false);
-        add.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addActionPerformed(evt);
-            }
-        });
-        master.add(add, java.awt.BorderLayout.SOUTH);
-
-        jSplitPane1.setLeftComponent(master);
-
-        detail.setFocusable(false);
-        detail.setLayout(new java.awt.BorderLayout());
-
-        container.setLayout(new java.awt.BorderLayout());
 
         fixedWrapper.setLayout(new java.awt.BorderLayout());
 
@@ -333,20 +301,54 @@ public class ClientViewController extends javax.swing.JPanel implements MasterDe
 
         fixedWrapper.add(fixedFields, java.awt.BorderLayout.CENTER);
 
-        container.add(fixedWrapper, java.awt.BorderLayout.NORTH);
-
         stretchableFields.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
         jScrollPane2.setFocusable(false);
 
         notesOutlet.setColumns(20);
-        notesOutlet.setRows(5);
+        notesOutlet.setLineWrap(true);
+        notesOutlet.setRows(1);
+        notesOutlet.setWrapStyleWord(true);
         jScrollPane2.setViewportView(notesOutlet);
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        container.add(stretchableFields, java.awt.BorderLayout.CENTER);
+        setFocusable(false);
+        setLayout(new java.awt.BorderLayout());
+
+        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setFocusable(false);
+
+        master.setFocusable(false);
+        master.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setFocusable(false);
+
+        listOutlet.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listOutlet);
+
+        master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        add.setText("Toevoegen...");
+        add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
+
+        jSplitPane1.setLeftComponent(master);
+
+        detail.setFocusable(false);
+        detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 

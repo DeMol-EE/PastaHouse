@@ -11,6 +11,7 @@ import gui.invoices.delegates.AddArticleDelegate;
 import gui.utilities.AcceleratorAdder;
 import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -18,6 +19,7 @@ import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.JXTitledPanel;
 
 /**
  *
@@ -51,6 +53,9 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	    }
 	});
 	
+	container.add(new JXTitledPanel("Details", jPanel1), BorderLayout.NORTH);
+	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
+	
 	loadDefaults();
     }
 
@@ -73,7 +78,6 @@ public class AddArticleDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         nameOutlet = new javax.swing.JTextField();
@@ -95,15 +99,11 @@ public class AddArticleDialog extends javax.swing.JDialog {
         taxesFormattedOutlet = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        container = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         create = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(400, 400));
-
-        container.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.GridLayout(6, 2));
 
@@ -188,16 +188,18 @@ public class AddArticleDialog extends javax.swing.JDialog {
 
         jPanel1.add(jPanel6);
 
-        container.add(jPanel1, java.awt.BorderLayout.NORTH);
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
 
         jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(1);
+        jTextArea1.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea1);
 
-        container.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(400, 400));
 
+        container.setLayout(new java.awt.BorderLayout());
         getContentPane().add(container, java.awt.BorderLayout.CENTER);
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));

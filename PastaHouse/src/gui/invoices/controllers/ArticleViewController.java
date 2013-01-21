@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTitledPanel;
 
 /**
  *
@@ -57,6 +58,9 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
+	
+	container.add(new JXTitledPanel("Details", fixedfields), BorderLayout.NORTH);
+	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
     }
 
     /**
@@ -72,14 +76,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        master = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listOutlet = new javax.swing.JList();
-        add = new javax.swing.JButton();
-        filter = new javax.swing.JTextField();
-        detail = new javax.swing.JPanel();
-        container = new javax.swing.JPanel();
         fixedfields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         nameOutlet = new javax.swing.JLabel();
@@ -95,6 +91,14 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         taxesOutlet = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        master = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listOutlet = new javax.swing.JList();
+        add = new javax.swing.JButton();
+        filter = new javax.swing.JTextField();
+        detail = new javax.swing.JPanel();
+        container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         edit = new javax.swing.JButton();
 
@@ -126,42 +130,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
             }
         });
         editMenu.add(jMenuItem1);
-
-        setLayout(new java.awt.BorderLayout());
-
-        jSplitPane1.setDividerLocation(200);
-
-        master.setLayout(new java.awt.BorderLayout());
-
-        listOutlet.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(listOutlet);
-
-        master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        add.setText("Toevoegen...");
-        add.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addActionPerformed(evt);
-            }
-        });
-        master.add(add, java.awt.BorderLayout.SOUTH);
-
-        filter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                filterKeyReleased(evt);
-            }
-        });
-        master.add(filter, java.awt.BorderLayout.NORTH);
-
-        jSplitPane1.setLeftComponent(master);
-
-        detail.setLayout(new java.awt.BorderLayout());
-
-        container.setLayout(new java.awt.BorderLayout());
 
         fixedfields.setLayout(new java.awt.GridLayout(6, 2));
 
@@ -225,15 +193,49 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         taxesOutlet.setOpaque(true);
         fixedfields.add(taxesOutlet);
 
-        container.add(fixedfields, java.awt.BorderLayout.NORTH);
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opmerking:"));
+        jScrollPane2.setBorder(null);
 
         jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(1);
+        jTextArea1.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea1);
 
-        container.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        setLayout(new java.awt.BorderLayout());
+
+        jSplitPane1.setDividerLocation(200);
+
+        master.setLayout(new java.awt.BorderLayout());
+
+        listOutlet.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listOutlet);
+
+        master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        add.setText("Toevoegen...");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        master.add(add, java.awt.BorderLayout.SOUTH);
+
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+        master.add(filter, java.awt.BorderLayout.NORTH);
+
+        jSplitPane1.setLeftComponent(master);
+
+        detail.setLayout(new java.awt.BorderLayout());
+
+        container.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
