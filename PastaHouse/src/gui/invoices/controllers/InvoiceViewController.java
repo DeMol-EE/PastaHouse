@@ -442,7 +442,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void electFirstResponder() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        table.requestFocus();
     }
 
     private void configureDisplayProperties() {
