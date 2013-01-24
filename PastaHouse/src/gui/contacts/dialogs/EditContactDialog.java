@@ -99,6 +99,14 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    }
 	});
 	
+	taxnrOutlet.setInputVerifier(new AbstractValidator(this, taxnrOutlet, "Het BTW-nummer is ongeldig (enkel cijfers worden gecontroleerd).") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		return taxnrOutlet.getText().isEmpty() ? true : Utilities.validTaxNr(taxnrOutlet.getText());
+	    }
+	});
+	
 	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
 	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
@@ -393,12 +401,6 @@ public class EditContactDialog extends javax.swing.JDialog {
         jLabel3.setText("BTWNummer");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
         jPanel2.add(jLabel3);
-
-        taxnrOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                taxnrOutletKeyReleased(evt);
-            }
-        });
         jPanel2.add(taxnrOutlet);
 
         jLabel4.setText("Prijscode");
@@ -567,30 +569,6 @@ public class EditContactDialog extends javax.swing.JDialog {
 	return true;
     }
     
-    private void taxnrOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxnrOutletKeyReleased
-        
-	taxnrOutlet.setInputVerifier(new InputVerifier() {
-
-	    @Override
-	    public boolean verify(JComponent input) {
-		try{
-		    Integer.parseInt(taxnrOutlet.getText());
-		    System.out.println("erear");
-		    return true;
-		} catch (Exception e){
-		    System.out.println("erwqer");
-		    return false;
-		}
-	    }
-	});
-	
-	String taxnr = taxnrOutlet.getText();
-        if (!Utilities.validTaxNr(taxnr)) {
-            taxnrOutlet.setForeground(Color.red);
-        } else {
-            taxnrOutlet.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_taxnrOutletKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JLabel contactLabel;

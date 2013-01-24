@@ -10,7 +10,7 @@ import gui.ingredients.RecipeTabbedViewController;
 import gui.invoices.InvoiceTabbedViewController;
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.Frame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
@@ -39,8 +39,8 @@ public class ApplicationInvoices extends javax.swing.JFrame {
 	/*
 	 * Set full screen
 	 */
-	setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
-	setSize(Toolkit.getDefaultToolkit().getScreenSize());
+	setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
+	
         setLocationRelativeTo(null);
         setTitle("Pasta House");
 	
