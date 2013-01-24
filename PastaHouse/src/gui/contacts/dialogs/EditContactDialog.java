@@ -566,6 +566,14 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    sortkeyOutlet.requestFocus();
 	    return false;
 	}
+	
+	if(!taxnrOutlet.getInputVerifier().verify(taxnrOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Het BTW-nummer is ongeldig, een geldig nummer bevat 9 cijfers.\nVan alle ingevoerde tekens worden enkel de cijfers gecontroleerd.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    taxnrOutlet.requestFocus();
+	    taxnrOutlet.selectAll();
+	    return false;
+	}
+	
 	return true;
     }
     

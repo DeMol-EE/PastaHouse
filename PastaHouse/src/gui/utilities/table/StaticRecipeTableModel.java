@@ -56,7 +56,7 @@ public class StaticRecipeTableModel extends AbstractTableModel{
 	    case 1:
 		return "Type";
 	    case 2:
-		return "Hoeveelheid";
+		return "Kg";
 	    case 3:
 		return "Stuks";
 	    default:

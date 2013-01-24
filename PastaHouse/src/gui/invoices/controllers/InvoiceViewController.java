@@ -19,8 +19,6 @@ import gui.utilities.table.invoicetable.InvoiceTableModel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
@@ -38,6 +36,7 @@ import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import printer.printables.PrintableInvoiceNew;
+import tools.Utilities;
 
 /**
  *
@@ -67,10 +66,24 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         table = createXTable();
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
+	table.setRowHeight(table.getRowHeight()+Utilities.fontSize()-10);
         
         configureDisplayProperties();
         fromPicker = DatePickerFactory.makeStandardDatePicker();
+	fromPicker.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		filterController.setFromDate(fromPicker.getDate());
+	    }
+	});
         toPicker = DatePickerFactory.makeStandardDatePicker();
+	toPicker.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		filterController.setToDate(toPicker.getDate());
+	    }
+	});
         fromOutlet.add(fromPicker);
         toOutlet.add(toPicker);
         filterpanel = new JXTitledPanel("Filter");
@@ -106,7 +119,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jLabel4 = new javax.swing.JLabel();
         toOutlet = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        btnAdjustFilters = new javax.swing.JButton();
         btnClearFilters = new javax.swing.JButton();
         tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -118,7 +130,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
 
-        controlPanel.setLayout(new java.awt.GridLayout());
+        controlPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -155,6 +167,12 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(jLabel2, gridBagConstraints);
+
+        clientField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                clientFieldKeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -211,14 +229,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         controlPanel.add(jPanel3);
 
         jPanel5.setLayout(new java.awt.GridLayout(2, 1));
-
-        btnAdjustFilters.setText("Pas toe");
-        btnAdjustFilters.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdjustFiltersActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnAdjustFilters);
 
         btnClearFilters.setText("Wis filters");
         btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
@@ -284,6 +294,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_editActionPerformed
 
     private void numberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFieldKeyReleased
+	filterController.setNumberString(numberField.getText());
     }//GEN-LAST:event_numberFieldKeyReleased
 
     private void afdrukkenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afdrukkenActionPerformed
@@ -301,13 +312,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_afdrukkenActionPerformed
 
-    private void btnAdjustFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdjustFiltersActionPerformed
-        filterController.setClientString(clientField.getText());
-        filterController.setNumberString(numberField.getText());
-        filterController.setFromDate(fromPicker.getDate());
-        filterController.setToDate(toPicker.getDate());
-    }//GEN-LAST:event_btnAdjustFiltersActionPerformed
-
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
         clientField.setText("");
         numberField.setText("");
@@ -316,9 +320,12 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         filterController.clearFilters();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
+    private void clientFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clientFieldKeyReleased
+        filterController.setClientString(clientField.getText());
+    }//GEN-LAST:event_clientFieldKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton afdrukken;
-    private javax.swing.JButton btnAdjustFilters;
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JTextField clientField;
     private javax.swing.JPanel controlPanel;

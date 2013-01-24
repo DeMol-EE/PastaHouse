@@ -63,7 +63,7 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 	    case 1:
 		return "Ingredient";
 	    case 2:
-		return "Hoeveelheid";
+		return "Kg";
 	    case 3:
 		return "Stuks";
 	    default:

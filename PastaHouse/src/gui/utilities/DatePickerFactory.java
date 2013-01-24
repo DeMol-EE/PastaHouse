@@ -21,6 +21,7 @@ public class DatePickerFactory {
 
     public static JXDatePicker makeStandardDatePicker() {
         JXDatePicker dp = new JXDatePicker();
+	dp.getEditor().setFocusable(false);
         dp.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
         dp.getLinkPanel().setVisible(false);
         JXMonthView mv = dp.getMonthView();
