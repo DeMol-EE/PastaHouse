@@ -23,6 +23,7 @@ import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.util.Map;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -30,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.RowFilter;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
+import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
@@ -89,11 +91,41 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         filterpanel = new JXTitledPanel("Filter");
         invoicespanel = new JXTitledPanel("Facturen");
         filterpanel.add(controlPanel);
-        tablePanel.add(filterpanel, BorderLayout.NORTH);
         tablePanel.add(invoicespanel, BorderLayout.CENTER);
         invoicespanel.add(scrollpane, BorderLayout.CENTER);
+	
+	final JXCollapsiblePane filtercollapser = new JXCollapsiblePane(JXCollapsiblePane.Direction.UP);
+	filtercollapser.setCollapsed(true);
+	filtercollapser.setContentPane(filterpanel);
+	tablePanel.add(filtercollapser, BorderLayout.NORTH);
+	
+	final JButton showFilter = new JButton("Filters");
+	showFilter.setFocusable(false);
+	
+	final JButton hideFilter = new JButton("Sluiten");
+	hideFilter.setFocusable(false);
+	
+	showFilter.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		filtercollapser.setCollapsed(false);
+		numberField.requestFocus();
+		invoicespanel.setRightDecoration(null);
+	    }
+	});
+	
+	hideFilter.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		filtercollapser.setCollapsed(true);
+		invoicespanel.setRightDecoration(showFilter);
+	    }
+	});
+	
+	invoicespanel.setRightDecoration(showFilter);
+	filterpanel.setRightDecoration(hideFilter);
+	
         bind();
-
     }
 
     /**
