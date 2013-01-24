@@ -106,6 +106,7 @@ public class Invoice extends Record<Invoice>{
 
     @Override
     public boolean delete() {
-	throw new UnsupportedOperationException("Not supported yet.");
+//	Database.driver().
+	return true;
     }
 }

@@ -767,6 +767,21 @@ public class Database {
         }
         return currentnumber + 1;
     }
+    
+    public FunctionResult deleteInvoice(Invoice i){
+	try {
+            statement.executeUpdate("DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"");
+            System.out.println("DatabaseDriver::Executed delete:\n"
+                    + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nSUCCES!");
+            return new FunctionResult(0, null, null);
+        } catch (Exception e) {
+            // do logging
+            System.err.println("DatabaseDriver::Delete command: \n"
+                    + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nFAILED:\n" + e.getMessage());
+
+            return new FunctionResult(1, null, StringTools.capitalize(e.getMessage()));
+        }
+    }
 
     /**
      * Tries to close the active database connection.

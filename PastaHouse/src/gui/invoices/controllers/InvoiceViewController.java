@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.RowFilter;
@@ -154,10 +155,12 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         btnClearFilters = new javax.swing.JButton();
         tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        invoices = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        afdrukken = new javax.swing.JButton();
+        print = new javax.swing.JButton();
         edit = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        invoices = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
@@ -281,24 +284,15 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        invoices.setText("Toevoegen...");
-        invoices.setFocusable(false);
-        invoices.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                invoicesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(invoices, java.awt.BorderLayout.WEST);
-
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        afdrukken.setText("Afdrukken...");
-        afdrukken.addActionListener(new java.awt.event.ActionListener() {
+        print.setText("Afdrukken...");
+        print.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                afdrukkenActionPerformed(evt);
+                printActionPerformed(evt);
             }
         });
-        jPanel2.add(afdrukken);
+        jPanel2.add(print);
 
         edit.setText("Details...");
         edit.setFocusable(false);
@@ -310,6 +304,27 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel2.add(edit);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
+
+        jPanel6.setLayout(new java.awt.GridLayout(1, 2));
+
+        invoices.setText("Toevoegen...");
+        invoices.setFocusable(false);
+        invoices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoicesActionPerformed(evt);
+            }
+        });
+        jPanel6.add(invoices);
+
+        delete.setText("Verwijderen...");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
+        jPanel6.add(delete);
+
+        jPanel1.add(jPanel6, java.awt.BorderLayout.WEST);
 
         add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
@@ -329,20 +344,19 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	filterController.setNumberString(numberField.getText());
     }//GEN-LAST:event_numberFieldKeyReleased
 
-    private void afdrukkenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afdrukkenActionPerformed
+    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
 	int[] rijen = table.getSelectedRows();
         Book b = new Book();
         PageFormat pf = new PageFormat();
         pf.setPaper(new A4());
 
 	for (int i : rijen) {
-//            b.append(new PrintableInvoice(tableModel.getInvoiceAtRow(i)), pf);
             b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
         }
 
         printer.Printer.driver().setPrintableBook(b);
         printer.Printer.driver().tryPrint();
-    }//GEN-LAST:event_afdrukkenActionPerformed
+    }//GEN-LAST:event_printActionPerformed
 
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
         clientField.setText("");
@@ -356,11 +370,26 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         filterController.setClientString(clientField.getText());
     }//GEN-LAST:event_clientFieldKeyReleased
 
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        int[] rijen = table.getSelectedRows();
+	if (rijen.length>0) {
+	    String msg = "Bent u zeker dat u deze "+(rijen.length==1?"factuur":"facturen")+" wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden!";
+	    int choice = JOptionPane.showOptionDialog(this, msg, "Aandacht!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Verwijderen", "Terug"}, 1);
+	    if (choice == 0) {
+		System.out.println("Deleting...");
+		for (int i : rijen) {
+		    tableModel.getInvoiceAtRow(i).delete();
+		}
+		tableModel.fireTableRowsDeleted(rijen[0], rijen[rijen.length-1]);
+	    }
+	}
+    }//GEN-LAST:event_deleteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton afdrukken;
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JTextField clientField;
     private javax.swing.JPanel controlPanel;
+    private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JPanel fromOutlet;
     private javax.swing.JButton invoices;
@@ -373,8 +402,10 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel noResultOutlet;
     private javax.swing.JTextField numberField;
+    private javax.swing.JButton print;
     private javax.swing.JPanel tablePanel;
     private javax.swing.JPanel toOutlet;
     // End of variables declaration//GEN-END:variables
@@ -399,7 +430,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }
 
     private JXTable createXTable() {
-        JXTable table = new JXTable() {
+        JXTable table_l = new JXTable() {
             @Override
             protected JTableHeader createDefaultTableHeader() {
                 return new JXTableHeader(columnModel) {
@@ -416,7 +447,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
                 };
             }
         };
-        return table;
+        return table_l;
     }
 
     private void bind() {
