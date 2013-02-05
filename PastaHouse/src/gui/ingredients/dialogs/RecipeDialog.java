@@ -345,7 +345,9 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
         jPanel12 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         newBasicIngredient = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
         quantityOutlet = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         addComponent = new javax.swing.JButton();
@@ -398,13 +400,21 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 
         jPanel12.add(jPanel14);
 
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
         quantityOutlet.setText("<quantityOutlet>");
         quantityOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 quantityOutletKeyReleased(evt);
             }
         });
-        jPanel12.add(quantityOutlet);
+        jPanel4.add(quantityOutlet, java.awt.BorderLayout.CENTER);
+
+        jLabel3.setText("(kg)");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        jPanel4.add(jLabel3, java.awt.BorderLayout.EAST);
+
+        jPanel12.add(jPanel4);
 
         jPanel8.add(jPanel12, java.awt.BorderLayout.CENTER);
 
@@ -859,6 +869,7 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     private final javax.swing.JTable ingredientsOutlet = new javax.swing.JTable();
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
@@ -869,6 +880,7 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;

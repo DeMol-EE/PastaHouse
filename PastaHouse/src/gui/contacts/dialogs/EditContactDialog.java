@@ -13,7 +13,6 @@ import gui.utilities.KeyAction;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +20,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -566,6 +564,14 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    sortkeyOutlet.requestFocus();
 	    return false;
 	}
+	
+	if(!taxnrOutlet.getInputVerifier().verify(taxnrOutlet)) {
+	    JOptionPane.showMessageDialog(null, "Het BTW-nummer is ongeldig, een geldig nummer bevat 9 cijfers.\nVan alle ingevoerde tekens worden enkel de cijfers gecontroleerd.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    taxnrOutlet.requestFocus();
+	    taxnrOutlet.selectAll();
+	    return false;
+	}
+	
 	return true;
     }
     
