@@ -772,6 +772,10 @@ public class Database {
             statement.executeUpdate("DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"");
             System.out.println("DatabaseDriver::Executed delete:\n"
                     + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nSUCCES!");
+	    
+	    invoicesById.remove(i.getPrimaryKeyValue());
+	    invoicesByNumber.remove(i.getNumber());
+	    
             return new FunctionResult(0, null, null);
         } catch (Exception e) {
             // do logging

@@ -5,6 +5,8 @@
 package gui.utilities.table.invoicetable;
 
 import database.tables.Invoice;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 
@@ -22,6 +24,24 @@ public class InvoiceTableModel extends AbstractTableModel {
 
     public Invoice getInvoiceAtRow(int row) {
         return (row > 0 && row < data.size()) ? (Invoice) data.values().toArray()[row] : (Invoice) data.values().toArray()[0];
+    }
+    
+    public boolean removeInvoiceAtRows(int[] rows) {
+	List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
+	for (int row : rows) {
+	    invoicesToRemove.add(getInvoiceAtRow(row));
+	}
+	
+	int removed = 0;
+	
+	for (Invoice invoice : invoicesToRemove) {
+	    if(invoice.delete()) removed++;
+	    else break;
+	}
+	
+	fireTableDataChanged();
+	
+	return removed == rows.length;
     }
 
     @Override

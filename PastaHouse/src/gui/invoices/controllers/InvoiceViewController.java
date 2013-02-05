@@ -377,10 +377,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	    int choice = JOptionPane.showOptionDialog(this, msg, "Aandacht!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Verwijderen", "Terug"}, 1);
 	    if (choice == 0) {
 		System.out.println("Deleting...");
-		for (int i : rijen) {
-		    tableModel.getInvoiceAtRow(i).delete();
-		}
-		tableModel.fireTableRowsDeleted(rijen[0], rijen[rijen.length-1]);
+		tableModel.removeInvoiceAtRows(rijen);
 	    }
 	}
     }//GEN-LAST:event_deleteActionPerformed
