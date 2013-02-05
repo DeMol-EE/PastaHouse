@@ -68,7 +68,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         comboPriceClass.addItem("B");
         DateOutlet.add(datepicker);
         datepicker.setDate(new Date());
-        number = Database.driver().getInvoiceNumber();
+        number = Database.driver().getInvoiceNumber(new Date());
         txtNumber.setText("" + number);
         table = createXTable();
         tablemodel = new InvoiceItemTableModel(data, pricecode);
