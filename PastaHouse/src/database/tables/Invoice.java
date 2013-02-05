@@ -106,7 +106,6 @@ public class Invoice extends Record<Invoice>{
 
     @Override
     public boolean delete() {
-//	Database.driver().
-	return true;
+	return Database.driver().deleteInvoice(this).getCode()==0;
     }
 }
