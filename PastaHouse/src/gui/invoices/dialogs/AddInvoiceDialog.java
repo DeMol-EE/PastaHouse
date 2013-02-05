@@ -90,6 +90,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         pricetitledpanel.add(pricepanel);
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
+//	table.setSelectionMode();
+	
 	txtReduction.setText("0.0");
 	
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
@@ -391,7 +393,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     }//GEN-LAST:event_addSupplierActionPerformed
 
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
-        // TODO add your handling code here:
+        int row = table.getSelectedRow();
+	if (row >= 0 && row<table.getRowCount()) {
+	    data.remove(row);
+	    tablemodel.fireTableDataChanged();
+	}
     }//GEN-LAST:event_deleteArticleActionPerformed
     
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
