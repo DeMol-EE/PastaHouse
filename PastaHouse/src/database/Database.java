@@ -477,7 +477,7 @@ public class Database {
         Invoice newInv = null;
         String insertinvart = "INSERT INTO invoicesarticles"
                 + "(invoiceid, articleid, amount) VALUES"
-                + "(?,?,?,?,?)";
+                + "(?,?,?)";
         PreparedStatement preparedStatement = null;
         try {
             connection.setAutoCommit(false);
@@ -740,25 +740,10 @@ public class Database {
         }
     }
 
-    public int getInvoiceNumber() {
+    public int getInvoiceNumber(Date date) {
         int currentnumber = 0;
-        try {
-            ResultSet rs = statement.executeQuery("select number\n"
-                    + "from invoices\n"
-                    + "where number=(select max(number) from invoices)");
-            while (rs.next()) {
-                currentnumber = rs.getInt("number");
-            }
-            DateFormat dateFormat = new SimpleDateFormat("yy");
-            Date date = new Date();
-            int year = Integer.parseInt(dateFormat.format(date));
-            int numberyear = currentnumber / 10000;
-            if (year != numberyear) {
-                currentnumber = year * 10000;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        DateFormat dateFormat = new SimpleDateFormat("yyyy");
+
         return currentnumber + 1;
     }
     

@@ -5,9 +5,18 @@
 package gui.invoices.dialogs;
 
 import database.tables.Invoice;
+import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
+import java.awt.BorderLayout;
+import java.awt.ScrollPane;
 import java.text.DecimalFormat;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.table.JTableHeader;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTableHeader;
+import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 
 /**
@@ -24,14 +33,32 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
      */
     public InvoiceDetailsDialog(java.awt.Frame parent, boolean modal, Invoice invoice) {
         super(parent, modal);
+        
         initComponents();
+        model = invoice;
         setLocationRelativeTo(null);
+        JXTable table = createXTable();
+	tableModel = new InvoiceItemTableModel(model.items(), model.getPriceCode());
+        table.setModel(tableModel);
 	
-	model = invoice;
-	
-	
-        tableModel = new InvoiceItemTableModel(model.items(), model.getPriceCode());
-        articleTableOutlet.setModel(tableModel);
+        
+        table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
+        table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
+        table.getColumns().get(2).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+        table.getColumns().get(3).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+        table.getColumns().get(4).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+        JScrollPane articlepanel = new JScrollPane(table);
+        
+	JXTitledPanel detailstitledpanel = new JXTitledPanel("Details");
+	JXTitledPanel articlestitledpanel = new JXTitledPanel("Artikelen");
+        JXTitledPanel pricetitledpanel = new JXTitledPanel("Prijs");
+        detailstitledpanel.add(detailpanel);
+        articlestitledpanel.add(articlepanel);
+        pricetitledpanel.add(pricepanel);
+        componentpanel.add(detailstitledpanel, BorderLayout.NORTH);
+        componentpanel.add(articlestitledpanel, BorderLayout.CENTER);
+        componentpanel.add(pricetitledpanel, BorderLayout.SOUTH);
+        
 	
 	this.setTitle("Factuur - " + model.getNumber());
 	
@@ -56,8 +83,7 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        detail = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        detailpanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         lblNummer = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -66,9 +92,7 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         clientOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblKlasse = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        articleTableOutlet = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
+        pricepanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         lblSave = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -77,80 +101,58 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         edit = new javax.swing.JButton();
         close = new javax.swing.JButton();
+        componentpanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        detail.setLayout(new java.awt.BorderLayout());
-
-        jPanel2.setLayout(new java.awt.GridLayout(0, 2));
+        detailpanel.setLayout(new java.awt.GridLayout(0, 2));
 
         jLabel6.setBackground(new java.awt.Color(242, 242, 242));
         jLabel6.setText("Nummer");
         jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel6.setOpaque(true);
-        jPanel2.add(jLabel6);
+        detailpanel.add(jLabel6);
 
         lblNummer.setBackground(new java.awt.Color(242, 242, 242));
         lblNummer.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         lblNummer.setOpaque(true);
-        jPanel2.add(lblNummer);
+        detailpanel.add(lblNummer);
 
         jLabel4.setText("Datum");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel2.add(jLabel4);
+        detailpanel.add(jLabel4);
 
         lblDate.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        jPanel2.add(lblDate);
+        detailpanel.add(lblDate);
 
         jLabel2.setBackground(new java.awt.Color(242, 242, 242));
         jLabel2.setText("Klant");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel2.setOpaque(true);
-        jPanel2.add(jLabel2);
+        detailpanel.add(jLabel2);
 
         clientOutlet.setBackground(new java.awt.Color(242, 242, 242));
         clientOutlet.setText("<hyperlink to client>");
         clientOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         clientOutlet.setOpaque(true);
-        jPanel2.add(clientOutlet);
+        detailpanel.add(clientOutlet);
 
         jLabel3.setText("Prijsklasse");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
-        jPanel2.add(jLabel3);
+        detailpanel.add(jLabel3);
 
         lblKlasse.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
-        jPanel2.add(lblKlasse);
+        detailpanel.add(lblKlasse);
 
-        detail.add(jPanel2, java.awt.BorderLayout.PAGE_START);
-
-        articleTableOutlet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(articleTableOutlet);
-
-        detail.add(jScrollPane2, java.awt.BorderLayout.CENTER);
-
-        jPanel1.setLayout(new java.awt.GridLayout(0, 2));
+        pricepanel.setLayout(new java.awt.GridLayout(0, 2));
 
         jLabel5.setText("Korting");
-        jPanel1.add(jLabel5);
-        jPanel1.add(lblSave);
+        pricepanel.add(jLabel5);
+        pricepanel.add(lblSave);
 
         jLabel1.setText("Prijs");
-        jPanel1.add(jLabel1);
-        jPanel1.add(lblPrice);
+        pricepanel.add(jLabel1);
+        pricepanel.add(lblPrice);
 
-        detail.add(jPanel1, java.awt.BorderLayout.PAGE_END);
-
-        getContentPane().add(detail, java.awt.BorderLayout.CENTER);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
@@ -171,6 +173,9 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
+        componentpanel.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(componentpanel, java.awt.BorderLayout.CENTER);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -189,10 +194,10 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable articleTableOutlet;
     private javax.swing.JLabel clientOutlet;
     private javax.swing.JButton close;
-    private javax.swing.JPanel detail;
+    private javax.swing.JPanel componentpanel;
+    private javax.swing.JPanel detailpanel;
     private javax.swing.JButton edit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -200,15 +205,35 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblKlasse;
     private javax.swing.JLabel lblNummer;
     private javax.swing.JLabel lblPrice;
     private javax.swing.JLabel lblSave;
+    private javax.swing.JPanel pricepanel;
     // End of variables declaration//GEN-END:variables
+private JXTable createXTable() {
+        JXTable table = new JXTable() {
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JXTableHeader(columnModel) {
+                    @Override
+                    public void updateUI() {
+                        super.updateUI();
+                        // need toPicker do in updateUI toPicker survive toggling of LAF 
+                        if (getDefaultRenderer() instanceof JLabel) {
+                            ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
+                        }
+                    }
+                    //                    </snip> 
+                };
+            }
+        };
+        return table;
+    }
+
+
 }
