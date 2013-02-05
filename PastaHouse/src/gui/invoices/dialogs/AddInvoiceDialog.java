@@ -416,6 +416,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	InvoiceItem item = new InvoiceItem(art, quantity);
 	data.add(item);
 	tablemodel.addComponent(item);
+	
+	updatePrices();
     }//GEN-LAST:event_addArticleActionPerformed
 
     private void disposeLater() {
@@ -481,6 +483,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private void txtReductionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReductionKeyReleased
         try{
 	    saving = Double.parseDouble(txtReduction.getText());
+	    updatePrices();
 	} catch (Exception e){
 	    saving = 0.0;
 	}
@@ -672,5 +675,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             comboPriceClass.setSelectedItem(pricecode);
             tablemodel.updatePricecode(pricecode);
         }
+	
+	updatePrices();
+    }
+    
+    private void updatePrices(){
+	System.out.println("UPDATE THE PRICES");
     }
 }
