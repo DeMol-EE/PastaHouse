@@ -58,6 +58,10 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
         
     }
     
+    public void electFirstResponder(){
+	tabs.get(tabController.getSelectedIndex()).electFirstResponder();
+    }
+    
     @Override
     public JPanel view(){
         return this;

@@ -301,6 +301,7 @@ public class ApplicationInvoices extends javax.swing.JFrame {
     private void btnInvoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoicesActionPerformed
         removeActiveMenus();
 	setContent(itvc);
+	itvc.electFirstResponder();
 	activeTabbedViewController = itvc;
 	addActiveMenus();
     }//GEN-LAST:event_btnInvoicesActionPerformed
