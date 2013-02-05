@@ -249,6 +249,15 @@ public class Database {
                 newInv = Invoice.createFromModel(rs.getInt("id"), model);
                 invoicesById.put(newInv.getPrimaryKeyValue(), newInv);
                 invoicesByNumber.put(newInv.getNumber(), newInv);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                Date datum = formatter.parse(rs.getString("date"));
+                Calendar now = Calendar.getInstance();
+                now.setTime(datum);
+                int year = now.get(Calendar.YEAR);
+                if (!InvoicesbyYear.containsKey(year)) {
+                    InvoicesbyYear.put(year, new ArrayList<Invoice>());
+                }
+                InvoicesbyYear.get(year).add(newInv);
             } else {
                 code = 2;
                 msg = "Er is iets verkeerd gegaan. Herstart het programma.";
@@ -264,6 +273,9 @@ public class Database {
                 preparedStatement.executeUpdate();
             }
             connection.commit();
+        } catch (ParseException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            connection.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             code = 1;
@@ -762,8 +774,8 @@ public class Database {
         Calendar time = Calendar.getInstance();
         time.setTime(date);
         int year = time.get(Calendar.YEAR);
-        if(!InvoicesbyYear.containsKey(year)){
-            return year%100 * 10000 + 1;
+        if (!InvoicesbyYear.containsKey(year)) {
+            return year % 100 * 10000 + 1;
         }
         ArrayList<Invoice> invoicesofyear = InvoicesbyYear.get(year);
         int lastindex = invoicesofyear.size() - 1;
