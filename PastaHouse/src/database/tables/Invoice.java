@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tools.Configuration;
@@ -32,6 +33,11 @@ public class Invoice extends Record<Invoice>{
     
     private Map<Double, List<InvoiceItem>> itemsPerCategory;
 
+    public Invoice(ArrayList<InvoiceItem> items){
+	super(1234656, "");
+	this.items = items;
+    }
+    
     private Invoice(int id, int number, String date, Contact client, String priceCode, double save) {
 	super(id, Configuration.center().getDB_TABLE_INV());
 	this.number = number;
@@ -161,6 +167,33 @@ public class Invoice extends Record<Invoice>{
 	}
 	
 	return nets;
+    }
+    
+    public List<Double> added(){
+	List<Double> added = new ArrayList<Double>();
+	
+	List<Double> nets = netAfterSave();
+	Set<Double> categories = itemsPerTaxesCategory().keySet();
+	
+	int index = 0;
+	for (Double cat : categories) {
+	    added.add(cat/100*nets.get(index));
+	}
+	
+	return added;
+    }
+    
+    public List<Double> total(){
+	List<Double> totals = new ArrayList<Double>();
+	
+	List<Double> nets = netAfterSave();
+	List<Double> adds = added();
+	
+	for (int i = 0; i < nets.size(); i++) {
+	    totals.add(nets.get(i)+adds.get(i));
+	}
+	
+	return totals;
     }
     
     @Override
