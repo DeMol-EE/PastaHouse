@@ -175,7 +175,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	tabs[0] = margin;
 	int base = 30;
 	for (int i = 0; i < categories.size(); i++) {
-	    tabs[i+1] = margin + base + 30*(i+1);
+	    tabs[i+1] = margin + 60*(i+1);
 	}
 	tabs[tabs.length-2] = 4*width/5;
 	tabs[tabs.length-1] = width;
