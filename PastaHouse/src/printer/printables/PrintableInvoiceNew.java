@@ -42,8 +42,8 @@ public class PrintableInvoiceNew extends MyPrintable{
 	 * Formatting variables
 	 */
 	int half = width/2;
-	width-=5; // small correction...
-	half-=2;
+	width-=10; // small correction...
+	half-=5;
 	int[] tabs = new int[]{0, half, 3*width/5, 4*width/5, width};
 	
 	/*
@@ -112,7 +112,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	/*
 	 * Print invoice articles (InvoiceItems)
 	 */
-	DecimalFormat threeFormatter = new DecimalFormat("0,000");
+	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
 	otherSymbols.setDecimalSeparator(',');
 	otherSymbols.setGroupingSeparator('.'); 
@@ -124,10 +124,13 @@ public class PrintableInvoiceNew extends MyPrintable{
 	     */
 	    ArrayList<PrintableHorizontalLineObject> ii = new ArrayList<PrintableHorizontalLineObject>();
 	    ii.add(new PrintableString(invoiceItem.getArticle().getName(), tabs[0]));
-	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getArticle().getTaxes()), tabs[1]));
-	    ii.add(new PrintableString(invoiceItem.getAmount()+" "+invoiceItem.getArticle().getUnit(), tabs[2]));
+	    ii.add(new PrintableString(""+(int)(invoiceItem.getArticle().getTaxes()), tabs[1]));
+	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getAmount())+" "+invoiceItem.getArticle().getUnit(), tabs[2]));
 	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())), tabs[3]));
-	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount()), tabs[4]));
+	    
+	    String tot = threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount());
+	    
+	    ii.add(new PrintableString(tot, tabs[4]-fontMetrics.charsWidth(tot.toCharArray(), 0, tot.length())));
 	    printModel.add(new PrintableMulti(ii));
 	    
 	    printModel.add(new PrintableNewline());
@@ -138,6 +141,8 @@ public class PrintableInvoiceNew extends MyPrintable{
 
     @Override
     public List<PrintableHorizontalLineObject> transformFooter(int width, int margin, FontMetrics fontMetrics) {
+	width-=10;
+	
 	/*
 	 * Incremental print model
 	 */
@@ -167,9 +172,10 @@ public class PrintableInvoiceNew extends MyPrintable{
 	}
 	
 	int[] tabs = new int[categories.size()+3];
-	tabs[0] = 0;
+	tabs[0] = margin;
+	int base = 30;
 	for (int i = 0; i < categories.size(); i++) {
-	    tabs[i+1] = 30*(i+1);
+	    tabs[i+1] = margin + base + 30*(i+1);
 	}
 	tabs[tabs.length-2] = 4*width/5;
 	tabs[tabs.length-1] = width;
@@ -183,13 +189,16 @@ public class PrintableInvoiceNew extends MyPrintable{
 	     */
 	}
 	
+	int threeZeroesWidth = fontMetrics.charsWidth("000".toCharArray(), 0 , 3);
+	
 	printModel.add(new PrintableLine(0, width));
 	printModel.add(new PrintableNewline());
 	ArrayList<PrintableHorizontalLineObject> savingsCategories = new ArrayList<PrintableHorizontalLineObject>();
 	savingsCategories.add(new PrintableString("BTW %", 0));
 	int index = 1;
 	for (Double savings : categories.keySet()) {
-	    savingsCategories.add(new PrintableString(savings+" %", tabs[index]));
+	    String printMe = savings+" %";
+	    savingsCategories.add(new PrintableString(printMe, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(printMe.toCharArray(), 0, printMe.length()-4)));
 	    index++;
 	}
 	printModel.add(new PrintableMulti(savingsCategories));
@@ -206,7 +215,8 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    }
 	    pricesTot+= price;
 	    String pr = new DecimalFormat("0.000").format(price);
-	    prices.add(new PrintableString(pr, tabs[index]-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length())));
+	    prices.add(new PrintableString(pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
+//	    prices.add(new PrintableString(pr, tabs[index]));
 	    index++;
 	}
 	prices.add(new PrintableString("Tot. Excl.", tabs[tabs.length-2]));
@@ -224,10 +234,11 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    for (InvoiceItem invoiceItem : entry.getValue()) {
 		price += invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount();
 	    }
-	    double tax = price * entry.getKey();
+	    double tax = price * entry.getKey()/100;
 	    taxesTot+= tax;
 	    String t = new DecimalFormat("0.000").format(tax);
-	    taxes.add(new PrintableString(t, tabs[index]-fontMetrics.charsWidth(t.toCharArray(), 0, t.length())));
+	    taxes.add(new PrintableString(t, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(t.toCharArray(), 0, t.length()-4)));
+//	    taxes.add(new PrintableString(t, tabs[index]));
 	    index++;
 	}
 	taxes.add(new PrintableString("BTW", tabs[tabs.length-2]));
@@ -240,15 +251,17 @@ public class PrintableInvoiceNew extends MyPrintable{
 	ArrayList<PrintableHorizontalLineObject> totals = new ArrayList<PrintableHorizontalLineObject>();
 	totals.add(new PrintableString("Totaal", 0));
 	double total = 0.0;
+	index = 1;
 	for (Map.Entry<Double, List<InvoiceItem>> entry : categories.entrySet()) {
 	    double price = 0;
 	    for (InvoiceItem invoiceItem : entry.getValue()) {
 		price += invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount();
 	    }
-	    double tot = price * (1.0+entry.getKey());
+	    double tot = price * (1.0+entry.getKey()/100);
 	    total+=tot;
 	    String t = new DecimalFormat("0.00").format(tot);
-	    totals.add(new PrintableString(t, tabs[index]-fontMetrics.charsWidth((t+"0").toCharArray(), 0, t.length()+1)));
+	    totals.add(new PrintableString(t, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth((t+"0").toCharArray(), 0, t.length()-3)));
+//	    totals.add(new PrintableString(t, tabs[index]));
 	    index++;
 	}
 	totals.add(new PrintableString("TOTAAL", tabs[tabs.length-2]));
