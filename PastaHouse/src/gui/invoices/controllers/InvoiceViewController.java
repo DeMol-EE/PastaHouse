@@ -157,9 +157,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         print = new javax.swing.JButton();
-        edit = new javax.swing.JButton();
+        details = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        invoices = new javax.swing.JButton();
+        add = new javax.swing.JButton();
         delete = new javax.swing.JButton();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -294,27 +294,27 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         });
         jPanel2.add(print);
 
-        edit.setText("Details...");
-        edit.setFocusable(false);
-        edit.addActionListener(new java.awt.event.ActionListener() {
+        details.setText("Details...");
+        details.setFocusable(false);
+        details.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editActionPerformed(evt);
+                detailsActionPerformed(evt);
             }
         });
-        jPanel2.add(edit);
+        jPanel2.add(details);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
 
         jPanel6.setLayout(new java.awt.GridLayout(1, 2));
 
-        invoices.setText("Toevoegen...");
-        invoices.setFocusable(false);
-        invoices.addActionListener(new java.awt.event.ActionListener() {
+        add.setText("Toevoegen...");
+        add.setFocusable(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                invoicesActionPerformed(evt);
+                addActionPerformed(evt);
             }
         });
-        jPanel6.add(invoices);
+        jPanel6.add(add);
 
         delete.setText("Verwijderen...");
         delete.addActionListener(new java.awt.event.ActionListener() {
@@ -329,16 +329,16 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void invoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoicesActionPerformed
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         new AddInvoiceDialog(null, true, this).setVisible(true);
-    }//GEN-LAST:event_invoicesActionPerformed
+    }//GEN-LAST:event_addActionPerformed
 
-    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+    private void detailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsActionPerformed
         int row = table.getSelectedRow();
         int index = table.convertRowIndexToModel(row);
-        Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
+	Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
         new InvoiceDetailsDialog(null, true, inv).setVisible(true);
-    }//GEN-LAST:event_editActionPerformed
+    }//GEN-LAST:event_detailsActionPerformed
 
     private void numberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFieldKeyReleased
 	filterController.setNumberString(numberField.getText());
@@ -386,13 +386,13 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_deleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JTextField clientField;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton delete;
-    private javax.swing.JButton edit;
+    private javax.swing.JButton details;
     private javax.swing.JPanel fromOutlet;
-    private javax.swing.JButton invoices;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

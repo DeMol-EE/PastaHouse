@@ -203,13 +203,13 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="edit">
+            <Component class="javax.swing.JButton" name="details">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Details..."/>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="detailsActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -226,13 +226,13 @@
             <Property name="rows" type="int" value="1"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="invoices">
+            <Component class="javax.swing.JButton" name="add">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Toevoegen..."/>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="invoicesActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="delete">
