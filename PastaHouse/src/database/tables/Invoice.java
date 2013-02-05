@@ -11,6 +11,9 @@ import database.extra.Record;
 import database.models.InvoiceModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tools.Configuration;
@@ -91,6 +94,21 @@ public class Invoice extends Record<Invoice>{
     
     public ArrayList<InvoiceItem> items(){
 	return items;
+    }
+    
+    public Map<Double, List<InvoiceItem>> itemsPerTaxesCategory(){
+	Map<Double, List<InvoiceItem>> categories = new HashMap<Double, List<InvoiceItem>>();
+	
+	for (InvoiceItem invoiceItem : items()) {
+	    if (categories.containsKey(invoiceItem.getArticle().getTaxes())) {
+		categories.get(invoiceItem.getArticle().getTaxes()).add(invoiceItem);
+	    } else {
+		List<InvoiceItem> _items = new ArrayList<InvoiceItem>();
+		_items.add(invoiceItem);
+		categories.put(invoiceItem.getArticle().getTaxes(), _items);
+	    }
+	}
+	return categories;
     }
     
     @Override
