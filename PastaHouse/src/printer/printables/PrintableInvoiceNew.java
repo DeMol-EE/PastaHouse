@@ -183,12 +183,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	int threeZeroesWidth = fontMetrics.charsWidth("000".toCharArray(), 0 , 3);
 	
 	if (model.getSave()>0) {
-	    
 	    printModel.add(0, new PrintableNewline());
-	    
-	    /*
-	     * Print savings
-	     */
 	    
 	    /*
 	     * BTW
