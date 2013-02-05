@@ -5,9 +5,15 @@
 package gui.utilities.table.invoicetable;
 
 import database.tables.Invoice;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -25,23 +31,26 @@ public class InvoiceTableModel extends AbstractTableModel {
     public Invoice getInvoiceAtRow(int row) {
         return (row > 0 && row < data.size()) ? (Invoice) data.values().toArray()[row] : (Invoice) data.values().toArray()[0];
     }
-    
+
     public boolean removeInvoiceAtRows(int[] rows) {
-	List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
-	for (int row : rows) {
-	    invoicesToRemove.add(getInvoiceAtRow(row));
-	}
-	
-	int removed = 0;
-	
-	for (Invoice invoice : invoicesToRemove) {
-	    if(invoice.delete()) removed++;
-	    else break;
-	}
-	
-	fireTableDataChanged();
-	
-	return removed == rows.length;
+        List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
+        for (int row : rows) {
+            invoicesToRemove.add(getInvoiceAtRow(row));
+        }
+
+        int removed = 0;
+
+        for (Invoice invoice : invoicesToRemove) {
+            if (invoice.delete()) {
+                removed++;
+            } else {
+                break;
+            }
+        }
+
+        fireTableDataChanged();
+
+        return removed == rows.length;
     }
 
     @Override
@@ -81,7 +90,14 @@ public class InvoiceTableModel extends AbstractTableModel {
             case 1:
                 return ((Invoice) data.values().toArray()[rowIndex]).getClient().getSortKey();
             case 2:
-                return ((Invoice) data.values().toArray()[rowIndex]).getDate();
+                String datestring = ((Invoice) data.values().toArray()[rowIndex]).getDate();
+                Date date = new Date();
+                try {
+                    date = new SimpleDateFormat("dd/MM/yyyy").parse(datestring);
+                } catch (ParseException ex) {
+                    Logger.getLogger(InvoiceTableModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return date;
             case 3:
                 return ((Invoice) data.values().toArray()[rowIndex]).getPrimaryKeyValue();
             default:
@@ -91,5 +107,21 @@ public class InvoiceTableModel extends AbstractTableModel {
 
     public Invoice getInvoice(int id) {
         return data.get(id);
+    }
+
+    @Override
+    public Class getColumnClass(int col) {
+        switch (col) {
+            case 0:
+                return Integer.class;
+            case 1:
+                return String.class;
+            case 2:
+                return Date.class;
+            case 3:
+                return Boolean.class;
+            default:
+                return Object.class;
+        }
     }
 }

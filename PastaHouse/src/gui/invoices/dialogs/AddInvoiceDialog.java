@@ -52,6 +52,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private JXTable table;
     private ArrayList<InvoiceItem> data = new ArrayList<InvoiceItem>();
     private AutocompleteCombobox autobox;
+    private AutocompleteCombobox codepicker;
     private InvoiceItemTableModel tablemodel;
     private String pricecode = "A";
     private Double saving = 0.0;
@@ -100,6 +101,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         clients.addAll(Database.driver().getClientsAlphabetically().values());
         clientBox = new AutocompleteCombobox(clients);
         ClientOutlet.add(clientBox, BorderLayout.CENTER);
+        
         ArrayList articles = new ArrayList();
         articles.add("");
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
@@ -109,6 +111,13 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
+        
+        ArrayList articlesbycode = new ArrayList();
+        articlesbycode.add("");
+        articlesbycode.addAll(Database.driver().getArticlesByCode().keySet());
+        codepicker = new AutocompleteCombobox(articlesbycode);
+        codeoutlet.add(codepicker, BorderLayout.CENTER);
+        
         this.pack();
         addValidators();
         setLocationRelativeTo(null);
@@ -134,6 +143,26 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             public void actionPerformed(ActionEvent e) {
                 number = Database.driver().getInvoiceNumber(datepicker.getDate());
                 txtNumber.setText("" + number);
+            }
+        });
+        
+        autobox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String stringart = (String) autobox.getSelectedItem();
+                
+                Article art = Database.driver().getArticlesAlphabetically().get(stringart);
+                codepicker.setSelectedItem(art.getCode());
+            }
+        });
+        
+        codepicker.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String code = (String)codepicker.getSelectedItem();
+
+                Article art = Database.driver().getArticlesByCode().get(code);
+                autobox.setSelectedItem(art.getName());
             }
         });
 	
@@ -172,6 +201,10 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         addArticlespanel = new javax.swing.JPanel();
         addarticlechooserpanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        codeoutlet = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         choseartickleoutlet = new javax.swing.JPanel();
         quantityoutlet = new javax.swing.JTextField();
@@ -267,7 +300,22 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         addarticlechooserpanel.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel2.setLayout(new java.awt.GridLayout(2, 0));
+
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("Artikelcode");
+        jPanel2.add(jLabel16);
+
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Artikel");
+        jPanel2.add(jLabel17);
+
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Hoeveelheid");
+        jPanel2.add(jLabel18);
+
+        codeoutlet.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(codeoutlet);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
@@ -525,6 +573,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSave;
     private javax.swing.JPanel choseartickleoutlet;
+    private javax.swing.JPanel codeoutlet;
     private javax.swing.JComboBox comboPriceClass;
     private javax.swing.JButton deleteArticle;
     private javax.swing.JPanel detail;
@@ -543,6 +592,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
