@@ -5,9 +5,8 @@
 package gui.utilities.table.invoicetable;
 
 import database.extra.InvoiceItem;
-import java.util.Map;
+import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
-
 
 /**
  *
@@ -15,10 +14,9 @@ import javax.swing.table.AbstractTableModel;
  */
 public class InvoiceItemTableModel extends AbstractTableModel {
 
-    private final Map<Integer, InvoiceItem> data;
+    private final ArrayList<InvoiceItem> data;
 
-   
-    public InvoiceItemTableModel(Map<Integer, InvoiceItem> data) {
+    public InvoiceItemTableModel(ArrayList<InvoiceItem> data) {
         this.data = data;
     }
 
@@ -55,9 +53,13 @@ public class InvoiceItemTableModel extends AbstractTableModel {
         return false;
     }
 
+    public void addComponent(InvoiceItem item) {
+        fireTableRowsInserted(0, data.size()-1);
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        InvoiceItem item = (InvoiceItem) data.values().toArray()[rowIndex];
+        InvoiceItem item = (InvoiceItem) data.toArray()[rowIndex];
         double price;
         String code = item.getArticle().getCode();
         if (code.equals("A")) {
@@ -69,13 +71,14 @@ public class InvoiceItemTableModel extends AbstractTableModel {
             case 0:
                 return item.getArticle().getName();
             case 1:
-                return item.getAmount();
+                return item.getArticle().getTaxes();
             case 2:
-                return item.getTaxes();
+                
+                return item.getAmount();
             case 3:
                 return price;
             case 4:
-                return price * item.getAmount() * 1+(item.getTaxes()/100);
+                return price * item.getAmount() * (1 + (item.getArticle().getTaxes() / 100));
 
             default:
                 return "Error";

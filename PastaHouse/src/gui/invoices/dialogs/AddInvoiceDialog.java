@@ -40,8 +40,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private AutocompleteCombobox clientBox;
     private JXDatePicker datepicker = DatePickerFactory.makeStandardDatePicker();
     private JXTable table;
-    private Map<Integer, InvoiceItem> data = new TreeMap<Integer, InvoiceItem>();
+    private ArrayList<InvoiceItem> data = new ArrayList<InvoiceItem>();
     private AutocompleteCombobox autobox;
+    private InvoiceItemTableModel tablemodel;
     
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
@@ -51,7 +52,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         DateOutlet.add(datepicker);
         txtNumber.setText("" + Database.driver().getInvoiceNumber());
         table = createXTable();
-        InvoiceItemTableModel tablemodel = new InvoiceItemTableModel(data);
+        tablemodel = new InvoiceItemTableModel(data);
         table.setModel(tablemodel);
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
@@ -72,6 +73,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         ArrayList articles = new ArrayList();
         articles.add(" ");
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
+        
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
         this.pack();
@@ -328,7 +330,12 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     }//GEN-LAST:event_quantityoutletActionPerformed
 
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
-        // TODO add your handling code here:
+        Article art;
+        art = Database.driver().getArticlesAlphabetically().get(autobox.getSelectedItem());
+        double quantity = Double.parseDouble(quantityoutlet.getText());
+        InvoiceItem item = new InvoiceItem(art, quantity);
+        data.add(item);
+        tablemodel.addComponent(item);
     }//GEN-LAST:event_addArticleActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;

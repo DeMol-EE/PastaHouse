@@ -125,10 +125,8 @@ public class Database {
         while (rs.next()) {
             int invoiceid = rs.getInt("invoiceid");
             int articleid = rs.getInt("articleid");
-            int rank = rs.getInt("rank");
             double amount = rs.getDouble("amount");
-            double taxes = rs.getDouble("taxes");
-            invoicesById.get(invoiceid).addItem(rank, amount, taxes, articlesById.get(articleid));
+            invoicesById.get(invoiceid).addItem(amount, articlesById.get(articleid));
             links++;
         }
         MyLogger.log("Database driver:: loaded " + invoicesById.size() + " invoices (linked " + links + " articles)!", MyLogger.LOW);
@@ -217,8 +215,8 @@ public class Database {
                 + "(number, date, clientid, pricecode, save) VALUES"
                 + "(?,?,?,?,?)";
         String insertinvart = "INSERT INTO invoicesarticles"
-                + "(invoiceid, articleid, taxes, amount, rank) VALUES"
-                + "(?,?,?,?,?)";
+                + "(invoiceid, articleid, amount) VALUES"
+                + "(?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
             preparedStatement.setInt(1, model.getNumber());
@@ -245,9 +243,7 @@ public class Database {
                 preparedStatement = connection.prepareStatement(insertinvart);
                 preparedStatement.setInt(1, newInv.getPrimaryKeyValue());
                 preparedStatement.setInt(2, art.getPrimaryKeyValue());
-                preparedStatement.setDouble(3, item.getTaxes());
-                preparedStatement.setDouble(4, item.getAmount());
-                preparedStatement.setInt(4, item.getRank());
+                preparedStatement.setDouble(3, item.getAmount());
                 preparedStatement.executeUpdate();
             }
             connection.commit();
@@ -479,7 +475,7 @@ public class Database {
         String msg = "";
         Invoice newInv = null;
         String insertinvart = "INSERT INTO invoicesarticles"
-                + "(invoiceid, articleid, taxes, amount, rank) VALUES"
+                + "(invoiceid, articleid, amount) VALUES"
                 + "(?,?,?,?,?)";
         PreparedStatement preparedStatement = null;
         try {
@@ -496,17 +492,14 @@ public class Database {
             Statement st = connection.createStatement();
             sql = "DELETE FROM invoicesarticles WHERE invoiceid = " + invoice.getPrimaryKeyValue();
             st.executeUpdate(sql);
-            Map<Integer, InvoiceItem> items = invoice.items();
+            ArrayList<InvoiceItem> items = invoice.items();
 
-            for (int i : items.keySet()) {
-                InvoiceItem item = items.get(i);
+            for (InvoiceItem item : items) {
                 Article art = item.getArticle();
                 preparedStatement = connection.prepareStatement(insertinvart);
                 preparedStatement.setInt(1, newInv.getPrimaryKeyValue());
                 preparedStatement.setInt(2, art.getPrimaryKeyValue());
-                preparedStatement.setDouble(3, item.getTaxes());
-                preparedStatement.setDouble(4, item.getAmount());
-                preparedStatement.setInt(4, item.getRank());
+                preparedStatement.setDouble(3, item.getAmount());
                 preparedStatement.executeUpdate();
             }
             connection.commit();

@@ -10,6 +10,7 @@ import database.extra.InvoiceItem;
 import database.extra.Record;
 import database.models.InvoiceModel;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -26,7 +27,7 @@ public class Invoice extends Record<Invoice>{
     private Contact client;
     private String priceCode;
     private double save;
-    private Map<Integer, InvoiceItem> items;
+    private ArrayList<InvoiceItem> items;
 
     private Invoice(int id, int number, String date, Contact client, String priceCode, double save) {
 	super(id, Configuration.center().getDB_TABLE_INV());
@@ -35,7 +36,7 @@ public class Invoice extends Record<Invoice>{
 	this.client = client;
 	this.priceCode = priceCode;
 	this.save = save;
-	this.items = new TreeMap<Integer, InvoiceItem>();
+	this.items = new ArrayList<InvoiceItem>();
     }
     
     public static Invoice createStub(int id, int number, String date, Contact client, String priceCode, double save){
@@ -86,11 +87,11 @@ public class Invoice extends Record<Invoice>{
 	this.save = save;
     }
 
-    public void addItem(int rank, double amount, double save, Article article) {
-	items.put(rank, new InvoiceItem(article, rank, amount, save));
+    public void addItem( double amount, Article article) {
+	items.add(new InvoiceItem(article, amount));
     }
     
-    public Map<Integer, InvoiceItem> items(){
+    public ArrayList<InvoiceItem> items(){
 	return items;
     }
     
