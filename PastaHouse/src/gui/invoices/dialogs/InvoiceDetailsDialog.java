@@ -153,6 +153,8 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         pricepanel.add(lblPrice);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(600, 600));
+        setPreferredSize(new java.awt.Dimension(600, 600));
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
