@@ -5,11 +5,15 @@
 package gui.utilities.table.invoicetable;
 
 import database.tables.Invoice;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -86,7 +90,14 @@ public class InvoiceTableModel extends AbstractTableModel {
             case 1:
                 return ((Invoice) data.values().toArray()[rowIndex]).getClient().getSortKey();
             case 2:
-                return ((Invoice) data.values().toArray()[rowIndex]).getDate();
+                String datestring = ((Invoice) data.values().toArray()[rowIndex]).getDate();
+                Date date = new Date();
+                try {
+                    date = new SimpleDateFormat("dd/MM/yyyy").parse(datestring);
+                } catch (ParseException ex) {
+                    Logger.getLogger(InvoiceTableModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return date;
             case 3:
                 return ((Invoice) data.values().toArray()[rowIndex]).getPrimaryKeyValue();
             default:

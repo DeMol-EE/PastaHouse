@@ -460,31 +460,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         table.getColumns().get(0).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
         table.getColumns().get(1).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
-        table.getColumns().get(2).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
-//        Comparator<String> dateComp = new Comparator<String>() {
-//            @Override
-//            public int compare(String o1, String o2) {
-//                String[] c1 = o1.split("/");
-//                String[] c2 = o2.split("/");
-//                int year = c1[2].compareTo(c2[2]);
-//                if (year != 0) {
-//                    return year;
-//                } else {
-//                    int month = c1[1].compareTo(c2[1]);
-//                    if (month != 0) {
-//                        return month;
-//                    } else {
-//                        return c1[0].compareTo(c2[0]);
-//                    }
-//                }
-//            }
-//        };
-//        TableRowSorter sor = new TableRowSorter(tableModel);
-//        
-//        sor.setComparator(2, dateComp);
-//        table.setRowSorter(sor);
+        table.getColumns().get(2).setCellRenderer(CellRendererFactory.createDateRenderer());
 
-//        table.setSortOrder(0, SortOrder.DESCENDING);
+        table.setSortOrder(0, SortOrder.DESCENDING);
 
 
     }

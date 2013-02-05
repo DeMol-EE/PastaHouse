@@ -59,6 +59,7 @@ public class Database {
     private Map<String, Recipe> recipesByName;
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
+    private Map<String, Article> articlesByCode;
     private Map<String, Contact> contactsBySortKey;
     private Map<Integer, ArrayList<Invoice>> InvoicesbyYear;
 
@@ -67,6 +68,7 @@ public class Database {
             basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
             recipesById = new TreeMap<Integer, Recipe>();
             articlesById = new TreeMap<Integer, Article>();
+            articlesByCode = new TreeMap<String, Article>();
             contactsById = new TreeMap<Integer, Contact>();
             invoicesById = new TreeMap<Integer, Invoice>();
             invoicesByNumber = new TreeMap<Integer, Invoice>();
@@ -95,6 +97,10 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             MyLogger.log(ex.getMessage());
         }
+    }
+
+    public Map<String, Article> getArticlesByCode() {
+        return articlesByCode;
     }
 
     public static Database driver() {
@@ -310,6 +316,7 @@ public class Database {
                 newArt = Article.createFromModel(rs.getInt("id"), model);
                 articlesById.put(newArt.getPrimaryKeyValue(), newArt);
                 articlesByName.put(newArt.getName(), newArt);
+                articlesByCode.put(newArt.getCode(), newArt);
             } else {
                 code = 2;
                 msg = "Er is iets verkeerd gegaan. Herstart het programma.";
@@ -621,6 +628,7 @@ public class Database {
                     rs.getDouble("taxes"));
             articlesById.put(a.getPrimaryKeyValue(), a);
             articlesByName.put(a.getName(), a);
+            articlesByCode.put(a.getCode(), a);
         }
 
 //        System.out.println("Database driver:: loaded " + suppliersById.size() + " suppliers!");
