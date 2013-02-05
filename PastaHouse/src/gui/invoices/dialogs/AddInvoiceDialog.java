@@ -134,6 +134,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 String clientname = (String) clientBox.getSelectedItem();
                 client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
                 updatePriceClass(client.getPricecode());
+//		updatePrices();
             }
         });
         
@@ -141,6 +142,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             @Override
             public void actionPerformed(ActionEvent e) {
                 updatePriceClass((String) comboPriceClass.getSelectedItem());
+//		updatePrices();
             }
         });
         
@@ -377,6 +379,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         pricepanel.setLayout(new java.awt.BorderLayout());
 
+        taxespanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 20));
         taxespanel.setLayout(new java.awt.GridLayout(0, 1));
 
         jLabel1.setText("BTW%");
@@ -399,6 +402,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         pricepanel.add(taxespanel, java.awt.BorderLayout.WEST);
 
+        totalpricepanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         totalpricepanel.setLayout(new java.awt.GridLayout(6, 2));
         totalpricepanel.add(filler4);
         totalpricepanel.add(filler8);
@@ -781,7 +785,6 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             comboPriceClass.setSelectedItem(pricecode);
             tablemodel.updatePricecode(pricecode);
         }
-	
 	updatePrices();
     }
     
@@ -799,7 +802,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	    String clientname = (String) clientBox.getSelectedItem();
 	    Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
 	    i.setClient(_client);
-	    i.setPriceCode(_client.getPricecode());
+//	    i.setPriceCode(_client.getPricecode());
+	    i.setPriceCode(tablemodel.priceCode());
 
 	    Set<Double> cats = i.itemsPerTaxesCategory().keySet();
 
