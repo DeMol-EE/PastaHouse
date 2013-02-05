@@ -210,6 +210,7 @@ public class Database {
         int code = 0;
         String msg = "";
         Invoice newInv = null;
+        connection.setAutoCommit(false);
         String insertTableSQL = "INSERT INTO invoices"
                 + "(number, date, clientid, pricecode, save) VALUES"
                 + "(?,?,?,?,?)";
@@ -235,9 +236,8 @@ public class Database {
                 msg = "Er is iets verkeerd gegaan. Herstart het programma.";
             }
 
-            Map<Integer, InvoiceItem> items = model.getItems();
-            for (int i : items.keySet()) {
-                InvoiceItem item = items.get(i);
+            ArrayList<InvoiceItem> items = model.getItems();
+            for (InvoiceItem item : items) {
                 Article art = item.getArticle();
                 preparedStatement = connection.prepareStatement(insertinvart);
                 preparedStatement.setInt(1, newInv.getPrimaryKeyValue());
@@ -250,8 +250,10 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             code = 1;
             msg = ex.getMessage();
+            connection.rollback();
         } finally {
             preparedStatement.close();
+            connection.setAutoCommit(true);
         }
         return new FunctionResult<Invoice>(code, newInv, msg);
     }

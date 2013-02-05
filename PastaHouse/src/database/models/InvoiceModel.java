@@ -6,13 +6,11 @@ package database.models;
 
 import database.Database;
 import database.FunctionResult;
-import database.extra.Component;
 import database.extra.InvoiceItem;
-import database.tables.Article;
 import database.tables.Contact;
 import database.tables.Invoice;
 import java.sql.SQLException;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
@@ -26,13 +24,13 @@ public class InvoiceModel implements Model {
     private String date;
     private String priceCode;
     private double save;
-    private Map<Integer, InvoiceItem> items = new TreeMap<Integer, InvoiceItem>();
+    private ArrayList<InvoiceItem> items = new ArrayList<InvoiceItem>();
 
-    public Map<Integer, InvoiceItem> getItems() {
+    public ArrayList<InvoiceItem> getItems() {
         return items;
     }
 
-    public void setItems(Map<Integer, InvoiceItem> items) {
+    public void setItems(ArrayList<InvoiceItem> items) {
         this.items = items;
     }
 

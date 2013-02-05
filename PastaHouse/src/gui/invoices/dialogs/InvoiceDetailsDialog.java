@@ -30,7 +30,7 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
 	model = invoice;
 	
 	
-        tableModel = new InvoiceItemTableModel(model.items());
+        tableModel = new InvoiceItemTableModel(model.items(), model.getPriceCode());
         articleTableOutlet.setModel(tableModel);
 	
 	this.setTitle("Factuur - " + model.getNumber());

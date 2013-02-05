@@ -5,9 +5,12 @@
 package gui.invoices.dialogs;
 
 import database.Database;
+import database.FunctionResult;
 import database.extra.InvoiceItem;
+import database.models.InvoiceModel;
 import database.tables.Article;
 import database.tables.Contact;
+import database.tables.Invoice;
 import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.invoices.delegates.AddInvoiceDelegate;
@@ -20,11 +23,11 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 
-import java.util.Map;
-import java.util.TreeMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -47,7 +50,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private AutocompleteCombobox autobox;
     private InvoiceItemTableModel tablemodel;
     private String pricecode = "A";
-    private Double saving;
+    private Double saving = 0.0;
+    private Contact client;
+    private int number;
 
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
@@ -55,7 +60,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         comboPriceClass.addItem("A");
         comboPriceClass.addItem("B");
         DateOutlet.add(datepicker);
-        txtNumber.setText("" + Database.driver().getInvoiceNumber());
+        datepicker.setDate(new Date());
+        number = Database.driver().getInvoiceNumber();
+        txtNumber.setText("" + number);
         table = createXTable();
         tablemodel = new InvoiceItemTableModel(data, pricecode);
         table.setModel(tablemodel);
@@ -77,8 +84,10 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
-
-        clientBox = new AutocompleteCombobox(new ArrayList<Contact>(Database.driver().getClientsAlphabetically().values()));
+        ArrayList clients = new ArrayList();
+        clients.add("");
+        clients.addAll(Database.driver().getClientsAlphabetically().values());
+        clientBox = new AutocompleteCombobox(clients);
         ClientOutlet.add(clientBox, BorderLayout.CENTER);
         ArrayList articles = new ArrayList();
         articles.add(" ");
@@ -94,16 +103,15 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             @Override
             public void actionPerformed(ActionEvent e) {
                 String clientname = (String) clientBox.getSelectedItem();
-                Contact client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
-                System.out.println(client);
+                client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
                 updatePriceClass(client.getPricecode());
             }
         });
-        
+
         comboPriceClass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updatePriceClass((String)comboPriceClass.getSelectedItem());
+                updatePriceClass((String) comboPriceClass.getSelectedItem());
             }
         });
     }
@@ -229,7 +237,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         addarticlechooserpanel.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
@@ -252,7 +260,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         addarticlesbuttonpanel.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         addArticle.setText("Toevoegen");
         addArticle.addActionListener(new java.awt.event.ActionListener() {
@@ -328,6 +336,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         btnSave.setText("Opslaan");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnSave);
 
         btnBack.setText("Terug");
@@ -358,12 +371,29 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
         Article art;
-        art = Database.driver().getArticlesAlphabetically().get(autobox.getSelectedItem());
+        art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
         double quantity = Double.parseDouble(quantityoutlet.getText());
         InvoiceItem item = new InvoiceItem(art, quantity);
         data.add(item);
         tablemodel.addComponent(item);
     }//GEN-LAST:event_addArticleActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        InvoiceModel model = new InvoiceModel();
+        model.setDate(datepicker.getDate().toString());
+        model.setClient(client);
+        model.setNumber(number);
+        model.setItems(data);
+        model.setPriceCode(pricecode);
+        model.setSave(saving);
+        FunctionResult<Invoice> result = model.create();
+        int code = result.getCode();
+        if (code == 0){
+            
+        } else {
+            //JOptionPane.showMessageDialog(ClientOutlet, result);
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
     private javax.swing.JPanel DateOutlet;
