@@ -103,6 +103,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
 	
 	TextFieldAutoHighlighter.installHighlighter(txtReduction);
+	TextFieldAutoHighlighter.installHighlighter(quantityoutlet);
 	
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
@@ -566,10 +567,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                         // need toPicker do in updateUI toPicker survive toggling of LAF 
                         if (getDefaultRenderer() instanceof JLabel) {
                             ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
-                            
                         }
                     }
-                    //                    </snip> 
                 };
             }
         };
