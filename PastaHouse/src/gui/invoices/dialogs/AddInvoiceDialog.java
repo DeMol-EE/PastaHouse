@@ -57,7 +57,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private Double saving = 0.0;
     private Contact client;
     private int number;
-
+    
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
         initComponents();
@@ -109,7 +109,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         this.pack();
         addValidators();
         setLocationRelativeTo(null);
-
+        
         clientBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,11 +118,19 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 updatePriceClass(client.getPricecode());
             }
         });
-
+        
         comboPriceClass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updatePriceClass((String) comboPriceClass.getSelectedItem());
+            }
+        });
+        
+        datepicker.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                number = Database.driver().getInvoiceNumber(datepicker.getDate());
+                txtNumber.setText("" + number);
             }
         });
 	
@@ -378,11 +386,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_deleteArticleActionPerformed
-
+    
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_quantityoutletActionPerformed
-
+    
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
         Article art;
         art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
@@ -529,7 +537,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     public void addContact(Contact c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
     private JXTable createXTable() {
         JXTable _table = new JXTable() {
             @Override
@@ -541,7 +549,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                         // need toPicker do in updateUI toPicker survive toggling of LAF 
                         if (getDefaultRenderer() instanceof JLabel) {
                             ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
-
+                            
                         }
                     }
                     //                    </snip> 
@@ -550,7 +558,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         };
         return _table;
     }
-
+    
     private void addValidators() {
         quantityoutlet.setInputVerifier(new AbstractValidator(this, quantityoutlet, "Ongeldige waarde! Verwacht formaat: x.y, groter dan 0.0") {
             @Override

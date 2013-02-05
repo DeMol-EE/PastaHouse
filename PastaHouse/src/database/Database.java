@@ -25,8 +25,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +62,7 @@ public class Database {
     private Map<String, Integer> municipales;
     private Map<String, Article> articlesByName;
     private Map<String, Contact> contactsBySortKey;
+    private Map<Integer, ArrayList<Invoice>> InvoicesbyYear;
 
     private Database() {
         try {
@@ -68,6 +72,7 @@ public class Database {
             contactsById = new TreeMap<Integer, Contact>();
             invoicesById = new TreeMap<Integer, Invoice>();
             invoicesByNumber = new TreeMap<Integer, Invoice>();
+            InvoicesbyYear = new TreeMap<Integer, ArrayList<Invoice>>();
 
             basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
             recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
@@ -106,17 +111,30 @@ public class Database {
     }
 
     private void loadInvoices() throws SQLException {
-        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV());
+        ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV() + " order by id");
         while (rs.next()) {
-            Invoice inv = Invoice.createStub(
-                    rs.getInt("id"),
-                    rs.getInt("number"),
-                    rs.getString("date"),
-                    contactsById.get(rs.getInt("clientid")),
-                    rs.getString("pricecode"),
-                    rs.getDouble("save"));
-            invoicesById.put(inv.getPrimaryKeyValue(), inv);
-            invoicesByNumber.put(inv.getNumber(), inv);
+            try {
+                Invoice inv = Invoice.createStub(
+                        rs.getInt("id"),
+                        rs.getInt("number"),
+                        rs.getString("date"),
+                        contactsById.get(rs.getInt("clientid")),
+                        rs.getString("pricecode"),
+                        rs.getDouble("save"));
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                Date datum = formatter.parse(rs.getString("date"));
+                Calendar now = Calendar.getInstance();
+                now.setTime(datum);
+                int year = now.get(Calendar.YEAR);
+                if (!InvoicesbyYear.containsKey(year)) {
+                    InvoicesbyYear.put(year, new ArrayList<Invoice>());
+                }
+                InvoicesbyYear.get(year).add(inv);
+                invoicesById.put(inv.getPrimaryKeyValue(), inv);
+                invoicesByNumber.put(inv.getNumber(), inv);
+            } catch (ParseException ex) {
+                Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV_ART());
@@ -231,6 +249,15 @@ public class Database {
                 newInv = Invoice.createFromModel(rs.getInt("id"), model);
                 invoicesById.put(newInv.getPrimaryKeyValue(), newInv);
                 invoicesByNumber.put(newInv.getNumber(), newInv);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                Date datum = formatter.parse(rs.getString("date"));
+                Calendar now = Calendar.getInstance();
+                now.setTime(datum);
+                int year = now.get(Calendar.YEAR);
+                if (!InvoicesbyYear.containsKey(year)) {
+                    InvoicesbyYear.put(year, new ArrayList<Invoice>());
+                }
+                InvoicesbyYear.get(year).add(newInv);
             } else {
                 code = 2;
                 msg = "Er is iets verkeerd gegaan. Herstart het programma.";
@@ -246,6 +273,9 @@ public class Database {
                 preparedStatement.executeUpdate();
             }
             connection.commit();
+        } catch (ParseException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            connection.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             code = 1;
@@ -741,21 +771,26 @@ public class Database {
     }
 
     public int getInvoiceNumber(Date date) {
-        int currentnumber = 0;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy");
-
-        return currentnumber + 1;
+        Calendar time = Calendar.getInstance();
+        time.setTime(date);
+        int year = time.get(Calendar.YEAR);
+        if (!InvoicesbyYear.containsKey(year)) {
+            return year % 100 * 10000 + 1;
+        }
+        ArrayList<Invoice> invoicesofyear = InvoicesbyYear.get(year);
+        int lastindex = invoicesofyear.size() - 1;
+        return invoicesofyear.get(lastindex).getNumber() + 1;
     }
-    
-    public FunctionResult deleteInvoice(Invoice i){
-	try {
+
+    public FunctionResult deleteInvoice(Invoice i) {
+        try {
             statement.executeUpdate("DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"");
             System.out.println("DatabaseDriver::Executed delete:\n"
                     + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nSUCCES!");
-	    
-	    invoicesById.remove(i.getPrimaryKeyValue());
-	    invoicesByNumber.remove(i.getNumber());
-	    
+
+            invoicesById.remove(i.getPrimaryKeyValue());
+            invoicesByNumber.remove(i.getNumber());
+
             return new FunctionResult(0, null, null);
         } catch (Exception e) {
             // do logging
