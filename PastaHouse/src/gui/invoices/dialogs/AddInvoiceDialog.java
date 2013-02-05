@@ -393,10 +393,18 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     }//GEN-LAST:event_addSupplierActionPerformed
 
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
-        int row = table.getSelectedRow();
-	if (row >= 0 && row<table.getRowCount()) {
-	    data.remove(row);
-	    tablemodel.fireTableDataChanged();
+        try{
+	    int row = table.getSelectedRow();
+	    if (row >= 0 && row<table.getRowCount()) {
+		data.remove(row);
+		tablemodel.fireTableDataChanged();
+	    }
+	    if (row >= table.getRowCount()) {
+		row = table.getRowCount()-1;
+	    }
+	    table.setRowSelectionInterval(row, row);
+	} catch (Exception e){
+	    
 	}
     }//GEN-LAST:event_deleteArticleActionPerformed
     
