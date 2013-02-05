@@ -516,7 +516,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void addInvoice(Invoice e) {
-        tableModel.fireTableRowsInserted(0, tableModel.getRowCount());
+        tableModel.fireTableDataChanged();
     }
 
     @Override

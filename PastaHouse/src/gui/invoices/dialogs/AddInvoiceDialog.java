@@ -225,6 +225,12 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         jLabel6.setText("Nummer");
         detailspanel.add(jLabel6);
+
+        txtNumber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNumberKeyReleased(evt);
+            }
+        });
         detailspanel.add(txtNumber);
         detailspanel.add(filler2);
 
@@ -480,6 +486,14 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	}
     }//GEN-LAST:event_txtReductionKeyReleased
 
+    private void txtNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberKeyReleased
+        try{
+	    number = Integer.parseInt(txtNumber.getText());
+	} catch (Exception e){
+	    
+	}
+    }//GEN-LAST:event_txtNumberKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
     private javax.swing.JPanel DateOutlet;
@@ -574,6 +588,29 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             }
         });
 	
+	txtNumber.setInputVerifier(new AbstractValidator(this, txtNumber, "Dit nummer moet precies 6 tekens lang en geldig uniek zijn.") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (txtNumber.getText().length()!=6) {
+		    return false;
+		}
+		try{
+		    int nr = Integer.parseInt(txtNumber.getText());
+		    
+		    int year = nr/10000;
+		    String dateString = new DateFormatter(new SimpleDateFormat("yy")).valueToString(datepicker.getDate());
+		    if (Integer.parseInt(dateString) != year) {
+			return false;
+		    }
+		    
+		    return !Database.driver().getInvoicesByNumber().keySet().contains(nr);
+		} catch (Exception e){
+		    return false;
+		}
+	    }
+	});
+	
 	txtReduction.setInputVerifier(new AbstractValidator(this, txtReduction, "Ongeldige waarde! Kies een positief getal tussen 0 en 100 of laat dit veld leeg (=0 % korting)") {
 
 	    @Override
@@ -598,6 +635,12 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	if (clientBox.getSelectedIndex()==0 || _client == null) {
 	    JOptionPane.showMessageDialog(null, "Gelieve een klant te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    clientBox.requestFocus();
+	    return false;
+	}
+	
+	if (!txtNumber.getInputVerifier().verify(txtNumber)){
+	    JOptionPane.showMessageDialog(null, "Gelieve het factuur nummer na te kijken! De eerste twee tekens\nmoeten overeenkomen met het jaartal van de gekozen datum.\nDit nummer moet precies 6 tekens lang en geldig uniek zijn", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    txtNumber.requestFocus();
 	    return false;
 	}
 	

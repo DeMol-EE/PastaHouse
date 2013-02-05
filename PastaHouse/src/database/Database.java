@@ -244,12 +244,12 @@ public class Database {
             preparedStatement.setDouble(5, model.getSave());
             preparedStatement.executeUpdate();
 
-            ResultSet rs = statement.executeQuery("SELECT id FROM invoices WHERE number=\"" + model.getNumber() + "\"");
+            ResultSet rs = statement.executeQuery("SELECT * FROM invoices WHERE number=\"" + model.getNumber() + "\"");
             if (rs.next()) {
                 newInv = Invoice.createFromModel(rs.getInt("id"), model);
                 invoicesById.put(newInv.getPrimaryKeyValue(), newInv);
                 invoicesByNumber.put(newInv.getNumber(), newInv);
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 Date datum = formatter.parse(rs.getString("date"));
                 Calendar now = Calendar.getInstance();
                 now.setTime(datum);
