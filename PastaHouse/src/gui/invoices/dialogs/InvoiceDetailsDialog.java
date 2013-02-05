@@ -27,7 +27,7 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         
         lblSave.setText(new DecimalFormat("0.00").format(invoice.getSave())+" %");
         this.setTitle("Factuur - " + invoice.getNumber());
-        InvoiceItemTableModel model = new InvoiceItemTableModel(invoice.items());
+        InvoiceItemTableModel model = new InvoiceItemTableModel(invoice.items(), "B");
         articleTableOutlet.setModel(model);
     }
 

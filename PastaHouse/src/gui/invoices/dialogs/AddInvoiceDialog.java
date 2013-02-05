@@ -12,10 +12,13 @@ import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.invoices.delegates.AddInvoiceDelegate;
 import gui.utilities.DatePickerFactory;
+import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import java.util.Map;
@@ -43,7 +46,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private ArrayList<InvoiceItem> data = new ArrayList<InvoiceItem>();
     private AutocompleteCombobox autobox;
     private InvoiceItemTableModel tablemodel;
-    
+    private String pricecode = "A";
+    private Double saving;
+
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
         initComponents();
@@ -52,8 +57,13 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         DateOutlet.add(datepicker);
         txtNumber.setText("" + Database.driver().getInvoiceNumber());
         table = createXTable();
-        tablemodel = new InvoiceItemTableModel(data);
+        tablemodel = new InvoiceItemTableModel(data, pricecode);
         table.setModel(tablemodel);
+        table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
+        table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
+        table.getColumns().get(2).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+        table.getColumns().get(3).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+        table.getColumns().get(4).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
         JXTitledPanel detailstitled = new JXTitledPanel("Details");
@@ -73,12 +83,29 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         ArrayList articles = new ArrayList();
         articles.add(" ");
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
-        
+
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
         this.pack();
         addValidators();
         setLocationRelativeTo(null);
+
+        clientBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String clientname = (String) clientBox.getSelectedItem();
+                Contact client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+                System.out.println(client);
+                updatePriceClass(client.getPricecode());
+            }
+        });
+        
+        comboPriceClass.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePriceClass((String)comboPriceClass.getSelectedItem());
+            }
+        });
     }
 
     /**
@@ -420,15 +447,26 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         quantityoutlet.setInputVerifier(new AbstractValidator(this, quantityoutlet, "Ongeldige waarde! Verwacht formaat: x.y, groter dan 0.0") {
             @Override
             protected boolean validationCriteria(JComponent c) {
-                if (autobox.getSelectedIndex()==0) {
-		return true;
-	    }
-	    try{
-		return Double.parseDouble(((JTextField)c).getText())>0;
-	    } catch(Exception e){
-		return false;
-	    }
+                if (autobox.getSelectedIndex() == 0) {
+                    return true;
+                }
+                try {
+                    return Double.parseDouble(((JTextField) c).getText()) > 0;
+                } catch (Exception e) {
+                    return false;
+                }
             }
         });
+    }
+
+    private void updatePriceClass(String newprice) {
+        String oldprice = pricecode;
+        pricecode = newprice;
+        if (!oldprice.equals(pricecode)) {
+            comboPriceClass.setSelectedItem(pricecode);
+            tablemodel.updatePricecode(pricecode);
+        }
+
+
     }
 }

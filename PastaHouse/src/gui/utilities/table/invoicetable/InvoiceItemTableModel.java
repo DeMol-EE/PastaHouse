@@ -15,9 +15,12 @@ import javax.swing.table.AbstractTableModel;
 public class InvoiceItemTableModel extends AbstractTableModel {
 
     private final ArrayList<InvoiceItem> data;
+    private String pricecode;
+    
 
-    public InvoiceItemTableModel(ArrayList<InvoiceItem> data) {
+    public InvoiceItemTableModel(ArrayList<InvoiceItem> data, String pricecode) {
         this.data = data;
+        this.pricecode = pricecode;
     }
 
     @Override
@@ -56,17 +59,16 @@ public class InvoiceItemTableModel extends AbstractTableModel {
     public void addComponent(InvoiceItem item) {
         fireTableRowsInserted(0, data.size()-1);
     }
+    
+    public void updatePricecode(String pricecode){
+        this.pricecode = pricecode;
+        fireTableDataChanged();
+    }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         InvoiceItem item = (InvoiceItem) data.toArray()[rowIndex];
-        double price;
-        String code = item.getArticle().getCode();
-        if (code.equals("A")) {
-            price = item.getArticle().getPriceA();
-        } else {
-            price = item.getArticle().getPriceB();
-        }
+        double price = item.getArticle().getPriceForCode(pricecode);
         switch (columnIndex) {
             case 0:
                 return item.getArticle().getName();
