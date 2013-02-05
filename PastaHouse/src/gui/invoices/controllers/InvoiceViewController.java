@@ -516,7 +516,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void addInvoice(Invoice e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        tableModel.fireTableRowsInserted(0, tableModel.getRowCount());
     }
 
     @Override

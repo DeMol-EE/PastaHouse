@@ -15,6 +15,7 @@ import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.invoices.delegates.AddInvoiceDelegate;
 import gui.utilities.DatePickerFactory;
+import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
@@ -22,16 +23,17 @@ import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.DateFormatter;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
@@ -43,6 +45,8 @@ import org.jdesktop.swingx.JXTitledPanel;
  */
 public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactDelegate {
 
+    private final AddInvoiceDelegate delegate;
+    
     private AutocompleteCombobox clientBox;
     private JXDatePicker datepicker = DatePickerFactory.makeStandardDatePicker();
     private JXTable table;
@@ -57,6 +61,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
         initComponents();
+	
+	this.delegate = delegate;
+	
         comboPriceClass.addItem("A");
         comboPriceClass.addItem("B");
         DateOutlet.add(datepicker);
@@ -83,6 +90,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         pricetitledpanel.add(pricepanel);
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
+	txtReduction.setText("0.0");
+	
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
         ArrayList clients = new ArrayList();
         clients.add("");
@@ -90,9 +99,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         clientBox = new AutocompleteCombobox(clients);
         ClientOutlet.add(clientBox, BorderLayout.CENTER);
         ArrayList articles = new ArrayList();
-        articles.add(" ");
+        articles.add("");
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
-
+	
+	TextFieldAutoHighlighter.installHighlighter(txtReduction);
+	
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
         this.pack();
@@ -114,6 +125,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 updatePriceClass((String) comboPriceClass.getSelectedItem());
             }
         });
+	
+	
     }
 
     /**
@@ -217,9 +230,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         jLabel15.setText("Korting");
         detailspanel.add(jLabel15);
 
-        txtReduction.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtReductionActionPerformed(evt);
+        txtReduction.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtReductionKeyReleased(evt);
             }
         });
         detailspanel.add(txtReduction);
@@ -344,6 +357,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         jPanel4.add(btnSave);
 
         btnBack.setText("Terug");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnBack);
 
         jPanel3.add(jPanel4, java.awt.BorderLayout.EAST);
@@ -356,10 +374,6 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
         AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
-
-    private void txtReductionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReductionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtReductionActionPerformed
 
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
         // TODO add your handling code here:
@@ -378,22 +392,70 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         tablemodel.addComponent(item);
     }//GEN-LAST:event_addArticleActionPerformed
 
+    private void disposeLater() {
+	SwingUtilities.invokeLater(new Runnable() {
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        InvoiceModel model = new InvoiceModel();
-        model.setDate(datepicker.getDate().toString());
-        model.setClient(client);
-        model.setNumber(number);
-        model.setItems(data);
-        model.setPriceCode(pricecode);
-        model.setSave(saving);
-        FunctionResult<Invoice> result = model.create();
-        int code = result.getCode();
-        if (code == 0){
-            
-        } else {
-            //JOptionPane.showMessageDialog(ClientOutlet, result);
-        }
+        try{
+	    /*
+	     * Validity check
+	     */
+	    if (!valid()) {
+		return;
+	    }
+	    
+	    DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
+	    
+	    InvoiceModel model = new InvoiceModel();
+	    model.setDate(df.valueToString(datepicker.getDate()));
+	    model.setClient(client);
+	    model.setNumber(number);
+	    model.setItems(data);
+	    model.setPriceCode(pricecode);
+	    model.setSave(saving);
+	    FunctionResult<Invoice> res = model.create();
+	    if (res.getCode() == 0 && res.getObj()!=null){
+		delegate.addInvoice(res.getObj());
+		disposeLater();
+	    } else {
+		// switch case error code
+		String msg;
+		switch (res.getCode()) {
+		    case 1:
+			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n" + res.getMessage();
+			break;
+		    case 4:
+			msg = res.getMessage();
+			break;
+		    default:
+			msg = "Het toevoegen van het basisingrediënt is foutgelopen (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
+		}
+		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+	    }
+	} catch (Exception e){
+	    System.err.println("Error: \n" + e.getMessage());
+	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+	}
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        disposeLater();
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void txtReductionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReductionKeyReleased
+        try{
+	    saving = Double.parseDouble(txtReduction.getText());
+	} catch (Exception e){
+	    saving = 0.0;
+	}
+    }//GEN-LAST:event_txtReductionKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
     private javax.swing.JPanel DateOutlet;
@@ -453,7 +515,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     }
 
     private JXTable createXTable() {
-        JXTable table = new JXTable() {
+        JXTable _table = new JXTable() {
             @Override
             protected JTableHeader createDefaultTableHeader() {
                 return new JXTableHeader(columnModel) {
@@ -470,7 +532,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 };
             }
         };
-        return table;
+        return _table;
     }
 
     private void addValidators() {
@@ -487,8 +549,52 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 }
             }
         });
+	
+	txtReduction.setInputVerifier(new AbstractValidator(this, txtReduction, "Ongeldige waarde! Kies een positief getal tussen 0 en 100 of laat dit veld leeg (=0 % korting)") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		if (txtReduction.getText().isEmpty()) {
+		    return true;
+		}
+		try {
+		    double s = Double.parseDouble(((JTextField) c).getText());
+                    return s >= 0.0 && s<=100.0;
+                } catch (Exception e) {
+                    return false;
+                }
+	    }
+	});
     }
 
+    private boolean valid(){
+	if (clientBox.getSelectedIndex()==0) {
+	    JOptionPane.showMessageDialog(null, "Gelieve een klant te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    clientBox.requestFocus();
+	    return false;
+	}
+	
+	if (!txtReduction.getInputVerifier().verify(txtReduction)){
+	    JOptionPane.showMessageDialog(null, "Gelieve de korting na te kijken!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    txtReduction.requestFocus();
+	    return false;
+	}
+	
+	if (tablemodel.getRowCount()==0) {
+	    JOptionPane.showMessageDialog(null, "Gelieve minstens 1 artikel toe te voegen aan deze factuur!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    autobox.requestFocus();
+	    return false;
+	}
+	
+	if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
+	    JOptionPane.showMessageDialog(null, "Gelieve een geldige hoeveelheid in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    quantityoutlet.requestFocus();
+	    return false;
+	}
+	
+	return true;
+    }
+    
     private void updatePriceClass(String newprice) {
         String oldprice = pricecode;
         pricecode = newprice;
@@ -496,7 +602,5 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             comboPriceClass.setSelectedItem(pricecode);
             tablemodel.updatePricecode(pricecode);
         }
-
-
     }
 }
