@@ -35,7 +35,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.spec.IvParameterSpec;
 import logging.MyLogger;
 import tools.Configuration;
 import tools.StringTools;
@@ -759,6 +758,25 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
         return currentnumber + 1;
+    }
+    
+    public FunctionResult deleteInvoice(Invoice i){
+	try {
+            statement.executeUpdate("DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"");
+            System.out.println("DatabaseDriver::Executed delete:\n"
+                    + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nSUCCES!");
+	    
+	    invoicesById.remove(i.getPrimaryKeyValue());
+	    invoicesByNumber.remove(i.getNumber());
+	    
+            return new FunctionResult(0, null, null);
+        } catch (Exception e) {
+            // do logging
+            System.err.println("DatabaseDriver::Delete command: \n"
+                    + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nFAILED:\n" + e.getMessage());
+
+            return new FunctionResult(1, null, StringTools.capitalize(e.getMessage()));
+        }
     }
 
     /**

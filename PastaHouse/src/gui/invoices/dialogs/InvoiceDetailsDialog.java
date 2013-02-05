@@ -7,6 +7,8 @@ package gui.invoices.dialogs;
 import database.tables.Invoice;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import java.text.DecimalFormat;
+import javax.swing.SwingUtilities;
+import tools.StringTools;
 
 /**
  *
@@ -14,6 +16,9 @@ import java.text.DecimalFormat;
  */
 public class InvoiceDetailsDialog extends javax.swing.JDialog {
 
+    private final Invoice model;
+    private final InvoiceItemTableModel tableModel;
+    
     /**
      * Creates new form InvoiceDetailsDialog
      */
@@ -21,14 +26,25 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
-        lblNummer.setText("" + invoice.getNumber());
-        lblKlasse.setText(invoice.getPriceCode());
-        lblDate.setText(invoice.getDate());
+	
+	model = invoice;
+	
+	
+        tableModel = new InvoiceItemTableModel(model.items());
+        articleTableOutlet.setModel(tableModel);
+	
+	this.setTitle("Factuur - " + model.getNumber());
+	
+	loadModel();
+    }
+    
+    private void loadModel(){
+        lblNummer.setText("" + model.getNumber());
+        lblKlasse.setText(model.getPriceCode());
+        lblDate.setText(model.getDate());
+	clientOutlet.setText(StringTools.capitalizeEach(model.getClient().getSortKey()));
         
-        lblSave.setText(new DecimalFormat("0.00").format(invoice.getSave())+" %");
-        this.setTitle("Factuur - " + invoice.getNumber());
-        InvoiceItemTableModel model = new InvoiceItemTableModel(invoice.items(), "B");
-        articleTableOutlet.setModel(model);
+        lblSave.setText(new DecimalFormat("0.00").format(model.getSave())+" %");
     }
 
     /**
@@ -59,8 +75,8 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         lblPrice = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        edit = new javax.swing.JButton();
+        close = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -68,22 +84,41 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(0, 2));
 
+        jLabel6.setBackground(new java.awt.Color(242, 242, 242));
         jLabel6.setText("Nummer");
+        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel6.setOpaque(true);
         jPanel2.add(jLabel6);
+
+        lblNummer.setBackground(new java.awt.Color(242, 242, 242));
+        lblNummer.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        lblNummer.setOpaque(true);
         jPanel2.add(lblNummer);
 
         jLabel4.setText("Datum");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jPanel2.add(jLabel4);
+
+        lblDate.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         jPanel2.add(lblDate);
 
+        jLabel2.setBackground(new java.awt.Color(242, 242, 242));
         jLabel2.setText("Klant");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
+        jLabel2.setOpaque(true);
         jPanel2.add(jLabel2);
 
+        clientOutlet.setBackground(new java.awt.Color(242, 242, 242));
         clientOutlet.setText("<hyperlink to client>");
+        clientOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
+        clientOutlet.setOpaque(true);
         jPanel2.add(clientOutlet);
 
         jLabel3.setText("Prijsklasse");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jPanel2.add(jLabel3);
+
+        lblKlasse.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         jPanel2.add(lblKlasse);
 
         detail.add(jPanel2, java.awt.BorderLayout.PAGE_START);
@@ -121,11 +156,16 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
-        jButton1.setText("Wijzig...");
-        jPanel4.add(jButton1);
+        edit.setText("Wijzig...");
+        jPanel4.add(edit);
 
-        jButton2.setText("Terug");
-        jPanel4.add(jButton2);
+        close.setText("Terug");
+        close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeActionPerformed(evt);
+            }
+        });
+        jPanel4.add(close);
 
         jPanel3.add(jPanel4, java.awt.BorderLayout.EAST);
 
@@ -134,12 +174,26 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeActionPerformed
+        disposeLater();
+    }//GEN-LAST:event_closeActionPerformed
+
+    private void disposeLater(){
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		dispose();
+	    }
+	});
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable articleTableOutlet;
     private javax.swing.JLabel clientOutlet;
+    private javax.swing.JButton close;
     private javax.swing.JPanel detail;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton edit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
