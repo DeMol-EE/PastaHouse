@@ -118,13 +118,13 @@ public class PrintableInvoiceNew extends MyPrintable{
 	otherSymbols.setGroupingSeparator('.'); 
 	threeFormatter.setDecimalFormatSymbols(otherSymbols);
 	
-	for (InvoiceItem invoiceItem : model.items().values()) {
+	for (InvoiceItem invoiceItem : model.items()) {
 	    /*
 	     * Group per savings?
 	     */
 	    ArrayList<PrintableHorizontalLineObject> ii = new ArrayList<PrintableHorizontalLineObject>();
 	    ii.add(new PrintableString(invoiceItem.getArticle().getName(), tabs[0]));
-	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getTaxes()), tabs[1]));
+	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getArticle().getTaxes()), tabs[1]));
 	    ii.add(new PrintableString(invoiceItem.getAmount()+" "+invoiceItem.getArticle().getUnit(), tabs[2]));
 	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())), tabs[3]));
 	    ii.add(new PrintableString(threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount()), tabs[4]));
@@ -156,13 +156,13 @@ public class PrintableInvoiceNew extends MyPrintable{
 	
 	Map<Double, List<InvoiceItem>> categories = new HashMap<Double, List<InvoiceItem>>();
 	
-	for (InvoiceItem invoiceItem : model.items().values()) {
-	    if (categories.containsKey(invoiceItem.getTaxes())) {
-		categories.get(invoiceItem.getTaxes()).add(invoiceItem);
+	for (InvoiceItem invoiceItem : model.items()) {
+	    if (categories.containsKey(invoiceItem.getArticle().getTaxes())) {
+		categories.get(invoiceItem.getArticle().getTaxes()).add(invoiceItem);
 	    } else {
 		List<InvoiceItem> items = new ArrayList<InvoiceItem>();
 		items.add(invoiceItem);
-		categories.put(invoiceItem.getTaxes(), items);
+		categories.put(invoiceItem.getArticle().getTaxes(), items);
 	    }
 	}
 	

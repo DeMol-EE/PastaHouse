@@ -305,7 +305,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel4);
 
         pricecodeOutlet.setMaximumRowCount(3);
-        pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
+        pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "A", "B" }));
         jPanel2.add(pricecodeOutlet);
 
         detailsContainer.add(jPanel2, java.awt.BorderLayout.CENTER);

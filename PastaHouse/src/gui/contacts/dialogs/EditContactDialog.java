@@ -164,6 +164,14 @@ public class EditContactDialog extends javax.swing.JDialog {
 		return true;
 	    }
 	});
+        
+	taxnrOutlet.setInputVerifier(new AbstractValidator(this, taxnrOutlet, "Het BTW-nummer is ongeldig (enkel cijfers worden gecontroleerd).") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		return taxnrOutlet.getText().isEmpty() ? true : Utilities.validTaxNr(taxnrOutlet.getText());
+	    }
+	});
 	
 	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
 	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
@@ -406,7 +414,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         jPanel2.add(jLabel4);
 
         pricecodeOutlet.setMaximumRowCount(3);
-        pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "A", "B" }));
+        pricecodeOutlet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "A", "B" }));
         jPanel2.add(pricecodeOutlet);
 
         detailsContainer.add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -482,7 +490,7 @@ public class EditContactDialog extends javax.swing.JDialog {
             model.setEmail(txtEmail.getText());
             model.setNotes(notesOutlet.getText());
             model.setTaxnumber(taxnrOutlet.getText());
-            model.setPricecode(pricecodeOutlet.getSelectedIndex() == 0 ? null : pricecodeOutlet.getSelectedItem().toString());
+            model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
             if (type == Contact.both) {
                 model.setType(typeBox.getSelectedIndex() == 0 ? "supplier" : "client");
             } else if (type == Contact.supplier) {

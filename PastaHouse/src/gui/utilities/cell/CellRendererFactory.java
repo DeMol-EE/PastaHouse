@@ -31,6 +31,10 @@ public class CellRendererFactory {
 	return new ThreeDecimalDoubleCellRenderer();
     }
     
+    public static TableCellRenderer createZeroDecimalDoubleCellRenderer(){
+	return new ZeroDecimalDoubleCellRenderer();
+    }
+    
     public static TableCellRenderer createCapitalizedStringCellRenderer(){
 	return createCapitalizedStringCellRenderer(false);
     }
@@ -119,6 +123,31 @@ public class CellRendererFactory {
 		setForeground(table.getForeground());
 	    }
 	    DecimalFormat threeFormatter = new DecimalFormat("0.000");
+	    if(value!=null) this.setText(threeFormatter.format(value));
+	    
+	    return this;
+	}
+	
+    }
+    
+       private static class ZeroDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer{
+
+	public ZeroDecimalDoubleCellRenderer(){
+	    setOpaque(true);
+	    setHorizontalAlignment(JLabel.CENTER);
+	}
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
+	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	    setBackground(defaultComponent.getBackground());
+	    if (isSelected) {
+		setForeground(table.getSelectionForeground());
+	    } else {
+		setForeground(table.getForeground());
+	    }
+	    DecimalFormat threeFormatter = new DecimalFormat("0");
 	    if(value!=null) this.setText(threeFormatter.format(value));
 	    
 	    return this;
