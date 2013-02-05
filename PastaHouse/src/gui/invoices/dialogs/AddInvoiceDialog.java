@@ -42,7 +42,7 @@ import org.jdesktop.swingx.JXTitledPanel;
  * @author Hannes
  */
 public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactDelegate {
-
+    
     private AutocompleteCombobox clientBox;
     private JXDatePicker datepicker = DatePickerFactory.makeStandardDatePicker();
     private JXTable table;
@@ -53,7 +53,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private Double saving = 0.0;
     private Contact client;
     private int number;
-
+    
     public AddInvoiceDialog(java.awt.Frame parent, boolean modal, AddInvoiceDelegate delegate) {
         super(parent, modal);
         initComponents();
@@ -82,7 +82,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         JXTitledPanel pricetitledpanel = new JXTitledPanel("Prijs");
         pricetitledpanel.add(pricepanel);
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
-
+        
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
         ArrayList clients = new ArrayList();
         clients.add("");
@@ -92,13 +92,13 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         ArrayList articles = new ArrayList();
         articles.add(" ");
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
-
+        
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
         this.pack();
         addValidators();
         setLocationRelativeTo(null);
-
+        
         clientBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,11 +107,19 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 updatePriceClass(client.getPricecode());
             }
         });
-
+        
         comboPriceClass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updatePriceClass((String) comboPriceClass.getSelectedItem());
+            }
+        });
+        
+        datepicker.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                number = Database.driver().getInvoiceNumber(datepicker.getDate());
+                txtNumber.setText("" + number);
             }
         });
     }
@@ -356,19 +364,19 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
         AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
-
+    
     private void txtReductionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReductionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtReductionActionPerformed
-
+    
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_deleteArticleActionPerformed
-
+    
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_quantityoutletActionPerformed
-
+    
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
         Article art;
         art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
@@ -377,7 +385,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         data.add(item);
         tablemodel.addComponent(item);
     }//GEN-LAST:event_addArticleActionPerformed
-
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         InvoiceModel model = new InvoiceModel();
         model.setDate(datepicker.getDate().toString());
@@ -388,7 +396,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         model.setSave(saving);
         FunctionResult<Invoice> result = model.create();
         int code = result.getCode();
-        if (code == 0){
+        if (code == 0) {
             
         } else {
             //JOptionPane.showMessageDialog(ClientOutlet, result);
@@ -451,7 +459,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     public void addContact(Contact c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
     private JXTable createXTable() {
         JXTable table = new JXTable() {
             @Override
@@ -463,7 +471,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                         // need toPicker do in updateUI toPicker survive toggling of LAF 
                         if (getDefaultRenderer() instanceof JLabel) {
                             ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
-
+                            
                         }
                     }
                     //                    </snip> 
@@ -472,7 +480,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         };
         return table;
     }
-
+    
     private void addValidators() {
         quantityoutlet.setInputVerifier(new AbstractValidator(this, quantityoutlet, "Ongeldige waarde! Verwacht formaat: x.y, groter dan 0.0") {
             @Override
@@ -488,7 +496,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             }
         });
     }
-
+    
     private void updatePriceClass(String newprice) {
         String oldprice = pricecode;
         pricecode = newprice;
@@ -496,7 +504,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             comboPriceClass.setSelectedItem(pricecode);
             tablemodel.updatePricecode(pricecode);
         }
-
-
+        
+        
     }
 }
