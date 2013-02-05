@@ -8,7 +8,6 @@ import database.tables.Invoice;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import java.awt.BorderLayout;
-import java.awt.ScrollPane;
 import java.text.DecimalFormat;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;

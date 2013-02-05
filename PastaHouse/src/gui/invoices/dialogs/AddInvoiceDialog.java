@@ -386,10 +386,22 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
         Article art;
         art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
-        double quantity = Double.parseDouble(quantityoutlet.getText());
-        InvoiceItem item = new InvoiceItem(art, quantity);
-        data.add(item);
-        tablemodel.addComponent(item);
+	
+	if(art==null){
+	    JOptionPane.showMessageDialog(null, "Gelieve een artikel te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    autobox.requestFocus();
+	    return;
+	}
+	
+	if(!quantityoutlet.getInputVerifier().verify(quantityoutlet)){
+	    quantityoutlet.requestFocus();
+	    return;
+	}
+	
+	double quantity = Double.parseDouble(quantityoutlet.getText());
+	InvoiceItem item = new InvoiceItem(art, quantity);
+	data.add(item);
+	tablemodel.addComponent(item);
     }//GEN-LAST:event_addArticleActionPerformed
 
     private void disposeLater() {
@@ -414,7 +426,11 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	    
 	    InvoiceModel model = new InvoiceModel();
 	    model.setDate(df.valueToString(datepicker.getDate()));
-	    model.setClient(client);
+	    
+	    String clientname = (String) clientBox.getSelectedItem();
+	    Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+	    model.setClient(_client);
+	    
 	    model.setNumber(number);
 	    model.setItems(data);
 	    model.setPriceCode(pricecode);
@@ -568,7 +584,10 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     }
 
     private boolean valid(){
-	if (clientBox.getSelectedIndex()==0) {
+	String clientname = (String) clientBox.getSelectedItem();
+	Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+	    
+	if (clientBox.getSelectedIndex()==0 || _client == null) {
 	    JOptionPane.showMessageDialog(null, "Gelieve een klant te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    clientBox.requestFocus();
 	    return false;
