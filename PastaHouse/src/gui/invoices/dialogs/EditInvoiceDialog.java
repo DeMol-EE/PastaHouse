@@ -897,7 +897,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 		p.add(new JLabel(threeFormatter.format(nets.get(index)), SwingConstants.TRAILING));
 		totalNets+=nets.get(index);
 		p.add(new JLabel(threeFormatter.format(add.get(index)), SwingConstants.TRAILING));
-		totalAdded+=nets.get(index);
+		totalAdded+=add.get(index);
 		p.add(new JLabel(twoFormatter.format(tot.get(index))+"  ", SwingConstants.TRAILING));
 		total+=tot.get(index);
 
