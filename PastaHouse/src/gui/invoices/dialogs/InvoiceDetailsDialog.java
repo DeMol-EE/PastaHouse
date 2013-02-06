@@ -30,8 +30,8 @@ import tools.StringTools;
  */
 public class InvoiceDetailsDialog extends javax.swing.JDialog implements EditInvoiceDelegate{
 
-    private final Invoice model;
-    private final InvoiceItemTableModel tableModel;
+    private Invoice model;
+    private InvoiceItemTableModel tableModel;
     
     /**
      * Creates new form InvoiceDetailsDialog
@@ -345,7 +345,10 @@ private JXTable createXTable() {
 
     @Override
     public void editInvoice(Invoice oldInvoice, Invoice newInvoice) {
-        System.out.println("derp");
+        model.copy(newInvoice);
+        
+        tableModel.setData(model.items(), model.getPriceCode());
+        updatePrices();
     }
 
     private void updatePrices(){

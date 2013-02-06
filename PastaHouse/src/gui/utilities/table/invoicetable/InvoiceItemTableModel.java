@@ -14,13 +14,19 @@ import javax.swing.table.AbstractTableModel;
  */
 public class InvoiceItemTableModel extends AbstractTableModel {
 
-    private final ArrayList<InvoiceItem> data;
+    private ArrayList<InvoiceItem> data;
     private String pricecode;
     
 
     public InvoiceItemTableModel(ArrayList<InvoiceItem> data, String pricecode) {
         this.data = data;
         this.pricecode = pricecode;
+    }
+    
+    public void setData(ArrayList<InvoiceItem> data, String pricecode){
+        this.data = data;
+        this.pricecode = pricecode;
+        fireTableDataChanged();
     }
 
     @Override

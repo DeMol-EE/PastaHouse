@@ -89,7 +89,9 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         }
         number = oldinvoice.getNumber();
         txtNumber.setText("" + number);
-        this.setTitle(pricecode);
+        
+        this.setTitle("Wijzig factuur - " + number);
+        
         table = createXTable();
         this.oldinvoice = oldinvoice;
         this.newinvoice = new Invoice(oldinvoice);
@@ -143,19 +145,8 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 //        this.pack();
         addValidators();
         setLocationRelativeTo(null);
-
-        clientBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-		if (clientBox.getSelectedItem() instanceof Contact) {
-		    client = (Contact) clientBox.getSelectedItem();
-		} else {
-		    String clientname = (String) clientBox.getSelectedItem();
-		    client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
-		}
-                updatePriceClass(client.getPricecode());
-            }
-        });
+        
+        clientBox.setEditable(false);
 
         comboPriceClass.addActionListener(new ActionListener() {
             @Override
@@ -568,7 +559,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }//GEN-LAST:event_deleteArticleActionPerformed
 
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
-        // TODO add your handling code here:
+        addArticleActionPerformed(evt);
     }//GEN-LAST:event_quantityoutletActionPerformed
 
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
@@ -635,6 +626,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             FunctionResult<Invoice> res = newinvoice.update();
             if (res.getCode() == 0) {
                 delegate.editInvoice(oldinvoice, newinvoice);
+                oldinvoice = newinvoice;
                 disposeLater();
             } else {
                 // switch case error code
@@ -688,6 +680,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private void txtNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumberActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumberActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
     private javax.swing.JPanel DateOutlet;

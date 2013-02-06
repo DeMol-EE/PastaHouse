@@ -21,10 +21,15 @@ import javax.swing.table.AbstractTableModel;
  */
 public class InvoiceTableModel extends AbstractTableModel {
 
-    private final Map<Integer, Invoice> data;
+    private Map<Integer, Invoice> data;
 
     public InvoiceTableModel(Map<Integer, Invoice> data) {
         this.data = data;
+    }
+    
+    public void setData(Map<Integer, Invoice> data){
+        this.data = data;
+        fireTableDataChanged();
     }
 
     public Invoice getInvoiceAtRow(int row) {
