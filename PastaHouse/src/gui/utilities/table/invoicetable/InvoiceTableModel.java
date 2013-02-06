@@ -8,7 +8,6 @@ import database.tables.Invoice;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,13 @@ public class InvoiceTableModel extends AbstractTableModel {
     public boolean removeInvoiceAtRows(int[] rows) {
         List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
         for (int row : rows) {
-            invoicesToRemove.add(getInvoiceAtRow(row));
+            invoicesToRemove.add(database.Database.driver().getInvoicesByNumber().get((Integer)getValueAt(row, 0)));
         }
+	
+//	System.out.println("To remove: ");
+//	for (Invoice invoice : invoicesToRemove) {
+//	    System.out.println(invoice.getNumber());
+//	}
 
         int removed = 0;
 

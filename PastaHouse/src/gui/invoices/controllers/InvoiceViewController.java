@@ -8,7 +8,6 @@ import database.Database;
 import database.tables.Invoice;
 import gui.MasterDetailViewController;
 import gui.invoices.delegates.AddInvoiceDelegate;
-import gui.invoices.delegates.EditInvoiceDelegate;
 import gui.invoices.dialogs.AddInvoiceDialog;
 import gui.invoices.dialogs.InvoiceDetailsDialog;
 import gui.utilities.DatePickerFactory;
@@ -23,10 +22,6 @@ import java.awt.event.ActionListener;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -36,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.RowFilter;
 import javax.swing.SortOrder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -379,8 +373,14 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         int[] rijen = table.getSelectedRows();
+	
+	int added = 0;
+	for (int i : rijen) {
+	    rijen[added++]=table.convertRowIndexToModel(i);
+	}
+	
         if (rijen.length > 0) {
-            String msg = "Bent u zeker dat u deze " + (rijen.length == 1 ? "factuur" : "facturen") + " wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden!";
+	    String msg = "Bent u zeker dat u deze " + (rijen.length == 1 ? "factuur" : "facturen") + " wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden!";
             int choice = JOptionPane.showOptionDialog(this, msg, "Aandacht!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Verwijderen", "Terug"}, 1);
             if (choice == 0) {
                 System.out.println("Deleting...");
