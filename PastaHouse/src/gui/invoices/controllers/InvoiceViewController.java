@@ -323,6 +323,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel6.add(add);
 
         delete.setText("Verwijderen...");
+        delete.setFocusable(false);
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);

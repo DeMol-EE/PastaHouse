@@ -11,6 +11,10 @@ import database.extra.Record;
 import database.models.InvoiceModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tools.Configuration;
@@ -26,7 +30,14 @@ public class Invoice extends Record<Invoice>{
     private String priceCode;
     private double save;
     private ArrayList<InvoiceItem> items;
+    
+    private Map<Double, List<InvoiceItem>> itemsPerCategory;
 
+    public Invoice(ArrayList<InvoiceItem> items){
+	super(1234656, "");
+	this.items = items;
+    }
+    
     private Invoice(int id, int number, String date, Contact client, String priceCode, double save) {
 	super(id, Configuration.center().getDB_TABLE_INV());
 	this.number = number;
@@ -93,8 +104,101 @@ public class Invoice extends Record<Invoice>{
 	return items;
     }
     
+
     public void SetItems(ArrayList<InvoiceItem> items){
 	this.items = items;
+    }
+    public Map<Double, List<InvoiceItem>> itemsPerTaxesCategory(boolean reset){
+	if (itemsPerCategory == null || reset == true) {
+	    itemsPerCategory = new HashMap<Double, List<InvoiceItem>>();
+	
+	    for (InvoiceItem invoiceItem : items()) {
+		if (itemsPerCategory.containsKey(invoiceItem.getArticle().getTaxes())) {
+		    itemsPerCategory.get(invoiceItem.getArticle().getTaxes()).add(invoiceItem);
+		} else {
+		    List<InvoiceItem> _items = new ArrayList<InvoiceItem>();
+		    _items.add(invoiceItem);
+		    itemsPerCategory.put(invoiceItem.getArticle().getTaxes(), _items);
+		}
+	    }
+	}
+	return itemsPerCategory;
+    }
+    
+    public Map<Double, List<InvoiceItem>> itemsPerTaxesCategory(){
+	return itemsPerTaxesCategory(true);
+    }
+    
+    public List<Double> netBeforeSave(){
+	List<Double> nets = new ArrayList<Double>();
+	
+	itemsPerTaxesCategory(false);
+	
+	for (List<InvoiceItem> list : itemsPerCategory.values()) {
+	    double net = 0.0;
+	    for (InvoiceItem invoiceItem : list) {
+		net+=invoiceItem.getArticle().getPriceForCode(getPriceCode())*invoiceItem.getAmount();
+	    }
+	    nets.add(net);
+	}
+	
+	return nets;
+    }
+    
+    public List<Double> savings(){
+	List<Double> savings = new ArrayList<Double>();
+	
+	List<Double> nets = netBeforeSave();
+	
+	int index = 0;
+	for (List<InvoiceItem> list : itemsPerCategory.values()) {
+	    double sav = nets.get(index) * getSave()/100;
+	    savings.add(sav);
+	    index++;
+	}
+	
+	return savings;
+    }
+    
+    public List<Double> netAfterSave(){
+	List<Double> nets = new ArrayList<Double>();
+	
+	List<Double> net = netBeforeSave();
+	List<Double> saves = savings();
+	
+	for (int i = 0; i < net.size(); i++) {
+	    nets.add(net.get(i) - saves.get(i));
+	}
+	
+	return nets;
+    }
+    
+    public List<Double> added(){
+	List<Double> added = new ArrayList<Double>();
+	
+	List<Double> nets = netAfterSave();
+	Set<Double> categories = itemsPerTaxesCategory().keySet();
+	
+	int index = 0;
+	for (Double cat : categories) {
+	    added.add(cat/100*nets.get(index));
+	}
+	
+	return added;
+    }
+    
+    public List<Double> total(){
+	List<Double> totals = new ArrayList<Double>();
+	
+	List<Double> nets = netAfterSave();
+	List<Double> adds = added();
+	
+	for (int i = 0; i < nets.size(); i++) {
+	    totals.add(nets.get(i)+adds.get(i));
+	}
+	
+	return totals;
+
     }
     
     @Override

@@ -64,6 +64,10 @@ public class InvoiceItemTableModel extends AbstractTableModel {
         this.pricecode = pricecode;
         fireTableDataChanged();
     }
+    
+    public String priceCode(){
+	return pricecode;
+    }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -80,7 +84,8 @@ public class InvoiceItemTableModel extends AbstractTableModel {
             case 3:
                 return price;
             case 4:
-                return price * item.getAmount() * (1 + (item.getArticle().getTaxes() / 100));
+//                return price * item.getAmount() * (1 + (item.getArticle().getTaxes() / 100));
+                return price * item.getAmount();
 
             default:
                 return "Error";

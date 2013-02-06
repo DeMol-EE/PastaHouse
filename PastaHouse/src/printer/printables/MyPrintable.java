@@ -32,6 +32,8 @@ public abstract class MyPrintable implements Printable{
     private final Font font;
     private int[] pageBreaks;
     
+    private int pages;
+    
     public MyPrintable() {
 	this(new Font("Serif", Font.PLAIN, 12));
     }
@@ -70,6 +72,8 @@ public abstract class MyPrintable implements Printable{
 	    int totalLines = printModelBody.size() + printModelFooter.size();
 	    int amountOfPages = (int)Math.ceil((1.0*totalLines)/linesPerPage);
 	    int totalGrossLines = amountOfPages*linesPerPage;
+	    
+	    pages = amountOfPages;
 	    
 	    System.out.println("Total lines: "+totalLines);
 	    System.out.println("\tat "+linesPerPage+" per page, makes "+amountOfPages+" pages");
@@ -113,7 +117,11 @@ public abstract class MyPrintable implements Printable{
 	/*
 	 * Check if we're in bounds of the print model
 	 */
-	if (pageIndex > pageBreaks.length) {
+//	if (pageIndex > pageBreaks.length) {
+//	    System.out.println("No such page...");
+//            return NO_SUCH_PAGE;
+//        }
+	if (pageIndex > pages) {
 	    System.out.println("No such page...");
             return NO_SUCH_PAGE;
         }

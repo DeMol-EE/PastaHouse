@@ -11,7 +11,6 @@ import database.tables.Contact;
 import database.tables.Invoice;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 /**
  *
