@@ -45,7 +45,7 @@ import tools.StringTools;
  * @author Warkst
  */
 public class Database {
-
+    
     private static Database driver;
     private Connection connection;
     private Statement statement;
@@ -62,7 +62,7 @@ public class Database {
     private Map<String, Article> articlesByCode;
     private Map<String, Contact> contactsBySortKey;
     private Map<Integer, ArrayList<Invoice>> InvoicesbyYear;
-
+    
     private Database() {
         try {
             basicIngredientsById = new TreeMap<Integer, BasicIngredient>();
@@ -73,12 +73,12 @@ public class Database {
             invoicesById = new TreeMap<Integer, Invoice>();
             invoicesByNumber = new TreeMap<Integer, Invoice>();
             InvoicesbyYear = new TreeMap<Integer, ArrayList<Invoice>>();
-
+            
             basicIngredientsByName = new TreeMap<String, BasicIngredient>(String.CASE_INSENSITIVE_ORDER);
             recipesByName = new TreeMap<String, Recipe>(String.CASE_INSENSITIVE_ORDER);
             articlesByName = new TreeMap<String, Article>(String.CASE_INSENSITIVE_ORDER);
             contactsBySortKey = new TreeMap<String, Contact>(String.CASE_INSENSITIVE_ORDER);
-
+            
             municipales = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
             // connect to db
             Class.forName("org.sqlite.JDBC");
@@ -92,28 +92,28 @@ public class Database {
             loadMunicipales();
             loadArticles();
             loadInvoices();
-
+            
         } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             MyLogger.log(ex.getMessage());
         }
     }
-
+    
     public Map<String, Article> getArticlesByCode() {
         return articlesByCode;
     }
-
+    
     public static Database driver() {
         if (driver == null) {
             driver = new Database();
         }
         return driver;
     }
-
+    
     public Connection getConnection() {
         return connection;
     }
-
+    
     private void loadInvoices() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV() + " order by id");
         while (rs.next()) {
@@ -140,7 +140,7 @@ public class Database {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
         rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INV_ART());
         int links = 0;
         while (rs.next()) {
@@ -152,7 +152,7 @@ public class Database {
         }
         MyLogger.log("Database driver:: loaded " + invoicesById.size() + " invoices (linked " + links + " articles)!", MyLogger.LOW);
     }
-
+    
     private void loadContacts() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_CON());
         while (rs.next()) {
@@ -178,12 +178,12 @@ public class Database {
         }
         MyLogger.log("Database driver:: loaded " + contactsById.size() + " contacts (" + getSuppliersAlphabetically().size() + " suppliers and " + getClientsAlphabetically().size() + " clients)!", MyLogger.LOW);
     }
-
+    
     public FunctionResult<Contact> addContact(ContactModel model) throws SQLException {
         if (contactsBySortKey.containsKey(model.getSortKey().toLowerCase())) {
             return new FunctionResult<Contact>(4, null, "Er bestaat al een contactpersoon met deze toonnaam.");
         }
-
+        
         String msg = "";
         int code = 0;
         Contact newCon = null;
@@ -208,7 +208,7 @@ public class Database {
             preparedStatement.setString(14, model.getNotes());
             preparedStatement.setString(15, model.getType());
             preparedStatement.executeUpdate();
-
+            
             ResultSet rs = statement.executeQuery("SELECT id FROM " + Configuration.center().getDB_TABLE_CON() + " WHERE sortkey=\"" + model.getSortKey() + "\"");
             if (rs.next()) {
                 newCon = Contact.createFromModel(rs.getInt("id"), model);
@@ -227,7 +227,7 @@ public class Database {
         }
         return new FunctionResult<Contact>(code, newCon, msg);
     }
-
+    
     public FunctionResult<Invoice> addInvoice(InvoiceModel model) throws SQLException {
         int code = 0;
         String msg = "";
@@ -247,7 +247,7 @@ public class Database {
             preparedStatement.setString(4, model.getPriceCode());
             preparedStatement.setDouble(5, model.getSave());
             preparedStatement.executeUpdate();
-
+            
             ResultSet rs = statement.executeQuery("SELECT * FROM invoices WHERE number=\"" + model.getNumber() + "\"");
             if (rs.next()) {
                 newInv = Invoice.createFromModel(rs.getInt("id"), model);
@@ -266,7 +266,7 @@ public class Database {
                 code = 2;
                 msg = "Er is iets verkeerd gegaan. Herstart het programma.";
             }
-
+            
             ArrayList<InvoiceItem> items = model.getItems();
             for (InvoiceItem item : items) {
                 Article art = item.getArticle();
@@ -275,8 +275,8 @@ public class Database {
                 preparedStatement.setInt(2, art.getPrimaryKeyValue());
                 preparedStatement.setDouble(3, item.getAmount());
                 preparedStatement.executeUpdate();
-		
-		newInv.addItem(item.getAmount(), item.getArticle());
+                
+                newInv.addItem(item.getAmount(), item.getArticle());
             }
             connection.commit();
         } catch (ParseException ex) {
@@ -293,7 +293,7 @@ public class Database {
         }
         return new FunctionResult<Invoice>(code, newInv, msg);
     }
-
+    
     public FunctionResult<Article> addArticle(ArticleModel model) throws SQLException {
         int code = 0;
         String msg = "";
@@ -310,7 +310,7 @@ public class Database {
             preparedStatement.setString(5, model.getUnit());
             preparedStatement.setDouble(6, model.getTaxes());
             preparedStatement.executeUpdate();
-
+            
             ResultSet rs = statement.executeQuery("SELECT id FROM " + Configuration.center().getDB_TABLE_ART() + " WHERE name=\"" + model.getName() + "\"");
             if (rs.next()) {
                 newArt = Article.createFromModel(rs.getInt("id"), model);
@@ -330,7 +330,7 @@ public class Database {
         }
         return new FunctionResult<Article>(code, newArt, msg);
     }
-
+    
     private void loadBasicIngredients() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_INGR());
         while (rs.next()) {
@@ -354,12 +354,12 @@ public class Database {
 //        System.out.println("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!");
         MyLogger.log("Database driver:: loaded " + basicIngredientsById.size() + " basic ingredients!", MyLogger.LOW);
     }
-
+    
     public FunctionResult<BasicIngredient> addBasicIngredient(BasicIngredientModel ingredient) throws SQLException {
         if (basicIngredientsByName.containsKey(ingredient.getName().toLowerCase())) {
             return new FunctionResult<BasicIngredient>(4, null, "Er bestaat al een basisingrediënt met deze naam.");
         }
-
+        
         int code = 0;
         String msg = "";
         BasicIngredient newBI = null;
@@ -380,7 +380,7 @@ public class Database {
             preparedStatement.setString(10, ingredient.getDate());
             preparedStatement.setString(11, ingredient.getNotes());
             preparedStatement.executeUpdate();
-
+            
             ResultSet rs = statement.executeQuery("SELECT id FROM " + Configuration.center().getDB_TABLE_INGR() + " WHERE naam=\"" + ingredient.getName() + "\"");
             if (rs.next()) {
                 newBI = BasicIngredient.createFromModel(rs.getInt("id"), ingredient);
@@ -399,7 +399,7 @@ public class Database {
         }
         return new FunctionResult<BasicIngredient>(code, newBI, msg);
     }
-
+    
     private void loadRecipes() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_REC());
         while (rs.next()) {
@@ -437,12 +437,12 @@ public class Database {
 //        System.out.println("Database driver:: loaded " + recipesById.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!");
         MyLogger.log("Database driver:: loaded " + recipesById.size() + " recipes (linked " + ingrLinks + " ingredients and " + recLinks + " recipes)!", MyLogger.LOW);
     }
-
+    
     public FunctionResult<Recipe> addRecipe(RecipeModel recipe) throws SQLException {
         if (recipesByName.containsKey(recipe.getName().toLowerCase())) {
             return new FunctionResult<Recipe>(4, null, "Er bestaat al een recept met deze naam");
         }
-
+        
         boolean autoComm = connection.getAutoCommit();
         int code = 0;
         String msg = "";
@@ -476,7 +476,7 @@ public class Database {
                 code = 2;
                 msg = "Er is iets verkeerd gegaan. Herstart het programma.";
             }
-
+            
             Map<Integer, Component> ings = recipe.getComponents();
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
@@ -492,7 +492,7 @@ public class Database {
                 stmt.executeUpdate();
             }
             connection.commit();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             connection.rollback();
@@ -506,7 +506,7 @@ public class Database {
         }
         return new FunctionResult<Recipe>(code, newRec, msg);
     }
-
+    
     public FunctionResult<Invoice> updateInvoice(Invoice invoice) throws SQLException {
         boolean autoComm = connection.getAutoCommit();
         int code = 0;
@@ -530,7 +530,7 @@ public class Database {
             sql = "DELETE FROM invoicesarticles WHERE invoiceid = " + invoice.getPrimaryKeyValue();
             st.executeUpdate(sql);
             ArrayList<InvoiceItem> items = invoice.items();
-
+            
             for (InvoiceItem item : items) {
                 Article art = item.getArticle();
                 preparedStatement = connection.prepareStatement(insertinvart);
@@ -551,7 +551,7 @@ public class Database {
         }
         return new FunctionResult<Invoice>(code, null, null);
     }
-
+    
     public FunctionResult<Recipe> updateRecipe(Recipe recipe) throws SQLException {
         boolean autoComm = connection.getAutoCommit();
         int code = 0;
@@ -578,7 +578,7 @@ public class Database {
             sql = "DELETE FROM recipesingredients WHERE receptid = " + recipe.getPrimaryKeyValue();
             st.executeUpdate(sql);
             Map<Integer, Component> ings = recipe.getComponents();
-
+            
             for (int i : ings.keySet()) {
                 Component comp = ings.get(i);
                 if (comp.getIngredient().isBasicIngredient()) {
@@ -604,7 +604,7 @@ public class Database {
         }
         return new FunctionResult<Recipe>(code, null, null);
     }
-
+    
     private void loadMunicipales() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_MUNI());
         while (rs.next()) {
@@ -613,7 +613,7 @@ public class Database {
             municipales.put(name, code);
         }
     }
-
+    
     private void loadArticles() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM " + Configuration.center().getDB_TABLE_ART());
         while (rs.next()) {
@@ -675,43 +675,43 @@ public class Database {
         }
         return suppliers;
     }
-
+    
     public Map<Integer, BasicIngredient> getBasicIngredients() {
         return basicIngredientsById;
     }
-
+    
     public Map<String, BasicIngredient> getBasicIngredientsAlphabetically() {
         return basicIngredientsByName;
     }
-
+    
     public Map<Integer, Article> getArticles() {
         return articlesById;
     }
-
+    
     public Map<String, Article> getArticlesAlphabetically() {
         return articlesByName;
     }
-
+    
     public Map<Integer, Recipe> getRecipes() {
         return recipesById;
     }
-
+    
     public Map<String, Recipe> getRecipesAlphabetically() {
         return recipesByName;
     }
-
+    
     public Map<String, Integer> getMunicipales() {
         return municipales;
     }
-
+    
     public Map<Integer, Invoice> getInvoicesById() {
         return invoicesById;
     }
-
+    
     public Map<Integer, Invoice> getInvoicesByNumber() {
         return invoicesByNumber;
     }
-
+    
     public boolean isArticleCodeUnique(String code) {
         Set<String> codes = new TreeSet<String>();
         for (Article article : articlesByName.values()) {
@@ -723,7 +723,7 @@ public class Database {
         }
         return true;
     }
-
+    
     public boolean isArticleCodeUnique(String code, Article exclude) {
         Set<String> codes = new TreeSet<String>();
         for (Article article : articlesByName.values()) {
@@ -737,7 +737,7 @@ public class Database {
         }
         return true;
     }
-
+    
     public List<Ingredient> getIngredients() {
         Map<String, Ingredient> sorted = new TreeMap<String, Ingredient>(String.CASE_INSENSITIVE_ORDER);
         sorted.putAll(basicIngredientsByName);
@@ -746,7 +746,7 @@ public class Database {
         me.addAll(sorted.values());
         return me;
     }
-
+    
     public Map<String, Contact> getContactsAlphabetically() {
         return contactsBySortKey;
     }
@@ -772,11 +772,11 @@ public class Database {
             // do logging
             System.err.println("DatabaseDriver::Update command: \n"
                     + "UPDATE " + table + " SET " + values + " WHERE " + primaryKey + " = \"" + primaryKeyValue + "\" \nFAILED:\n" + e.getMessage());
-
+            
             return new FunctionResult(1, null, StringTools.capitalize(e.getMessage()));
         }
     }
-
+    
     public int getInvoiceNumber(Date date) {
         Calendar time = Calendar.getInstance();
         time.setTime(date);
@@ -788,22 +788,30 @@ public class Database {
         int lastindex = invoicesofyear.size() - 1;
         return invoicesofyear.get(lastindex).getNumber() + 1;
     }
-
+    
     public FunctionResult deleteInvoice(Invoice i) {
         try {
             statement.executeUpdate("DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"");
             System.out.println("DatabaseDriver::Executed delete:\n"
                     + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nSUCCES!");
-
+            
             invoicesById.remove(i.getPrimaryKeyValue());
             invoicesByNumber.remove(i.getNumber());
-
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+            Date datum = formatter.parse(i.getDate());
+            Calendar now = Calendar.getInstance();
+            now.setTime(datum);
+            int year = now.get(Calendar.YEAR);
+            if (InvoicesbyYear.containsKey(year)) {
+                InvoicesbyYear.get(year).remove(i);
+            }
+            
             return new FunctionResult(0, null, null);
         } catch (Exception e) {
             // do logging
             System.err.println("DatabaseDriver::Delete command: \n"
                     + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nFAILED:\n" + e.getMessage());
-
+            
             return new FunctionResult(1, null, StringTools.capitalize(e.getMessage()));
         }
     }

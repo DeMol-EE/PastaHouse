@@ -76,6 +76,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         datepicker.setEditable(false);
         this.delegate = delegate;
 
+        setTitle("Factuur wijzigen");
         comboPriceClass.addItem("A");
         comboPriceClass.addItem("B");
         comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
@@ -88,6 +89,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         }
         number = oldinvoice.getNumber();
         txtNumber.setText("" + number);
+        this.setTitle(pricecode);
         table = createXTable();
         this.oldinvoice = oldinvoice;
         this.newinvoice = new Invoice(oldinvoice);
