@@ -5,6 +5,7 @@
 package database.extra;
 
 import database.tables.Article;
+import javax.crypto.spec.IvParameterSpec;
 
 /**
  *
@@ -34,5 +35,10 @@ public class InvoiceItem {
     public void setAmount(double amount) {
 	this.amount = amount;
     } 
+    
+    public InvoiceItem(InvoiceItem copy){
+        this.amount=copy.amount;
+        this.article= new Article(copy.article);
+    }
     
 }

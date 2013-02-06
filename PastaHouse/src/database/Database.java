@@ -511,7 +511,6 @@ public class Database {
         boolean autoComm = connection.getAutoCommit();
         int code = 0;
         String msg = "";
-        Invoice newInv = null;
         String insertinvart = "INSERT INTO invoicesarticles"
                 + "(invoiceid, articleid, amount) VALUES"
                 + "(?,?,?)";
@@ -525,7 +524,7 @@ public class Database {
             preparedStatement.setInt(3, invoice.getClient().getPrimaryKeyValue());
             preparedStatement.setString(4, invoice.getPriceCode());
             preparedStatement.setDouble(5, invoice.getSave());
-            preparedStatement.setInt(5, invoice.getPrimaryKeyValue());
+            preparedStatement.setInt(6, invoice.getPrimaryKeyValue());
             preparedStatement.executeUpdate();
             Statement st = connection.createStatement();
             sql = "DELETE FROM invoicesarticles WHERE invoiceid = " + invoice.getPrimaryKeyValue();
@@ -535,7 +534,7 @@ public class Database {
             for (InvoiceItem item : items) {
                 Article art = item.getArticle();
                 preparedStatement = connection.prepareStatement(insertinvart);
-                preparedStatement.setInt(1, newInv.getPrimaryKeyValue());
+                preparedStatement.setInt(1, invoice.getPrimaryKeyValue());
                 preparedStatement.setInt(2, art.getPrimaryKeyValue());
                 preparedStatement.setDouble(3, item.getAmount());
                 preparedStatement.executeUpdate();

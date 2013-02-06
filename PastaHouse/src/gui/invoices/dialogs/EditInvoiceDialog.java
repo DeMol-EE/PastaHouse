@@ -7,13 +7,11 @@ package gui.invoices.dialogs;
 import database.Database;
 import database.FunctionResult;
 import database.extra.InvoiceItem;
-import database.models.InvoiceModel;
 import database.tables.Article;
 import database.tables.Contact;
 import database.tables.Invoice;
 import gui.contacts.delegates.AddContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
-import gui.invoices.delegates.AddInvoiceDelegate;
 import gui.invoices.delegates.EditInvoiceDelegate;
 import gui.utilities.DatePickerFactory;
 import gui.utilities.TextFieldAutoHighlighter;
@@ -29,7 +27,6 @@ import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
@@ -70,6 +67,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         super(parent, modal);
         initComponents();
         this.oldinvoice = oldinvoice;
+        this.newinvoice = new Invoice(oldinvoice);
         datepicker.setEditable(false);
         this.delegate = delegate;
 
@@ -140,8 +138,13 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         clientBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String clientname = (String) clientBox.getSelectedItem();
-                client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+
+                if (clientBox.getSelectedItem() instanceof Contact) {
+                    client = (Contact) clientBox.getSelectedItem();
+                } else {
+                    String clientname = (String) clientBox.getSelectedItem();
+                    client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+                }
                 updatePriceClass(client.getPricecode());
             }
         });
@@ -165,7 +168,6 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             @Override
             public void actionPerformed(ActionEvent e) {
                 String stringart = (String) autobox.getSelectedItem();
-
                 Article art = Database.driver().getArticlesAlphabetically().get(stringart);
                 codepicker.setSelectedItem(art.getCode());
             }
@@ -539,21 +541,23 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             if (!valid()) {
                 return;
             }
-
             DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
 
             newinvoice.setDate(df.valueToString(datepicker.getDate()));
-
-            String clientname = (String) clientBox.getSelectedItem();
-            Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+            Contact _client;
+            if (clientBox.getSelectedItem() instanceof Contact) {
+                _client = (Contact) clientBox.getSelectedItem();
+            } else {
+                String clientname = (String) clientBox.getSelectedItem();
+                _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+            }
             newinvoice.setClient(_client);
 
             newinvoice.setNumber(number);
-            newinvoice.SetItems(data);
             newinvoice.setPriceCode(pricecode);
             newinvoice.setSave(saving);
             FunctionResult<Invoice> res = newinvoice.update();
-            if (res.getCode() == 0 && res.getObj() != null) {
+            if (res.getCode() == 0) {
                 delegate.editInvoice(oldinvoice, newinvoice);
                 disposeLater();
             } else {
