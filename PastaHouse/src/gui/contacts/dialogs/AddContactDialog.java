@@ -75,15 +75,15 @@ public class AddContactDialog extends javax.swing.JDialog {
             }
         });
 	
-	sortkeyOutlet.setInputVerifier(new AbstractValidator(this, sortkeyOutlet, "De toonnaam moet uniek en niet leeg zijn!") {
+	txtFirma.setInputVerifier(new AbstractValidator(this, txtFirma, "De firma moet uniek en niet leeg zijn!") {
 
 	    @Override
 	    protected boolean validationCriteria(JComponent c) {
-		if (sortkeyOutlet.getText().isEmpty()) {
+		if (txtFirma.getText().isEmpty()) {
 		    return false;
 		}
 		for (String sortkey : Database.driver().getContactsAlphabetically().keySet()) {
-		    if (sortkey.equalsIgnoreCase(sortkeyOutlet.getText())) {
+		    if (sortkey.equalsIgnoreCase(txtFirma.getText())) {
 			return false;
 		    }
 		}
@@ -129,19 +129,27 @@ public class AddContactDialog extends javax.swing.JDialog {
             }
         });
 	
-	sortkeyOutlet.setInputVerifier(new AbstractValidator(this, sortkeyOutlet, "De toonnaam moet uniek en niet leeg zijn!") {
+	txtFirma.setInputVerifier(new AbstractValidator(this, txtFirma, "De firma moet uniek en niet leeg zijn!") {
 
 	    @Override
 	    protected boolean validationCriteria(JComponent c) {
-		if (sortkeyOutlet.getText().isEmpty()) {
+		if (txtFirma.getText().isEmpty()) {
 		    return false;
 		}
 		for (String sortkey : Database.driver().getContactsAlphabetically().keySet()) {
-		    if (sortkey.equalsIgnoreCase(sortkeyOutlet.getText())) {
+		    if (sortkey.equalsIgnoreCase(txtFirma.getText())) {
 			return false;
 		    }
 		}
 		return true;
+	    }
+	});
+	
+	taxnrOutlet.setInputVerifier(new AbstractValidator(this, taxnrOutlet, "Het BTW-nummer is ongeldig (enkel cijfers worden gecontroleerd).") {
+
+	    @Override
+	    protected boolean validationCriteria(JComponent c) {
+		return taxnrOutlet.getText().isEmpty() ? true : Utilities.validTaxNr(taxnrOutlet.getText());
 	    }
 	});
 	
@@ -177,8 +185,6 @@ public class AddContactDialog extends javax.swing.JDialog {
         typeParent = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
-        sortkey = new javax.swing.JLabel();
-        sortkeyOutlet = new javax.swing.JTextField();
         firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
         contactLabel = new javax.swing.JLabel();
@@ -229,13 +235,7 @@ public class AddContactDialog extends javax.swing.JDialog {
 
         detailsContainer.add(jPanel6, java.awt.BorderLayout.NORTH);
 
-        jPanel2.setLayout(new java.awt.GridLayout(13, 2));
-
-        sortkey.setText("Toonnaam *");
-        sortkey.setToolTipText("Het veld \"toonnaam\" wordt gebruikt om contactpersonen te sorteren. Het dient uniek te zijn. Contactpersonen zullen in alle lijsten verschijnen onder de waarde van dit attribuut.");
-        sortkey.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
-        jPanel2.add(sortkey);
-        jPanel2.add(sortkeyOutlet);
+        jPanel2.setLayout(new java.awt.GridLayout(12, 2));
 
         firmLabel.setText("Firma");
         firmLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 1));
@@ -385,7 +385,7 @@ public class AddContactDialog extends javax.swing.JDialog {
             System.out.println("\"" + comboGemeentes.getSelectedItem() + "\"");
 
             model.setFirm(txtFirma.getText());
-            model.setSortKey(sortkeyOutlet.getText());
+            model.setSortKey(txtFirma.getText());
             model.setAddress(txtAdres.getText());
             model.setMunicipality(comboGemeentes.getSelectedItem().toString());
             model.setZipcode(txtPostcode.getText());
@@ -480,8 +480,6 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JPanel notesContainer;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
-    private javax.swing.JLabel sortkey;
-    private javax.swing.JTextField sortkeyOutlet;
     private javax.swing.JTextField taxnrOutlet;
     private javax.swing.JTextField txtAdres;
     private javax.swing.JTextField txtContact;
@@ -540,9 +538,9 @@ public class AddContactDialog extends javax.swing.JDialog {
     }
     
     private boolean valid(){
-	if (!sortkeyOutlet.getInputVerifier().verify(sortkeyOutlet)) {
-	    JOptionPane.showMessageDialog(null, "Geef een geldige toonnaam in. Die dient uniek te zijn en mag niet leeg zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    sortkeyOutlet.requestFocus();
+	if (!txtFirma.getInputVerifier().verify(txtFirma)) {
+	    JOptionPane.showMessageDialog(null, "Geef een geldige firma in. Die dient uniek te zijn en mag niet leeg zijn.", "Fout!", JOptionPane.ERROR_MESSAGE);
+	    txtFirma.requestFocus();
 	    return false;
 	}
 	

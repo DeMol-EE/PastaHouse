@@ -61,23 +61,9 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="2"/>
-            <Property name="rows" type="int" value="13"/>
+            <Property name="rows" type="int" value="12"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="sortkey">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Toonnaam *"/>
-                <Property name="toolTipText" type="java.lang.String" value="Het veld &quot;toonnaam&quot; wordt gebruikt om contactpersonen te sorteren. Het dient uniek te zijn. Contactpersonen zullen in alle lijsten verschijnen onder de waarde van dit attribuut."/>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                    <EmptyBorder bottom="0" left="5" right="0" top="0"/>
-                  </Border>
-                </Property>
-                <Property name="focusable" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="sortkeyOutlet">
-            </Component>
             <Component class="javax.swing.JLabel" name="firmLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Firma"/>
