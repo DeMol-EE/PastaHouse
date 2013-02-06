@@ -20,20 +20,26 @@ import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.DateFormatter;
@@ -132,20 +138,19 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         codepicker = new AutocompleteCombobox(articlesbycode);
         codeoutlet.add(codepicker, BorderLayout.CENTER);
 
-        this.pack();
+//        this.pack();
         addValidators();
         setLocationRelativeTo(null);
 
         clientBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                if (clientBox.getSelectedItem() instanceof Contact) {
-                    client = (Contact) clientBox.getSelectedItem();
-                } else {
-                    String clientname = (String) clientBox.getSelectedItem();
-                    client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
-                }
+		if (clientBox.getSelectedItem() instanceof Contact) {
+		    client = (Contact) clientBox.getSelectedItem();
+		} else {
+		    String clientname = (String) clientBox.getSelectedItem();
+		    client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+		}
                 updatePriceClass(client.getPricecode());
             }
         });
@@ -169,30 +174,43 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             @Override
             public void actionPerformed(ActionEvent e) {
                 String stringart = (String) autobox.getSelectedItem();
+
                 Article art = Database.driver().getArticlesAlphabetically().get(stringart);
-                codepicker.setSelectedItem(art.getCode());
+                if(art!=null){
+		    codepicker.setSelectedItem(art.getCode());
+		} else {
+		    codepicker.setSelectedIndex(0);
+		}
             }
         });
 
         codepicker.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String code = (String) codepicker.getSelectedItem();
+		String code = (String) codepicker.getSelectedItem();
 
                 Article art = Database.driver().getArticlesByCode().get(code);
-                autobox.setSelectedItem(art.getName());
+                if(art!=null){
+		    autobox.setSelectedItem(art.getName());
+		} else {
+		    autobox.setSelectedIndex(0);
+		}
             }
         });
 
         autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     quantityoutlet.requestFocus();
                 } else {
                     String stringart = (String) autobox.getSelectedItem();
                     Article art = Database.driver().getArticlesAlphabetically().get(stringart);
-                    codepicker.setSelectedItem(art.getCode());
+                    if(art!=null){
+			codepicker.setSelectedItem(art.getCode());
+		    } else {
+			codepicker.setSelectedIndex(0);
+		    }
                 }
 
             }
@@ -200,21 +218,22 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 
         codepicker.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     quantityoutlet.requestFocus();
                 } else {
                     String code = (String) codepicker.getSelectedItem();
                     Article art = Database.driver().getArticlesByCode().get(code);
-                    autobox.setSelectedItem(art.getName());
+                    if(art!=null){
+			autobox.setSelectedItem(art.getName());
+		    } else {
+			autobox.setSelectedIndex(0);
+		    }
                 }
-
             }
         });
 
-
-
-
+        updatePrices();
     }
 
     /**
@@ -229,18 +248,15 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         detailspanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         DateOutlet = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jLabel2 = new javax.swing.JLabel();
         ClientOutlet = new javax.swing.JPanel();
         addSupplier = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txtNumber = new javax.swing.JTextField();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jLabel3 = new javax.swing.JLabel();
         comboPriceClass = new javax.swing.JComboBox();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabel15 = new javax.swing.JLabel();
         txtReduction = new javax.swing.JTextField();
         artikelspanel = new javax.swing.JPanel();
@@ -264,31 +280,37 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         taxespanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        saveOutlet = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         totalpricepanel = new javax.swing.JPanel();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabel11 = new javax.swing.JLabel();
+        totalSavingsOutlet = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        totalNetsOutlet = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        totalAddedOutlet = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        totalOutlet = new javax.swing.JLabel();
+        pricesContainer = new javax.swing.JPanel();
         detail = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         btnSave = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        detailspanel.setLayout(new java.awt.GridLayout(0, 5));
+        detailspanel.setLayout(new java.awt.GridLayout(0, 4));
 
         jLabel4.setText("Datum");
         detailspanel.add(jLabel4);
 
         DateOutlet.setLayout(new java.awt.BorderLayout());
         detailspanel.add(DateOutlet);
-        detailspanel.add(filler1);
 
         jLabel2.setText("Klant");
         detailspanel.add(jLabel2);
@@ -322,14 +344,12 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             }
         });
         detailspanel.add(txtNumber);
-        detailspanel.add(filler2);
 
         jLabel3.setText("Prijsklasse");
         detailspanel.add(jLabel3);
         detailspanel.add(comboPriceClass);
         detailspanel.add(filler5);
         detailspanel.add(filler6);
-        detailspanel.add(filler7);
 
         jLabel15.setText("Korting");
         detailspanel.add(jLabel15);
@@ -395,6 +415,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         addArticle.setText("Toevoegen");
+        addArticle.setFocusable(false);
         addArticle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addArticleActionPerformed(evt);
@@ -403,6 +424,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jPanel1.add(addArticle);
 
         deleteArticle.setText("Verwijderen");
+        deleteArticle.setFocusable(false);
         deleteArticle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteArticleActionPerformed(evt);
@@ -418,6 +440,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 
         pricepanel.setLayout(new java.awt.BorderLayout());
 
+        taxespanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 20));
         taxespanel.setLayout(new java.awt.GridLayout(0, 1));
 
         jLabel1.setText("BTW%");
@@ -426,8 +449,8 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jLabel5.setText("Bedrag");
         taxespanel.add(jLabel5);
 
-        jLabel7.setText("Korting");
-        taxespanel.add(jLabel7);
+        saveOutlet.setText("Korting");
+        taxespanel.add(saveOutlet);
 
         jLabel8.setText("Exclu");
         taxespanel.add(jLabel8);
@@ -440,25 +463,46 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 
         pricepanel.add(taxespanel, java.awt.BorderLayout.WEST);
 
-        totalpricepanel.setLayout(new java.awt.GridLayout(0, 1));
+        totalpricepanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 20));
+        totalpricepanel.setLayout(new java.awt.GridLayout(6, 2));
         totalpricepanel.add(filler4);
+        totalpricepanel.add(filler8);
         totalpricepanel.add(filler3);
+        totalpricepanel.add(filler9);
 
         jLabel11.setText("Tot Korting");
         totalpricepanel.add(jLabel11);
 
+        totalSavingsOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        totalpricepanel.add(totalSavingsOutlet);
+
         jLabel12.setText("Tot Exclu");
         totalpricepanel.add(jLabel12);
+
+        totalNetsOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        totalpricepanel.add(totalNetsOutlet);
 
         jLabel13.setText("BTW");
         totalpricepanel.add(jLabel13);
 
+        totalAddedOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        totalpricepanel.add(totalAddedOutlet);
+
         jLabel14.setText("Totaal");
         totalpricepanel.add(jLabel14);
 
+        totalOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        totalpricepanel.add(totalOutlet);
+
         pricepanel.add(totalpricepanel, java.awt.BorderLayout.EAST);
 
+        pricesContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        pricesContainer.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
+        pricepanel.add(pricesContainer, java.awt.BorderLayout.CENTER);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(800, 800));
+        setPreferredSize(new java.awt.Dimension(800, 800));
 
         detail.setLayout(new java.awt.BorderLayout());
         getContentPane().add(detail, java.awt.BorderLayout.CENTER);
@@ -468,6 +512,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         btnSave.setText("Opslaan");
+        btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -476,6 +521,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jPanel4.add(btnSave);
 
         btnBack.setText("Terug");
+        btnBack.setFocusable(false);
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -495,7 +541,20 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }//GEN-LAST:event_addSupplierActionPerformed
 
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
-        // TODO add your handling code here:
+        try{
+	    int row = table.getSelectedRow();
+	    if (row >= 0 && row<table.getRowCount()) {
+		data.remove(row);
+		tablemodel.fireTableDataChanged();
+	    }
+	    if (row >= table.getRowCount()) {
+		row = table.getRowCount()-1;
+	    }
+	    table.setRowSelectionInterval(row, row);
+	} catch (Exception e){
+	    
+	}
+	updatePrices();
     }//GEN-LAST:event_deleteArticleActionPerformed
 
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
@@ -522,7 +581,13 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         data.add(item);
         tablemodel.addComponent(item);
 
+        quantityoutlet.setText("");
+	autobox.setSelectedIndex(0);
+	codepicker.setSelectedIndex(0);
+
         updatePrices();
+	
+	codepicker.getEditor().getEditorComponent().requestFocus();
     }//GEN-LAST:event_addArticleActionPerformed
 
     private void disposeLater() {
@@ -588,12 +653,19 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void txtReductionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReductionKeyReleased
-        try {
-            saving = Double.parseDouble(txtReduction.getText());
-            updatePrices();
-        } catch (Exception e) {
-            saving = 0.0;
-        }
+        if (txtReduction.getText().isEmpty()) {
+	    saving = 0.0;
+	}
+	try{
+	    saving = Double.parseDouble(txtReduction.getText());
+	} catch (Exception e){
+	    saving = 0.0;
+	}
+	updatePrices();
+	
+	if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+	    codepicker.getEditor().getEditorComponent().requestFocus();
+	}
     }//GEN-LAST:event_txtReductionKeyReleased
 
     private void txtNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberKeyReleased
@@ -624,13 +696,12 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JButton deleteArticle;
     private javax.swing.JPanel detail;
     private javax.swing.JPanel detailspanel;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -646,7 +717,6 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -656,8 +726,14 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JPanel jPanel5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pricepanel;
+    private javax.swing.JPanel pricesContainer;
     private javax.swing.JTextField quantityoutlet;
+    private javax.swing.JLabel saveOutlet;
     private javax.swing.JPanel taxespanel;
+    private javax.swing.JLabel totalAddedOutlet;
+    private javax.swing.JLabel totalNetsOutlet;
+    private javax.swing.JLabel totalOutlet;
+    private javax.swing.JLabel totalSavingsOutlet;
     private javax.swing.JPanel totalpricepanel;
     private javax.swing.JTextField txtNumber;
     private javax.swing.JTextField txtReduction;
@@ -696,28 +772,6 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
                 }
                 try {
                     return Double.parseDouble(((JTextField) c).getText()) > 0;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        });
-
-        txtNumber.setInputVerifier(new AbstractValidator(this, txtNumber, "Dit nummer moet precies 6 tekens lang en geldig uniek zijn.") {
-            @Override
-            protected boolean validationCriteria(JComponent c) {
-                if (txtNumber.getText().length() != 6) {
-                    return false;
-                }
-                try {
-                    int nr = Integer.parseInt(txtNumber.getText());
-
-                    int year = nr / 10000;
-                    String dateString = new DateFormatter(new SimpleDateFormat("yy")).valueToString(datepicker.getDate());
-                    if (Integer.parseInt(dateString) != year) {
-                        return false;
-                    }
-
-                    return !Database.driver().getInvoicesByNumber().keySet().contains(nr);
                 } catch (Exception e) {
                     return false;
                 }
@@ -788,7 +842,78 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         updatePrices();
     }
 
-    private void updatePrices() {
-        System.out.println("UPDATE THE PRICES");
+    private void updatePrices(){
+	try{
+	    pricesContainer.removeAll();
+	    
+	    totalNetsOutlet.setText("");
+	    totalSavingsOutlet.setText("");
+	    totalAddedOutlet.setText("");
+	    totalOutlet.setText("");
+	    
+	    saveOutlet.setText(saving==0?"0%":"- "+saving+"%");
+	    
+	    Invoice i = new Invoice(data);
+	    i.setSave(saving);
+	    Contact _client;
+	    if (clientBox.getSelectedItem() instanceof Contact) {
+		    _client = (Contact) clientBox.getSelectedItem();
+		} else {
+		    String clientname = (String) clientBox.getSelectedItem();
+		    _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+		}
+	    i.setClient(_client);
+//	    i.setPriceCode(_client.getPricecode());
+	    i.setPriceCode(tablemodel.priceCode());
+
+	    Set<Double> cats = i.itemsPerTaxesCategory().keySet();
+
+	    List<Double> net = i.netBeforeSave();
+	    List<Double> save = i.savings();
+	    List<Double> nets = i.netAfterSave();
+	    List<Double> add = i.added();
+	    List<Double> tot = i.total();
+
+	    DecimalFormat threeFormatter = new DecimalFormat("0.000");
+	    DecimalFormat twoFormatter = new DecimalFormat("0.00");
+
+	    int index = 0;
+	    double totalSavings = 0.0;
+	    double totalNets = 0.0;
+	    double totalAdded = 0.0;
+	    double total = 0.0;
+	    for (Double c : cats) {
+		/*
+		 * Format a new panel
+		 */
+		JPanel p = new JPanel(new GridLayout(6, 1));
+		p.add(new JLabel(""+c.intValue()+" %", SwingConstants.TRAILING));
+		p.add(new JLabel(threeFormatter.format(net.get(index)), SwingConstants.TRAILING));
+		p.add(new JLabel(threeFormatter.format(save.get(index)), SwingConstants.TRAILING));
+		totalSavings+=save.get(index);
+		p.add(new JLabel(threeFormatter.format(nets.get(index)), SwingConstants.TRAILING));
+		totalNets+=nets.get(index);
+		p.add(new JLabel(threeFormatter.format(add.get(index)), SwingConstants.TRAILING));
+		totalAdded+=nets.get(index);
+		p.add(new JLabel(twoFormatter.format(tot.get(index))+"  ", SwingConstants.TRAILING));
+		total+=tot.get(index);
+
+		/*
+		 * Add the panel
+		 */
+		pricesContainer.add(p);
+		index++;
+	    }
+	    
+	    totalNetsOutlet.setText(threeFormatter.format(totalNets));
+	    totalSavingsOutlet.setText(threeFormatter.format(totalSavings));
+	    totalAddedOutlet.setText(threeFormatter.format(totalAdded));
+	    totalOutlet.setText(twoFormatter.format(total)+"  ");
+	    
+	    pricesContainer.repaint();
+	    pricesContainer.validate();
+	} catch (Exception e){
+	    e.printStackTrace();
+	}
     }
 }
