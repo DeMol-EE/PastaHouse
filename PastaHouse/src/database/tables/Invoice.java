@@ -230,6 +230,14 @@ public class Invoice extends Record<Invoice> {
     }
 
     public void copy(Invoice copy) {
-
+        this.number = copy.getNumber();
+        this.date = copy.date;
+        this.client = copy.client;
+        this.priceCode = copy.priceCode;
+        this.save = copy.save;
+        this.items = new ArrayList<InvoiceItem>();
+        for(InvoiceItem item: copy.items){
+            this.items.add(new InvoiceItem(item));
+        }
     }
 }

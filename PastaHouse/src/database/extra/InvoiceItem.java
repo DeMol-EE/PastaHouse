@@ -41,4 +41,9 @@ public class InvoiceItem {
         this.article= new Article(copy.article);
     }
     
+    public void copy(InvoiceItem copy){
+        this.amount=copy.amount;
+        this.article= new Article(copy.article);
+    }
+    
 }
