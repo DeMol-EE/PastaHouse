@@ -515,6 +515,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	data.add(item);
 	tablemodel.addComponent(item);
 	
+	quantityoutlet.setText("");
+	
 	updatePrices();
     }//GEN-LAST:event_addArticleActionPerformed
 
