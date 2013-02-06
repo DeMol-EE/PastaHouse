@@ -792,7 +792,12 @@ public class Database {
     public FunctionResult deleteInvoice(Invoice i) {
         try {
             statement.executeUpdate("DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"");
-            System.out.println("DatabaseDriver::Executed delete:\n"
+
+	    for (InvoiceItem invoiceItem : i.items()) {
+		statement.executeUpdate("DELETE FROM invoicesarticles WHERE invoiceid= \"" + i.getPrimaryKeyValue() + "\"");
+	    }
+	    
+	    System.out.println("DatabaseDriver::Executed delete:\n"
                     + "DELETE FROM invoices WHERE id= \"" + i.getPrimaryKeyValue() + "\"\nSUCCES!");
 
             invoicesById.remove(i.getPrimaryKeyValue());

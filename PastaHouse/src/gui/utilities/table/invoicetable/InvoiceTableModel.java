@@ -34,10 +34,7 @@ public class InvoiceTableModel extends AbstractTableModel {
     public boolean removeInvoiceAtRows(int[] rows) {
         List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
         for (int row : rows) {
-	    
-	    System.out.println(getValueAt(row, 0));
-	    
-//            invoicesToRemove.add(getInvoiceAtRow(row));
+            invoicesToRemove.add(database.Database.driver().getInvoicesByNumber().get((Integer)getValueAt(row, 0)));
         }
 	
 //	System.out.println("To remove: ");
