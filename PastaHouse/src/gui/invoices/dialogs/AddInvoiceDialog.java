@@ -135,7 +135,6 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
                 String clientname = (String) clientBox.getSelectedItem();
                 client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
                 updatePriceClass(client.getPricecode());
-//		updatePrices();
             }
         });
 
@@ -143,7 +142,6 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
             @Override
             public void actionPerformed(ActionEvent e) {
                 updatePriceClass((String) comboPriceClass.getSelectedItem());
-//		updatePrices();
             }
         });
 
