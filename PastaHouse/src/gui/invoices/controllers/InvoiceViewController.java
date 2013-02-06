@@ -52,7 +52,7 @@ import tools.Utilities;
  *
  * @author Warkst
  */
-public class InvoiceViewController extends javax.swing.JPanel implements MasterDetailViewController<Invoice>, AddInvoiceDelegate, EditInvoiceDelegate {
+public class InvoiceViewController extends javax.swing.JPanel implements MasterDetailViewController<Invoice>, AddInvoiceDelegate {
 
     private Map<String, RowFilter<Object, Object>> filters;
     private TableRowSorter<InvoiceTableModel> sorter;
@@ -485,10 +485,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         tableModel.fireTableDataChanged();
     }
 
-    @Override
-    public void editInvoice(Invoice oldInvoice, Invoice newInvoice) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     private class A4 extends Paper {
 

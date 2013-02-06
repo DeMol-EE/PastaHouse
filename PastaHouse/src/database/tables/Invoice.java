@@ -93,6 +93,10 @@ public class Invoice extends Record<Invoice>{
 	return items;
     }
     
+    public void SetItems(ArrayList<InvoiceItem> items){
+	this.items = items;
+    }
+    
     @Override
     public FunctionResult<Invoice> update() {
 	try {

@@ -24,9 +24,14 @@ import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -62,19 +67,27 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private Invoice oldinvoice;
     private Invoice newinvoice;
     
-    public EditInvoiceDialog(java.awt.Frame parent, boolean modal, EditInvoiceDelegate delegate, Article oldinvoice) {
+    public EditInvoiceDialog(java.awt.Frame parent, boolean modal, EditInvoiceDelegate delegate, Invoice oldinvoice) {
         super(parent, modal);
         initComponents();
-	
+	this.oldinvoice = oldinvoice;
+        datepicker.setEditable(false);
 	this.delegate = delegate;
 	
         comboPriceClass.addItem("A");
         comboPriceClass.addItem("B");
+        comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
+        saving = oldinvoice.getSave();
         DateOutlet.add(datepicker);
-        datepicker.setDate(new Date());
-        number = Database.driver().getInvoiceNumber(new Date());
+        try {
+            datepicker.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(oldinvoice.getDate()));
+        } catch (ParseException ex) {
+            Logger.getLogger(EditInvoiceDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        number = oldinvoice.getNumber();
         txtNumber.setText("" + number);
         table = createXTable();
+        data = oldinvoice.items();
         tablemodel = new InvoiceItemTableModel(data, pricecode);
         table.setModel(tablemodel);
         table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
@@ -94,13 +107,15 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         pricetitledpanel.add(pricepanel);
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
-	txtReduction.setText("0.0");
+	txtReduction.setText("" + saving);
 	
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
         ArrayList clients = new ArrayList();
         clients.add("");
         clients.addAll(Database.driver().getClientsAlphabetically().values());
+        client = oldinvoice.getClient();
         clientBox = new AutocompleteCombobox(clients);
+        clientBox.setSelectedItem(client);
         ClientOutlet.add(clientBox, BorderLayout.CENTER);
         
         ArrayList articles = new ArrayList();
@@ -167,6 +182,36 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             }
         });
 	
+                autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    quantityoutlet.requestFocus();
+                } else {
+                    String stringart = (String) autobox.getSelectedItem();
+                    Article art = Database.driver().getArticlesAlphabetically().get(stringart);
+                    codepicker.setSelectedItem(art.getCode());
+                }
+
+            }
+        });
+
+        codepicker.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    quantityoutlet.requestFocus();
+                } else {
+                    String code = (String) codepicker.getSelectedItem();
+                    Article art = Database.driver().getArticlesByCode().get(code);
+                    autobox.setSelectedItem(art.getName());
+                }
+
+            }
+        });
+        
+        
+        
 	
     }
 
@@ -263,6 +308,12 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jLabel6.setText("Nummer");
         detailspanel.add(jLabel6);
 
+        txtNumber.setEditable(false);
+        txtNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNumberActionPerformed(evt);
+            }
+        });
         txtNumber.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtNumberKeyReleased(evt);
@@ -492,18 +543,17 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 	    
 	    DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
 	    
-	    InvoiceModel model = new InvoiceModel();
-	    model.setDate(df.valueToString(datepicker.getDate()));
+	    newinvoice.setDate(df.valueToString(datepicker.getDate()));
 	    
 	    String clientname = (String) clientBox.getSelectedItem();
 	    Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
-	    model.setClient(_client);
+	    newinvoice.setClient(_client);
 	    
-	    model.setNumber(number);
-	    model.setItems(data);
-	    model.setPriceCode(pricecode);
-	    model.setSave(saving);
-	    FunctionResult<Invoice> res = model.create();
+	    newinvoice.setNumber(number);
+	    newinvoice.SetItems(data);
+	    newinvoice.setPriceCode(pricecode);
+	    newinvoice.setSave(saving);
+	    FunctionResult<Invoice> res = newinvoice.update();
 	    if (res.getCode() == 0 && res.getObj()!=null){
                 delegate.editInvoice(oldinvoice, newinvoice);
 		disposeLater();
@@ -548,6 +598,10 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 	    
 	}
     }//GEN-LAST:event_txtNumberKeyReleased
+
+    private void txtNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumberActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
@@ -694,13 +748,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 	    clientBox.requestFocus();
 	    return false;
 	}
-	
-	if (!txtNumber.getInputVerifier().verify(txtNumber)){
-	    JOptionPane.showMessageDialog(null, "Gelieve het factuur nummer na te kijken! De eerste twee tekens\nmoeten overeenkomen met het jaartal van de gekozen datum.\nDit nummer moet precies 6 tekens lang en geldig uniek zijn", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    txtNumber.requestFocus();
-	    return false;
-	}
-	
+
 	if (!txtReduction.getInputVerifier().verify(txtReduction)){
 	    JOptionPane.showMessageDialog(null, "Gelieve de korting na te kijken!", "Fout!", JOptionPane.ERROR_MESSAGE);
 	    txtReduction.requestFocus();

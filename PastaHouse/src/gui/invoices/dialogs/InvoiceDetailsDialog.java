@@ -5,6 +5,8 @@
 package gui.invoices.dialogs;
 
 import database.tables.Invoice;
+import gui.invoices.controllers.InvoiceViewController;
+import gui.invoices.delegates.EditInvoiceDelegate;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import java.awt.BorderLayout;
@@ -22,7 +24,7 @@ import tools.StringTools;
  *
  * @author Hannes
  */
-public class InvoiceDetailsDialog extends javax.swing.JDialog {
+public class InvoiceDetailsDialog extends javax.swing.JDialog implements EditInvoiceDelegate{
 
     private final Invoice model;
     private final InvoiceItemTableModel tableModel;
@@ -30,6 +32,7 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     /**
      * Creates new form InvoiceDetailsDialog
      */
+
     public InvoiceDetailsDialog(java.awt.Frame parent, boolean modal, Invoice invoice) {
         super(parent, modal);
         
@@ -161,6 +164,11 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         edit.setText("Wijzig...");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
         jPanel4.add(edit);
 
         close.setText("Terug");
@@ -184,6 +192,10 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog {
     private void closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeActionPerformed
         disposeLater();
     }//GEN-LAST:event_closeActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        new EditInvoiceDialog(null, true, this,model).setVisible(true);
+    }//GEN-LAST:event_editActionPerformed
 
     private void disposeLater(){
 	SwingUtilities.invokeLater(new Runnable() {
@@ -235,6 +247,11 @@ private JXTable createXTable() {
             }
         };
         return table;
+    }
+
+    @Override
+    public void editInvoice(Invoice oldInvoice, Invoice newInvoice) {
+        System.out.println("derp");
     }
 
 
