@@ -52,7 +52,6 @@ import org.jdesktop.swingx.JXTitledPanel;
 public class EditInvoiceDialog extends javax.swing.JDialog implements AddContactDelegate {
 
     private final EditInvoiceDelegate delegate;
-    
     private AutocompleteCombobox clientBox;
     private JXDatePicker datepicker = DatePickerFactory.makeStandardDatePicker();
     private JXTable table;
@@ -66,14 +65,14 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private int number;
     private Invoice oldinvoice;
     private Invoice newinvoice;
-    
+
     public EditInvoiceDialog(java.awt.Frame parent, boolean modal, EditInvoiceDelegate delegate, Invoice oldinvoice) {
         super(parent, modal);
         initComponents();
-	this.oldinvoice = oldinvoice;
+        this.oldinvoice = oldinvoice;
         datepicker.setEditable(false);
-	this.delegate = delegate;
-	
+        this.delegate = delegate;
+
         comboPriceClass.addItem("A");
         comboPriceClass.addItem("B");
         comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
@@ -107,8 +106,8 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         pricetitledpanel.add(pricepanel);
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
-	txtReduction.setText("" + saving);
-	
+        txtReduction.setText("" + saving);
+
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
         ArrayList clients = new ArrayList();
         clients.add("");
@@ -117,27 +116,27 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         clientBox = new AutocompleteCombobox(clients);
         clientBox.setSelectedItem(client);
         ClientOutlet.add(clientBox, BorderLayout.CENTER);
-        
+
         ArrayList articles = new ArrayList();
         articles.add("");
         articles.addAll(Database.driver().getArticlesAlphabetically().values());
-	
-	TextFieldAutoHighlighter.installHighlighter(txtReduction);
-	TextFieldAutoHighlighter.installHighlighter(quantityoutlet);
-	
+
+        TextFieldAutoHighlighter.installHighlighter(txtReduction);
+        TextFieldAutoHighlighter.installHighlighter(quantityoutlet);
+
         autobox = new AutocompleteCombobox(articles);
         choseartickleoutlet.add(autobox, BorderLayout.CENTER);
-        
+
         ArrayList articlesbycode = new ArrayList();
         articlesbycode.add("");
         articlesbycode.addAll(Database.driver().getArticlesByCode().keySet());
         codepicker = new AutocompleteCombobox(articlesbycode);
         codeoutlet.add(codepicker, BorderLayout.CENTER);
-        
+
         this.pack();
         addValidators();
         setLocationRelativeTo(null);
-        
+
         clientBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,14 +145,14 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
                 updatePriceClass(client.getPricecode());
             }
         });
-        
+
         comboPriceClass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updatePriceClass((String) comboPriceClass.getSelectedItem());
             }
         });
-        
+
         datepicker.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,28 +160,28 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
                 txtNumber.setText("" + number);
             }
         });
-        
+
         autobox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String stringart = (String) autobox.getSelectedItem();
-                
+
                 Article art = Database.driver().getArticlesAlphabetically().get(stringart);
                 codepicker.setSelectedItem(art.getCode());
             }
         });
-        
+
         codepicker.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String code = (String)codepicker.getSelectedItem();
+                String code = (String) codepicker.getSelectedItem();
 
                 Article art = Database.driver().getArticlesByCode().get(code);
                 autobox.setSelectedItem(art.getName());
             }
         });
-	
-                autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+
+        autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -209,10 +208,10 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 
             }
         });
-        
-        
-        
-	
+
+
+
+
     }
 
     /**
@@ -495,87 +494,87 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_deleteArticleActionPerformed
-    
+
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_quantityoutletActionPerformed
-    
+
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
         Article art;
         art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
-	
-	if(art==null){
-	    JOptionPane.showMessageDialog(null, "Gelieve een artikel te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    autobox.requestFocus();
-	    return;
-	}
-	
-	if(!quantityoutlet.getInputVerifier().verify(quantityoutlet)){
-	    quantityoutlet.requestFocus();
-	    return;
-	}
-	
-	double quantity = Double.parseDouble(quantityoutlet.getText());
-	InvoiceItem item = new InvoiceItem(art, quantity);
-	data.add(item);
-	tablemodel.addComponent(item);
-	
-	updatePrices();
+
+        if (art == null) {
+            JOptionPane.showMessageDialog(null, "Gelieve een artikel te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+            autobox.requestFocus();
+            return;
+        }
+
+        if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
+            quantityoutlet.requestFocus();
+            return;
+        }
+
+        double quantity = Double.parseDouble(quantityoutlet.getText());
+        InvoiceItem item = new InvoiceItem(art, quantity);
+        data.add(item);
+        tablemodel.addComponent(item);
+
+        updatePrices();
     }//GEN-LAST:event_addArticleActionPerformed
 
     private void disposeLater() {
-	SwingUtilities.invokeLater(new Runnable() {
-	    @Override
-	    public void run() {
-		dispose();
-	    }
-	});
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                dispose();
+            }
+        });
     }
-    
+
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try{
-	    /*
-	     * Validity check
-	     */
-	    if (!valid()) {
-		return;
-	    }
-	    
-	    DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
-	    
-	    newinvoice.setDate(df.valueToString(datepicker.getDate()));
-	    
-	    String clientname = (String) clientBox.getSelectedItem();
-	    Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
-	    newinvoice.setClient(_client);
-	    
-	    newinvoice.setNumber(number);
-	    newinvoice.SetItems(data);
-	    newinvoice.setPriceCode(pricecode);
-	    newinvoice.setSave(saving);
-	    FunctionResult<Invoice> res = newinvoice.update();
-	    if (res.getCode() == 0 && res.getObj()!=null){
+        try {
+            /*
+             * Validity check
+             */
+            if (!valid()) {
+                return;
+            }
+
+            DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
+
+            newinvoice.setDate(df.valueToString(datepicker.getDate()));
+
+            String clientname = (String) clientBox.getSelectedItem();
+            Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+            newinvoice.setClient(_client);
+
+            newinvoice.setNumber(number);
+            newinvoice.SetItems(data);
+            newinvoice.setPriceCode(pricecode);
+            newinvoice.setSave(saving);
+            FunctionResult<Invoice> res = newinvoice.update();
+            if (res.getCode() == 0 && res.getObj() != null) {
                 delegate.editInvoice(oldinvoice, newinvoice);
-		disposeLater();
-	    } else {
-		// switch case error code
-		String msg;
-		switch (res.getCode()) {
-		    case 1:
-			msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n" + res.getMessage();
-			break;
-		    case 4:
-			msg = res.getMessage();
-			break;
-		    default:
-			msg = "Het toevoegen van het basisingrediënt is foutgelopen (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
-		}
-		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-	    }
-	} catch (Exception e){
-	    System.err.println("Error: \n" + e.getMessage());
-	    JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-	}
+                disposeLater();
+            } else {
+                // switch case error code
+                String msg;
+                switch (res.getCode()) {
+                    case 1:
+                        msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n" + res.getMessage();
+                        break;
+                    case 4:
+                        msg = res.getMessage();
+                        break;
+                    default:
+                        msg = "Het toevoegen van het basisingrediënt is foutgelopen (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
+                }
+                JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            System.err.println("Error: \n" + e.getMessage());
+            JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -583,26 +582,24 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void txtReductionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReductionKeyReleased
-        try{
-	    saving = Double.parseDouble(txtReduction.getText());
-	    updatePrices();
-	} catch (Exception e){
-	    saving = 0.0;
-	}
+        try {
+            saving = Double.parseDouble(txtReduction.getText());
+            updatePrices();
+        } catch (Exception e) {
+            saving = 0.0;
+        }
     }//GEN-LAST:event_txtReductionKeyReleased
 
     private void txtNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberKeyReleased
-        try{
-	    number = Integer.parseInt(txtNumber.getText());
-	} catch (Exception e){
-	    
-	}
+        try {
+            number = Integer.parseInt(txtNumber.getText());
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_txtNumberKeyReleased
 
     private void txtNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumberActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumberActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
     private javax.swing.JPanel DateOutlet;
@@ -664,7 +661,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     public void addContact(Contact c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
     private JXTable createXTable() {
         JXTable _table = new JXTable() {
             @Override
@@ -683,7 +680,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         };
         return _table;
     }
-    
+
     private void addValidators() {
         quantityoutlet.setInputVerifier(new AbstractValidator(this, quantityoutlet, "Ongeldige waarde! Verwacht formaat: x.y, groter dan 0.0") {
             @Override
@@ -698,78 +695,82 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
                 }
             }
         });
-	
-	txtNumber.setInputVerifier(new AbstractValidator(this, txtNumber, "Dit nummer moet precies 6 tekens lang en geldig uniek zijn.") {
 
-	    @Override
-	    protected boolean validationCriteria(JComponent c) {
-		if (txtNumber.getText().length()!=6) {
-		    return false;
-		}
-		try{
-		    int nr = Integer.parseInt(txtNumber.getText());
-		    
-		    int year = nr/10000;
-		    String dateString = new DateFormatter(new SimpleDateFormat("yy")).valueToString(datepicker.getDate());
-		    if (Integer.parseInt(dateString) != year) {
-			return false;
-		    }
-		    
-		    return !Database.driver().getInvoicesByNumber().keySet().contains(nr);
-		} catch (Exception e){
-		    return false;
-		}
-	    }
-	});
-	
-	txtReduction.setInputVerifier(new AbstractValidator(this, txtReduction, "Ongeldige waarde! Kies een positief getal tussen 0 en 100 of laat dit veld leeg (=0 % korting)") {
+        txtNumber.setInputVerifier(new AbstractValidator(this, txtNumber, "Dit nummer moet precies 6 tekens lang en geldig uniek zijn.") {
+            @Override
+            protected boolean validationCriteria(JComponent c) {
+                if (txtNumber.getText().length() != 6) {
+                    return false;
+                }
+                try {
+                    int nr = Integer.parseInt(txtNumber.getText());
 
-	    @Override
-	    protected boolean validationCriteria(JComponent c) {
-		if (txtReduction.getText().isEmpty()) {
-		    return true;
-		}
-		try {
-		    double s = Double.parseDouble(((JTextField) c).getText());
-                    return s >= 0.0 && s<=100.0;
+                    int year = nr / 10000;
+                    String dateString = new DateFormatter(new SimpleDateFormat("yy")).valueToString(datepicker.getDate());
+                    if (Integer.parseInt(dateString) != year) {
+                        return false;
+                    }
+
+                    return !Database.driver().getInvoicesByNumber().keySet().contains(nr);
                 } catch (Exception e) {
                     return false;
                 }
-	    }
-	});
+            }
+        });
+
+        txtReduction.setInputVerifier(new AbstractValidator(this, txtReduction, "Ongeldige waarde! Kies een positief getal tussen 0 en 100 of laat dit veld leeg (=0 % korting)") {
+            @Override
+            protected boolean validationCriteria(JComponent c) {
+                if (txtReduction.getText().isEmpty()) {
+                    return true;
+                }
+                try {
+                    double s = Double.parseDouble(((JTextField) c).getText());
+                    return s >= 0.0 && s <= 100.0;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        });
     }
 
-    private boolean valid(){
-	String clientname = (String) clientBox.getSelectedItem();
-	Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
-	    
-	if (clientBox.getSelectedIndex()==0 || _client == null) {
-	    JOptionPane.showMessageDialog(null, "Gelieve een klant te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    clientBox.requestFocus();
-	    return false;
-	}
+    private boolean valid() {
+        Contact _client;
+        if (clientBox.getSelectedItem() instanceof Contact) {
+            _client = (Contact) clientBox.getSelectedItem();
+        } else {
+            String clientname = (String) clientBox.getSelectedItem();
+            _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+        }
 
-	if (!txtReduction.getInputVerifier().verify(txtReduction)){
-	    JOptionPane.showMessageDialog(null, "Gelieve de korting na te kijken!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    txtReduction.requestFocus();
-	    return false;
-	}
-	
-	if (tablemodel.getRowCount()==0) {
-	    JOptionPane.showMessageDialog(null, "Gelieve minstens 1 artikel toe te voegen aan deze factuur!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    autobox.requestFocus();
-	    return false;
-	}
-	
-	if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
-	    JOptionPane.showMessageDialog(null, "Gelieve een geldige hoeveelheid in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    quantityoutlet.requestFocus();
-	    return false;
-	}
-	
-	return true;
+
+        if (clientBox.getSelectedIndex() == 0 || _client == null) {
+            JOptionPane.showMessageDialog(null, "Gelieve een klant te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+            clientBox.requestFocus();
+            return false;
+        }
+
+        if (!txtReduction.getInputVerifier().verify(txtReduction)) {
+            JOptionPane.showMessageDialog(null, "Gelieve de korting na te kijken!", "Fout!", JOptionPane.ERROR_MESSAGE);
+            txtReduction.requestFocus();
+            return false;
+        }
+
+        if (tablemodel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Gelieve minstens 1 artikel toe te voegen aan deze factuur!", "Fout!", JOptionPane.ERROR_MESSAGE);
+            autobox.requestFocus();
+            return false;
+        }
+
+        if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
+            JOptionPane.showMessageDialog(null, "Gelieve een geldige hoeveelheid in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
+            quantityoutlet.requestFocus();
+            return false;
+        }
+
+        return true;
     }
-    
+
     private void updatePriceClass(String newprice) {
         String oldprice = pricecode;
         pricecode = newprice;
@@ -777,11 +778,11 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             comboPriceClass.setSelectedItem(pricecode);
             tablemodel.updatePricecode(pricecode);
         }
-	
-	updatePrices();
+
+        updatePrices();
     }
-    
-    private void updatePrices(){
-	System.out.println("UPDATE THE PRICES");
+
+    private void updatePrices() {
+        System.out.println("UPDATE THE PRICES");
     }
 }
