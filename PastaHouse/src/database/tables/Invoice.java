@@ -104,6 +104,10 @@ public class Invoice extends Record<Invoice>{
 	return items;
     }
     
+
+    public void SetItems(ArrayList<InvoiceItem> items){
+	this.items = items;
+    }
     public Map<Double, List<InvoiceItem>> itemsPerTaxesCategory(boolean reset){
 	if (itemsPerCategory == null || reset == true) {
 	    itemsPerCategory = new HashMap<Double, List<InvoiceItem>>();
@@ -194,6 +198,7 @@ public class Invoice extends Record<Invoice>{
 	}
 	
 	return totals;
+
     }
     
     @Override
