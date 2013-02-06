@@ -268,7 +268,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         taxespanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        saveOutlet = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -431,8 +431,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         jLabel5.setText("Bedrag");
         taxespanel.add(jLabel5);
 
-        jLabel7.setText("Korting");
-        taxespanel.add(jLabel7);
+        saveOutlet.setText("Korting");
+        taxespanel.add(saveOutlet);
 
         jLabel8.setText("Exclu");
         taxespanel.add(jLabel8);
@@ -445,7 +445,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         pricepanel.add(taxespanel, java.awt.BorderLayout.WEST);
 
-        totalpricepanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        totalpricepanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 20));
         totalpricepanel.setLayout(new java.awt.GridLayout(6, 2));
         totalpricepanel.add(filler4);
         totalpricepanel.add(filler8);
@@ -641,6 +641,10 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	    saving = 0.0;
 	}
 	updatePrices();
+	
+	if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+	    codepicker.getEditor().getEditorComponent().requestFocus();
+	}
     }//GEN-LAST:event_txtReductionKeyReleased
 
     private void txtNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberKeyReleased
@@ -688,7 +692,6 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -700,6 +703,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     private javax.swing.JPanel pricepanel;
     private javax.swing.JPanel pricesContainer;
     private javax.swing.JTextField quantityoutlet;
+    private javax.swing.JLabel saveOutlet;
     private javax.swing.JPanel taxespanel;
     private javax.swing.JLabel totalAddedOutlet;
     private javax.swing.JLabel totalNetsOutlet;
@@ -842,6 +846,8 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	    totalSavingsOutlet.setText("");
 	    totalAddedOutlet.setText("");
 	    totalOutlet.setText("");
+	    
+	    saveOutlet.setText(saving==0?"0%":"- "+saving+"%");
 	    
 	    Invoice i = new Invoice(data);
 	    i.setSave(saving);

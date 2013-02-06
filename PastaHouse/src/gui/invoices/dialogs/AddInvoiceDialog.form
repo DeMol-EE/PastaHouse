@@ -283,7 +283,7 @@
                 <Property name="text" type="java.lang.String" value="Bedrag"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel7">
+            <Component class="javax.swing.JLabel" name="saveOutlet">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Korting"/>
               </Properties>
@@ -309,7 +309,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="5" left="5" right="5" top="5"/>
+                <EmptyBorder bottom="5" left="5" right="20" top="5"/>
               </Border>
             </Property>
           </Properties>
