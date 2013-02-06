@@ -144,8 +144,12 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         clientBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String clientname = (String) clientBox.getSelectedItem();
-                client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+		if (clientBox.getSelectedItem() instanceof Contact) {
+		    client = (Contact) clientBox.getSelectedItem();
+		} else {
+		    String clientname = (String) clientBox.getSelectedItem();
+		    client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+		}
                 updatePriceClass(client.getPricecode());
             }
         });
@@ -182,10 +186,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         codepicker.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-		
-		System.out.println("Derp");
-		
-                String code = (String) codepicker.getSelectedItem();
+		String code = (String) codepicker.getSelectedItem();
 
                 Article art = Database.driver().getArticlesByCode().get(code);
                 if(art!=null){
@@ -246,18 +247,15 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         detailspanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         DateOutlet = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jLabel2 = new javax.swing.JLabel();
         ClientOutlet = new javax.swing.JPanel();
         addSupplier = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txtNumber = new javax.swing.JTextField();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jLabel3 = new javax.swing.JLabel();
         comboPriceClass = new javax.swing.JComboBox();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabel15 = new javax.swing.JLabel();
         txtReduction = new javax.swing.JTextField();
         artikelspanel = new javax.swing.JPanel();
@@ -305,14 +303,13 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         btnSave = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        detailspanel.setLayout(new java.awt.GridLayout(0, 5));
+        detailspanel.setLayout(new java.awt.GridLayout(0, 4));
 
         jLabel4.setText("Datum");
         detailspanel.add(jLabel4);
 
         DateOutlet.setLayout(new java.awt.BorderLayout());
         detailspanel.add(DateOutlet);
-        detailspanel.add(filler1);
 
         jLabel2.setText("Klant");
         detailspanel.add(jLabel2);
@@ -346,14 +343,12 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
             }
         });
         detailspanel.add(txtNumber);
-        detailspanel.add(filler2);
 
         jLabel3.setText("Prijsklasse");
         detailspanel.add(jLabel3);
         detailspanel.add(comboPriceClass);
         detailspanel.add(filler5);
         detailspanel.add(filler6);
-        detailspanel.add(filler7);
 
         jLabel15.setText("Korting");
         detailspanel.add(jLabel15);
@@ -558,6 +553,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 	} catch (Exception e){
 	    
 	}
+	updatePrices();
     }//GEN-LAST:event_deleteArticleActionPerformed
 
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
@@ -698,13 +694,10 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JButton deleteArticle;
     private javax.swing.JPanel detail;
     private javax.swing.JPanel detailspanel;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel jLabel1;
@@ -777,28 +770,6 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
                 }
                 try {
                     return Double.parseDouble(((JTextField) c).getText()) > 0;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        });
-
-        txtNumber.setInputVerifier(new AbstractValidator(this, txtNumber, "Dit nummer moet precies 6 tekens lang en geldig uniek zijn.") {
-            @Override
-            protected boolean validationCriteria(JComponent c) {
-                if (txtNumber.getText().length() != 6) {
-                    return false;
-                }
-                try {
-                    int nr = Integer.parseInt(txtNumber.getText());
-
-                    int year = nr / 10000;
-                    String dateString = new DateFormatter(new SimpleDateFormat("yy")).valueToString(datepicker.getDate());
-                    if (Integer.parseInt(dateString) != year) {
-                        return false;
-                    }
-
-                    return !Database.driver().getInvoicesByNumber().keySet().contains(nr);
                 } catch (Exception e) {
                     return false;
                 }
@@ -882,8 +853,13 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 	    
 	    Invoice i = new Invoice(data);
 	    i.setSave(saving);
-	    String clientname = (String) clientBox.getSelectedItem();
-	    Contact _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+	    Contact _client;
+	    if (clientBox.getSelectedItem() instanceof Contact) {
+		    _client = (Contact) clientBox.getSelectedItem();
+		} else {
+		    String clientname = (String) clientBox.getSelectedItem();
+		    _client = Database.driver().getClientsAlphabetically().get(clientname.toLowerCase());
+		}
 	    i.setClient(_client);
 //	    i.setPriceCode(_client.getPricecode());
 	    i.setPriceCode(tablemodel.priceCode());

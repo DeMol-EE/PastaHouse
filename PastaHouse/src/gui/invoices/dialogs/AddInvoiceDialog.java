@@ -534,6 +534,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	} catch (Exception e){
 	    
 	}
+	updatePrices();
     }//GEN-LAST:event_deleteArticleActionPerformed
 
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
