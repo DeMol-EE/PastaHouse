@@ -11,7 +11,12 @@ import gui.invoices.InvoiceTabbedViewController;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -359,6 +364,20 @@ public class ApplicationInvoices extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+	
+	File guard = new File(".guard");
+	if(guard.exists()){
+	    JOptionPane.showMessageDialog(null, "Er is al een andere instantie van het programma actief.", "Melding", JOptionPane.INFORMATION_MESSAGE);
+	    System.exit(0);
+	} else {
+	    try {
+		guard.createNewFile();
+		guard.deleteOnExit();
+	    } catch (IOException ex) {
+		Logger.getLogger(ApplicationInvoices.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	
         database.Database.driver();
 
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.PLAIN, Utilities.fontSize()));
