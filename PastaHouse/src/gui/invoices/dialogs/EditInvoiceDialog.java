@@ -66,8 +66,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     public EditInvoiceDialog(java.awt.Frame parent, boolean modal, EditInvoiceDelegate delegate, Invoice oldinvoice) {
         super(parent, modal);
         initComponents();
-        this.oldinvoice = oldinvoice;
-        this.newinvoice = new Invoice(oldinvoice);
+        
         datepicker.setEditable(false);
         this.delegate = delegate;
 
@@ -84,7 +83,9 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         number = oldinvoice.getNumber();
         txtNumber.setText("" + number);
         table = createXTable();
-        data = oldinvoice.items();
+        this.oldinvoice = oldinvoice;
+        this.newinvoice = new Invoice(oldinvoice);
+        data = newinvoice.items();
         tablemodel = new InvoiceItemTableModel(data, pricecode);
         table.setModel(tablemodel);
         table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
@@ -582,6 +583,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        newinvoice.copy(oldinvoice);
         disposeLater();
     }//GEN-LAST:event_btnBackActionPerformed
 
