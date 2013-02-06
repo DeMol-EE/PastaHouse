@@ -204,7 +204,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
         jScrollPane2.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(400, 400));
+        setPreferredSize(new java.awt.Dimension(500, 500));
 
         container.setLayout(new java.awt.BorderLayout());
         getContentPane().add(container, java.awt.BorderLayout.CENTER);

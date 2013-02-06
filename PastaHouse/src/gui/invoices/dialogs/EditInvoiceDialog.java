@@ -200,38 +200,46 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
                     quantityoutlet.requestFocus();
-                } else {
-                    String stringart = (String) autobox.getSelectedItem();
-                    Article art = Database.driver().getArticlesAlphabetically().get(stringart);
-                    if(art!=null){
-			codepicker.setSelectedItem(art.getCode());
-		    } else {
-			codepicker.setSelectedIndex(0);
-		    }
                 }
-
             }
-        });
+	    
+	     @Override
+	    public void keyReleased(KeyEvent e){
+		 String stringart = (String) autobox.getSelectedItem();
+		Article art = Database.driver().getArticlesAlphabetically().get(stringart);
+		if(art!=null){
+		    codepicker.setSelectedItem(art.getCode());
+		} else {
+		    codepicker.setSelectedIndex(0);
+		}
+	    }
+	});
 
         codepicker.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
                     quantityoutlet.requestFocus();
-                } else {
-                    String code = (String) codepicker.getSelectedItem();
-                    Article art = Database.driver().getArticlesByCode().get(code);
-                    if(art!=null){
-			autobox.setSelectedItem(art.getName());
-		    } else {
-			autobox.setSelectedIndex(0);
-		    }
                 }
             }
+	    
+	    @Override
+	    public void keyReleased(KeyEvent e){
+		String code = (String) codepicker.getSelectedItem();
+		Article art = Database.driver().getArticlesByCode().get(code);
+		if(art!=null){
+		    autobox.setSelectedItem(art.getName());
+		} else {
+		    autobox.setSelectedIndex(0);
+		}
+	    }
         });
 
+	/*
+	 * load prices for the model
+	 */
         updatePrices();
     }
 
