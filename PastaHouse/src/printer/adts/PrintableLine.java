@@ -10,11 +10,12 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public class PrintableLine implements PrintableHorizontalLineObject{
+public class PrintableLine extends PrintableHorizontalLineObject{
 
     private final int x1, x2;
     
-    public PrintableLine(int x1, int x2){
+    public PrintableLine(int height, int x1, int x2){
+	super(height);
 	this.x1=x1;
 	this.x2=x2;
     }

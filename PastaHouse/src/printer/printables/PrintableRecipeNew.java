@@ -84,7 +84,7 @@ public class PrintableRecipeNew extends MyPrintable{
      */
     
     @Override
-    public List<PrintableHorizontalLineObject> transformBody(int width, int margin, FontMetrics fontMetrics) {
+    public List<PrintableHorizontalLineObject> transformBody(int lineHeight, int width, int margin, FontMetrics fontMetrics) {
 	/*
 	 * Empty list, to be added to
 	 */
@@ -107,29 +107,29 @@ public class PrintableRecipeNew extends MyPrintable{
 	 */
 	// print the name of the recipe in the middle
 	// print something like: for preparing amount x, you need ...
-	printModel.add(new PrintableNewline());
+	printModel.add(new PrintableNewline(lineHeight));
 	
-	printModel.add(new PrintableString("Recept "+model.getName().toUpperCase(), margin+charWidth*10));
-	printModel.add(new PrintableNewline());
+	printModel.add(new PrintableString(lineHeight, "Recept "+model.getName().toUpperCase(), margin+charWidth*10));
+	printModel.add(new PrintableNewline(lineHeight));
 	
-	printModel.add(new PrintableString(isWeight?"Om "+two.format(toMake)+" kg te bereiden heeft u de volgende hoeveelheden nodig:" : 
+	printModel.add(new PrintableString(lineHeight, isWeight?"Om "+two.format(toMake)+" kg te bereiden heeft u de volgende hoeveelheden nodig:" : 
 		"Om "+toMakeToNet+" "
 		+ (toMakeToNet==1? "eenheid":"eenheden")
 		+" te maken heeft u de volgende hoeveelheden nodig: ", margin));
-	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableNewline());
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
 	
 	/*
 	 * Print the ingredient list
 	 */
 	ArrayList<PrintableHorizontalLineObject> headers = new ArrayList<PrintableHorizontalLineObject>();
-	headers.add(new PrintableString("Ingrediënt", margin+tabs[0]));
-	headers.add(new PrintableString("Verpakking", margin+tabs[1]));
-	headers.add(new PrintableString("Stuks", margin+tabs[2]));
-	headers.add(new PrintableString("Kg", margin+tabs[3]));
-	printModel.add(new PrintableMulti(headers));
+	headers.add(new PrintableString(lineHeight, "Ingrediënt", margin+tabs[0]));
+	headers.add(new PrintableString(lineHeight, "Verpakking", margin+tabs[1]));
+	headers.add(new PrintableString(lineHeight, "Stuks", margin+tabs[2]));
+	headers.add(new PrintableString(lineHeight, "Kg", margin+tabs[3]));
+	printModel.add(new PrintableMulti(lineHeight, headers));
 	
-	printModel.add(new PrintableLine(margin, margin+imageableWidth));
+	printModel.add(new PrintableLine(lineHeight, margin, margin+imageableWidth));
 	
 	double sum = 0.0;
 	
@@ -137,14 +137,14 @@ public class PrintableRecipeNew extends MyPrintable{
 	    
 	    ArrayList<PrintableHorizontalLineObject> comp = new ArrayList<PrintableHorizontalLineObject>();
 	    
-	    comp.add(new PrintableString(StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), margin+tabs[0]));
-	    comp.add(new PrintableString(StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), margin+tabs[1]));
-	    comp.add(new PrintableString(component.getFormattedUnits(), margin+tabs[2]));
+	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), margin+tabs[0]));
+	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), margin+tabs[1]));
+	    comp.add(new PrintableString(lineHeight, component.getFormattedUnits(), margin+tabs[2]));
 	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
 	    int chars = s.substring(0, s.indexOf(".")).length();
-	    comp.add(new PrintableString(three.format(quantity), margin+tabs[3]-chars*charWidth));
-	    printModel.add(new PrintableMulti(comp));
+	    comp.add(new PrintableString(lineHeight, three.format(quantity), margin+tabs[3]-chars*charWidth));
+	    printModel.add(new PrintableMulti(lineHeight, comp));
 	    
 	    sum+=quantity;
 	}
@@ -153,17 +153,17 @@ public class PrintableRecipeNew extends MyPrintable{
 	 */
 	String s = three.format(sum);
 	int chars = s.substring(0, s.indexOf(".")).length();
-	printModel.add(new PrintableLine(margin+tabs[3]-chars*charWidth, margin+tabs[3]+charWidth*4));
-	printModel.add(new PrintableString(three.format(sum), margin+tabs[3]-chars*charWidth));
+	printModel.add(new PrintableLine(lineHeight, margin+tabs[3]-chars*charWidth, margin+tabs[3]+charWidth*4));
+	printModel.add(new PrintableString(lineHeight, three.format(sum), margin+tabs[3]-chars*charWidth));
 	
 	if (!model.getPreparation().isEmpty()) {
 	    /*
 	    * Print the preparation
 	    */
-	   printModel.add(new PrintableNewline());
-	   printModel.add(new PrintableNewline());
-	   printModel.add(new PrintableString("BEREIDINGSWIJZE:", margin+charWidth*10));
-	   printModel.add(new PrintableNewline());
+	   printModel.add(new PrintableNewline(lineHeight));
+	   printModel.add(new PrintableNewline(lineHeight));
+	   printModel.add(new PrintableString(lineHeight, "BEREIDINGSWIJZE:", margin+charWidth*10));
+	   printModel.add(new PrintableNewline(lineHeight));
 
 
 	   /*
@@ -216,7 +216,7 @@ public class PrintableRecipeNew extends MyPrintable{
 			   builder.append(word).append(" ");
 			   xOffset += length+charWidth;
 		       } else {
-			   printModel.add(new PrintableString(builder.toString(), margin));
+			   printModel.add(new PrintableString(lineHeight, builder.toString(), margin));
 			   builder = new StringBuilder(word+" ");
 			   xOffset = length+charWidth;
 //			   System.out.println("PrintableRecipe:: NEW LINE!");
@@ -225,17 +225,17 @@ public class PrintableRecipeNew extends MyPrintable{
 	       }
 
 	       // empty the buffer
-	       printModel.add(new PrintableString(builder.toString(), margin));
+	       printModel.add(new PrintableString(lineHeight, builder.toString(), margin));
 	   }
 
-	   printModel.add(new PrintableNewline());
+	   printModel.add(new PrintableNewline(lineHeight));
 	}
 	
 	return printModel;
     }
 
     @Override
-    public List<PrintableHorizontalLineObject> transformFooter(int width, int margin, FontMetrics fontMetrics) {
+    public List<PrintableHorizontalLineObject> transformFooter(int lineHeight, int width, int margin, FontMetrics fontMetrics) {
 	/*
 	 * There is no footer
 	 */

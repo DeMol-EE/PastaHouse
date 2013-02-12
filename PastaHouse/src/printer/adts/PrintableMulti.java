@@ -4,7 +4,6 @@
  */
 package printer.adts;
 
-import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Graphics;
 import java.util.List;
 
@@ -12,11 +11,12 @@ import java.util.List;
  *
  * @author Warkst
  */
-public class PrintableMulti implements PrintableHorizontalLineObject{
+public class PrintableMulti extends PrintableHorizontalLineObject{
 
     private final List<PrintableHorizontalLineObject> objectsOnThisLine;
 
-    public PrintableMulti(List<PrintableHorizontalLineObject> objectsOnThisLine) {
+    public PrintableMulti(int height, List<PrintableHorizontalLineObject> objectsOnThisLine) {
+	super(height);
 	this.objectsOnThisLine = objectsOnThisLine;
     }
     

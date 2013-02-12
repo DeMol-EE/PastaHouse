@@ -352,6 +352,12 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         int[] rijen = table.getSelectedRows();
+	
+	int added = 0;
+	for (int i : rijen) {
+	    rijen[added++]=table.convertRowIndexToModel(i);
+	}
+	
         Book b = new Book();
         PageFormat pf = new PageFormat();
         pf.setPaper(new A4());

@@ -4,14 +4,17 @@
  */
 package printer.adts;
 
-import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Graphics;
 
 /**
  *
  * @author Warkst
  */
-public class PrintableNewline implements PrintableHorizontalLineObject{
+public class PrintableNewline extends PrintableHorizontalLineObject{
+
+    public PrintableNewline(int height) {
+	super(height);
+    }
     
     @Override
     public void print(Graphics g, int y) {

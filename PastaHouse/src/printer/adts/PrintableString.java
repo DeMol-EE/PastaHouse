@@ -4,19 +4,19 @@
  */
 package printer.adts;
 
-import printer.adts.PrintableHorizontalLineObject;
 import java.awt.Graphics;
 
 /**
  *
  * @author Warkst
  */
-public class PrintableString implements PrintableHorizontalLineObject{
+public class PrintableString extends PrintableHorizontalLineObject{
 
     private final String line;
     private final int x;
     
-    public PrintableString(String line, int x){
+    public PrintableString(int height, String line, int x){
+	super(height);
 	this.line = line;
 	this.x = x;
     }

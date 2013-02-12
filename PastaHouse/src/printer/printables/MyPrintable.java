@@ -63,8 +63,8 @@ public abstract class MyPrintable implements Printable{
 	    /*
 	     * Transform the data model to the printing model
 	     */
-	    List<PrintableHorizontalLineObject> printModelBody = transformBody((int)pf.getImageableWidth(), (int)pf.getImageableX(), g.getFontMetrics(font));
-	    List<PrintableHorizontalLineObject> printModelFooter = transformFooter((int)pf.getImageableWidth(), (int)pf.getImageableY(), g.getFontMetrics(font));
+	    List<PrintableHorizontalLineObject> printModelBody = transformBody(lineHeight, (int)pf.getImageableWidth(), (int)pf.getImageableX(), g.getFontMetrics(font));
+	    List<PrintableHorizontalLineObject> printModelFooter = transformFooter(lineHeight, (int)pf.getImageableWidth(), (int)pf.getImageableY(), g.getFontMetrics(font));
 	    
 	    /*
 	     * Calculate the amount of needed pages
@@ -89,7 +89,7 @@ public abstract class MyPrintable implements Printable{
 	    }
 	    if (!printModelFooter.isEmpty()) {
 		while (printModel.size() < totalGrossLines-printModelFooter.size()) {
-		    printModel.add(new PrintableNewline());
+		    printModel.add(new PrintableNewline(lineHeight));
 		}
 		for (int footerLine = 0; footerLine < printModelFooter.size(); footerLine++) {
 		    printModel.add(printModelFooter.get(footerLine));
@@ -138,7 +138,7 @@ public abstract class MyPrintable implements Printable{
 	
 	for (int line=start; line<end; line++) {
 	    printModel.get(line).print(g, y);
-	    y+=lineHeight;
+	    y+=printModel.get(line).height();
         }
 	
 	return PAGE_EXISTS;
@@ -155,7 +155,7 @@ public abstract class MyPrintable implements Printable{
      * @param fontMetrics To easy the implementation, the font metrics for the font used for printing is given as a parameter.
      * @return Returns an array of PrintableObjects representing the data model in a printer-friendly format.
      */
-    public abstract List<PrintableHorizontalLineObject> transformBody(int width, int margin, FontMetrics fontMetrics);
+    public abstract List<PrintableHorizontalLineObject> transformBody(int height, int width, int margin, FontMetrics fontMetrics);
     
-    public abstract List<PrintableHorizontalLineObject> transformFooter(int width, int margin, FontMetrics fontMetrics);
+    public abstract List<PrintableHorizontalLineObject> transformFooter(int height, int width, int margin, FontMetrics fontMetrics);
 }
