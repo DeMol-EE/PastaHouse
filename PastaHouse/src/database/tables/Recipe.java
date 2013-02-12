@@ -175,7 +175,7 @@ public class Recipe extends Ingredient {
 
     @Override
     public String getPackaging() {
-	return ""; // geen packaging
+	return "Recept"; // geen packaging
     }
 
     @Override

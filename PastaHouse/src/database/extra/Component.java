@@ -77,4 +77,8 @@ public class Component {
     public double getPieces(){
 	return ingredient == null? 0.0 : quantity/ingredient.getWeightPerUnit();
     }
+    
+    public String getPackaging(){
+	return ingredient.getPackaging();
+    }
 }

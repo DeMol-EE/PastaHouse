@@ -210,7 +210,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
 
         jPanel10.setLayout(new java.awt.GridLayout(1, 2));
 
-        nameLabel.setText("Naam *");
+        nameLabel.setText("Naam");
         nameLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
         jPanel10.add(nameLabel);
 
@@ -311,7 +311,7 @@ public class AddRecipeDialog extends javax.swing.JDialog implements ComboCoxDele
         grossWeightOutlet.setText("<grossWeightOutlet>");
         jPanel6.add(grossWeightOutlet);
 
-        jLabel4.setText("Gewicht na bereiding *");
+        jLabel4.setText("Gewicht na bereiding");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
         jPanel6.add(jLabel4);
 

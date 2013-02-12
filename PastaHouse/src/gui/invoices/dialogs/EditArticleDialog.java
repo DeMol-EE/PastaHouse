@@ -114,20 +114,20 @@ public class EditArticleDialog extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridLayout(6, 2));
 
-        jLabel1.setText("Naam *");
+        jLabel1.setText("Naam");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel1.setFocusable(false);
         jPanel1.add(jLabel1);
         jPanel1.add(nameOutlet);
 
-        jLabel3.setText("Code *");
+        jLabel3.setText("Code");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel3.setFocusable(false);
         jLabel3.setOpaque(true);
         jPanel1.add(jLabel3);
         jPanel1.add(codeOutlet);
 
-        jLabel5.setText("Prijs A (Excl BTW) *");
+        jLabel5.setText("Prijs A (Excl BTW)");
         jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel5.setFocusable(false);
         jPanel1.add(jLabel5);
@@ -147,7 +147,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
 
         jPanel1.add(jPanel4);
 
-        jLabel7.setText("Prijs B (Excl BTW) *");
+        jLabel7.setText("Prijs B (Excl BTW)");
         jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         jLabel7.setFocusable(false);
         jLabel7.setOpaque(true);

@@ -38,7 +38,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	super(parent, modal);
 	initComponents();
 	
-	setTitle("Hoeveelheid:");
+	setTitle("Afdrukken");
 	
 	setLocationRelativeTo(null);
 	
@@ -106,6 +106,11 @@ public class RecipePrintDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        grossTotalOutlet = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        priceTotalOutlet = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         print = new javax.swing.JButton();
         back = new javax.swing.JButton();
@@ -125,11 +130,22 @@ public class RecipePrintDialog extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         componentsOutlet = new javax.swing.JTable();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        grossTotalOutlet = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        priceTotalOutlet = new javax.swing.JLabel();
+
+        jPanel7.setLayout(new java.awt.GridLayout(2, 2, 0, 5));
+
+        jLabel2.setText("Bruto gewicht voor totaal");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jPanel7.add(jLabel2);
+
+        grossTotalOutlet.setText("<grossTotalOutlet>");
+        jPanel7.add(grossTotalOutlet);
+
+        jLabel4.setText("Bruto inkoopprijs voor totaal");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        jPanel7.add(jLabel4);
+
+        priceTotalOutlet.setText("<priceTotalOutlet>");
+        jPanel7.add(priceTotalOutlet);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 500));
@@ -246,24 +262,6 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel7.setLayout(new java.awt.GridLayout(2, 2, 0, 5));
-
-        jLabel2.setText("Bruto gewicht voor totaal");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jPanel7.add(jLabel2);
-
-        grossTotalOutlet.setText("<grossTotalOutlet>");
-        jPanel7.add(grossTotalOutlet);
-
-        jLabel4.setText("Bruto inkoopprijs voor totaal");
-        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        jPanel7.add(jLabel4);
-
-        priceTotalOutlet.setText("<priceTotalOutlet>");
-        jPanel7.add(priceTotalOutlet);
-
-        jPanel1.add(jPanel7, java.awt.BorderLayout.PAGE_END);
-
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -311,8 +309,6 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	    quantityOutlet.setSelectionEnd(quantityOutlet.getText().length());
 	    quantityOutlet.requestFocus();
 	}
-	
-	
     }//GEN-LAST:event_printActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed

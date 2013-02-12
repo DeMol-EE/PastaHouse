@@ -47,9 +47,9 @@ public class PrintableTableModel extends AbstractTableModel{
 	    case 1:
 		return ((Component)data.values().toArray()[rowIndex]).getIngredient().getPackaging();
 	    case 2:
-		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
-	    case 3:
 		return ((Component)data.values().toArray()[rowIndex]).getUnits();
+	    case 3:
+		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
 	    default:
 		return "<empty>";
 	}
@@ -63,9 +63,9 @@ public class PrintableTableModel extends AbstractTableModel{
 	    case 1:
 		return "Verpakking";
 	    case 2:
-		return "Hoeveelheid";
-	    case 3:
 		return "Stuks";
+	    case 3:
+		return "Kg";
 	    default:
 		return "<ERROR>";
 	}
@@ -81,9 +81,9 @@ public class PrintableTableModel extends AbstractTableModel{
 	    case 1:
 		return String.class;
 	    case 2:
-		return Component.class;
-	    case 3:
 		return Double.class;
+	    case 3:
+		return Component.class;
 	    default:
 		return Object.class;
 	}

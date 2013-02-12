@@ -347,7 +347,7 @@ public class EditRecipeDialog extends javax.swing.JDialog implements ComboCoxDel
         grossWeightOutlet.setText("<grossWeightOutlet>");
         jPanel6.add(grossWeightOutlet);
 
-        jLabel4.setText("  Gewicht na bereiding *");
+        jLabel4.setText("  Gewicht na bereiding");
         jPanel6.add(jLabel4);
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));

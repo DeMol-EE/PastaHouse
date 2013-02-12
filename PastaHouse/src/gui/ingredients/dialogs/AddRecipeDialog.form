@@ -71,7 +71,7 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="nameLabel">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Naam *"/>
+                        <Property name="text" type="java.lang.String" value="Naam"/>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                             <EmptyBorder bottom="0" left="10" right="0" top="0"/>
@@ -280,7 +280,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Gewicht na bereiding *"/>
+                    <Property name="text" type="java.lang.String" value="Gewicht na bereiding"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                         <EmptyBorder bottom="0" left="10" right="0" top="0"/>

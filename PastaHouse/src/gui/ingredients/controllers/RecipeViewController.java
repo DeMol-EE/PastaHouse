@@ -41,6 +41,8 @@ import tools.Utilities;
  */
 public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>, RecipeDelegate{
     
+    final JXTitledPanel d = new JXTitledPanel("Receptuur");
+    
     /**
      * Creates new form RecipeViewController
      */
@@ -74,8 +76,6 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	    detail.remove(container);
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
-	
-	final JXTitledPanel d = new JXTitledPanel("Receptuur");
 	final JButton ber = new JButton("Bereiding");
 	final JButton det = new JButton("Receptuur");
 	ber.addActionListener(new ActionListener() {
@@ -118,8 +118,16 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     @Override
     public void updateDetail(Recipe r){
 	
+	try{
+	    d.setTitle("Receptuur - "+r.getName()+" - Laatste update: "+r.getDate());
+	} catch(Exception e){
+	    d.setTitle("Receptuur");
+	}
+	
+	
 	nameOutlet.setText(StringTools.capitalize(r.getName()));
-	dateOutlet.setText("Laatste update: "+r.getDate());
+//	dateOutlet.setText("Laatste update: "+r.getDate());
+//	dateOutlet.setText(r.getDate());
 	
 	DecimalFormat threeFormatter = new DecimalFormat("0.000");
 	grossWeightOutlet.setText(threeFormatter.format(r.getGrossWeight())+" kg");
@@ -170,6 +178,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         preparationOutlet = new javax.swing.JTextArea();
         jPanel5 = new javax.swing.JPanel();
         nameOutlet = new javax.swing.JLabel();
+        dateOutlet = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -183,7 +192,6 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel2 = new javax.swing.JPanel();
         print = new javax.swing.JButton();
         edit = new javax.swing.JButton();
-        dateOutlet = new javax.swing.JLabel();
 
         editMenu.setText("Acties");
 
@@ -320,6 +328,11 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         nameOutlet.setFocusable(false);
         jPanel5.add(nameOutlet);
 
+        dateOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        dateOutlet.setText("<dateOutlet>");
+        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        dateOutlet.setFocusable(false);
+
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
@@ -387,12 +400,6 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel2.add(edit);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
-
-        dateOutlet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        dateOutlet.setText("<dateOutlet>");
-        dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        dateOutlet.setFocusable(false);
-        jPanel1.add(dateOutlet, java.awt.BorderLayout.WEST);
 
         container.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
