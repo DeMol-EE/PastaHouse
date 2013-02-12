@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
+import java.awt.print.Printable;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -39,6 +40,7 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import printer.MultiPrintable;
 import printer.printables.PrintableInvoiceNew;
 import tools.Utilities;
 
@@ -154,6 +156,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel5 = new javax.swing.JPanel();
         btnClearFilters = new javax.swing.JButton();
         delete = new javax.swing.JButton();
+        editMenu1 = new javax.swing.JMenu();
+        addMenuItem1 = new javax.swing.JMenuItem();
+        printMenuItem = new javax.swing.JMenuItem();
         tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -291,6 +296,26 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         controlPanel.getAccessibleContext().setAccessibleName("");
 
+        editMenu1.setText("Acties");
+
+        addMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addMenuItem1.setText("Toevoegen...");
+        addMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuItem1ActionPerformed(evt);
+            }
+        });
+        editMenu1.add(addMenuItem1);
+
+        printMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        printMenuItem.setText("Afdrukken...");
+        printMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu1.add(printMenuItem);
+
         setLayout(new java.awt.BorderLayout());
 
         tablePanel.setLayout(new java.awt.BorderLayout());
@@ -353,6 +378,10 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         int[] rijen = table.getSelectedRows();
 	
+	if (rijen.length == 0) {
+	    return;
+	}
+	
 	int added = 0;
 	for (int i : rijen) {
 	    rijen[added++]=table.convertRowIndexToModel(i);
@@ -362,11 +391,18 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         PageFormat pf = new PageFormat();
         pf.setPaper(new A4());
 
+	MultiPrintable mp = new MultiPrintable();
+	
         for (int i : rijen) {
-            b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
+//            b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
+	    mp.add(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)));
         }
-
-        printer.Printer.driver().setPrintableBook(b);
+	
+//        printer.Printer.driver().setPrintableBook(b);
+	
+//	Printable p = new PrintableInvoiceNew(tableModel.getInvoiceAtRow(rijen[0]));
+//        printer.Printer.driver().setPrintableJob(p);
+        printer.Printer.driver().setPrintableJob(mp, pf);
         printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_printActionPerformed
 
@@ -399,13 +435,26 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
             }
         }
     }//GEN-LAST:event_deleteActionPerformed
+
+    private void addMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItem1ActionPerformed
+        addActionPerformed(null);
+    }//GEN-LAST:event_addMenuItem1ActionPerformed
+
+    private void printMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printMenuItemActionPerformed
+        printActionPerformed(evt);
+    }//GEN-LAST:event_printMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JMenuItem addMenuItem;
+    private javax.swing.JMenuItem addMenuItem1;
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JTextField clientField;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton delete;
     private javax.swing.JButton details;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenu editMenu1;
     private javax.swing.JPanel fromOutlet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -420,6 +469,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JLabel noResultOutlet;
     private javax.swing.JTextField numberField;
     private javax.swing.JButton print;
+    private javax.swing.JMenuItem printMenuItem;
     private javax.swing.JPanel tablePanel;
     private javax.swing.JPanel toOutlet;
     // End of variables declaration//GEN-END:variables
@@ -440,7 +490,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public JMenu menu() {
-        return null;
+        return editMenu1;
     }
 
     private JXTable createXTable() {

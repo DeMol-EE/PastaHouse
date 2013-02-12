@@ -10,6 +10,8 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import printer.adts.PrintableHorizontalLineObject;
 import printer.adts.PrintableNewline;
 
@@ -28,6 +30,7 @@ public abstract class MyPrintable implements Printable{
      * Calculated once and used for printing callbacks.
      * 
      */
+    private Map<Integer, List<PrintableHorizontalLineObject>> printablesPerPage;
     private List<PrintableHorizontalLineObject> printModel;
     private final Font font;
     private int[] pageBreaks;
@@ -35,7 +38,7 @@ public abstract class MyPrintable implements Printable{
     private int pages;
     
     public MyPrintable() {
-	this(new Font("Serif", Font.PLAIN, 12));
+	this(new Font("SansSerif", Font.PLAIN, 12));
     }
     
     public MyPrintable(Font font) {
@@ -52,9 +55,12 @@ public abstract class MyPrintable implements Printable{
         g2d.translate(pf.getImageableX(), pf.getImageableY());
 	g.setFont(font);
 	
+	System.out.println(font.toString()+" - "+font.getFamily()+"; "+font.getFontName());
+	
 	int lineHeight = g.getFontMetrics(font).getHeight();
 	
-	if (pageBreaks == null) {
+	if (printablesPerPage == null) {
+	    printablesPerPage = new TreeMap<Integer, List<PrintableHorizontalLineObject>>();
 	    /*
 	     * Calculate how many lines fit on one page
 	     */
@@ -70,45 +76,127 @@ public abstract class MyPrintable implements Printable{
 	     * Calculate the amount of needed pages
 	     */
 	    int totalLines = printModelBody.size() + printModelFooter.size();
-	    int amountOfPages = (int)Math.ceil((1.0*totalLines)/linesPerPage);
-	    int totalGrossLines = amountOfPages*linesPerPage;
+	    int bodyHeight = 0;
+	    for (PrintableHorizontalLineObject printableHorizontalLineObject : printModelBody) {
+		bodyHeight+=printableHorizontalLineObject.height();
+	    }
+	    int footerHeight = 0;
+	    for (PrintableHorizontalLineObject printableHorizontalLineObject : printModelFooter) {
+		footerHeight+=printableHorizontalLineObject.height();
+	    }
+	    int totalHeight = bodyHeight+footerHeight;
+//	    int amountOfPages = (int)Math.ceil((1.0*totalHeight)/pf.getImageableHeight());
+//	    int amountOfPages = (int)Math.ceil((1.0*totalLines)/linesPerPage);
+//	    int totalGrossLines = amountOfPages*linesPerPage;
 	    
-	    pages = amountOfPages;
+//	    pages = amountOfPages;
 	    
-	    System.out.println("Total lines: "+totalLines);
-	    System.out.println("\tat "+linesPerPage+" per page, makes "+amountOfPages+" pages");
-	    System.out.println("\tso there will be "+totalGrossLines+" lines.");
-	    System.out.println("\tBreakdown: body="+printModelBody.size()+", footer="+printModelFooter.size()+", filling="+(totalGrossLines-totalLines));
+//	    System.out.println("Total lines: "+totalLines);
+//	    System.out.println("\tat "+linesPerPage+" per page, makes "+amountOfPages+" pages");
+//	    System.out.println("\tso there will be "+totalGrossLines+" lines.");
+//	    System.out.println("\tBreakdown: body="+printModelBody.size()+", footer="+printModelFooter.size()+", filling="+(totalGrossLines-totalLines));
+	    
+	    int amountOfPages = (int)Math.ceil((1.0*totalHeight)/pf.getImageableHeight());
+	    int fillerHeight = amountOfPages * (int)pf.getImageableHeight() - bodyHeight - footerHeight;
+	    
+//	    int amountOfPages = 1;
+	    
+//	    int fillerHeight = (int)pf.getImageableHeight() - bodyHeight - footerHeight;
+//	    while (fillerHeight<0){
+//		fillerHeight+=(int)pf.getImageableHeight();
+//		amountOfPages++;
+//	    }
+	    
+	    System.out.println("Total height: "+totalHeight);
+	    System.out.println("\tat "+(int)pf.getImageableHeight()+" per page makes "+amountOfPages+" pages");
+	    System.out.println("\tBreakdown: body height="+bodyHeight+", footer="+footerHeight+", filling="+fillerHeight);
 	    
 	    /*
 	     * Combine the body and footer into one model, padding with newlines in the space between
 	     */
+	    int printHeight = 0;
 	    printModel = new ArrayList<PrintableHorizontalLineObject>();
 	    for (int line = 0; line < printModelBody.size(); line++) {
 		printModel.add(printModelBody.get(line));
+		printHeight+=printModelBody.get(line).height();
 	    }
 	    if (!printModelFooter.isEmpty()) {
-		while (printModel.size() < totalGrossLines-printModelFooter.size()) {
-		    printModel.add(new PrintableNewline(lineHeight));
+//		while (printModel.size() < totalGrossLines-printModelFooter.size()) {
+//		    printModel.add(new PrintableNewline(lineHeight));
+//		}
+//		for (int footerLine = 0; footerLine < printModelFooter.size(); footerLine++) {
+//		    printModel.add(printModelFooter.get(footerLine));
+//		}
+		int currentHeight = bodyHeight;
+		while (fillerHeight>lineHeight){
+		    if (currentHeight+lineHeight<=(int)pf.getImageableHeight()) {
+			printModel.add(new PrintableNewline(lineHeight));
+			currentHeight+=lineHeight;
+		    } else {
+			currentHeight = 0;
+		    }
+		    fillerHeight-=lineHeight;
+		}
+		if (fillerHeight%lineHeight!=0) {
+		    fillerHeight-=fillerHeight%lineHeight;
 		}
 		for (int footerLine = 0; footerLine < printModelFooter.size(); footerLine++) {
 		    printModel.add(printModelFooter.get(footerLine));
 		}
+	    } else {
+		System.err.println("No footer to print!");
 	    }
+	    
+	    int h = 0;
+	    for (PrintableHorizontalLineObject printableHorizontalLineObject : printModel) {
+		h+=printableHorizontalLineObject.height();
+	    }
+	    System.out.println("Total height with fillers: "+h);
 	    
 	    /*
 	     * Calculate page breaks
 	     */
-	    int amountOfPageBreaks = (printModel.size()-1)/linesPerPage;
-	    pageBreaks = new int[amountOfPageBreaks];
-	    for (int i = 0; i < amountOfPageBreaks; i++) {
-		pageBreaks[i] = (i+1)*linesPerPage;
+	    
+	    int height = 0;
+	    int page = 0;
+	    ArrayList<PrintableHorizontalLineObject> printables = new ArrayList<PrintableHorizontalLineObject>();
+	    printablesPerPage.put(0, printables);
+	    for (PrintableHorizontalLineObject printableHorizontalLineObject : printModel) {
+		height += printableHorizontalLineObject.height();
+		if (height>(int)pf.getImageableHeight()) {
+		    System.out.println("Height on page "+page+": "+(height-printableHorizontalLineObject.height()));
+		    page++;
+		    ArrayList<PrintableHorizontalLineObject> _printables = new ArrayList<PrintableHorizontalLineObject>();
+		    _printables.add(printableHorizontalLineObject);
+		    height = printableHorizontalLineObject.height();
+		    printablesPerPage.put(page, _printables);
+		} else {
+		    printablesPerPage.get(page).add(printableHorizontalLineObject);
+		}
 	    }
 	    
-	    int i = 0;
-	    for (PrintableHorizontalLineObject printableHorizontalLineObject : printModel) {
-		System.out.println("L"+i+":\t"+printableHorizontalLineObject);
-		i++;
+	    System.out.println("Height on page "+page+": "+height);
+	    
+//	    int amountOfPageBreaks = amountOfPages-1;
+////	    int amountOfPageBreaks = (printModel.size()-1)/linesPerPage;
+//	    pageBreaks = new int[amountOfPageBreaks];
+//	    for (int i = 0; i < amountOfPageBreaks; i++) {
+//		pageBreaks[i] = (i+1)*linesPerPage;
+	    
+//	    int i = 0;
+//	    for (PrintableHorizontalLineObject printableHorizontalLineObject : printModel) {
+//		System.out.println("L"+i+":\t"+printableHorizontalLineObject);
+//		i++;
+//	    }
+	    
+	    int i;
+	    for (Map.Entry<Integer, List<PrintableHorizontalLineObject>> entry : printablesPerPage.entrySet()) {
+		System.out.println(" *** PAGE "+entry.getKey()+" ***");
+		i = 0;
+		for (PrintableHorizontalLineObject printableHorizontalLineObject : entry.getValue()) {
+		    System.out.println("P"+entry.getKey()+"L"+i+":\t"+printableHorizontalLineObject);
+		    i++;
+		}
 	    }
 	    
 	    System.out.println("Finished calculating print model!");
@@ -121,7 +209,7 @@ public abstract class MyPrintable implements Printable{
 //	    System.out.println("No such page...");
 //            return NO_SUCH_PAGE;
 //        }
-	if (pageIndex > pages) {
+	if (pageIndex >= printablesPerPage.size()) {
 	    System.out.println("No such page...");
             return NO_SUCH_PAGE;
         }
@@ -132,15 +220,23 @@ public abstract class MyPrintable implements Printable{
 	 * Print lines starting at the pagebreak according to the current page
 	 */
 	int y = 0;
-	int start = (pageIndex == 0) ? 0 : pageBreaks[pageIndex-1];
-        int end   = (pageIndex == pageBreaks.length)
-                         ? printModel.size() : pageBreaks[pageIndex];
+	int lineToPrint = 0;
+	for (PrintableHorizontalLineObject printableHorizontalLineObject : printablesPerPage.get(pageIndex)) {
+	    printableHorizontalLineObject.print(g, y);
+	    y+=printableHorizontalLineObject.height();
+	}
 	
-	for (int line=start; line<end; line++) {
-	    printModel.get(line).print(g, y);
-	    y+=printModel.get(line).height();
-        }
+//	int y = 0;
+//	int start = (pageIndex == 0) ? 0 : pageBreaks[pageIndex-1];
+//        int end   = (pageIndex == pageBreaks.length)
+//                         ? printModel.size() : pageBreaks[pageIndex];
+//	
+//	for (int line=start; line<end; line++) {
+//	    printModel.get(line).print(g, y);
+//	    y+=printModel.get(line).height();
+//        }
 	
+	System.out.println("Returning page exists...");
 	return PAGE_EXISTS;
     }
     

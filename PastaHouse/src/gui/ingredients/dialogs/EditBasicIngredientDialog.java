@@ -248,7 +248,7 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 	weightPerUnitOutlet.setText(""+model.getWeightPerUnit());
 	weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getWeightPerUnit())+" kg/"+model.getPackaging());
 	pricePerUnitOutlet.setText(""+model.getPricePerUnit());
-	pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerUnit())+" euro/kg");
+	pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerUnit())+" euro/"+model.getPackaging());
 	
 	updateGrossPriceOutlet();
     }

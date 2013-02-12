@@ -9,6 +9,7 @@ import database.tables.Recipe;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -24,7 +25,7 @@ import tools.StringTools;
  * @author Warkst
  */
 public class PrintableRecipeNew extends MyPrintable{
-
+    
     /*
      * Data model
      */
@@ -46,7 +47,10 @@ public class PrintableRecipeNew extends MyPrintable{
     }
     
     public PrintableRecipeNew(Recipe model, double toMake, boolean isWeight) {
-	super(new Font("Monospaced", Font.PLAIN, 12));
+	super(Font.decode("Courier"));
+//	Font f = Font.decode("Courier");
+//	System.out.println(f.toString()+" - "+f.getFamily()+"; "+f.getFontName());
+//	super(new Font("Courier New", Font.PLAIN, 12));
 	this.model = new Recipe(model);
 	this.toMake = toMake;
 	this.isWeight = isWeight;
@@ -79,12 +83,17 @@ public class PrintableRecipeNew extends MyPrintable{
 	return isWeight? toMake/model.getNetWeight() : toMake;
     }
     
+    
+    
     /*
      * MyPrintable overrides
      */
     
     @Override
     public List<PrintableHorizontalLineObject> transformBody(int lineHeight, int width, int margin, FontMetrics fontMetrics) {
+	margin+=30;
+	width-=60;
+	
 	/*
 	 * Empty list, to be added to
 	 */
@@ -94,12 +103,21 @@ public class PrintableRecipeNew extends MyPrintable{
 	 * Formatting variables
 	 */
 	int ingrNameLength = 30;
-	int[] tabs = new int[]{5,ingrNameLength*charWidth,50*charWidth,68*charWidth};
+	int[] tabs = new int[]{5,ingrNameLength*charWidth,50*charWidth,60*charWidth};
 	DecimalFormat three = new DecimalFormat("0.000");
 	DecimalFormat two = new DecimalFormat("0.00");
+	
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+	otherSymbols.setDecimalSeparator(',');
+	otherSymbols.setGroupingSeparator('.'); 
+	three.setDecimalFormatSymbols(otherSymbols);
+	two.setDecimalFormatSymbols(otherSymbols);
+//	this.oneFormatter.setDecimalFormatSymbols(otherSymbols);
+	
 	int imageableWidth = width - 50;
 	
-	double toMakeToNet = getToMakeToNet();
+//	double toMakeToNet = getToMakeToNet();
+	double toMakeToNet = isWeight? toMake : toMake * model.getWeightPerUnit();
 	
 	/*
 	 * Actual transformation
@@ -108,14 +126,15 @@ public class PrintableRecipeNew extends MyPrintable{
 	// print the name of the recipe in the middle
 	// print something like: for preparing amount x, you need ...
 	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
 	
 	printModel.add(new PrintableString(lineHeight, "Recept "+model.getName().toUpperCase(), margin+charWidth*10));
 	printModel.add(new PrintableNewline(lineHeight));
 	
-	printModel.add(new PrintableString(lineHeight, isWeight?"Om "+two.format(toMake)+" kg te bereiden heeft u de volgende hoeveelheden nodig:" : 
-		"Om "+toMakeToNet+" "
-		+ (toMakeToNet==1? "eenheid":"eenheden")
-		+" te maken heeft u de volgende hoeveelheden nodig: ", margin));
+	printModel.add(new PrintableString(lineHeight, "Om "+two.format(toMakeToNet)+" kg te bereiden heeft u de volgende hoeveelheden nodig:", margin));
 	printModel.add(new PrintableNewline(lineHeight));
 	printModel.add(new PrintableNewline(lineHeight));
 	
@@ -137,12 +156,13 @@ public class PrintableRecipeNew extends MyPrintable{
 	    
 	    ArrayList<PrintableHorizontalLineObject> comp = new ArrayList<PrintableHorizontalLineObject>();
 	    
-	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), margin+tabs[0]));
-	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getPackaging(), 15)), margin+tabs[1]));
-	    comp.add(new PrintableString(lineHeight, component.getFormattedUnits(), margin+tabs[2]));
+//	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), margin+tabs[0]));
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getName(), '.', ingrNameLength-1), margin+tabs[0]));
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getPackaging(), '.', 19), margin+tabs[1]));
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', 9), margin+tabs[2]));
 	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
-	    int chars = s.substring(0, s.indexOf(".")).length();
+	    int chars = s.substring(0, s.indexOf(",")).length();
 	    comp.add(new PrintableString(lineHeight, three.format(quantity), margin+tabs[3]-chars*charWidth));
 	    printModel.add(new PrintableMulti(lineHeight, comp));
 	    
@@ -152,7 +172,7 @@ public class PrintableRecipeNew extends MyPrintable{
 	 * Print total gross weight
 	 */
 	String s = three.format(sum);
-	int chars = s.substring(0, s.indexOf(".")).length();
+	int chars = s.substring(0, s.indexOf(",")).length();
 	printModel.add(new PrintableLine(lineHeight, margin+tabs[3]-chars*charWidth, margin+tabs[3]+charWidth*4));
 	printModel.add(new PrintableString(lineHeight, three.format(sum), margin+tabs[3]-chars*charWidth));
 	

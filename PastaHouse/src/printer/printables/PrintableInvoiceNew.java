@@ -35,7 +35,7 @@ public class PrintableInvoiceNew extends MyPrintable{
     private final Invoice model;
     
     public PrintableInvoiceNew(Invoice model) {
-	super(new Font("Sans-Serif", Font.PLAIN, 8));
+	super(new Font(Font.SANS_SERIF, Font.PLAIN, 8));
 	this.model = model;
 	
 	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
@@ -54,7 +54,10 @@ public class PrintableInvoiceNew extends MyPrintable{
 	int half = width/2;
 	width-=10; // small correction...
 	half-=5;
-	int[] tabs = new int[]{0, half, 3*width/5, 4*width/5, width-9};
+	int[] tabs = new int[]{0, half, 3*width/5+10, 4*width/5+5, width-9};
+	int threeZeroesWidth = fontMetrics.charsWidth(",000".toCharArray(), 0, 4);
+	int commaWidth = fontMetrics.charsWidth(",".toCharArray(), 0, 1);
+	int zeroWidth = fontMetrics.charsWidth("0".toCharArray(), 0, 1);
 	
 	/*
 	 * Incremental print model
@@ -76,7 +79,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	
 	header.add(new PrintableString(lineHeight, "FACTUUR: "+model.getNumber(), half+3));
 	String dateString = "DATUM : "+model.getDate();
-	int dateAnchor = width - fontMetrics.charsWidth(dateString.toCharArray(), 0, dateString.length()) - 10;
+	int dateAnchor = width - fontMetrics.charsWidth(dateString.toCharArray(), 0, dateString.length()) - 5;
 	header.add(new PrintableString(lineHeight, dateString, dateAnchor-15));
 	
 	printModel.add(new PrintableMulti(lineHeight, header));
@@ -119,8 +122,8 @@ public class PrintableInvoiceNew extends MyPrintable{
 	printModel.add(new PrintableNewline(lineHeight));
 	ArrayList<PrintableHorizontalLineObject> group = new ArrayList<PrintableHorizontalLineObject>();
 	group.add(new PrintableString(lineHeight, "Omschrijving artikels", tabs[0]));
-	group.add(new PrintableString(lineHeight, "BTW", tabs[1]));
-	group.add(new PrintableString(lineHeight, "Hoeveelheid", tabs[2]));
+	group.add(new PrintableString(lineHeight, "BTW", tabs[1]-commaWidth-zeroWidth*2));
+	group.add(new PrintableString(lineHeight, "Hoeveelheid", tabs[2]-threeZeroesWidth));
 	group.add(new PrintableString(lineHeight, "Prijs", tabs[3]));
 	group.add(new PrintableString(lineHeight, "Totaal", tabs[4]-fontMetrics.charsWidth("Totaal".toCharArray(), 0, "Totaal".length())));
 	printModel.add(new PrintableMulti(lineHeight, group));
@@ -130,20 +133,57 @@ public class PrintableInvoiceNew extends MyPrintable{
 	/*
 	 * Print invoice articles (InvoiceItems)
 	 */
+	
+//	int offsetPix = fontMetrics.charsWidth("00".toCharArray(), 0, 2) - fontMetrics.charWidth('0');
+//	int offsetPix = fontMetrics.charsWidth("00".toCharArray(), 0, 2) - zeroWidth;
+	int offsetPix = zeroWidth+2;
+	
 	for (InvoiceItem invoiceItem : model.items()) {
 	    /*
 	     * Group per savings?
 	     */
 	    ArrayList<PrintableHorizontalLineObject> ii = new ArrayList<PrintableHorizontalLineObject>();
 	    ii.add(new PrintableString(lineHeight, invoiceItem.getArticle().getName(), tabs[0]));
-	    ii.add(new PrintableString(lineHeight, oneFormatter.format(invoiceItem.getArticle().getTaxes()), tabs[1]));
-	    ii.add(new PrintableString(lineHeight, threeFormatter.format(invoiceItem.getAmount())+" "+invoiceItem.getArticle().getUnit(), tabs[2]));
-	    ii.add(new PrintableString(lineHeight, threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())), tabs[3]));
+	    String tax = oneFormatter.format(invoiceItem.getArticle().getTaxes());
+	    String[] tp = tax.split(",");
+	    int offset = tp[0].length();
+	    for (char c : tp[0].toCharArray()) {
+		ii.add(new PrintableString(lineHeight, ""+c, tabs[1]-offsetPix*offset));
+		offset--;
+	    }
+//	    ii.add(new PrintableString(lineHeight, tp[0], tabs[1]-commaWidth-fontMetrics.charsWidth(tp[0].toCharArray(), 0, tp[0].length())));
+	    ii.add(new PrintableString(lineHeight, ","+tp[1], tabs[1]));
+	    
+	    String amount = threeFormatter.format(invoiceItem.getAmount());
+	    String[] ap = amount.split(",");
+	    offset = ap[0].length();
+	    for (char c : ap[0].toCharArray()) {
+		ii.add(new PrintableString(lineHeight, ""+c, tabs[2]-offsetPix*offset));
+		offset--;
+	    }
+//	    ii.add(new PrintableString(lineHeight, ap[0], tabs[2]-commaWidth-fontMetrics.charsWidth(ap[0].toCharArray(), 0, ap[0].length())));
+	    ii.add(new PrintableString(lineHeight, ","+ap[1]+" "+invoiceItem.getArticle().getUnit(), tabs[2]));
+	    
+	    String price = threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode()));
+	    String[] pp = price.split(",");
+	    offset = pp[0].length();
+	    for (char c : pp[0].toCharArray()) {
+		ii.add(new PrintableString(lineHeight, ""+c, tabs[3]-offsetPix*offset));
+		offset--;
+	    }
+//	    ii.add(new PrintableString(lineHeight, pp[0], tabs[3]-commaWidth-fontMetrics.charsWidth(pp[0].toCharArray(), 0, pp[0].length())));
+	    ii.add(new PrintableString(lineHeight, ","+pp[1], tabs[3]));
 	    
 	    String tot = threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount());
+	    String[] parts = tot.split(",");
+	    offset = parts[0].length();
+	    for (char c : parts[0].toCharArray()) {
+		ii.add(new PrintableString(lineHeight, ""+c, tabs[4]-threeZeroesWidth-offsetPix*offset));
+		offset--;
+	    }
+//	    ii.add(new PrintableString(lineHeight, parts[0], tabs[4]-commaWidth-threeZeroesWidth-fontMetrics.charsWidth(parts[0].toCharArray(), 0, parts[0].length())));
+	    ii.add(new PrintableString(lineHeight, ","+parts[1], tabs[4]-threeZeroesWidth));
 	    
-	    ii.add(new PrintableString(lineHeight, tot, tabs[4]-5-fontMetrics.charsWidth(tot.toCharArray(), 0, tot.length())));
-//	    ii.add(new PrintableString(lineHeight, tot, tabs[4]-15-fontMetrics.charsWidth(",000".toCharArray(), 0, ",000".length())));
 	    printModel.add(new PrintableMulti(lineHeight, ii));
 	    
 	    printModel.add(new PrintableNewline(lineHeight/2));
@@ -155,6 +195,11 @@ public class PrintableInvoiceNew extends MyPrintable{
     @Override
     public List<PrintableHorizontalLineObject> transformFooter(int lineHeight, int width, int margin, FontMetrics fontMetrics) {
 	width-=10;
+	int threeZeroesWithCommaWidth = fontMetrics.charsWidth(",000".toCharArray(), 0, 4);
+	int commaWidth = fontMetrics.charsWidth(",".toCharArray(), 0, 1);
+	int zeroWidth = fontMetrics.charsWidth("0".toCharArray(), 0, 1);
+	int offsetPix = zeroWidth+2;
+	int offset = 0;
 	
 	/*
 	 * Incremental print model
@@ -188,9 +233,9 @@ public class PrintableInvoiceNew extends MyPrintable{
 	tabs[0] = margin;
 	int base = 30;
 	for (int i = 0; i < categories.size(); i++) {
-	    tabs[i+1] = margin + 60*(i+1);
+	    tabs[i+1] = margin + 80*(i+1);
 	}
-	tabs[1]-=30;
+//	tabs[1]-=30;
 	tabs[tabs.length-2] = 4*width/5-35;
 	tabs[tabs.length-1] = width-9;
 	
@@ -209,7 +254,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    int index = 1;
 	    for (Double savings : categories.keySet()) {
 		String printMe = oneFormatter.format(savings)+" %";
-		savingsCategories.add(new PrintableString(lineHeight, printMe, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(printMe.toCharArray(), 0, printMe.length()-4)));
+		String[] pp = printMe.split(",");
+		offset = pp[0].length();
+		for (char c : pp[0].toCharArray()) {
+		    savingsCategories.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		    offset--;
+		}
+		savingsCategories.add(new PrintableString(lineHeight, ","+pp[1], tabs[index]-threeZeroesWithCommaWidth));
+//		savingsCategories.add(new PrintableString(lineHeight, printMe, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(printMe.toCharArray(), 0, printMe.length()-4)));
 		index++;
 	    }
 	    printModel.add(new PrintableMulti(lineHeight, savingsCategories));
@@ -229,7 +281,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 		}
 		netPrices.add(price);
 		String pr = threeFormatter.format(price);
-		prices.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
+		String[] pp = pr.split(",");
+		offset = pp[0].length();
+		for (char c : pp[0].toCharArray()) {
+		    prices.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		    offset--;
+		}
+		prices.add(new PrintableString(lineHeight, ","+pp[1], tabs[index]-threeZeroesWithCommaWidth));
+//		prices.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
 		index++;
 	    }
 	    printModel.add(new PrintableMulti(lineHeight, prices));
@@ -246,7 +305,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 		double sav = netPrices.get(index-1) * model.getSave()/100;
 		saved.add(sav);
 		String pr = threeFormatter.format(sav);
-		savings.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
+		String[] pp = pr.split(",");
+		offset = pp[0].length();
+		for (char c : pp[0].toCharArray()) {
+		    savings.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		    offset--;
+		}
+		savings.add(new PrintableString(lineHeight, ","+pp[1], tabs[index]-threeZeroesWithCommaWidth));
+//		savings.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
 		index++;
 	    }
 	    printModel.add(new PrintableMulti(lineHeight, savings));
@@ -262,7 +328,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 		double price = netPrices.get(index-1)-saved.get(index-1);
 		netPrices.add(price);
 		String pr = threeFormatter.format(price);
-		savedPrices.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
+		String[] pp = pr.split(",");
+		offset = pp[0].length();
+		for (char c : pp[0].toCharArray()) {
+		    savedPrices.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		    offset--;
+		}
+		savedPrices.add(new PrintableString(lineHeight, ","+pp[1], tabs[index]-threeZeroesWithCommaWidth));
+//		savedPrices.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
 		index++;
 	    }
 	    printModel.add(new PrintableMulti(lineHeight, savedPrices));
@@ -278,7 +351,14 @@ public class PrintableInvoiceNew extends MyPrintable{
 	int index = 1;
 	for (Double savings : categories.keySet()) {
 	    String printMe = oneFormatter.format(savings)+" %";
-	    savingsCategories.add(new PrintableString(lineHeight, printMe, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(printMe.toCharArray(), 0, printMe.length()-4)));
+	    String[] pp = printMe.split(",");
+	    offset = pp[0].length();
+	    for (char c : pp[0].toCharArray()) {
+		savingsCategories.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		offset--;
+	    }
+	    savingsCategories.add(new PrintableString(lineHeight, ","+pp[1], tabs[index]-threeZeroesWithCommaWidth));
+//	    savingsCategories.add(new PrintableString(lineHeight, printMe, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(printMe.toCharArray(), 0, printMe.length()-4)));
 	    index++;
 	}
 	printModel.add(new PrintableMulti(lineHeight, savingsCategories));
@@ -294,12 +374,26 @@ public class PrintableInvoiceNew extends MyPrintable{
 	for (Double price : model.netAfterSave()) {
 	    pricesTot+= price;
 	    String pr = threeFormatter.format(price);
-	    prices.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
+	    String[] prp = pr.split(",");
+	    offset = prp[0].length();
+	    for (char c : prp[0].toCharArray()) {
+		prices.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		offset--;
+	    }
+	    prices.add(new PrintableString(lineHeight, ","+prp[1], tabs[index]-threeZeroesWithCommaWidth));
+//	    prices.add(new PrintableString(lineHeight, pr, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(pr.toCharArray(), 0, pr.length()-4)));
 	    index++;
 	}
 	prices.add(new PrintableString(lineHeight, "Tot. Excl.", tabs[tabs.length-2]));
 	String prTot = threeFormatter.format(pricesTot);
-	prices.add(new PrintableString(lineHeight, prTot, tabs[tabs.length-1]-fontMetrics.charsWidth(prTot.toCharArray(), 0, prTot.length())));
+	String[] ptp = prTot.split(",");
+	offset = ptp[0].length();
+	    for (char c : ptp[0].toCharArray()) {
+		prices.add(new PrintableString(lineHeight, ""+c, tabs[tabs.length-1]-threeZeroesWithCommaWidth-offsetPix*offset));
+		offset--;
+	    }
+	prices.add(new PrintableString(lineHeight, ","+ptp[1], tabs[tabs.length-1]-threeZeroesWithCommaWidth));
+//	prices.add(new PrintableString(lineHeight, prTot, tabs[tabs.length-1]-fontMetrics.charsWidth(prTot.toCharArray(), 0, prTot.length())));
 	printModel.add(new PrintableMulti(lineHeight, prices));
 	
 	/*
@@ -316,13 +410,27 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    double tax = nets.get(index-1) * entry.getKey()/100;
 	    taxesTot+= tax;
 	    String t = threeFormatter.format(tax);
-	    taxes.add(new PrintableString(lineHeight, t, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(t.toCharArray(), 0, t.length()-4)));
+	    String[] tp = t.split(",");
+	    offset = tp[0].length();
+	    for (char c : tp[0].toCharArray()) {
+		taxes.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		offset--;
+	    }
+	    taxes.add(new PrintableString(lineHeight, ","+tp[1], tabs[index]-threeZeroesWithCommaWidth));
+//	    taxes.add(new PrintableString(lineHeight, t, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth(t.toCharArray(), 0, t.length()-4)));
 	    index++;
 	    adds.add(tax);
 	}
 	taxes.add(new PrintableString(lineHeight, "BTW", tabs[tabs.length-2]));
 	String tTot = threeFormatter.format(taxesTot);
-	taxes.add(new PrintableString(lineHeight, tTot, tabs[tabs.length-1]-fontMetrics.charsWidth(tTot.toCharArray(), 0, tTot.length())));
+	String[] totp = tTot.split(",");
+	offset = totp[0].length();
+	for (char c : totp[0].toCharArray()) {
+	    taxes.add(new PrintableString(lineHeight, ""+c, tabs[tabs.length-1]-threeZeroesWithCommaWidth-offsetPix*offset));
+	    offset--;
+	}
+	taxes.add(new PrintableString(lineHeight, ","+totp[1], tabs[tabs.length-1]-threeZeroesWithCommaWidth));
+//	taxes.add(new PrintableString(lineHeight, tTot, tabs[tabs.length-1]-fontMetrics.charsWidth(tTot.toCharArray(), 0, tTot.length())));
 	printModel.add(new PrintableMulti(lineHeight, taxes));
 	
 	/*
@@ -338,12 +446,26 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    double tot = nets.get(index-1)+adds.get(index-1);
 	    total+=tot;
 	    String t = twoFormatter.format(tot);
-	    totals.add(new PrintableString(lineHeight, t, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth((t+"0").toCharArray(), 0, t.length()-3)));
+	    String[] ttp = t.split(",");
+	    offset = ttp[0].length();
+	    for (char c : ttp[0].toCharArray()) {
+		totals.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));
+		offset--;
+	    }
+	    totals.add(new PrintableString(lineHeight, ","+ttp[1], tabs[index]-threeZeroesWithCommaWidth));
+//	    totals.add(new PrintableString(lineHeight, t, tabs[index]+threeZeroesWidth-fontMetrics.charsWidth((t+"0").toCharArray(), 0, t.length()-3)));
 	    index++;
 	}
 	totals.add(new PrintableString(lineHeight, "TOTAAL", tabs[tabs.length-2]));
 	String tot = twoFormatter.format(total);
-	totals.add(new PrintableString(lineHeight, tot, tabs[tabs.length-1]-fontMetrics.charsWidth((tot+"0").toCharArray(), 0, tot.length()+1)));
+	String[] tp = tot.split(",");
+	offset = tp[0].length();
+	for (char c : tp[0].toCharArray()) {
+	    totals.add(new PrintableString(lineHeight, ""+c, tabs[tabs.length-1]-threeZeroesWithCommaWidth-offsetPix*offset));
+	    offset--;
+	}
+	totals.add(new PrintableString(lineHeight, ","+tp[1], tabs[tabs.length-1]-threeZeroesWithCommaWidth));
+//	totals.add(new PrintableString(lineHeight, tot, tabs[tabs.length-1]-fontMetrics.charsWidth((tot+"0").toCharArray(), 0, tot.length()+1)));
 	printModel.add(new PrintableMulti(lineHeight, totals));
 	
 	printModel.add(new PrintableLine(0, 0, width));
@@ -352,11 +474,11 @@ public class PrintableInvoiceNew extends MyPrintable{
 	/*
 	 * Keep 7 white lines from the bottom
 	 */
-//	printModel.add(new PrintableNewline(lineHeight));
-//	printModel.add(new PrintableNewline(lineHeight));
-//	printModel.add(new PrintableNewline(lineHeight));
-//	printModel.add(new PrintableNewline(lineHeight));
-//	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
+	printModel.add(new PrintableNewline(lineHeight));
 	
 //	printModel.add(new PrintableNewline());
 //	printModel.add(new PrintableNewline());

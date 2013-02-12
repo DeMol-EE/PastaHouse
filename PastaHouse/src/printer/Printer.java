@@ -5,8 +5,10 @@
 package printer;
 
 import java.awt.print.Book;
+import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
+import javax.print.attribute.Attribute;
 
 /**
  *
@@ -46,6 +48,10 @@ public class Printer {
 	job.setPrintable(pj);
     }
     
+    public void setPrintableJob(Printable pj, PageFormat pf){
+	job.setPrintable(pj, pf);
+    }
+    
     public void tryPrint(){
 	// ask for a page dialog to format the page?
 //	job.pageDialog(job.defaultPage());
@@ -57,6 +63,11 @@ public class Printer {
 	if (shouldPrint) {
 	    try{
 		job.print();
+		
+		for (Attribute attribute : job.getPrintService().getAttributes().toArray()) {
+		    System.out.println(attribute.getName()+": "+attribute.toString());
+		}
+		
 		System.out.println("Finished printing!");
 	    } catch (Exception e){
 		System.err.println("Printing failed with exception:\n"+e.getMessage());

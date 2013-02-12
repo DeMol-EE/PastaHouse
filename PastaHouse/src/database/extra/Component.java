@@ -5,6 +5,7 @@
 package database.extra;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 /**
  *
@@ -38,10 +39,15 @@ public class Component {
     }
     
     public String getFormattedUnits(){
+	DecimalFormat f = new DecimalFormat("0.00");
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+	otherSymbols.setDecimalSeparator(',');
+	otherSymbols.setGroupingSeparator('.'); 
+	f.setDecimalFormatSymbols(otherSymbols);
 	if (ingredient == null) {
 	    return "Geen ingrediënt";
 	} else {
-	    return ingredient.isInBulk() ? "Bulk" : new DecimalFormat("0.00").format(getUnits());
+	    return ingredient.isInBulk() ? "Bulk" : f.format(getUnits());
 	}
     }
     
