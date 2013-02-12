@@ -97,13 +97,13 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 	packagingOutlet.setText(StringTools.capitalize(bi.getPackaging()));
-	if (bi.isInBulk()) {
-	    pricePerUnitOutlet.setText("<n.v.t.>");
-	    weightPerUnitOutlet.setText("<n.v.t.>");
-	} else {
+//	if (bi.isInBulk()) {
+//	    pricePerUnitOutlet.setText("");
+//	    weightPerUnitOutlet.setText("");
+//	} else {
 	    pricePerUnitOutlet.setText(threeFormatter.format(bi.getPricePerUnit()) + " euro / " + bi.getPackaging());
 	    weightPerUnitOutlet.setText(threeFormatter.format(bi.getWeightPerUnit()) + " kg / " + bi.getPackaging());
-	}
+//	}
 	
         //€-sign?
         brandOutlet.setText(StringTools.capitalize(bi.getBrand()));
