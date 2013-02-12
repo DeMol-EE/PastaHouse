@@ -27,7 +27,7 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 
     private final int recipeTabIndex = 0;
     private final int ingredientTabIndex = 1;
-    private final int supplierTabIndex = 2;
+//    private final int supplierTabIndex = 2;
     private HashMap<Integer, MasterDetailViewController> tabs;
     
     /**
@@ -38,13 +38,13 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
 	
         tabs = new HashMap<Integer, MasterDetailViewController>();
         
-	tabs.put(supplierTabIndex, new SupplierViewController());
+//	tabs.put(supplierTabIndex, new SupplierViewController());
 	tabs.put(ingredientTabIndex, new BasicIngredientViewController(this));
 	tabs.put(recipeTabIndex, new RecipeViewController());
 	
 	recipeTab.add(tabs.get(recipeTabIndex).view());
 	ingredientTab.add(tabs.get(ingredientTabIndex).view());
-	supplierTab.add(tabs.get(supplierTabIndex).view());
+//	supplierTab.add(tabs.get(supplierTabIndex).view());
 	
 	tabController.addChangeListener(new ChangeListener() {
 
@@ -61,8 +61,8 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
     }
     
     public void selectAndSwitchToSupplier(Contact supplier){
-	tabController.setSelectedIndex(supplierTabIndex);
-	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
+//	tabController.setSelectedIndex(supplierTabIndex);
+//	((SupplierViewController)tabs.get(supplierTabIndex)).selectSupplier(supplier);
     }
     
     @Override
@@ -82,11 +82,11 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
         tabMenu = new javax.swing.JMenu();
         recipeMenuItem = new javax.swing.JMenuItem();
         ingredientMenuItem = new javax.swing.JMenuItem();
+        supplierTab = new javax.swing.JPanel();
         supplierMenuItem = new javax.swing.JMenuItem();
         tabController = new javax.swing.JTabbedPane();
         recipeTab = new javax.swing.JPanel();
         ingredientTab = new javax.swing.JPanel();
-        supplierTab = new javax.swing.JPanel();
 
         tabMenu.setText("Tabs");
 
@@ -108,6 +108,9 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
         });
         tabMenu.add(ingredientMenuItem);
 
+        supplierTab.setFocusable(false);
+        supplierTab.setLayout(new java.awt.BorderLayout());
+
         supplierMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         supplierMenuItem.setText("Leveranciers");
         supplierMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -115,7 +118,6 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
                 supplierMenuItemActionPerformed(evt);
             }
         });
-        tabMenu.add(supplierMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -131,15 +133,11 @@ public class RecipeTabbedViewController extends javax.swing.JPanel implements Ta
         ingredientTab.setLayout(new java.awt.BorderLayout());
         tabController.addTab("Ingrediënten", ingredientTab);
 
-        supplierTab.setFocusable(false);
-        supplierTab.setLayout(new java.awt.BorderLayout());
-        tabController.addTab("Leveranciers", supplierTab);
-
         add(tabController, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void supplierMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierMenuItemActionPerformed
-        tabController.setSelectedIndex(supplierTabIndex);
+//        tabController.setSelectedIndex(supplierTabIndex);
     }//GEN-LAST:event_supplierMenuItemActionPerformed
 
     private void recipeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipeMenuItemActionPerformed

@@ -646,13 +646,14 @@ public class Database {
 //    
 
     public Map<String, Contact> getClientsAlphabetically() {
-        Map<String, Contact> clients = new TreeMap<String, Contact>();
-        for (Contact contact : contactsBySortKey.values()) {
-            if (!contact.isSupplier()) {
-                clients.put(contact.getSortKey().toLowerCase(), contact);
-            }
-        }
-        return clients;
+//        Map<String, Contact> clients = new TreeMap<String, Contact>();
+//        for (Contact contact : contactsBySortKey.values()) {
+//            if (!contact.isSupplier()) {
+//                clients.put(contact.getSortKey().toLowerCase(), contact);
+//            }
+//        }
+//        return clients;
+	return contactsBySortKey;
     }
 //
 //    public Map<Integer, Contact> getSuppliers() {
@@ -667,13 +668,14 @@ public class Database {
 //    
 
     public Map<String, Contact> getSuppliersAlphabetically() {
-        Map<String, Contact> suppliers = new TreeMap<String, Contact>();
-        for (Contact contact : contactsBySortKey.values()) {
-            if (contact.isSupplier()) {
-                suppliers.put(contact.getSortKey().toLowerCase(), contact);
-            }
-        }
-        return suppliers;
+//        Map<String, Contact> suppliers = new TreeMap<String, Contact>();
+//        for (Contact contact : contactsBySortKey.values()) {
+//            if (contact.isSupplier()) {
+//                suppliers.put(contact.getSortKey().toLowerCase(), contact);
+//            }
+//        }
+//        return suppliers;
+	return contactsBySortKey;
     }
     
     public Map<Integer, BasicIngredient> getBasicIngredients() {

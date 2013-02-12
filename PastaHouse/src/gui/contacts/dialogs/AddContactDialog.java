@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXTitledPanel;
+import tools.Clipboard;
 import tools.Utilities;
 
 /**
@@ -55,9 +56,9 @@ public class AddContactDialog extends javax.swing.JDialog {
         this.model = new ContactModel("supplier");
         this.type = type;
         loadModel();
-        this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+        this.typeBox = new JComboBox(new String[]{"Klant", "Leverancier"});
 
-        typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
+//        typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 
 	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
@@ -99,6 +100,17 @@ public class AddContactDialog extends javax.swing.JDialog {
 	    }
 	});
 	
+	Clipboard.installKeyListener(txtFirma);
+	Clipboard.installKeyListener(txtContact);
+	Clipboard.installKeyListener(txtAdres);
+	Clipboard.installKeyListener(txtEmail);
+	Clipboard.installKeyListener(txtFax);
+	Clipboard.installKeyListener(txtGSM);
+	Clipboard.installKeyListener(txtPostcode);
+	Clipboard.installKeyListener(txtTel);
+	Clipboard.installKeyListener(txtTel2);
+	Clipboard.installKeyListener(taxnrOutlet);
+	
 	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
 	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
@@ -112,8 +124,8 @@ public class AddContactDialog extends javax.swing.JDialog {
         this.model = new ContactModel("supplier");
         this.type = Contact.both;
         loadModel();
-        this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
-        typeParent.add(typeBox);
+        this.typeBox = new JComboBox(new String[]{"Klant", "Leverancier"});
+//        typeParent.add(typeBox);
 
         AcceleratorAdder.addAccelerator(add, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
             @Override
@@ -181,9 +193,6 @@ public class AddContactDialog extends javax.swing.JDialog {
         detailsContainer = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        typeTF = new javax.swing.JLabel();
-        typeParent = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
@@ -222,16 +231,7 @@ public class AddContactDialog extends javax.swing.JDialog {
         jPanel6.setLayout(new java.awt.BorderLayout());
 
         jPanel7.setLayout(new java.awt.GridLayout(1, 2));
-
-        typeTF.setText("Type");
-        typeTF.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 1));
-        jPanel7.add(typeTF);
-
-        typeParent.setLayout(new java.awt.BorderLayout());
-        jPanel7.add(typeParent);
-
         jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
-        jPanel6.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
         detailsContainer.add(jPanel6, java.awt.BorderLayout.NORTH);
 
@@ -398,13 +398,13 @@ public class AddContactDialog extends javax.swing.JDialog {
             model.setNotes(notesOutlet.getText());
             model.setTaxnumber(taxnrOutlet.getText());
             model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
-            if (type == Contact.both) {
-                model.setType(typeBox.getSelectedItem().toString());
-            } else if (type == Contact.supplier) {
+//            if (type == Contact.both) {
+//                model.setType(typeBox.getSelectedItem().toString());
+//            } else if (type == Contact.supplier) {
                 model.setType("supplier");
-            } else if (type == Contact.client) {
-                model.setType("client");
-            }
+//            } else if (type == Contact.client) {
+//                model.setType("client");
+//            }
 
             FunctionResult<Contact> result = model.create();
             if (result.getCode() == 0 && result.getObj() != null) {
@@ -476,7 +476,6 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel notesContainer;
     private javax.swing.JTextArea notesOutlet;
     private javax.swing.JComboBox pricecodeOutlet;
@@ -490,8 +489,6 @@ public class AddContactDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtPostcode;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txtTel2;
-    private javax.swing.JPanel typeParent;
-    private javax.swing.JLabel typeTF;
     // End of variables declaration//GEN-END:variables
     private AutocompleteCombobox comboGemeentes;
 

@@ -90,6 +90,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         DecimalFormat threeFormatter = new DecimalFormat("0.000");
         DecimalFormat twoFormatter = new DecimalFormat("0.00");
         
+	ingredientOutlet.setText(bi.getName());
+	
         supplierOutlet.setText(bi.getSupplier() != null ? bi.getSupplier().toString() : "<geen>");
         supplierOutlet.setForeground(Color.BLUE);
         supplierOutlet.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -154,6 +156,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
         fixedFields = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        ingredientOutlet = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         brandOutlet = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -209,7 +213,15 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu.add(editMenuItem);
 
         fixedFields.setFocusable(false);
-        fixedFields.setLayout(new java.awt.GridLayout(10, 2));
+        fixedFields.setLayout(new java.awt.GridLayout(11, 2));
+
+        jLabel1.setText("Ingrediënt");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 3, 5));
+        fixedFields.add(jLabel1);
+
+        ingredientOutlet.setText("<ingredientOutlet>");
+        ingredientOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 3, 5));
+        fixedFields.add(ingredientOutlet);
 
         jLabel2.setBackground(new java.awt.Color(239, 239, 239));
         jLabel2.setText("Merk");
@@ -501,6 +513,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JMenuItem editMenuItem;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
+    private javax.swing.JLabel ingredientOutlet;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;

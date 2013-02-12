@@ -27,7 +27,7 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
 
     private final int invoicesTabIndex = 0;
     private final int articlesTabIndex = 1;
-    private final int clientsTabIndex = 2;
+//    private final int clientsTabIndex = 2;
     
     private HashMap<Integer, MasterDetailViewController> tabs;
     
@@ -41,11 +41,11 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
 	
 	tabs.put(invoicesTabIndex, new InvoiceViewController());
 	tabs.put(articlesTabIndex, new ArticleViewController());
-	tabs.put(clientsTabIndex, new ClientViewController(this));
+//	tabs.put(clientsTabIndex, new ClientViewController(this));
 	
 	invoiceTab.add(tabs.get(invoicesTabIndex).view());
 	articleTab.add(tabs.get(articlesTabIndex).view());
-	clientTab.add(tabs.get(clientsTabIndex).view());
+//	clientTab.add(tabs.get(clientsTabIndex).view());
 	
 	tabController.addChangeListener(new ChangeListener() {
 
@@ -79,11 +79,11 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
         tabMenu = new javax.swing.JMenu();
         invoiceMenuItem = new javax.swing.JMenuItem();
         articleMenuItem = new javax.swing.JMenuItem();
+        clientTab = new javax.swing.JPanel();
         clientMenuItem = new javax.swing.JMenuItem();
         tabController = new javax.swing.JTabbedPane();
         invoiceTab = new javax.swing.JPanel();
         articleTab = new javax.swing.JPanel();
-        clientTab = new javax.swing.JPanel();
 
         tabMenu.setText("Tabs");
 
@@ -105,6 +105,9 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
         });
         tabMenu.add(articleMenuItem);
 
+        clientTab.setFocusable(false);
+        clientTab.setLayout(new java.awt.BorderLayout());
+
         clientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         clientMenuItem.setText("Klanten");
         clientMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -112,7 +115,6 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
                 clientMenuItemActionPerformed(evt);
             }
         });
-        tabMenu.add(clientMenuItem);
 
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
@@ -128,10 +130,6 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
         articleTab.setLayout(new java.awt.BorderLayout());
         tabController.addTab("Artikels", articleTab);
 
-        clientTab.setFocusable(false);
-        clientTab.setLayout(new java.awt.BorderLayout());
-        tabController.addTab("Klanten", clientTab);
-
         add(tabController, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -144,7 +142,7 @@ public class InvoiceTabbedViewController extends javax.swing.JPanel implements T
     }//GEN-LAST:event_articleMenuItemActionPerformed
 
     private void clientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientMenuItemActionPerformed
-        tabController.setSelectedIndex(clientsTabIndex);
+//        tabController.setSelectedIndex(clientsTabIndex);
     }//GEN-LAST:event_clientMenuItemActionPerformed
 
     public void switchToInvoicesAndFilterByClient(Contact c){

@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXTitledPanel;
+import tools.Clipboard;
 import tools.Utilities;
 
 /**
@@ -59,9 +60,9 @@ public class EditContactDialog extends javax.swing.JDialog {
         this.type = type;
 
         loadModel();
-        this.typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+        this.typeBox = new JComboBox(new String[]{"Klant", "Leverancier"});
 
-        typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
+//        typeParent.add(new JLabel(type == Contact.client ? "Klant" : "Leverancier"));
 
 	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
@@ -105,6 +106,17 @@ public class EditContactDialog extends javax.swing.JDialog {
 	    }
 	});
 	
+	Clipboard.installKeyListener(txtFirma);
+	Clipboard.installKeyListener(txtContact);
+	Clipboard.installKeyListener(txtAdres);
+	Clipboard.installKeyListener(txtEmail);
+	Clipboard.installKeyListener(txtFax);
+	Clipboard.installKeyListener(txtGSM);
+	Clipboard.installKeyListener(txtPostcode);
+	Clipboard.installKeyListener(txtTel);
+	Clipboard.installKeyListener(txttel2);
+	Clipboard.installKeyListener(taxnrOutlet);
+	
 	add(new JXTitledPanel("Details", detailsContainer), BorderLayout.NORTH);
 	add(new JXTitledPanel("Opmerkingen", notesContainer), BorderLayout.CENTER);
     }
@@ -125,13 +137,13 @@ public class EditContactDialog extends javax.swing.JDialog {
 
         loadModel();
 
-        typeBox = new JComboBox(new String[]{"Leverancier", "Klant"});
+        typeBox = new JComboBox(new String[]{"Klant", "Leverancier"});
         if (model.isSupplier()) {
             typeBox.setSelectedIndex(0);
         } else {
             typeBox.setSelectedIndex(1);
         }
-        typeParent.add(typeBox);
+//        typeParent.add(typeBox);
 
         AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
             @Override
@@ -191,7 +203,7 @@ public class EditContactDialog extends javax.swing.JDialog {
 
     private void loadModel() {
         txtFirma.setText(model.getFirm());
-        txtFirma.setText(model.getSortKey());
+//        txtFirma.setText(model.getSortKey());
         txtContact.setText(model.getContact());
         txtAdres.setText(model.getAddress());
         // copy municipale
@@ -272,9 +284,6 @@ public class EditContactDialog extends javax.swing.JDialog {
         detailsContainer = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        typeTF = new javax.swing.JLabel();
-        typeParent = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         firmLabel = new javax.swing.JLabel();
         txtFirma = new javax.swing.JTextField();
@@ -313,16 +322,7 @@ public class EditContactDialog extends javax.swing.JDialog {
         jPanel6.setLayout(new java.awt.BorderLayout());
 
         jPanel7.setLayout(new java.awt.GridLayout(1, 2));
-
-        typeTF.setText("Type");
-        typeTF.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 1));
-        jPanel7.add(typeTF);
-
-        typeParent.setLayout(new java.awt.BorderLayout());
-        jPanel7.add(typeParent);
-
         jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
-        jPanel6.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
         detailsContainer.add(jPanel6, java.awt.BorderLayout.NORTH);
 
@@ -482,13 +482,13 @@ public class EditContactDialog extends javax.swing.JDialog {
             model.setNotes(notesOutlet.getText());
             model.setTaxnumber(taxnrOutlet.getText());
             model.setPricecode(pricecodeOutlet.getSelectedItem().toString());
-            if (type == Contact.both) {
-                model.setType(typeBox.getSelectedIndex() == 0 ? "supplier" : "client");
-            } else if (type == Contact.supplier) {
+//            if (type == Contact.both) {
+//                model.setType(typeBox.getSelectedIndex() == 0 ? "supplier" : "client");
+//            } else if (type == Contact.supplier) {
                 model.setType("supplier");
-            } else if (type == Contact.client) {
-                model.setType("client");
-            }
+//            } else if (type == Contact.client) {
+//                model.setType("client");
+//            }
 
 //            if (!defaultModel.getSortKey().equalsIgnoreCase(model.getSortKey())) {
 //                if (Database.driver().getContactsAlphabetically().containsKey(model.getSortKey().toLowerCase())) {
@@ -595,7 +595,6 @@ public class EditContactDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel muniParent;
     private javax.swing.JPanel notesContainer;
     private javax.swing.JTextArea notesOutlet;
@@ -611,8 +610,6 @@ public class EditContactDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtPostcode;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txttel2;
-    private javax.swing.JPanel typeParent;
-    private javax.swing.JLabel typeTF;
     // End of variables declaration//GEN-END:variables
     private AutocompleteCombobox comboGemeentes;
 }

@@ -125,11 +125,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         editMenuItem = new javax.swing.JMenuItem();
         searchMenuItem = new javax.swing.JMenuItem();
         fixedFields = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        typeOutlet = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         firmTitleOutlet = new javax.swing.JLabel();
         firmOutlet = new javax.swing.JLabel();
@@ -158,6 +153,11 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        typeOutlet = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         filter = new javax.swing.JTextField();
@@ -201,22 +201,6 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.BorderLayout());
-
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
-
-        jLabel2.setText("Type");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
-        jPanel4.add(jLabel2);
-
-        typeOutlet.setText("<typeOutlet>");
-        jPanel4.add(typeOutlet);
-
-        jPanel3.add(jPanel4, java.awt.BorderLayout.CENTER);
-        jPanel3.add(jSeparator1, java.awt.BorderLayout.SOUTH);
-
-        fixedFields.add(jPanel3, java.awt.BorderLayout.NORTH);
 
         jPanel1.setLayout(new java.awt.GridLayout(12, 2));
 
@@ -389,6 +373,20 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         jScrollPane2.setViewportView(notesOutlet);
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel2.setText("Type");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
+        jPanel4.add(jLabel2);
+
+        typeOutlet.setText("<typeOutlet>");
+        jPanel4.add(typeOutlet);
+
+        jPanel3.add(jPanel4, java.awt.BorderLayout.CENTER);
+        jPanel3.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
         setLayout(new java.awt.BorderLayout());
 

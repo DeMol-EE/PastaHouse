@@ -38,27 +38,29 @@ public class StringTools {
     }
 
     public static String capitalize(String s) {
-	if (s == null) {
-	    return "";
-	}
-	if (s.length() > 1) {
-//	    return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-	    return s.substring(0, 1).toUpperCase() + s.substring(1);
-	}
+//	if (s == null) {
+//	    return "";
+//	}
+//	if (s.length() > 1) {
+////	    return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+//	    return s.substring(0, 1).toUpperCase() + s.substring(1);
+//	}
+//	return s;
 	return s;
     }
 
     public static String capitalizeEach(String s) {
-	if (s==null || s.isEmpty()) {
-	    return "";
-	}
-	String[] parts = s.split(" ");
-	String returnMe = "";
-	if (s.length() > 1) {
-	    for (String string : parts) {
-		returnMe += capitalize(string) + " ";
-	    }
-	}
-	return returnMe.length() > 0 ? returnMe.substring(0, returnMe.length()-1) : "";
+//	if (s==null || s.isEmpty()) {
+//	    return "";
+//	}
+//	String[] parts = s.split(" ");
+//	String returnMe = "";
+//	if (s.length() > 1) {
+//	    for (String string : parts) {
+//		returnMe += capitalize(string) + " ";
+//	    }
+//	}
+//	return returnMe.length() > 0 ? returnMe.substring(0, returnMe.length()-1) : "";
+	return s;
     }
 }
