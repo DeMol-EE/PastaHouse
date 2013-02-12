@@ -76,7 +76,8 @@ public class PrintableInvoiceNew extends MyPrintable{
 	printModel.add(new PrintableNewline());
 	printModel.add(new PrintableNewline());
 	
-	printModel.add(new PrintableString(model.getClient().getContact(), half+3));
+//	printModel.add(new PrintableString(model.getClient().getContact(), half+3));
+	printModel.add(new PrintableString(model.getClient().getFirm(), half+3));
 	
 	printModel.add(new PrintableNewline());
 	
@@ -88,7 +89,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	
 	printModel.add(new PrintableNewline());
 	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableString(model.getClient().getTaxnumber(), half+3));
+	printModel.add(new PrintableString("BE0 "+model.getClient().getTaxnumber(), half+3));
 	
 	printModel.add(new PrintableNewline());
 	printModel.add(new PrintableNewline());
@@ -133,7 +134,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    ii.add(new PrintableString(tot, tabs[4]-fontMetrics.charsWidth(tot.toCharArray(), 0, tot.length())));
 	    printModel.add(new PrintableMulti(ii));
 	    
-	    printModel.add(new PrintableNewline());
+//	    printModel.add(new PrintableNewline());
 	}
 	
 	return printModel;
@@ -183,13 +184,13 @@ public class PrintableInvoiceNew extends MyPrintable{
 	int threeZeroesWidth = fontMetrics.charsWidth("000".toCharArray(), 0 , 3);
 	
 	if (model.getSave()>0) {
-	    printModel.add(0, new PrintableNewline());
+	    printModel.add(new PrintableNewline());
 	    
 	    /*
 	     * BTW
 	     */
 	    printModel.add(new PrintableLine(0, width));
-	    printModel.add(new PrintableNewline());
+//	    printModel.add(new PrintableNewline());
 	    ArrayList<PrintableHorizontalLineObject> savingsCategories = new ArrayList<PrintableHorizontalLineObject>();
 	    savingsCategories.add(new PrintableString("BTW %", 0));
 	    int index = 1;
@@ -203,7 +204,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    /*
 	     * Net before save
 	     */
-	    printModel.add(new PrintableNewline());
+//	    printModel.add(new PrintableNewline());
 	    ArrayList<PrintableHorizontalLineObject> prices = new ArrayList<PrintableHorizontalLineObject>();
 	    ArrayList<Double> netPrices = new ArrayList<Double>();
 	    prices.add(new PrintableString("Bedrag", 0));
@@ -223,7 +224,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    /*
 	     * Save %
 	     */
-	    printModel.add(new PrintableNewline());
+//	    printModel.add(new PrintableNewline());
 	    ArrayList<PrintableHorizontalLineObject> savings = new ArrayList<PrintableHorizontalLineObject>();
 	    ArrayList<Double> saved = new ArrayList<Double>();
 	    savings.add(new PrintableString("- "+model.getSave()+"%", 0));
@@ -240,7 +241,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	    /*
 	     * Net after save
 	     */
-	    printModel.add(new PrintableNewline());
+//	    printModel.add(new PrintableNewline());
 	    ArrayList<PrintableHorizontalLineObject> savedPrices = new ArrayList<PrintableHorizontalLineObject>();
 	    savedPrices.add(new PrintableString("Netto", 0));
 	    index = 1;
@@ -258,7 +259,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	 * BTW %
 	 */
 	printModel.add(new PrintableLine(0, width));
-	printModel.add(new PrintableNewline());
+//	printModel.add(new PrintableNewline());
 	ArrayList<PrintableHorizontalLineObject> savingsCategories = new ArrayList<PrintableHorizontalLineObject>();
 	savingsCategories.add(new PrintableString("BTW %", 0));
 	int index = 1;
@@ -272,7 +273,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	/*
 	 * Net after save
 	 */
-	printModel.add(new PrintableNewline());
+//	printModel.add(new PrintableNewline());
 	ArrayList<PrintableHorizontalLineObject> prices = new ArrayList<PrintableHorizontalLineObject>();
 	prices.add(new PrintableString("Excl.", 0));
 	index = 1;
@@ -291,7 +292,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	/*
 	 * BTW price
 	 */
-	printModel.add(new PrintableNewline());
+//	printModel.add(new PrintableNewline());
 	ArrayList<PrintableHorizontalLineObject> taxes = new ArrayList<PrintableHorizontalLineObject>();
 	taxes.add(new PrintableString("BTW", 0));
 	index = 1;
@@ -315,7 +316,7 @@ public class PrintableInvoiceNew extends MyPrintable{
 	 * Totals
 	 */
 	printModel.add(new PrintableLine(0, width));
-	printModel.add(new PrintableNewline());
+//	printModel.add(new PrintableNewline());
 	ArrayList<PrintableHorizontalLineObject> totals = new ArrayList<PrintableHorizontalLineObject>();
 	totals.add(new PrintableString("Totaal", 0));
 	double total = 0.0;
@@ -344,8 +345,8 @@ public class PrintableInvoiceNew extends MyPrintable{
 	printModel.add(new PrintableNewline());
 	printModel.add(new PrintableNewline());
 	
-	printModel.add(new PrintableNewline());
-	printModel.add(new PrintableNewline());
+//	printModel.add(new PrintableNewline());
+//	printModel.add(new PrintableNewline());
 	
 	return printModel;
     }

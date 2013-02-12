@@ -260,7 +260,7 @@ public class CellRendererFactory {
 
     private static class DateRenderer extends DefaultTableCellRenderer {
 
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         public DateRenderer() {
             super();

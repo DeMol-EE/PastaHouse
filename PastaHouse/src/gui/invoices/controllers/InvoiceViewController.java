@@ -153,6 +153,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         toOutlet = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         btnClearFilters = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
         tablePanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -160,7 +161,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         details = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         add = new javax.swing.JButton();
-        delete = new javax.swing.JButton();
 
         noResultOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noResultOutlet.setText("Geen resultaten");
@@ -170,8 +170,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Nummer");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -194,7 +195,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(numberField, gridBagConstraints);
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Klant");
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -221,8 +224,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Van");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 3));
         jLabel3.setVerifyInputWhenFocusTarget(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -241,8 +245,9 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(fromOutlet, gridBagConstraints);
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Tot");
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 3));
         jLabel4.setVerifyInputWhenFocusTarget(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -272,6 +277,15 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
             }
         });
         jPanel5.add(btnClearFilters);
+
+        delete.setText("Verwijderen...");
+        delete.setFocusable(false);
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
+        jPanel5.add(delete);
 
         controlPanel.add(jPanel5);
 
@@ -315,15 +329,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
             }
         });
         jPanel6.add(add);
-
-        delete.setText("Verwijderen...");
-        delete.setFocusable(false);
-        delete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteActionPerformed(evt);
-            }
-        });
-        jPanel6.add(delete);
 
         jPanel1.add(jPanel6, java.awt.BorderLayout.WEST);
 
@@ -446,7 +451,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
                         }
                     }
-                    //                    </snip> 
                 };
             }
         };
@@ -464,7 +468,6 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         table.getColumns().get(2).setCellRenderer(CellRendererFactory.createDateRenderer());
 
         table.setSortOrder(0, SortOrder.DESCENDING);
-
 
     }
 
