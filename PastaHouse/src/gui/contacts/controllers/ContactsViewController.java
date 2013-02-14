@@ -13,12 +13,13 @@ import gui.contacts.delegates.EditContactDelegate;
 import gui.contacts.dialogs.AddContactDialog;
 import gui.contacts.dialogs.EditContactDialog;
 import gui.utilities.TextFieldAutoHighlighter;
-import gui.utilities.list.ContactListModel;
 import gui.utilities.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -28,6 +29,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTextField;
 import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 import tools.Utilities;
@@ -44,6 +46,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     
 //    private ContactListModel listModel;
     private FilterableListModel<Contact> listModel;
+    private final JXTextField xfilter;
     
     /**
      * Creates new form ContactsViewController
@@ -63,7 +66,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
 		    if (listOutlet.getSelectedValue()!=null) {
-			updateDetail((Contact)listOutlet.getSelectedValue());
+			updateDetail(listModel.getElementAt(listOutlet.getSelectedIndex()));
 		    }
 		}
 	    }
@@ -105,13 +108,27 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    detail.add(EmptyPanelManager.instance(), BorderLayout.CENTER);
 	}
 	
+//	xfilter = new JXSearchField("Search");
+	xfilter = new JXTextField("Zoeken");
+	xfilter.addKeyListener(new KeyAdapter() {
+
+	    @Override
+	    public void keyReleased(KeyEvent e) {
+		filterKeyReleased(e);
+	    }
+	    
+	});
+	master.remove(filter);
+	master.add(xfilter, BorderLayout.NORTH);
+	
 	container.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
 	container.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
 	
 	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 	
 //	filtersMap = new HashMap<FilterPanel, RowFilter>();
-	TextFieldAutoHighlighter.installHighlighter(filter);
+//	TextFieldAutoHighlighter.installHighlighter(filter);
+	TextFieldAutoHighlighter.installHighlighter(xfilter);
     }
 
     /**
@@ -362,15 +379,16 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
         notesOutlet.setRows(1);
         notesOutlet.setWrapStyleWord(true);
         notesOutlet.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        notesOutlet.setEnabled(false);
         notesOutlet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                notesOutletKeyTyped(evt);
+            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 notesOutletKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 notesOutletKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                notesOutletKeyTyped(evt);
             }
         });
         jScrollPane2.setViewportView(notesOutlet);
@@ -460,10 +478,10 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     }//GEN-LAST:event_editMenuItemActionPerformed
 
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
-        if (filter.getText().isEmpty()) {
+        if (xfilter.getText().isEmpty()) {
 	    listModel.setFilter(null);
 	} else {
-	    listModel.setFilter(filter.getText());
+	    listModel.setFilter(xfilter.getText());
 	}
 	if (listModel.getSize()==0) {
 	    System.out.println("No results");
@@ -477,14 +495,14 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	detail.add(results);
 	listOutlet.setSelectedIndex(0);
 	if (listOutlet.getSelectedValue()!=null) {
-	    updateDetail((Contact)listOutlet.getSelectedValue());
+	    updateDetail(listModel.getElementAt(listOutlet.getSelectedIndex()));
 	}
 	validate();
 	repaint();
     }//GEN-LAST:event_filterKeyReleased
 
     private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
-        filter.requestFocus();
+        xfilter.requestFocus();
     }//GEN-LAST:event_searchMenuItemActionPerformed
 
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed
@@ -502,9 +520,9 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
 //        new EditSupplierDialog(null, true, this, (Supplier) listOutlet.getSelectedValue()).setVisible(true);
 	listModel.setFilter(null);
-	filter.setText("");
+	xfilter.setText("");
 	
-	EditContactDialog.createContactDialog(this, (Contact) listOutlet.getSelectedValue()).setVisible(true);
+	EditContactDialog.createContactDialog(this, listModel.getElementAt(listOutlet.getSelectedIndex())).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
@@ -602,7 +620,7 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 		detail.add(container);
 	    }
 	    listOutlet.setSelectedIndex(0);
-	    if(listOutlet.getSelectedValue()!=null)updateDetail((Contact)listOutlet.getSelectedValue());
+	    if(listOutlet.getSelectedValue()!=null)updateDetail(listModel.getElementAt(listOutlet.getSelectedIndex()));
 	} else {
 	    System.out.println("No results");
 	    detail.removeAll();

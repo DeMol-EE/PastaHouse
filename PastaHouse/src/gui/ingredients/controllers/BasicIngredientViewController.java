@@ -20,7 +20,6 @@ import gui.ingredients.delegates.AddBasicIngredientDelegate;
 import gui.ingredients.delegates.EditBasicIngredientDelegate;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
-import gui.utilities.list.BasicIngredientListModel;
 import gui.utilities.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -483,11 +482,17 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }// </editor-fold>//GEN-END:initComponents
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        new EditBasicIngredientDialog(null, true, this, (BasicIngredient) listOutlet.getSelectedValue()).setVisible(true);
+        listModel.setFilter(null);
+	filter.setText("");
+	
+	new EditBasicIngredientDialog(null, true, this, (BasicIngredient) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
     
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        new AddBasicIngredientDialog(null, true, this).setVisible(true);
+        listModel.setFilter(null);
+	filter.setText("");
+	
+	new AddBasicIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
     
     private void notesOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_notesOutletKeyPressed

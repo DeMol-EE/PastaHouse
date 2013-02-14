@@ -12,7 +12,6 @@ import gui.invoices.delegates.AddArticleDelegate;
 import gui.invoices.delegates.EditArticleDelegate;
 import gui.invoices.dialogs.AddArticleDialog;
 import gui.invoices.dialogs.EditArticleDialog;
-import gui.utilities.list.ArticleListModel;
 import gui.utilities.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -260,11 +259,15 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        new AddArticleDialog(null, true, this).setVisible(true);
+        listModel.setFilter(null);
+	filter.setText("");
+	new AddArticleDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        if(listOutlet.getSelectedValue()!=null) new EditArticleDialog(null, true, this, (Article)listOutlet.getSelectedValue()).setVisible(true);
+        listModel.setFilter(null);
+	filter.setText("");
+	if(listOutlet.getSelectedValue()!=null) new EditArticleDialog(null, true, this, (Article)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
