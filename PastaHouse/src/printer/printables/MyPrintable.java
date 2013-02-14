@@ -236,7 +236,7 @@ public abstract class MyPrintable implements Printable{
 //	    y+=printModel.get(line).height();
 //        }
 	
-	System.out.println("Returning page exists...");
+	System.out.println("Returning page exists ("+pageIndex+")...");
 	return PAGE_EXISTS;
     }
     

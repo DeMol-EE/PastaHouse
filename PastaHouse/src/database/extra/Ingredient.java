@@ -4,6 +4,8 @@
  */
 package database.extra;
 
+import database.Filterable;
+
 /**
  * An extension to the base class Record by adding a name and date.
  * Represents both Recipes and Basic Ingredients. Offers the functionality
@@ -12,7 +14,7 @@ package database.extra;
  *
  * @author Warkst
  */
-public abstract class Ingredient extends Record implements Comparable<Ingredient> {
+public abstract class Ingredient extends Record implements Comparable<Ingredient>, Filterable {
     private String name;
     private String date;
 
@@ -54,4 +56,9 @@ public abstract class Ingredient extends Record implements Comparable<Ingredient
     public abstract boolean isBasicIngredient();
     
     public abstract boolean isInBulk();
+    
+    @Override
+    public String getFilterKey(){
+	return name;
+    }
 }

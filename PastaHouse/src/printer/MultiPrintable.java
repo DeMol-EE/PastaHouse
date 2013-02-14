@@ -31,6 +31,24 @@ public class MultiPrintable implements Printable{
     
     @Override
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+	int progress = 0;
+	int index = 0;
+	
+	try{
+	    int result;
+	    do {
+		result = collection.get(index).print(graphics, pageFormat, pageIndex);
+		index++;
+	    } while (result==NO_SUCH_PAGE);
+	    
+	    
+	    
+	    
+	} catch (Exception e){
+	    return NO_SUCH_PAGE;
+	}
+	
+	
 	
 	System.out.println(">>Multiprintable printing page index "+pageIndex+"\nChecking page "+index);
 	

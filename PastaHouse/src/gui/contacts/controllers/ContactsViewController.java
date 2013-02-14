@@ -14,6 +14,7 @@ import gui.contacts.dialogs.AddContactDialog;
 import gui.contacts.dialogs.EditContactDialog;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.list.ContactListModel;
+import gui.utilities.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -41,7 +42,8 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 //    private Set<String> unusedFilterKeys;
 //    private Set<String> usedFilterKeys;
     
-    private ContactListModel listModel;
+//    private ContactListModel listModel;
+    private FilterableListModel<Contact> listModel;
     
     /**
      * Creates new form ContactsViewController
@@ -50,7 +52,8 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	initComponents();
 	notesOutlet.setBackground(new Color(213, 216, 222));
         notesOutlet.setCaretPosition(0);
-	listModel = new ContactListModel(database.Database.driver().getContactsAlphabetically());
+//	listModel = new ContactListModel(database.Database.driver().getContactsAlphabetically());
+	listModel = new FilterableListModel<Contact>(database.Database.driver().getContactsAlphabetically());
 	listOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	listOutlet.setModel(listModel);
 	
@@ -600,6 +603,13 @@ public class ContactsViewController extends javax.swing.JPanel implements Master
 	    }
 	    listOutlet.setSelectedIndex(0);
 	    if(listOutlet.getSelectedValue()!=null)updateDetail((Contact)listOutlet.getSelectedValue());
+	} else {
+	    System.out.println("No results");
+	    detail.removeAll();
+	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+	    validate();
+	    repaint();
+	    return;
 	}
 	
 	/*

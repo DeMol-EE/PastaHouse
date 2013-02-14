@@ -10,4 +10,5 @@ package database;
  */
 public interface Filterable {
     public String filterable();
+    public String getFilterKey();
 }

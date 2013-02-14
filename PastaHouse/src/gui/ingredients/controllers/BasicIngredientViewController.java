@@ -14,13 +14,14 @@ import database.*;
 import database.tables.BasicIngredient;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
+import gui.NoResultsPanel;
 import gui.ingredients.RecipeTabbedViewController;
 import gui.ingredients.delegates.AddBasicIngredientDelegate;
 import gui.ingredients.delegates.EditBasicIngredientDelegate;
 import gui.ingredients.dialogs.AddBasicIngredientDialog;
 import gui.ingredients.dialogs.EditBasicIngredientDialog;
-import gui.utilities.list.EditableListModel;
-import gui.utilities.list.ListModelFactory;
+import gui.utilities.list.BasicIngredientListModel;
+import gui.utilities.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -43,6 +44,8 @@ import tools.Utilities;
 public class BasicIngredientViewController extends javax.swing.JPanel implements MasterDetailViewController<BasicIngredient>, AddBasicIngredientDelegate, EditBasicIngredientDelegate {
     
     private RecipeTabbedViewController delegate;
+//    private final BasicIngredientListModel listModel;
+    private final FilterableListModel<BasicIngredient> listModel;
 
     /**
      * Creates new form BasicIngredientViewController
@@ -64,7 +67,10 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         });
 
         // copy from the db
-        listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
+//        listOutlet.setModel(ListModelFactory.createBasicIngredientModel(Database.driver().getBasicIngredientsAlphabetically()));
+//	listModel = new BasicIngredientListModel(Database.driver().getBasicIngredientsAlphabetically());
+	listModel = new FilterableListModel<BasicIngredient>(Database.driver().getBasicIngredientsAlphabetically());
+	listOutlet.setModel(listModel);
         listOutlet.setSelectedIndex(0);
 
 	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
@@ -125,9 +131,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     
     @Override
     public void addBasicIngredient(BasicIngredient select) {
-        EditableListModel<BasicIngredient> dlm = (EditableListModel) listOutlet.getModel();
-        dlm.update();
-        if (dlm.getSize() == 1) {
+        listModel.update();
+        if (listModel.getSize() == 1) {
             detail.removeAll();
             detail.add(container);
         }
@@ -137,8 +142,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     
     @Override
     public void editBasicIngredient(BasicIngredient n, BasicIngredient o) {
-        EditableListModel<BasicIngredient> dlm = (EditableListModel) listOutlet.getModel();
-        dlm.edit(n, o);
+        listModel.update();
+	listModel.edit(n, o);
         listOutlet.setSelectedValue(n, true);
         updateDetail(n);
     }
@@ -155,6 +160,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         editMenu = new javax.swing.JMenu();
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
+        searchMenuItem = new javax.swing.JMenuItem();
         fixedFields = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         ingredientOutlet = new javax.swing.JLabel();
@@ -188,6 +194,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         add = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
+        filter = new javax.swing.JTextField();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -212,6 +219,15 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
             }
         });
         editMenu.add(editMenuItem);
+
+        searchMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        searchMenuItem.setText("Zoeken");
+        searchMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(searchMenuItem);
 
         fixedFields.setFocusable(false);
         fixedFields.setLayout(new java.awt.GridLayout(12, 2));
@@ -431,6 +447,13 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+        master.add(filter, java.awt.BorderLayout.NORTH);
+
         jSplitPane1.setLeftComponent(master);
 
         detail.setFocusable(false);
@@ -509,6 +532,34 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	}
     }//GEN-LAST:event_supplierOutletMouseReleased
 
+    private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
+        if (filter.getText().isEmpty()) {
+	    listModel.setFilter(null);
+	} else {
+	    listModel.setFilter(filter.getText());
+	}
+	if (listModel.getSize()==0) {
+	    System.out.println("No results");
+	    detail.removeAll();
+	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+	    validate();
+	    repaint();
+	    return;
+	}
+	detail.removeAll();
+	detail.add(container);
+	listOutlet.setSelectedIndex(0);
+	if (listOutlet.getSelectedValue()!=null) {
+	    updateDetail((BasicIngredient)listOutlet.getSelectedValue());
+	}
+	validate();
+	repaint();
+    }//GEN-LAST:event_filterKeyReleased
+
+    private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
+        filter.requestFocus();
+    }//GEN-LAST:event_searchMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JMenuItem addMenuItem;
@@ -519,6 +570,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JButton edit;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem editMenuItem;
+    private javax.swing.JTextField filter;
     private javax.swing.JPanel fixedFields;
     private javax.swing.JLabel grossPriceOutlet;
     private javax.swing.JLabel ingredientOutlet;
@@ -546,6 +598,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private javax.swing.JLabel packagingOutlet;
     private javax.swing.JLabel pricePerUnitOutlet;
     private javax.swing.JLabel pricePerWeightOutlet;
+    private javax.swing.JMenuItem searchMenuItem;
     private javax.swing.JPanel stretchableFields;
     private javax.swing.JLabel supplierOutlet;
     private javax.swing.JLabel taxesOutlet;
@@ -554,11 +607,34 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
     @Override
     public void electFirstResponder() {
-        ((EditableListModel) listOutlet.getModel()).update();
-        listOutlet.requestFocus();
-        if (listOutlet.getSelectedValue() != null) {
-            updateDetail((BasicIngredient) listOutlet.getSelectedValue());
-        }
+	/*
+	 * Update the list model to reflect any changes in the underlying data structure (contacts list)
+	 */
+	listModel.update();
+	
+//        if (listOutlet.getSelectedValue() != null) {
+//            updateDetail((BasicIngredient) listOutlet.getSelectedValue());
+//        }
+	if (listModel.getSize()>0) {
+	    if (listModel.getSize() == 1) {
+		detail.removeAll();
+		detail.add(container);
+	    }
+	    listOutlet.setSelectedIndex(0);
+	    if(listOutlet.getSelectedValue()!=null)updateDetail((BasicIngredient)listOutlet.getSelectedValue());
+	} else {
+	    System.out.println("No results");
+	    detail.removeAll();
+	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+	    validate();
+	    repaint();
+	    return;
+	}
+	
+	/*
+	 * Elect first responder
+	 */
+	listOutlet.requestFocus();
     }
     
     private void notesKeyEvent(KeyEvent evt) {

@@ -154,4 +154,9 @@ public class Article extends Record<Article> implements Filterable{
     public String filterable() {
 	return code;
     }
+
+    @Override
+    public String getFilterKey() {
+	return name;
+    }
 }

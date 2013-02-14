@@ -251,4 +251,9 @@ public class Contact extends Record<Contact> implements Filterable{
     public boolean delete() {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public String getFilterKey() {
+	return sortkey;
+    }
 }

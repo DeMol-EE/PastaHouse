@@ -13,6 +13,7 @@ import gui.invoices.delegates.EditArticleDelegate;
 import gui.invoices.dialogs.AddArticleDialog;
 import gui.invoices.dialogs.EditArticleDialog;
 import gui.utilities.list.ArticleListModel;
+import gui.utilities.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -29,7 +30,8 @@ import org.jdesktop.swingx.JXTitledPanel;
  */
 public class ArticleViewController extends javax.swing.JPanel implements MasterDetailViewController<Article>, AddArticleDelegate, EditArticleDelegate {
 
-    private ArticleListModel listModel;
+//    private ArticleListModel listModel;
+    private FilterableListModel<Article> listModel;
     
     /**
      * Creates new form ArticleViewController
@@ -38,7 +40,8 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	initComponents();
 	jTextArea1.setBackground(new Color(213, 216, 222));
         jTextArea1.setCaretPosition(0);
-	listModel = new ArticleListModel(database.Database.driver().getArticlesAlphabetically());
+//	listModel = new ArticleListModel(database.Database.driver().getArticlesAlphabetically());
+	listModel = new FilterableListModel<Article>(database.Database.driver().getArticlesAlphabetically());
 	
 	listOutlet.setModel(listModel);
 	
@@ -359,9 +362,10 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void addArticle(Article article) {
-	ArticleListModel dlm = (ArticleListModel)listOutlet.getModel();
-	dlm.update();
-	if (dlm.getSize() == 1) {
+//	ArticleListModel dlm = (ArticleListModel)listOutlet.getModel();
+//	dlm.update();
+	listModel.update();
+	if (listModel.getSize() == 1) {
 	    detail.removeAll();
 	    detail.add(container);
 	}
@@ -371,8 +375,10 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     @Override
     public void editArticle(Article o, Article n) {
-	ArticleListModel dlm = (ArticleListModel)listOutlet.getModel();
-	dlm.edit(n, o);
+//	ArticleListModel dlm = (ArticleListModel)listOutlet.getModel();
+//	dlm.edit(n, o);
+	listModel.update();
+	listModel.edit(n, o);
 	listOutlet.setSelectedValue(n, true);
 	updateDetail(n);
     }

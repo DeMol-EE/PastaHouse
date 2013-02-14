@@ -212,4 +212,9 @@ public class BasicIngredient extends Ingredient {
     public boolean isBasicIngredient(){
 	return true;
     }
+
+    @Override
+    public String filterable() {
+	return getName()+";"+getNotes()+";"+getDate()+";"+getBrand()+";"+getPackaging()+";"+getTaxes()+";"+pricePerWeight+";"+pricePerUnit+";"+weightPerUnit+";"+lossPercent+";"+getSupplier().getFirm();
+    }
 }

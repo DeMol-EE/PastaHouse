@@ -10,12 +10,12 @@ import database.extra.Ingredient;
 import database.tables.Recipe;
 import gui.EmptyPanelManager;
 import gui.MasterDetailViewController;
+import gui.NoResultsPanel;
 import gui.ingredients.delegates.RecipeDelegate;
 import gui.ingredients.dialogs.RecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
 import gui.utilities.cell.CellRendererFactory;
-import gui.utilities.list.EditableListModel;
-import gui.utilities.list.ListModelFactory;
+import gui.utilities.list.FilterableListModel;
 import gui.utilities.table.StaticRecipeTableModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +41,8 @@ import tools.Utilities;
  */
 public class RecipeViewController extends javax.swing.JPanel implements MasterDetailViewController<Recipe>, RecipeDelegate{
     
-    final JXTitledPanel d = new JXTitledPanel("Receptuur");
+    private final JXTitledPanel d = new JXTitledPanel("Receptuur");
+    private final FilterableListModel<Recipe> listModel;
     
     /**
      * Creates new form RecipeViewController
@@ -50,7 +51,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	initComponents();
 	preparationOutlet.setBackground(new Color(213,216,222));
         preparationOutlet.setCaretPosition(0);
-	recipeListOutlet.setModel(ListModelFactory.createRecipeListModel(Database.driver().getRecipesAlphabetically()));
+	listModel = new FilterableListModel<Recipe>(Database.driver().getRecipesAlphabetically());
+	recipeListOutlet.setModel(listModel);
+    //	recipeListOutlet.setModel(ListModelFactory.createRecipeListModel(Database.driver().getRecipesAlphabetically()));
 	recipeListOutlet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	recipeListOutlet.addListSelectionListener(new ListSelectionListener() {
 
@@ -161,6 +164,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         addMenuItem = new javax.swing.JMenuItem();
         editMenuItem = new javax.swing.JMenuItem();
         printMenuItem = new javax.swing.JMenuItem();
+        searchMenuItem = new javax.swing.JMenuItem();
         componentContainer = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -184,6 +188,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jScrollPane1 = new javax.swing.JScrollPane();
         recipeListOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
+        filter = new javax.swing.JTextField();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         titledContainer = new javax.swing.JPanel();
@@ -221,6 +226,15 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
             }
         });
         editMenu.add(printMenuItem);
+
+        searchMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        searchMenuItem.setText("Zoeken");
+        searchMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(searchMenuItem);
 
         componentContainer.setLayout(new java.awt.BorderLayout());
 
@@ -362,6 +376,13 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         });
         master.add(add, java.awt.BorderLayout.SOUTH);
 
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+        master.add(filter, java.awt.BorderLayout.NORTH);
+
         jSplitPane1.setLeftComponent(master);
 
         detail.setFocusable(false);
@@ -452,6 +473,35 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         printActionPerformed(null);
     }//GEN-LAST:event_printMenuItemActionPerformed
 
+    private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
+        if (filter.getText().isEmpty()) {
+	    listModel.setFilter(null);
+	} else {
+	    listModel.setFilter(filter.getText());
+	}
+	if (listModel.getSize()==0) {
+	    System.out.println("No results");
+	    detail.removeAll();
+	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+	    validate();
+	    repaint();
+	    return;
+	}
+	detail.removeAll();
+	detail.add(container);
+	recipeListOutlet.setSelectedIndex(0);
+	if (recipeListOutlet.getSelectedValue()!=null) {
+//	    updateDetail((Recipe)recipeListOutlet.getSelectedValue());
+	    updateDetail(listModel.getElementAt(recipeListOutlet.getSelectedIndex()));
+	}
+	validate();
+	repaint();
+    }//GEN-LAST:event_filterKeyReleased
+
+    private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
+        filter.requestFocus();
+    }//GEN-LAST:event_searchMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JMenuItem addMenuItem;
@@ -463,6 +513,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem editMenuItem;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JTextField filter;
     private javax.swing.JLabel grossWeightOutlet;
     private javax.swing.JTable ingredientsOutlet;
     private javax.swing.JLabel jLabel2;
@@ -487,14 +538,16 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private javax.swing.JButton print;
     private javax.swing.JMenuItem printMenuItem;
     private javax.swing.JList recipeListOutlet;
+    private javax.swing.JMenuItem searchMenuItem;
     private javax.swing.JPanel titledContainer;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void addRecipe(Recipe select) {
-	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
-	dlm.update();
-	if (dlm.getSize() == 1) {
+//	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
+//	dlm.update();
+	listModel.update();
+	if (listModel.getSize() == 1) {
 	    detail.removeAll();
 	    detail.add(container);
 	}
@@ -504,15 +557,44 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     
     @Override
     public void editRecipe(Recipe n, Recipe o){
-	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
-	dlm.edit(n, o);
+//	EditableListModel<Recipe> dlm = (EditableListModel)recipeListOutlet.getModel();
+//	dlm.edit(n, o);
+	listModel.update();
+	listModel.edit(n, o);
 	recipeListOutlet.setSelectedValue(n, true);
 	updateDetail(n);
+    }
+    
+    private void updateDetail(){
+	updateDetail(listModel.getElementAt(recipeListOutlet.getSelectedIndex()));
     }
 
     @Override
     public void electFirstResponder() {
-	((EditableListModel)recipeListOutlet.getModel()).update();
+	/*
+	 * Update the list model to reflect any changes in the underlying data structure (contacts list)
+	 */
+	listModel.update();
+	
+	if (listModel.getSize()>0) {
+	    if (listModel.getSize() == 1) {
+		detail.removeAll();
+		detail.add(container);
+	    }
+	    recipeListOutlet.setSelectedIndex(0);
+	    if(recipeListOutlet.getSelectedValue()!=null)updateDetail();
+	} else {
+	    System.out.println("No results");
+	    detail.removeAll();
+	    detail.add(new NoResultsPanel(), BorderLayout.CENTER);
+	    validate();
+	    repaint();
+	    return;
+	}
+	
+	/*
+	 * Elect first responder
+	 */
 	recipeListOutlet.requestFocus();
 	if(recipeListOutlet.getSelectedValue()!=null) updateDetail((Recipe)recipeListOutlet.getSelectedValue());
     }

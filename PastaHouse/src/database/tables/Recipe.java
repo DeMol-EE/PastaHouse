@@ -213,4 +213,13 @@ public class Recipe extends Ingredient {
 //	    return result;
 	}
     }
+
+    @Override
+    public String filterable() {
+	String result = getName()+";"+getDate()+";"+preparation+";"+getNetWeight();
+	for (Component component : components.values()) {
+	    result+=";"+component.getIngredient().getName();
+	}
+	return result;
+    }
 }
