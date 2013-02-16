@@ -69,6 +69,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	master.add(xfilter, BorderLayout.NORTH);
 	
 	xfilter.addKeyListener(new java.awt.event.KeyAdapter() {
+	    @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 filterKeyReleased(evt);
             }
