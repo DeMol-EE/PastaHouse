@@ -33,7 +33,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXTextField;
 import org.jdesktop.swingx.JXTitledPanel;
-import printer.printables.PrintableRecipeNew;
+import printer.printables.PrintableRecipe;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -466,7 +466,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
 //	new RecipePrintDialog(null, true, this, new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue())).setVisible(true);
-	RecipePrintDialog.getInstance().showDialog(new PrintableRecipeNew((Recipe)recipeListOutlet.getSelectedValue()));
+	RecipePrintDialog.getInstance().showDialog(new PrintableRecipe((Recipe)recipeListOutlet.getSelectedValue()));
     }//GEN-LAST:event_printActionPerformed
 
     private void preparationOutletKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_preparationOutletKeyPressed

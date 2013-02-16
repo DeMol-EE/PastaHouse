@@ -41,7 +41,7 @@ import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import printer.MultiPrintable;
-import printer.printables.PrintableInvoiceNew;
+import printer.printables.PrintableInvoice;
 import tools.Utilities;
 
 /**
@@ -406,13 +406,13 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 //	MultiPrintable mp = new MultiPrintable();
 	
 //        for (int i : rijen) {
-//            b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
-//	    mp.add(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)));
+//            b.append(new PrintableInvoice(tableModel.getInvoiceAtRow(i)), pf);
+//	    mp.add(new PrintableInvoice(tableModel.getInvoiceAtRow(i)));
 //        }
 	
 //        printer.Printer.driver().setPrintableBook(b);
 	
-	Printable p = new PrintableInvoiceNew(tableModel.getInvoiceAtRow(rijen[0]));
+	Printable p = new PrintableInvoice(tableModel.getInvoiceAtRow(rijen[0]));
 //        printer.Printer.driver().setPrintableJob(p);
 //        printer.Printer.driver().setPrintableJob(mp, pf);
         printer.Printer.driver().setPrintableJob(p, pf);
