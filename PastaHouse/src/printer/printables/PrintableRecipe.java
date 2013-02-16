@@ -47,10 +47,10 @@ public class PrintableRecipe extends MyPrintable{
     }
     
     public PrintableRecipe(Recipe model, double toMake, boolean isWeight) {
-	super(Font.decode("Courier"));
+//	super(Font.decode("Courier"));
 //	Font f = Font.decode("Courier");
 //	System.out.println(f.toString()+" - "+f.getFamily()+"; "+f.getFontName());
-//	super(new Font("Courier New", Font.PLAIN, 12));
+	super(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 	this.model = new Recipe(model);
 	this.toMake = toMake;
 	this.isWeight = isWeight;

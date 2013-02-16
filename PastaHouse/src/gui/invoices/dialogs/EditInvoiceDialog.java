@@ -82,7 +82,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
         saving = oldinvoice.getSave();
         pricecode = oldinvoice.getPriceCode();
-        DateOutlet.add(datepicker);
+        dateOutlet.add(datepicker);
         try {
             datepicker.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(oldinvoice.getDate()));
         } catch (ParseException ex) {
