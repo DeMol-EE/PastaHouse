@@ -387,21 +387,21 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 	    rijen[added++]=table.convertRowIndexToModel(i);
 	}
 	
-        Book b = new Book();
-        PageFormat pf = new PageFormat();
-        pf.setPaper(new A4());
+//        Book b = new Book();
+//        PageFormat pf = new PageFormat();
+//        pf.setPaper(new A4());
 
 //	MultiPrintable mp = new MultiPrintable();
 	
-        for (int i : rijen) {
-            b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
+//        for (int i : rijen) {
+//            b.append(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)), pf);
 //	    mp.add(new PrintableInvoiceNew(tableModel.getInvoiceAtRow(i)));
-        }
+//        }
 	
-        printer.Printer.driver().setPrintableBook(b);
+//        printer.Printer.driver().setPrintableBook(b);
 	
-//	Printable p = new PrintableInvoiceNew(tableModel.getInvoiceAtRow(rijen[0]));
-//        printer.Printer.driver().setPrintableJob(p);
+	Printable p = new PrintableInvoiceNew(tableModel.getInvoiceAtRow(rijen[0]));
+        printer.Printer.driver().setPrintableJob(p);
 //        printer.Printer.driver().setPrintableJob(mp, pf);
         printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_printActionPerformed
