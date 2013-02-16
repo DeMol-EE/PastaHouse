@@ -68,6 +68,9 @@ public class InvoiceItemTableModel extends AbstractTableModel {
     
     public void updatePricecode(String pricecode){
         this.pricecode = pricecode;
+        for(InvoiceItem item:data){
+            item.setPrice(item.getArticle().getPriceForCode(pricecode));
+        }
         fireTableDataChanged();
     }
     
@@ -78,14 +81,13 @@ public class InvoiceItemTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         InvoiceItem item = (InvoiceItem) data.toArray()[rowIndex];
-        double price = item.getArticle().getPriceForCode(pricecode);
+        double price = item.getPrice();
         switch (columnIndex) {
             case 0:
-                return item.getArticle().getName();
+                return item.getArticlename();
             case 1:
-                return item.getArticle().getTaxes();
+                return item.getTaxes();
             case 2:
-                
                 return item.getAmount();
             case 3:
                 return price;

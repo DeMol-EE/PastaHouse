@@ -62,7 +62,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private AutocompleteCombobox autobox;
     private AutocompleteCombobox codepicker;
     private InvoiceItemTableModel tablemodel;
-    private String pricecode = "A";
+    private String pricecode;
     private Double saving = 0.0;
     private Contact client;
     private int number;
@@ -81,6 +81,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         comboPriceClass.addItem("B");
         comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
         saving = oldinvoice.getSave();
+        pricecode = oldinvoice.getPriceCode();
         DateOutlet.add(datepicker);
         try {
             datepicker.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(oldinvoice.getDate()));
@@ -116,7 +117,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
         txtReduction.setText("" + saving);
-
+        
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
         ArrayList clients = new ArrayList();
         clients.add("");
@@ -578,7 +579,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         }
 
         double quantity = Double.parseDouble(quantityoutlet.getText());
-        InvoiceItem item = new InvoiceItem(art, quantity);
+        InvoiceItem item = new InvoiceItem(art, art.getName(), quantity, art.getPriceForCode(pricecode), art.getTaxes());
         data.add(item);
         tablemodel.addComponent(item);
 

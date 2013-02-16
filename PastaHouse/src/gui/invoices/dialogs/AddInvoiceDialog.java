@@ -590,7 +590,9 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         }
 
         double quantity = Double.parseDouble(quantityoutlet.getText());
-        InvoiceItem item = new InvoiceItem(art, quantity);
+        
+        InvoiceItem item = new InvoiceItem(art, art.getName(), quantity, art.getPriceForCode(pricecode), art.getTaxes());
+        
         data.add(item);
         tablemodel.addComponent(item);
 	

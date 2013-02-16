@@ -147,7 +147,10 @@ public class Database {
             int invoiceid = rs.getInt("invoiceid");
             int articleid = rs.getInt("articleid");
             double amount = rs.getDouble("amount");
-            invoicesById.get(invoiceid).addItem(amount, articlesById.get(articleid));
+            double taxes = rs.getDouble("taxes");
+            String name = rs.getString("articlename");
+            double price = rs.getDouble("price");
+            invoicesById.get(invoiceid).addItem(amount, price, taxes, name, articlesById.get(articleid));
             links++;
         }
         MyLogger.log("Database driver:: loaded " + invoicesById.size() + " invoices (linked " + links + " articles)!", MyLogger.LOW);
@@ -237,8 +240,8 @@ public class Database {
                 + "(number, date, clientid, pricecode, save) VALUES"
                 + "(?,?,?,?,?)";
         String insertinvart = "INSERT INTO invoicesarticles"
-                + "(invoiceid, articleid, amount) VALUES"
-                + "(?,?,?)";
+                + "(invoiceid, articleid, amount, price, taxes, articlename) VALUES"
+                + "(?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTableSQL);
         try {
             preparedStatement.setInt(1, model.getNumber());
@@ -274,9 +277,12 @@ public class Database {
                 preparedStatement.setInt(1, newInv.getPrimaryKeyValue());
                 preparedStatement.setInt(2, art.getPrimaryKeyValue());
                 preparedStatement.setDouble(3, item.getAmount());
+                preparedStatement.setDouble(4, item.getPrice());
+                preparedStatement.setDouble(5, item.getTaxes());
+                preparedStatement.setString(6, item.getArticlename());
                 preparedStatement.executeUpdate();
                 
-                newInv.addItem(item.getAmount(), item.getArticle());
+                newInv.addItem(item.getAmount(), item.getPrice(), item.getTaxes(), item.getArticlename(), item.getArticle());
             }
             connection.commit();
         } catch (ParseException ex) {
@@ -512,8 +518,8 @@ public class Database {
         int code = 0;
         String msg = "";
         String insertinvart = "INSERT INTO invoicesarticles"
-                + "(invoiceid, articleid, amount) VALUES"
-                + "(?,?,?)";
+                + "(invoiceid, articleid, amount, price, taxes, articlename) VALUES"
+                + "(?,?,?,?,?,?)";
         PreparedStatement preparedStatement = null;
         try {
             connection.setAutoCommit(false);
@@ -537,6 +543,9 @@ public class Database {
                 preparedStatement.setInt(1, invoice.getPrimaryKeyValue());
                 preparedStatement.setInt(2, art.getPrimaryKeyValue());
                 preparedStatement.setDouble(3, item.getAmount());
+                preparedStatement.setDouble(4, item.getPrice());
+                preparedStatement.setDouble(5, item.getTaxes());
+                preparedStatement.setString(6, item.getArticlename());
                 preparedStatement.executeUpdate();
             }
             connection.commit();
