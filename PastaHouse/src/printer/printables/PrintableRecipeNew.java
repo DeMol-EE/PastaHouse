@@ -159,10 +159,10 @@ public class PrintableRecipeNew extends MyPrintable{
 //	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), margin+tabs[0]));
 	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getName(), '.', ingrNameLength-1), margin+tabs[0]));
 	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getPackaging(), '.', 19), margin+tabs[1]));
-	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', 9), margin+tabs[2]));
 	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
 	    int chars = s.substring(0, s.indexOf(",")).length();
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', Math.max(0, 9-chars*charWidth)), margin+tabs[2]));
 	    comp.add(new PrintableString(lineHeight, three.format(quantity), margin+tabs[3]-chars*charWidth));
 	    printModel.add(new PrintableMulti(lineHeight, comp));
 	    
