@@ -157,6 +157,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         btnClearFilters = new javax.swing.JButton();
         delete = new javax.swing.JButton();
         editMenu1 = new javax.swing.JMenu();
+        detailMenuItem = new javax.swing.JMenuItem();
         addMenuItem1 = new javax.swing.JMenuItem();
         printMenuItem = new javax.swing.JMenuItem();
         tablePanel = new javax.swing.JPanel();
@@ -298,6 +299,15 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
         editMenu1.setText("Acties");
 
+        detailMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        detailMenuItem.setText("Detail...");
+        detailMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detailMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu1.add(detailMenuItem);
+
         addMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         addMenuItem1.setText("Toevoegen...");
         addMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -366,9 +376,11 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
 
     private void detailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsActionPerformed
         int row = table.getSelectedRow();
-        int index = table.convertRowIndexToModel(row);
-        Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
-        new InvoiceDetailsDialog(null, true, inv).setVisible(true);
+	if (row >= 0) {
+	    int index = table.convertRowIndexToModel(row);
+	    Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
+	    new InvoiceDetailsDialog(null, true, inv).setVisible(true);
+	}
     }//GEN-LAST:event_detailsActionPerformed
 
     private void numberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFieldKeyReleased
@@ -445,16 +457,19 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         printActionPerformed(evt);
     }//GEN-LAST:event_printMenuItemActionPerformed
 
+    private void detailMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailMenuItemActionPerformed
+        detailsActionPerformed(evt);
+    }//GEN-LAST:event_detailMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
-    private javax.swing.JMenuItem addMenuItem;
     private javax.swing.JMenuItem addMenuItem1;
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JTextField clientField;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton delete;
+    private javax.swing.JMenuItem detailMenuItem;
     private javax.swing.JButton details;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JMenu editMenu1;
     private javax.swing.JPanel fromOutlet;
     private javax.swing.JLabel jLabel1;
