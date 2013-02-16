@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Container class="javax.swing.JMenu" name="editMenu">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Edit"/>
+        <Property name="text" type="java.lang.String" value="Acties"/>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">

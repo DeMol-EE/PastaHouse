@@ -114,7 +114,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         jPanel1 = new javax.swing.JPanel();
         edit = new javax.swing.JButton();
 
-        editMenu.setText("Edit");
+        editMenu.setText("Acties");
 
         addMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         addMenuItem.setText("Toevoegen...");
