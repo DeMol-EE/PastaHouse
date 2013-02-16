@@ -677,14 +677,14 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	    /*
 	     * Warnings
 	     */
-	    double gW = editing? fullModel.getGrossWeight() : model.getGrossWeight();
-	    if (Double.parseDouble(netWeightOutlet.getText())>gW) {
-		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat het netto gewicht hoger is dan het bruto gewicht?", "Opgelet!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
-		if (result!=0) {
-		    netWeightOutlet.requestFocus();
-		    return;
-		}
-	    }
+//	    double gW = editing? fullModel.getGrossWeight() : model.getGrossWeight();
+//	    if (Double.parseDouble(netWeightOutlet.getText())>gW) {
+//		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat het netto gewicht hoger is dan het bruto gewicht?", "Opgelet!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
+//		if (result!=0) {
+//		    netWeightOutlet.requestFocus();
+//		    return;
+//		}
+//	    }
 	    
 	    /*
 	     * Save changes 

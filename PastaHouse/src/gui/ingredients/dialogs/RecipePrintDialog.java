@@ -13,9 +13,8 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
-import printer.printables.PrintableRecipe;
 import printer.Printer;
-import printer.printables.PrintableRecipeNew;
+import printer.printables.PrintableRecipe;
 import tools.StringTools;
 import tools.Utilities;
 
@@ -27,7 +26,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 
     private static RecipePrintDialog reused;
     
-    private PrintableRecipeNew model;
+    private PrintableRecipe model;
     private PrintableTableModel tableModel;
     private Map<Integer, Component> originalComponents;
     
@@ -61,7 +60,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
 	return reused;
     }
     
-    public void showDialog(PrintableRecipeNew model){
+    public void showDialog(PrintableRecipe model){
 	setModel(model);
 	updateTable();
 	setVisible(true);
@@ -71,7 +70,7 @@ public class RecipePrintDialog extends javax.swing.JDialog {
      * Private methods follow
      */
     
-    private void setModel(PrintableRecipeNew model){
+    private void setModel(PrintableRecipe model){
 	this.model = model;
 	this.originalComponents = new TreeMap<Integer, Component>();
 	for (Map.Entry<Integer, Component> entry : model.getRecipe().getComponents().entrySet()) {

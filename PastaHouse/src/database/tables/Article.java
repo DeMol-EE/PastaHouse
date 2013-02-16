@@ -152,7 +152,7 @@ public class Article extends Record<Article> implements Filterable{
 
     @Override
     public String filterable() {
-	return code;
+	return code+";"+name;
     }
 
     @Override

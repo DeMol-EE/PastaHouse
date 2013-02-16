@@ -148,6 +148,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         setLocationRelativeTo(null);
         
         clientBox.setEditable(false);
+//	clientBox.getEditor().getEditorComponent().setEnabled(false);
 
         comboPriceClass.addActionListener(new ActionListener() {
             @Override
@@ -248,19 +249,22 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private void initComponents() {
 
         detailspanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        DateOutlet = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         ClientOutlet = new javax.swing.JPanel();
         addSupplier = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        dateOutlet = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 32767));
         jLabel6 = new javax.swing.JLabel();
         txtNumber = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         comboPriceClass = new javax.swing.JComboBox();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 32767));
         jLabel15 = new javax.swing.JLabel();
         txtReduction = new javax.swing.JTextField();
+        jSeparator2 = new javax.swing.JSeparator();
         artikelspanel = new javax.swing.JPanel();
         articlestablepanel = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -306,16 +310,13 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         btnSave = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        detailspanel.setLayout(new java.awt.GridLayout(0, 4));
+        detailspanel.setLayout(new java.awt.BorderLayout());
 
-        jLabel4.setText("Datum");
-        detailspanel.add(jLabel4);
-
-        DateOutlet.setLayout(new java.awt.BorderLayout());
-        detailspanel.add(DateOutlet);
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
         jLabel2.setText("Klant");
-        detailspanel.add(jLabel2);
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 5));
+        jPanel7.add(jLabel2, java.awt.BorderLayout.WEST);
 
         ClientOutlet.setLayout(new java.awt.BorderLayout());
 
@@ -329,10 +330,21 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         });
         ClientOutlet.add(addSupplier, java.awt.BorderLayout.EAST);
 
-        detailspanel.add(ClientOutlet);
+        jPanel7.add(ClientOutlet, java.awt.BorderLayout.CENTER);
+
+        detailspanel.add(jPanel7, java.awt.BorderLayout.NORTH);
+
+        jPanel6.setLayout(new java.awt.GridLayout(2, 5));
+
+        jLabel4.setText("Datum");
+        jPanel6.add(jLabel4);
+
+        dateOutlet.setLayout(new java.awt.BorderLayout());
+        jPanel6.add(dateOutlet);
+        jPanel6.add(filler1);
 
         jLabel6.setText("Nummer");
-        detailspanel.add(jLabel6);
+        jPanel6.add(jLabel6);
 
         txtNumber.setEditable(false);
         txtNumber.addActionListener(new java.awt.event.ActionListener() {
@@ -345,23 +357,25 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
                 txtNumberKeyReleased(evt);
             }
         });
-        detailspanel.add(txtNumber);
+        jPanel6.add(txtNumber);
 
         jLabel3.setText("Prijsklasse");
-        detailspanel.add(jLabel3);
-        detailspanel.add(comboPriceClass);
-        detailspanel.add(filler5);
-        detailspanel.add(filler6);
+        jPanel6.add(jLabel3);
+        jPanel6.add(comboPriceClass);
+        jPanel6.add(filler2);
 
         jLabel15.setText("Korting");
-        detailspanel.add(jLabel15);
+        jPanel6.add(jLabel15);
 
         txtReduction.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtReductionKeyReleased(evt);
             }
         });
-        detailspanel.add(txtReduction);
+        jPanel6.add(txtReduction);
+
+        detailspanel.add(jPanel6, java.awt.BorderLayout.SOUTH);
+        detailspanel.add(jSeparator2, java.awt.BorderLayout.CENTER);
 
         artikelspanel.setLayout(new java.awt.BorderLayout());
 
@@ -408,7 +422,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         });
         jPanel2.add(quantityoutlet);
 
-        addarticlechooserpanel.add(jPanel2, java.awt.BorderLayout.EAST);
+        addarticlechooserpanel.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         addArticlespanel.add(addarticlechooserpanel, java.awt.BorderLayout.PAGE_START);
 
@@ -684,7 +698,6 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientOutlet;
-    private javax.swing.JPanel DateOutlet;
     private javax.swing.JButton addArticle;
     private javax.swing.JPanel addArticlespanel;
     private javax.swing.JButton addSupplier;
@@ -697,13 +710,14 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JPanel choseartickleoutlet;
     private javax.swing.JPanel codeoutlet;
     private javax.swing.JComboBox comboPriceClass;
+    private javax.swing.JPanel dateOutlet;
     private javax.swing.JButton deleteArticle;
     private javax.swing.JPanel detail;
     private javax.swing.JPanel detailspanel;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel jLabel1;
@@ -728,7 +742,10 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel pricepanel;
     private javax.swing.JPanel pricesContainer;
     private javax.swing.JTextField quantityoutlet;
