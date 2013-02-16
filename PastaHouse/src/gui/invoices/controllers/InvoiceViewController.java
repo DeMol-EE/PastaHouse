@@ -336,6 +336,7 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         print.setText("Afdrukken...");
+        print.setFocusable(false);
         print.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printActionPerformed(evt);

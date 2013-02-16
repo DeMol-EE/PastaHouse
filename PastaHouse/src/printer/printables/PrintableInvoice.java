@@ -143,8 +143,8 @@ public class PrintableInvoice extends MyPrintable{
 	     * Group per savings?
 	     */
 	    ArrayList<PrintableHorizontalLineObject> ii = new ArrayList<PrintableHorizontalLineObject>();
-	    ii.add(new PrintableString(lineHeight, invoiceItem.getArticle().getName(), tabs[0]));
-	    String tax = oneFormatter.format(invoiceItem.getArticle().getTaxes());
+	    ii.add(new PrintableString(lineHeight, invoiceItem.getArticlename(), tabs[0]));
+	    String tax = oneFormatter.format(invoiceItem.getTaxes());
 	    String[] tp = tax.split(",");
 	    int offset = tp[0].length();
 	    for (char c : tp[0].toCharArray()) {
@@ -164,7 +164,7 @@ public class PrintableInvoice extends MyPrintable{
 //	    ii.add(new PrintableString(lineHeight, ap[0], tabs[2]-commaWidth-fontMetrics.charsWidth(ap[0].toCharArray(), 0, ap[0].length())));
 	    ii.add(new PrintableString(lineHeight, ","+ap[1]+" "+invoiceItem.getArticle().getUnit(), tabs[2]));
 	    
-	    String price = threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode()));
+	    String price = threeFormatter.format(invoiceItem.getPrice());
 	    String[] pp = price.split(",");
 	    offset = pp[0].length();
 	    for (char c : pp[0].toCharArray()) {
@@ -174,7 +174,7 @@ public class PrintableInvoice extends MyPrintable{
 //	    ii.add(new PrintableString(lineHeight, pp[0], tabs[3]-commaWidth-fontMetrics.charsWidth(pp[0].toCharArray(), 0, pp[0].length())));
 	    ii.add(new PrintableString(lineHeight, ","+pp[1], tabs[3]));
 	    
-	    String tot = threeFormatter.format(invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount());
+	    String tot = threeFormatter.format(invoiceItem.getPrice()*invoiceItem.getAmount());
 	    String[] parts = tot.split(",");
 	    offset = parts[0].length();
 	    for (char c : parts[0].toCharArray()) {
@@ -220,12 +220,12 @@ public class PrintableInvoice extends MyPrintable{
 	Map<Double, List<InvoiceItem>> categories = new HashMap<Double, List<InvoiceItem>>();
 	
 	for (InvoiceItem invoiceItem : model.items()) {
-	    if (categories.containsKey(invoiceItem.getArticle().getTaxes())) {
-		categories.get(invoiceItem.getArticle().getTaxes()).add(invoiceItem);
+	    if (categories.containsKey(invoiceItem.getTaxes())) {
+		categories.get(invoiceItem.getTaxes()).add(invoiceItem);
 	    } else {
 		List<InvoiceItem> items = new ArrayList<InvoiceItem>();
 		items.add(invoiceItem);
-		categories.put(invoiceItem.getArticle().getTaxes(), items);
+		categories.put(invoiceItem.getTaxes(), items);
 	    }
 	}
 	
@@ -277,7 +277,7 @@ public class PrintableInvoice extends MyPrintable{
 	    for (List<InvoiceItem> list : categories.values()) {
 		double price = 0;
 		for (InvoiceItem invoiceItem : list) {
-		    price += invoiceItem.getArticle().getPriceForCode(model.getPriceCode())*invoiceItem.getAmount();
+		    price += invoiceItem.getPrice()*invoiceItem.getAmount();
 		}
 		netPrices.add(price);
 		String pr = threeFormatter.format(price);

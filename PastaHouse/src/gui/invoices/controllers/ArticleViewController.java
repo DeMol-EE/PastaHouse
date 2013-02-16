@@ -236,6 +236,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add.setText("Toevoegen...");
+        add.setFocusable(false);
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
@@ -252,6 +253,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         edit.setText("Wijzigen...");
+        edit.setFocusable(false);
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);
