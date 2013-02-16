@@ -14,6 +14,7 @@ import gui.NoResultsPanel;
 import gui.ingredients.delegates.RecipeDelegate;
 import gui.ingredients.dialogs.RecipeDialog;
 import gui.ingredients.dialogs.RecipePrintDialog;
+import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.list.FilterableListModel;
 import gui.utilities.table.StaticRecipeTableModel;
@@ -30,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTextField;
 import org.jdesktop.swingx.JXTitledPanel;
 import printer.printables.PrintableRecipeNew;
 import tools.StringTools;
@@ -43,6 +45,7 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     
     private final JXTitledPanel d = new JXTitledPanel("Receptuur");
     private final FilterableListModel<Recipe> listModel;
+    private final JXTextField xfilter = new JXTextField("Zoeken");
     
     /**
      * Creates new form RecipeViewController
@@ -111,6 +114,17 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
 	d.setRightDecoration(ber);
 	d.setContentContainer(componentContainer);
 	titledContainer.add(d, BorderLayout.CENTER);
+	
+	TextFieldAutoHighlighter.installHighlighter(xfilter);
+	
+	master.add(xfilter, BorderLayout.NORTH);
+	
+	xfilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+	    public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
     }
     
     @Override
@@ -183,12 +197,12 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         jPanel5 = new javax.swing.JPanel();
         nameOutlet = new javax.swing.JLabel();
         dateOutlet = new javax.swing.JLabel();
+        filter = new javax.swing.JTextField();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         recipeListOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
-        filter = new javax.swing.JTextField();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         titledContainer = new javax.swing.JPanel();
@@ -347,6 +361,12 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
         dateOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         dateOutlet.setFocusable(false);
 
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
@@ -375,13 +395,6 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
             }
         });
         master.add(add, java.awt.BorderLayout.SOUTH);
-
-        filter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                filterKeyReleased(evt);
-            }
-        });
-        master.add(filter, java.awt.BorderLayout.NORTH);
 
         jSplitPane1.setLeftComponent(master);
 
@@ -434,7 +447,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 //	new AddRecipeDialog(null, true, this).setVisible(true);
 	listModel.setFilter(null);
-	filter.setText("");
+//	filter.setText("");
+	xfilter.setText("");
 	
 	RecipeDialog.showAddRecipeDialog(this);
 	
@@ -444,7 +458,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
 //        new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue(), this).setVisible(true);
 	listModel.setFilter(null);
-	filter.setText("");
+//	filter.setText("");
+	xfilter.setText("");
 	
 	RecipeDialog.showEditRecipeDialog(this, (Recipe)recipeListOutlet.getSelectedValue());
     }//GEN-LAST:event_editActionPerformed
@@ -479,10 +494,12 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_printMenuItemActionPerformed
 
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
-        if (filter.getText().isEmpty()) {
+//        if (filter.getText().isEmpty()) {
+        if (xfilter.getText().isEmpty()) {
 	    listModel.setFilter(null);
 	} else {
-	    listModel.setFilter(filter.getText());
+//	    listModel.setFilter(filter.getText());
+	    listModel.setFilter(xfilter.getText());
 	}
 	if (listModel.getSize()==0) {
 	    System.out.println("No results");
@@ -504,7 +521,8 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_filterKeyReleased
 
     private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
-        filter.requestFocus();
+//        filter.requestFocus();
+        xfilter.requestFocus();
     }//GEN-LAST:event_searchMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTextField;
 import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
 import tools.Utilities;
@@ -45,6 +46,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     private RecipeTabbedViewController delegate;
 //    private final BasicIngredientListModel listModel;
     private final FilterableListModel<BasicIngredient> listModel;
+    private final JXTextField xfilter = new JXTextField("Zoeken");
 
     /**
      * Creates new form BasicIngredientViewController
@@ -84,6 +86,14 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 	
 	container.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
 	container.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
+	
+	master.add(xfilter, BorderLayout.NORTH);
+	
+	xfilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
     }
     
     @Override
@@ -188,12 +198,12 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         stretchableFields = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         notesOutlet = new javax.swing.JTextArea();
+        filter = new javax.swing.JTextField();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         add = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
-        filter = new javax.swing.JTextField();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -417,6 +427,12 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
         stretchableFields.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
@@ -445,13 +461,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         jScrollPane1.setViewportView(listOutlet);
 
         master.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        filter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                filterKeyReleased(evt);
-            }
-        });
-        master.add(filter, java.awt.BorderLayout.NORTH);
 
         jSplitPane1.setLeftComponent(master);
 
@@ -483,14 +492,16 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         listModel.setFilter(null);
-	filter.setText("");
+//	filter.setText("");
+	xfilter.setText("");
 	
 	new EditBasicIngredientDialog(null, true, this, (BasicIngredient) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
     
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         listModel.setFilter(null);
-	filter.setText("");
+//	filter.setText("");
+	xfilter.setText("");
 	
 	new AddBasicIngredientDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
@@ -538,10 +549,12 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }//GEN-LAST:event_supplierOutletMouseReleased
 
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
-        if (filter.getText().isEmpty()) {
+//        if (filter.getText().isEmpty()) {
+        if (xfilter.getText().isEmpty()) {
 	    listModel.setFilter(null);
 	} else {
-	    listModel.setFilter(filter.getText());
+//	    listModel.setFilter(filter.getText());
+	    listModel.setFilter(xfilter.getText());
 	}
 	if (listModel.getSize()==0) {
 	    System.out.println("No results");
@@ -562,7 +575,8 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }//GEN-LAST:event_filterKeyReleased
 
     private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
-        filter.requestFocus();
+//        filter.requestFocus();
+        xfilter.requestFocus();
     }//GEN-LAST:event_searchMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

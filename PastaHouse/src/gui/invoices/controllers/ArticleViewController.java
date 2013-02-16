@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.JXTextField;
 import org.jdesktop.swingx.JXTitledPanel;
 
 /**
@@ -31,6 +32,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
 //    private ArticleListModel listModel;
     private FilterableListModel<Article> listModel;
+    private final JXTextField xfilter = new JXTextField("Zoeken");
     
     /**
      * Creates new form ArticleViewController
@@ -63,6 +65,14 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	
 	container.add(new JXTitledPanel("Details", fixedfields), BorderLayout.NORTH);
 	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
+	
+	master.add(xfilter, BorderLayout.NORTH);
+	
+	xfilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
     }
 
     /**
@@ -93,12 +103,12 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         taxesOutlet = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        filter = new javax.swing.JTextField();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listOutlet = new javax.swing.JList();
         add = new javax.swing.JButton();
-        filter = new javax.swing.JTextField();
         detail = new javax.swing.JPanel();
         container = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -203,6 +213,12 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         jTextArea1.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea1);
 
+        filter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filterKeyReleased(evt);
+            }
+        });
+
         setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(200);
@@ -225,13 +241,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
             }
         });
         master.add(add, java.awt.BorderLayout.SOUTH);
-
-        filter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                filterKeyReleased(evt);
-            }
-        });
-        master.add(filter, java.awt.BorderLayout.NORTH);
 
         jSplitPane1.setLeftComponent(master);
 
@@ -260,13 +269,15 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         listModel.setFilter(null);
-	filter.setText("");
+//	filter.setText("");
+	xfilter.setText("");
 	new AddArticleDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         listModel.setFilter(null);
-	filter.setText("");
+//	filter.setText("");
+	xfilter.setText("");
 	if(listOutlet.getSelectedValue()!=null) new EditArticleDialog(null, true, this, (Article)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
@@ -279,10 +290,12 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_editMenuItemActionPerformed
 
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
-        if (filter.getText().isEmpty()) {
+//        if (filter.getText().isEmpty()) {
+        if (xfilter.getText().isEmpty()) {
 	    listModel.setFilter(null);
 	} else {
-	    listModel.setFilter(filter.getText());
+//	    listModel.setFilter(filter.getText());
+	    listModel.setFilter(xfilter.getText());
 	}
 	if (listModel.getSize()==0) {
 	    System.out.println("No results");
@@ -298,7 +311,8 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     }//GEN-LAST:event_filterKeyReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        filter.requestFocus();
+//        filter.requestFocus();
+        xfilter.requestFocus();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
