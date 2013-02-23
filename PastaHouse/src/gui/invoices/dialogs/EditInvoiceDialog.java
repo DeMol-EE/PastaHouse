@@ -125,7 +125,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         client = oldinvoice.getClient();
         clientBox = new AutocompleteCombobox(clients);
         clientBox.setSelectedItem(client);
-        ClientOutlet.add(clientBox, BorderLayout.CENTER);
+        clientOutlet.add(clientBox, BorderLayout.CENTER);
 
         ArrayList articles = new ArrayList();
         articles.add("");
@@ -251,8 +251,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         detailspanel = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        ClientOutlet = new javax.swing.JPanel();
-        addSupplier = new javax.swing.JButton();
+        clientOutlet = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         dateOutlet = new javax.swing.JPanel();
@@ -318,19 +317,9 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 5));
         jPanel7.add(jLabel2, java.awt.BorderLayout.WEST);
 
-        ClientOutlet.setLayout(new java.awt.BorderLayout());
-
-        addSupplier.setText("+");
-        addSupplier.setToolTipText("Klik hier om een nieuwe leverancier toe te voegen.");
-        addSupplier.setFocusable(false);
-        addSupplier.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addSupplierActionPerformed(evt);
-            }
-        });
-        ClientOutlet.add(addSupplier, java.awt.BorderLayout.EAST);
-
-        jPanel7.add(ClientOutlet, java.awt.BorderLayout.CENTER);
+        clientOutlet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        clientOutlet.setText("<clientOutlet>");
+        jPanel7.add(clientOutlet, java.awt.BorderLayout.CENTER);
 
         detailspanel.add(jPanel7, java.awt.BorderLayout.NORTH);
 
@@ -697,10 +686,8 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }//GEN-LAST:event_txtNumberActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel ClientOutlet;
     private javax.swing.JButton addArticle;
     private javax.swing.JPanel addArticlespanel;
-    private javax.swing.JButton addSupplier;
     private javax.swing.JPanel addarticlechooserpanel;
     private javax.swing.JPanel addarticlesbuttonpanel;
     private javax.swing.JPanel articlestablepanel;
@@ -708,6 +695,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSave;
     private javax.swing.JPanel choseartickleoutlet;
+    private javax.swing.JLabel clientOutlet;
     private javax.swing.JPanel codeoutlet;
     private javax.swing.JComboBox comboPriceClass;
     private javax.swing.JPanel dateOutlet;

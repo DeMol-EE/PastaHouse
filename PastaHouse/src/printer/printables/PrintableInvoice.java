@@ -40,7 +40,7 @@ public class PrintableInvoice extends MyPrintable{
 	
 	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
 	otherSymbols.setDecimalSeparator(',');
-	otherSymbols.setGroupingSeparator('.'); 
+	otherSymbols.setGroupingSeparator('.');
 	this.threeFormatter.setDecimalFormatSymbols(otherSymbols);
 	this.twoFormatter.setDecimalFormatSymbols(otherSymbols);
 	this.oneFormatter.setDecimalFormatSymbols(otherSymbols);

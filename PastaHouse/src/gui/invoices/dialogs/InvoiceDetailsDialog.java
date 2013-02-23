@@ -347,6 +347,7 @@ private JXTable createXTable() {
     public void editInvoice(Invoice oldInvoice, Invoice newInvoice) {
         model.copy(newInvoice);
         tableModel.setData(model.items(), model.getPriceCode());
+	saveOutlet.setText(model.getSave()==0?"0%":"- "+model.getSave()+"%");
         updatePrices();
     }
 
