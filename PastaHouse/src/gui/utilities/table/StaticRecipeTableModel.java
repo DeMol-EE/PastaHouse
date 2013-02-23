@@ -39,9 +39,11 @@ public class StaticRecipeTableModel extends AbstractTableModel{
 	    case 1:
 		return ((Component)data.values().toArray()[rowIndex]).getPackaging();
 	    case 2:
-		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
-	    case 3:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
+//		return ((Component)data.values().toArray()[rowIndex]).getFormattedQuantity();
+	    case 3:
+		return ((Component)data.values().toArray()[rowIndex]).getUnits();
+//		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
 	    default:
 		return "<empty>";
 	}
@@ -56,9 +58,9 @@ public class StaticRecipeTableModel extends AbstractTableModel{
 //		return "Type";
 		return "Verpakking";
 	    case 2:
-		return "Stuks";
-	    case 3:
 		return "Kg";
+	    case 3:
+		return "Stuks";
 	    default:
 		return "<ERROR>";
 	}
@@ -74,9 +76,12 @@ public class StaticRecipeTableModel extends AbstractTableModel{
 	    case 1:
 		return Ingredient.class;
 	    case 2:
+//		return String.class;
 		return Double.class;
 	    case 3:
 		return Component.class;
+//		return Double.class;
+//		return String.class;
 	    default:
 		return Object.class;
 	}

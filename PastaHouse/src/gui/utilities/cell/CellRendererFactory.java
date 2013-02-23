@@ -7,6 +7,7 @@ package gui.utilities.cell;
 import java.awt.Component;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,6 +26,10 @@ public class CellRendererFactory {
     public static TableCellRenderer createTwoDecimalDoubleCellRenderer() {
         return new TwoDecimalDoubleCellRenderer();
     }
+    
+    public static TableCellRenderer createTwoDecimalFormattedDoubleCellRenderer() {
+        return new TwoDecimalFormattedDoubleCellRenderer();
+    }
 
     public static TableCellRenderer createIngredientCellRenderer() {
         return new IngredientCellRenderer();
@@ -32,6 +37,10 @@ public class CellRendererFactory {
 
     public static TableCellRenderer createThreeDecimalDoubleCellRenderer() {
         return new ThreeDecimalDoubleCellRenderer();
+    }
+    
+    public static TableCellRenderer createThreeDecimalFormattedDoubleCellRenderer() {
+        return new ThreeDecimalFormattedDoubleCellRenderer();
     }
 
     public static TableCellRenderer createZeroDecimalDoubleCellRenderer() {
@@ -60,6 +69,62 @@ public class CellRendererFactory {
     
     public static DateRenderer createDateRenderer(){
         return new DateRenderer();
+    }
+    
+    private static class TwoDecimalFormattedDoubleCellRenderer extends JLabel implements TableCellRenderer {
+
+        public TwoDecimalFormattedDoubleCellRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(JLabel.CENTER);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+		setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+		setBackground(table.getBackground());
+            }
+            DecimalFormat twoFormatter = new DecimalFormat("0.00");
+	    DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+	    otherSymbols.setDecimalSeparator(',');
+	    otherSymbols.setGroupingSeparator('.'); 
+	    twoFormatter.setDecimalFormatSymbols(otherSymbols);
+            if (value != null) {
+                this.setText(twoFormatter.format(value));
+            }
+            return this;
+        }
+    }
+    
+    private static class ThreeDecimalFormattedDoubleCellRenderer extends JLabel implements TableCellRenderer {
+
+        public ThreeDecimalFormattedDoubleCellRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(JLabel.CENTER);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+		setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+		setBackground(table.getBackground());
+            }
+            DecimalFormat twoFormatter = new DecimalFormat("0.000");
+	    DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+	    otherSymbols.setDecimalSeparator(',');
+	    otherSymbols.setGroupingSeparator('.'); 
+	    twoFormatter.setDecimalFormatSymbols(otherSymbols);
+            if (value != null) {
+                this.setText(twoFormatter.format(value));
+            }
+            return this;
+        }
     }
 
     private static class TwoDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {

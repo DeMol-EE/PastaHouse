@@ -34,6 +34,19 @@ public class Component {
 	return rank;
     }
 
+    public String getFormattedQuantity(){
+	DecimalFormat f = new DecimalFormat("0.000");
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+	otherSymbols.setDecimalSeparator(',');
+	otherSymbols.setGroupingSeparator('.'); 
+	f.setDecimalFormatSymbols(otherSymbols);
+	if (ingredient == null) {
+	    return "Geen ingrediënt";
+	} else {
+	    return f.format(getQuantity());
+	}
+    }
+    
     public double getQuantity() {
 	return quantity;
     }

@@ -6,6 +6,7 @@ package gui.utilities.table;
 
 import database.extra.Component;
 import database.extra.Ingredient;
+import gui.ingredients.dialogs.EditableRecipeTableModelDelegate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -19,9 +20,11 @@ import javax.swing.table.AbstractTableModel;
 public class EditableRecipeTableModel extends AbstractTableModel implements Reorderable {
 
     private Map<Integer, Component> data;
+    private final EditableRecipeTableModelDelegate del;
     
-    public EditableRecipeTableModel(Map<Integer, Component> data){
+    public EditableRecipeTableModel(Map<Integer, Component> data, EditableRecipeTableModelDelegate del){
 	this.data = data;
+	this.del = del;
     }
     
     public Map<Integer, Component> getData(){
@@ -47,9 +50,10 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 		return ((Component)data.values().toArray()[rowIndex]).getIngredient();
 	    case 2:
 		return ((Component)data.values().toArray()[rowIndex]).getQuantity();
+//		return ((Component)data.values().toArray()[rowIndex]).getFormattedQuantity();
 	    case 3:
-//		return ((Component)data.values().toArray()[rowIndex]).getPieces();
-		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
+		return ((Component)data.values().toArray()[rowIndex]).getPieces();
+//		return ((Component)data.values().toArray()[rowIndex]).getFormattedUnits();
 	    default:
 		return "<ERROR>";
 	}
@@ -82,8 +86,11 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
 		return Ingredient.class;
 	    case 2:
 		return Double.class;
+//		return String.class;
 	    case 3:
-		return String.class;
+//		return Double.class;
+		return Component.class;
+//		return String.class;
 	    default:
 		return Object.class;
 	}
@@ -91,36 +98,29 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
     
     @Override
     public boolean isCellEditable(int row, int col) {
-	return col!=2;
+	return col==2;
     }
     
-//    @Override
-//    public void setValueAt(Object value, int row, int col) {
-//	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
-//	try{
-//	    switch(col){
-//		case 0:
-//		    if (value instanceof String) {
-//			((Component)data.values().toArray()[row]).setIngredient(null);
-//		    } else {
-//			((Component)data.values().toArray()[row]).setIngredient((Ingredient)value);
-//		    }
-//		    break;
-//		case 1:
-//		    ((Component)data.values().toArray()[row]).setQuantity(Double.parseDouble(value.toString()));
-//		    break;
-//    //	    case 2:
-//    //		// nothing
-//    //		break;
-//		default:
-//		    break;
-//	    }
-//
-//	    fireTableCellUpdated(row, col);
-//	} catch (Exception e){
-//	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());
-//	}
-//    }
+    @Override
+    public void setValueAt(Object value, int row, int col) {
+	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
+	try{
+	    
+//	    double v = Double.parseDouble(((String)value).replaceAll(",", "."));
+	    
+	    if ((Double)value<=0) {
+		return;
+	    }
+	    
+	    if (col == 2) {
+		((Component)data.values().toArray()[row]).setQuantity((Double)value);
+		fireTableCellUpdated(row, col);
+		del.dataChanged();
+	    }
+	} catch (Exception e){
+	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());
+	}
+    }
     
     public void removeRow(int row){
 	data.remove((Integer)data.keySet().toArray()[row]);

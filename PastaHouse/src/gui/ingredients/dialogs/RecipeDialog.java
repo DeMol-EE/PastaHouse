@@ -51,6 +51,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.TableCellEditor;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
@@ -60,7 +61,7 @@ import tools.Utilities;
  *
  * @author Warkst
  */
-public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredientDelegate{
+public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredientDelegate, EditableRecipeTableModelDelegate{
     /*
      * Add functionality
      */
@@ -92,8 +93,8 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	});
 	
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
-	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalDoubleCellRenderer());
-	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalDoubleCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalFormattedDoubleCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalFormattedDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
 	this.ingredientsOutlet.setDefaultRenderer(Integer.class, CellRendererFactory.createIndexCellRenderer());
 	
@@ -206,7 +207,7 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	this.fullModel = null;
 	this.defaultModel = null;
 	this.model = new RecipeModel();
-	this.tableModel = new EditableRecipeTableModel(model.getComponents());
+	this.tableModel = new EditableRecipeTableModel(model.getComponents(), this);
 	
 	List ingredients = new ArrayList();
 	ingredients.add("");
@@ -244,7 +245,7 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	this.fullModel = model;
 	this.defaultModel = new Recipe(model);
 	this.model = null;
-	this.tableModel = new EditableRecipeTableModel(fullModel.getComponents());
+	this.tableModel = new EditableRecipeTableModel(fullModel.getComponents(), this);
 	
 	List ingredients = new ArrayList();
 	ingredients.add("");
@@ -900,5 +901,10 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
     private javax.swing.JButton save;
     private javax.swing.JPanel totalContainer;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void dataChanged() {
+	updateGrossWeightOutlet();
+    }
 
 }
