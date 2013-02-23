@@ -270,7 +270,6 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         fixedFields.add(jLabel3);
 
         supplierOutlet.setBackground(new java.awt.Color(239, 239, 239));
-        supplierOutlet.setForeground(new java.awt.Color(0, 0, 255));
         supplierOutlet.setText("<supplierOutlet>");
         supplierOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 3, 0));
         supplierOutlet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -527,25 +526,24 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }//GEN-LAST:event_editMenuItemActionPerformed
 
     private void supplierOutletMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseEntered
-	BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
-        if (bi.getSupplier() != null) {
-	    supplierOutlet.setText("<html><u>" + supplierOutlet.getText() + "</u></html>");
-	}
+//	BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
+//        if (bi.getSupplier() != null) {
+//	    supplierOutlet.setText("<html><u>" + supplierOutlet.getText() + "</u></html>");
+//	}
     }//GEN-LAST:event_supplierOutletMouseEntered
 
     private void supplierOutletMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseExited
-        BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
-        if (bi.getSupplier() != null) {
-            String firm = bi.getSupplier().getSortKey();
-            supplierOutlet.setText(firm.substring(0, 1).toUpperCase() + firm.substring(1).toLowerCase());
-        }
+//        BasicIngredient bi = (BasicIngredient) listOutlet.getSelectedValue();
+//        if (bi.getSupplier() != null) {
+//	    supplierOutlet.setText(bi.getSupplier().getSortKey());
+//        }
     }//GEN-LAST:event_supplierOutletMouseExited
 
     private void supplierOutletMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierOutletMouseReleased
-        BasicIngredient selectedIngredient = (BasicIngredient) listOutlet.getSelectedValue();
-        if (selectedIngredient.getSupplier()!=null) {
-	    delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
-	}
+//        BasicIngredient selectedIngredient = (BasicIngredient) listOutlet.getSelectedValue();
+//        if (selectedIngredient.getSupplier()!=null) {
+//	    delegate.selectAndSwitchToSupplier(selectedIngredient.getSupplier());
+//	}
     }//GEN-LAST:event_supplierOutletMouseReleased
 
     private void filterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filterKeyReleased
