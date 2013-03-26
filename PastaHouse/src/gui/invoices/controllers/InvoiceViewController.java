@@ -19,7 +19,6 @@ import gui.utilities.table.invoicetable.InvoiceTableModel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
@@ -40,7 +39,6 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import printer.MultiPrintable;
 import printer.printables.PrintableInvoice;
 import tools.Utilities;
 

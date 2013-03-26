@@ -82,10 +82,14 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         tablemodel = new InvoiceItemTableModel(data, pricecode);
         table.setModel(tablemodel);
         table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
-        table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
+	table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
         table.getColumns().get(2).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
         table.getColumns().get(3).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
         table.getColumns().get(4).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+	
+	table.getColumns().get(0).setWidth(400);
+	table.getColumns().get(0).setPreferredWidth(400);
+	
         JScrollPane scrollpane = new JScrollPane(table);
         table.setName("invoiceTable");
         JXTitledPanel detailstitled = new JXTitledPanel("Details");
@@ -250,6 +254,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         detailspanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -387,37 +392,73 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 
         addarticlechooserpanel.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout(2, 3));
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Artikelcode");
-        jPanel2.add(jLabel16);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(jLabel16, gridBagConstraints);
 
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Artikel");
-        jPanel2.add(jLabel17);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 5.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(jLabel17, gridBagConstraints);
 
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Hoeveelheid");
-        jPanel2.add(jLabel18);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(jLabel18, gridBagConstraints);
 
         codeoutlet.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(codeoutlet);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(codeoutlet, gridBagConstraints);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
         choseartickleoutlet.setLayout(new java.awt.BorderLayout());
         jPanel5.add(choseartickleoutlet, java.awt.BorderLayout.CENTER);
 
-        jPanel2.add(jPanel5);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 5.0;
+        jPanel2.add(jPanel5, gridBagConstraints);
 
-        quantityoutlet.setPreferredSize(new java.awt.Dimension(200, 20));
+        quantityoutlet.setPreferredSize(new java.awt.Dimension(50, 20));
         quantityoutlet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quantityoutletActionPerformed(evt);
             }
         });
-        jPanel2.add(quantityoutlet);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(quantityoutlet, gridBagConstraints);
 
         addarticlechooserpanel.add(jPanel2, java.awt.BorderLayout.CENTER);
 

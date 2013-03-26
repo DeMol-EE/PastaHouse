@@ -490,11 +490,9 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
     }// </editor-fold>//GEN-END:initComponents
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        listModel.setFilter(null);
-//	filter.setText("");
+        new EditBasicIngredientDialog(null, true, this, (BasicIngredient) listOutlet.getSelectedValue()).setVisible(true);
+	listModel.setFilter(null);
 	xfilter.setText("");
-	
-	new EditBasicIngredientDialog(null, true, this, (BasicIngredient) listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
     
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed

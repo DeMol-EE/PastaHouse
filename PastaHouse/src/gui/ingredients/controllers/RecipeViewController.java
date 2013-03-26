@@ -455,12 +455,9 @@ public class RecipeViewController extends javax.swing.JPanel implements MasterDe
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-//        new EditRecipeDialog(null, true, (Recipe)recipeListOutlet.getSelectedValue(), this).setVisible(true);
-	listModel.setFilter(null);
-//	filter.setText("");
-	xfilter.setText("");
-	
 	RecipeDialog.showEditRecipeDialog(this, (Recipe)recipeListOutlet.getSelectedValue());
+	listModel.setFilter(null);
+	xfilter.setText("");
     }//GEN-LAST:event_editActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed

@@ -260,6 +260,8 @@ public class AddArticleDialog extends javax.swing.JDialog {
 	    model.setUnit(unitOutlet.getText());
 	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
 	    
+	    // set comments
+	    
 	    FunctionResult<Article> res = model.create();
 	    if (res.getCode() == 0 && res.getObj() != null) {
 		delegate.addArticle(res.getObj());

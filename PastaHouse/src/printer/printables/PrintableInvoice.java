@@ -44,6 +44,12 @@ public class PrintableInvoice extends MyPrintable{
 	this.threeFormatter.setDecimalFormatSymbols(otherSymbols);
 	this.twoFormatter.setDecimalFormatSymbols(otherSymbols);
 	this.oneFormatter.setDecimalFormatSymbols(otherSymbols);
+//	this.threeFormatter.setGroupingUsed(true);
+//	this.threeFormatter.setGroupingSize(3);
+//	this.twoFormatter.setGroupingUsed(true);
+//	this.twoFormatter.setGroupingSize(3);
+//	this.oneFormatter.setGroupingUsed(true);
+//	this.oneFormatter.setGroupingSize(3);
     }
     
     @Override
@@ -282,6 +288,8 @@ public class PrintableInvoice extends MyPrintable{
 		netPrices.add(price);
 		String pr = threeFormatter.format(price);
 		String[] pp = pr.split(",");
+		System.out.println("n 0: "+pp[0]);
+		System.out.println("n 1: "+pp[1]);
 		offset = pp[0].length();
 		for (char c : pp[0].toCharArray()) {
 		    prices.add(new PrintableString(lineHeight, ""+c, tabs[index]-threeZeroesWithCommaWidth-offsetPix*offset));

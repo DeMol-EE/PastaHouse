@@ -47,14 +47,14 @@ public class InvoiceDetailsDialog extends javax.swing.JDialog implements EditInv
 	tableModel = new InvoiceItemTableModel(model.items(), model.getPriceCode());
         table.setModel(tableModel);
         
-	
-        
         table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
         table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
         table.getColumns().get(2).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
         table.getColumns().get(3).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
         table.getColumns().get(4).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
         JScrollPane articlepanel = new JScrollPane(table);
+	
+	table.getColumns().get(0).setPreferredWidth(400);
         
 	JXTitledPanel detailstitledpanel = new JXTitledPanel("Details");
 	JXTitledPanel articlestitledpanel = new JXTitledPanel("Artikelen");

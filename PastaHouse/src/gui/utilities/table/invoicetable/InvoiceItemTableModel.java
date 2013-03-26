@@ -45,7 +45,7 @@ public class InvoiceItemTableModel extends AbstractTableModel {
             case 0:
                 return "Artikel";
             case 1:
-                return "BTW tarief";
+                return "BTW";
             case 2:
                 return "Hoeveelheid";
             case 3:

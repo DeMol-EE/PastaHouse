@@ -323,6 +323,8 @@ public class EditArticleDialog extends javax.swing.JDialog {
             model.setPriceB(Double.parseDouble(priceBOutlet.getText()));
             model.setUnit(unitOutlet.getText());
             model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+	    
+	    // set comments
 
 	    FunctionResult<Article> res = model.update();
 	    if (res.getCode() == 0) {

@@ -208,6 +208,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
         jScrollPane2.setBorder(null);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(1);
@@ -272,16 +273,14 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         listModel.setFilter(null);
-//	filter.setText("");
 	xfilter.setText("");
 	new AddArticleDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        listModel.setFilter(null);
-//	filter.setText("");
+        if(listOutlet.getSelectedValue()!=null) new EditArticleDialog(null, true, this, (Article)listOutlet.getSelectedValue()).setVisible(true);
+	listModel.setFilter(null);
 	xfilter.setText("");
-	if(listOutlet.getSelectedValue()!=null) new EditArticleDialog(null, true, this, (Article)listOutlet.getSelectedValue()).setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
     private void addMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItemActionPerformed
