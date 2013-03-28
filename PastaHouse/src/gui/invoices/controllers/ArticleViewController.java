@@ -223,7 +223,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 
         setLayout(new java.awt.BorderLayout());
 
-        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setDividerLocation(300);
 
         master.setLayout(new java.awt.BorderLayout());
 

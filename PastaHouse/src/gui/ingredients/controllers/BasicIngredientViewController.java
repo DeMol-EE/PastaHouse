@@ -435,7 +435,7 @@ public class BasicIngredientViewController extends javax.swing.JPanel implements
         setFocusable(false);
         setLayout(new java.awt.BorderLayout());
 
-        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setDividerLocation(300);
         jSplitPane1.setFocusable(false);
 
         master.setFocusable(false);
