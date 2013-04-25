@@ -58,7 +58,7 @@ public class EditArticleDialog extends javax.swing.JDialog {
 	});
 	
 	container.add(new JXTitledPanel("Details", jPanel1), BorderLayout.NORTH);
-	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
+//	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
 	
 	loadModel();
     }
@@ -104,8 +104,6 @@ public class EditArticleDialog extends javax.swing.JDialog {
         jPanel6 = new javax.swing.JPanel();
         taxesOutlet = new javax.swing.JTextField();
         taxesFormattedOutlet = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         container = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -194,14 +192,6 @@ public class EditArticleDialog extends javax.swing.JDialog {
         jPanel6.add(taxesFormattedOutlet);
 
         jPanel1.add(jPanel6);
-
-        jScrollPane2.setBorder(null);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(1);
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane2.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(500, 500));
@@ -368,8 +358,6 @@ public class EditArticleDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField nameOutlet;
     private javax.swing.JLabel priceAFormattedOutlet;
     private javax.swing.JTextField priceAOutlet;

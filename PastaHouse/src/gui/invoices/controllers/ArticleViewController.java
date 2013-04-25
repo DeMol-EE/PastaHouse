@@ -39,8 +39,8 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
      */
     public ArticleViewController() {
 	initComponents();
-	jTextArea1.setBackground(new Color(213, 216, 222));
-        jTextArea1.setCaretPosition(0);
+//	jTextArea1.setBackground(new Color(213, 216, 222));
+//        jTextArea1.setCaretPosition(0);
 //	listModel = new ArticleListModel(database.Database.driver().getArticlesAlphabetically());
 	listModel = new FilterableListModel<Article>(database.Database.driver().getArticlesAlphabetically());
 	
@@ -64,7 +64,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	}
 	
 	container.add(new JXTitledPanel("Details", fixedfields), BorderLayout.NORTH);
-	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
+//	container.add(new JXTitledPanel("Opmerkingen", jScrollPane2), BorderLayout.CENTER);
 	
 	master.add(xfilter, BorderLayout.NORTH);
 	
@@ -102,8 +102,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         unitOutlet = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         taxesOutlet = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         filter = new javax.swing.JTextField();
         jSplitPane1 = new javax.swing.JSplitPane();
         master = new javax.swing.JPanel();
@@ -205,15 +203,6 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
         taxesOutlet.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 0));
         taxesOutlet.setOpaque(true);
         fixedfields.add(taxesOutlet);
-
-        jScrollPane2.setBorder(null);
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(1);
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane2.setViewportView(jTextArea1);
 
         filter.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -337,9 +326,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JList listOutlet;
     private javax.swing.JPanel master;
     private javax.swing.JLabel nameOutlet;
@@ -359,7 +346,7 @@ public class ArticleViewController extends javax.swing.JPanel implements MasterD
 	priceBOutlet.setText(three.format(article.getPriceB())+" euro");
 	unitOutlet.setText(article.getUnit());
 	taxesOutlet.setText(new DecimalFormat("0.00").format(article.getTaxes())+" %");
-        jTextArea1.setCaretPosition(0);
+//        jTextArea1.setCaretPosition(0);
     }
     
     @Override
