@@ -50,7 +50,7 @@ public class PrintableRecipe extends MyPrintable{
 //	super(Font.decode("Courier"));
 //	Font f = Font.decode("Courier");
 //	System.out.println(f.toString()+" - "+f.getFamily()+"; "+f.getFontName());
-	super(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+	super(new Font(Font.MONOSPACED, Font.PLAIN, 10));
 	this.model = new Recipe(model);
 	this.toMake = toMake;
 	this.isWeight = isWeight;
@@ -162,7 +162,7 @@ public class PrintableRecipe extends MyPrintable{
 	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
 	    int chars = s.substring(0, s.indexOf(",")).length();
-	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', Math.max(0, 9-chars*charWidth)), margin+tabs[2]));
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', Math.max(0, 9-chars)), margin+tabs[2]));
 	    comp.add(new PrintableString(lineHeight, three.format(quantity), margin+tabs[3]-chars*charWidth));
 	    printModel.add(new PrintableMulti(lineHeight, comp));
 	    
@@ -173,7 +173,8 @@ public class PrintableRecipe extends MyPrintable{
 	 */
 	String s = three.format(sum);
 	int chars = s.substring(0, s.indexOf(",")).length();
-	printModel.add(new PrintableLine(lineHeight, margin+tabs[3]-chars*charWidth, margin+tabs[3]+charWidth*4));
+//	printModel.add(new PrintableLine(lineHeight, margin+tabs[3]-chars*charWidth, margin+tabs[3]+charWidth*4));
+	printModel.add(new PrintableLine(lineHeight, margin, margin+imageableWidth));
 	printModel.add(new PrintableString(lineHeight, three.format(sum), margin+tabs[3]-chars*charWidth));
 	
 	if (!model.getPreparation().isEmpty()) {

@@ -119,13 +119,14 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         txtReduction.setText("" + saving);
         
         articlestablepanel.add(scrollpane, BorderLayout.CENTER);
-        ArrayList clients = new ArrayList();
-        clients.add("");
-        clients.addAll(Database.driver().getClientsAlphabetically().values());
-        client = oldinvoice.getClient();
-        clientBox = new AutocompleteCombobox(clients);
-        clientBox.setSelectedItem(client);
-        clientOutlet.add(clientBox, BorderLayout.CENTER);
+//        ArrayList clients = new ArrayList();
+//        clients.add("");
+//        clients.addAll(Database.driver().getClientsAlphabetically().values());
+//        client = oldinvoice.getClient();
+//        clientBox = new AutocompleteCombobox(clients);
+//        clientBox.setSelectedItem(client);
+//        clientOutlet.add(clientBox, BorderLayout.CENTER);
+	clientOutlet.setText(oldinvoice.getClient().getFirm());
 
         ArrayList articles = new ArrayList();
         articles.add("");

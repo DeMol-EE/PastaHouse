@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import printer.adts.PrintableHorizontalLineObject;
+import printer.adts.PrintableLargeString;
 import printer.adts.PrintableLine;
 import printer.adts.PrintableMulti;
 import printer.adts.PrintableNewline;
@@ -102,15 +103,15 @@ public class PrintableInvoice extends MyPrintable{
 	printModel.add(new PrintableNewline(lineHeight));
 	
 //	printModel.add(new PrintableString(model.getClient().getContact(), half+3));
-	printModel.add(new PrintableString(lineHeight, model.getClient().getFirm(), half+3));
+	printModel.add(new PrintableLargeString(lineHeight, model.getClient().getFirm(), half+3));
 	
 	printModel.add(new PrintableNewline(lineHeight));
 	
-	printModel.add(new PrintableString(lineHeight, model.getClient().getAddress(), half+3));
+	printModel.add(new PrintableLargeString(lineHeight, model.getClient().getAddress(), half+3));
 	
 	printModel.add(new PrintableNewline(lineHeight));
 	
-	printModel.add(new PrintableString(lineHeight, model.getClient().getZipcode()+" "+model.getClient().getMunicipality(), half+3));
+	printModel.add(new PrintableLargeString(lineHeight, model.getClient().getZipcode()+" "+model.getClient().getMunicipality(), half+3));
 	
 	printModel.add(new PrintableNewline(lineHeight));
 	printModel.add(new PrintableNewline(lineHeight));
@@ -142,7 +143,8 @@ public class PrintableInvoice extends MyPrintable{
 	
 //	int offsetPix = fontMetrics.charsWidth("00".toCharArray(), 0, 2) - fontMetrics.charWidth('0');
 //	int offsetPix = fontMetrics.charsWidth("00".toCharArray(), 0, 2) - zeroWidth;
-	int offsetPix = zeroWidth+2;
+//	int offsetPix = zeroWidth+2;
+	int offsetPix = zeroWidth;
 	
 	for (InvoiceItem invoiceItem : model.items()) {
 	    /*
@@ -204,7 +206,8 @@ public class PrintableInvoice extends MyPrintable{
 	int threeZeroesWithCommaWidth = fontMetrics.charsWidth(",000".toCharArray(), 0, 4);
 	int commaWidth = fontMetrics.charsWidth(",".toCharArray(), 0, 1);
 	int zeroWidth = fontMetrics.charsWidth("0".toCharArray(), 0, 1);
-	int offsetPix = zeroWidth+2;
+//	int offsetPix = zeroWidth+2;
+	int offsetPix = zeroWidth;
 	int offset = 0;
 	
 	/*
