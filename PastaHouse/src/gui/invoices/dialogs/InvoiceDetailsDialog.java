@@ -348,6 +348,11 @@ private JXTable createXTable() {
         model.copy(newInvoice);
         tableModel.setData(model.items(), model.getPriceCode());
 	saveOutlet.setText(model.getSave()==0?"0%":"- "+model.getSave()+"%");
+	lblDate.setText(model.getDate());
+	lblNummer.setText("" + model.getNumber());
+        lblKlasse.setText(model.getPriceCode());
+	clientOutlet.setText(StringTools.capitalizeEach(model.getClient().getSortKey()));
+	saveOutlet.setText(model.getSave()==0?"0%":"- "+model.getSave()+"%");
         updatePrices();
     }
 

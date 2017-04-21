@@ -317,7 +317,11 @@ public class CellRendererFactory {
                 setBackground(table.getBackground());
             }
 
-            setText(value.toString());
+	    if (value!=null) {
+		setText(value.toString());
+	    } else {
+		setText("derp");
+	    }
 
             return this;
         }

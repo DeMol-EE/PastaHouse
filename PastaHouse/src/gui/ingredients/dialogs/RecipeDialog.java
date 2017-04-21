@@ -18,6 +18,7 @@ import gui.utilities.DatePickerFactory;
 import gui.utilities.KeyAction;
 import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.TextFieldValidator;
+import gui.utilities.cell.CellEditorFactory;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.EditableRecipeTableModel;
@@ -51,7 +52,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableCellEditor;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTitledPanel;
 import tools.StringTools;
@@ -93,10 +93,13 @@ public class RecipeDialog extends javax.swing.JDialog implements AddBasicIngredi
 	});
 	
 	this.ingredientsOutlet.setDefaultRenderer(Ingredient.class, CellRendererFactory.createCapitalizedStringCellRenderer());
-	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalFormattedDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(Component.class, CellRendererFactory.createTwoDecimalFormattedDoubleCellRenderer());
+	this.ingredientsOutlet.setDefaultRenderer(Double.class, CellRendererFactory.createThreeDecimalFormattedDoubleCellRenderer());
 	this.ingredientsOutlet.setDefaultRenderer(String.class, CellRendererFactory.createCapitalizedStringCellRenderer(true));
 	this.ingredientsOutlet.setDefaultRenderer(Integer.class, CellRendererFactory.createIndexCellRenderer());
+	
+	this.ingredientsOutlet.setDefaultEditor(Component.class, CellEditorFactory.createDoubleEditor());
+	this.ingredientsOutlet.setDefaultEditor(Double.class, CellEditorFactory.createDoubleEditor());
 	
 	this.ingredientsOutlet.setDragEnabled(true);
 	this.ingredientsOutlet.setDropMode(DropMode.INSERT_ROWS);

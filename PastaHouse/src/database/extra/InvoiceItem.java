@@ -5,7 +5,6 @@
 package database.extra;
 
 import database.tables.Article;
-import javax.crypto.spec.IvParameterSpec;
 
 /**
  *

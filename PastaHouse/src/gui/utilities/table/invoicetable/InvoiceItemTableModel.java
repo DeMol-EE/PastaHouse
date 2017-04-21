@@ -16,11 +16,18 @@ public class InvoiceItemTableModel extends AbstractTableModel {
 
     private ArrayList<InvoiceItem> data;
     private String pricecode;
+    private final boolean editable;
+    private final InvoiceItemTableModelDelegate delegate;
     
-
     public InvoiceItemTableModel(ArrayList<InvoiceItem> data, String pricecode) {
+        this(data, pricecode, null, false);
+    }
+    
+    public InvoiceItemTableModel(ArrayList<InvoiceItem> data, String pricecode, InvoiceItemTableModelDelegate delegate, boolean editable) {
         this.data = data;
         this.pricecode = pricecode;
+	this.editable = editable;
+	this.delegate = delegate;
     }
     
     public void setData(ArrayList<InvoiceItem> data, String pricecode){
@@ -58,8 +65,30 @@ public class InvoiceItemTableModel extends AbstractTableModel {
     }
 
     @Override
-    public boolean isCellEditable(int arg0, int arg1) {
-        return false;
+    public boolean isCellEditable(int row, int col) {
+	if (!editable) {
+	    return false;
+	}
+        return col==2;
+    }
+    
+    @Override
+    public void setValueAt(Object value, int row, int col) {
+//	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
+	try{
+	    if (col == 2) {
+		double v = Double.parseDouble((String)value);
+		if (v>=0) {
+		    InvoiceItem ii = data.get(row);
+		    ii.setAmount(v);
+		    fireTableCellUpdated(row, col);
+		    fireTableCellUpdated(row, 4);
+		    delegate.dataChanged();
+		}
+	    }
+	} catch (Exception e){
+	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());
+	}
     }
 
     public void addComponent(InvoiceItem item) {

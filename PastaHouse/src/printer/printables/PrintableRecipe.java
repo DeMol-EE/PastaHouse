@@ -156,13 +156,13 @@ public class PrintableRecipe extends MyPrintable{
 	    
 	    ArrayList<PrintableHorizontalLineObject> comp = new ArrayList<PrintableHorizontalLineObject>();
 	    
-//	    comp.add(new PrintableString(lineHeight, StringTools.capitalize(StringTools.clip(component.getIngredient().getName(), ingrNameLength)), margin+tabs[0]));
-	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getName(), '.', ingrNameLength-6), margin+tabs[0]));
-	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getPackaging(), '.', 19), margin+tabs[1]));
 	    double quantity = component.getQuantity();
 	    String s = three.format(quantity);
 	    int chars = s.substring(0, s.indexOf(",")).length();
-	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', Math.max(0, 9-chars)), margin+tabs[2]));
+	    
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getName(), '.', ingrNameLength-5), margin+tabs[0]));
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getIngredient().getPackaging(), '.', 20), margin+tabs[1]));
+	    comp.add(new PrintableString(lineHeight, StringTools.pad(component.getFormattedUnits(), '.', Math.max(0, 10-chars)), margin+tabs[2]));
 	    comp.add(new PrintableString(lineHeight, three.format(quantity), margin+tabs[3]-chars*charWidth));
 	    printModel.add(new PrintableMulti(lineHeight, comp));
 	    

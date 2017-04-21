@@ -25,7 +25,7 @@ public class StringTools {
 	if (s.length() >= length) {
 	    return s;
 	} else {
-	    return pad(s, c, length-1).concat(""+c);
+	    return pad(s.concat(""+c), c, length-1);
 	}
     }
     

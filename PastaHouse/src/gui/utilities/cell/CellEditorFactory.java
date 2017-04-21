@@ -112,7 +112,7 @@ public class CellEditorFactory {
 
 	@Override
 	public Object getCellEditorValue() {
-	    return input.getText();
+	    return input.getText().trim();
 	}
 
 	@Override

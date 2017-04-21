@@ -19,6 +19,7 @@ import gui.utilities.TextFieldAutoHighlighter;
 import gui.utilities.cell.CellRendererFactory;
 import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
+import gui.utilities.table.invoicetable.InvoiceItemTableModelDelegate;
 import gui.utilities.validation.AbstractValidator;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -51,7 +52,7 @@ import org.jdesktop.swingx.JXTitledPanel;
  *
  * @author Hannes
  */
-public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactDelegate {
+public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactDelegate, InvoiceItemTableModelDelegate {
 
     private final AddInvoiceDelegate delegate;
     private AutocompleteCombobox clientBox;
@@ -79,7 +80,7 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
         number = Database.driver().getInvoiceNumber(new Date());
         txtNumber.setText("" + number);
         table = createXTable();
-        tablemodel = new InvoiceItemTableModel(data, pricecode);
+        tablemodel = new InvoiceItemTableModel(data, pricecode, this, true);
         table.setModel(tablemodel);
         table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
 	table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
@@ -984,5 +985,10 @@ public class AddInvoiceDialog extends javax.swing.JDialog implements AddContactD
 	} catch (Exception e){
 	    e.printStackTrace();
 	}
+    }
+
+    @Override
+    public void dataChanged() {
+	updatePrices();
     }
 }

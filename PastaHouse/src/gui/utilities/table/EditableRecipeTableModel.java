@@ -93,24 +93,30 @@ public class EditableRecipeTableModel extends AbstractTableModel implements Reor
     
     @Override
     public boolean isCellEditable(int row, int col) {
-	return col==2;
+	return col==2 || col==3;
     }
     
     @Override
     public void setValueAt(Object value, int row, int col) {
-	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
+//	System.out.println("Called 'set value' at "+row+", "+col+": "+value);
 	try{
-	    
-//	    double v = Double.parseDouble(((String)value).replaceAll(",", "."));
-	    
-	    if ((Double)value<=0) {
-		return;
-	    }
-	    
 	    if (col == 2) {
-		((Component)data.values().toArray()[row]).setQuantity((Double)value);
-		fireTableCellUpdated(row, col);
-		del.dataChanged();
+		double v = Double.parseDouble((String)value);
+		if (v>=0) {
+		    Component c = (Component)data.values().toArray()[row];
+		    c.setQuantity(v*c.getIngredient().getWeightPerUnit());
+		    fireTableCellUpdated(row, col);
+		    fireTableCellUpdated(row, 3);
+		    del.dataChanged();
+		}
+	    } else if (col == 3) {
+		double v = Double.parseDouble((String)value);
+		if (v>=0) {
+		    ((Component)data.values().toArray()[row]).setQuantity(v);
+		    fireTableCellUpdated(row, col);
+		    fireTableCellUpdated(row, 2);
+		    del.dataChanged();
+		}
 	    }
 	} catch (Exception e){
 	    System.err.println("Something went wrong setting the value at "+row+", "+col+":\n"+e.getMessage());

@@ -265,7 +265,7 @@
           </Constraints>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-            <Property name="columns" type="int" value="2"/>
+            <Property name="columns" type="int" value="3"/>
             <Property name="rows" type="int" value="1"/>
           </Layout>
           <SubComponents>
