@@ -193,7 +193,7 @@
                   </Constraints>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="0"/>
+                    <Property name="columns" type="int" value="4"/>
                     <Property name="rows" type="int" value="2"/>
                   </Layout>
                   <SubComponents>
@@ -207,6 +207,12 @@
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="text" type="java.lang.String" value="Artikel"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel7">
+                      <Properties>
+                        <Property name="horizontalAlignment" type="int" value="0"/>
+                        <Property name="text" type="java.lang.String" value="LOT"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel18">
@@ -234,6 +240,8 @@
                         </Container>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JTextField" name="lotOutlet">
+                    </Component>
                     <Component class="javax.swing.JTextField" name="quantityoutlet">
                       <Properties>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">

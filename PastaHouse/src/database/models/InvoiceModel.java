@@ -33,8 +33,6 @@ public class InvoiceModel implements Model {
         this.items = items;
     }
 
-
-
     public Integer getNumber() {
         return number;
     }

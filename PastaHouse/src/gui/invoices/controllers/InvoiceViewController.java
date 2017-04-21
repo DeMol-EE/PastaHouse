@@ -48,93 +48,93 @@ import tools.Utilities;
  */
 public class InvoiceViewController extends javax.swing.JPanel implements MasterDetailViewController<Invoice>, AddInvoiceDelegate {
 
-    private Map<String, RowFilter<Object, Object>> filters;
-    private TableRowSorter<InvoiceTableModel> sorter;
-    private InvoiceTableModel tableModel;
-    private JXTable table;
-    private Map<Integer, Invoice> invoicesByID;
-    private JXDatePicker fromPicker;
-    private JXDatePicker toPicker;
-    private InvoiceFiltering filterController;
-    private JXTitledPanel filterpanel;
-    private JXTitledPanel invoicespanel;
+	private Map<String, RowFilter<Object, Object>> filters;
+	private TableRowSorter<InvoiceTableModel> sorter;
+	private InvoiceTableModel tableModel;
+	private JXTable table;
+	private Map<Integer, Invoice> invoicesByID;
+	private JXDatePicker fromPicker;
+	private JXDatePicker toPicker;
+	private InvoiceFiltering filterController;
+	private JXTitledPanel filterpanel;
+	private JXTitledPanel invoicespanel;
 
-    /**
-     * Creates new form InvoiceViewController
-     */
-    public InvoiceViewController() {
+	/**
+	 * Creates new form InvoiceViewController
+	 */
+	public InvoiceViewController() {
 
-        initComponents();
-        invoicesByID = Database.driver().getInvoicesById();
-        tablePanel.add(controlPanel, BorderLayout.NORTH);
-        table = createXTable();
-        JScrollPane scrollpane = new JScrollPane(table);
-        table.setName("invoiceTable");
-        table.setRowHeight(table.getRowHeight() + Utilities.fontSize() - 10);
+		initComponents();
+		invoicesByID = Database.driver().getInvoicesById();
+		tablePanel.add(controlPanel, BorderLayout.NORTH);
+		table = createXTable();
+		JScrollPane scrollpane = new JScrollPane(table);
+		table.setName("invoiceTable");
+		table.setRowHeight(table.getRowHeight() + Utilities.fontSize() - 10);
 
-        configureDisplayProperties();
-        fromPicker = DatePickerFactory.makeStandardDatePicker();
-        fromPicker.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filterController.setFromDate(fromPicker.getDate());
-            }
-        });
-        toPicker = DatePickerFactory.makeStandardDatePicker();
-        toPicker.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filterController.setToDate(toPicker.getDate());
-            }
-        });
-        fromOutlet.add(fromPicker);
-        toOutlet.add(toPicker);
-        filterpanel = new JXTitledPanel("Filter");
-        invoicespanel = new JXTitledPanel("Facturen");
-        filterpanel.add(controlPanel);
-        tablePanel.add(invoicespanel, BorderLayout.CENTER);
-        invoicespanel.add(scrollpane, BorderLayout.CENTER);
+		configureDisplayProperties();
+		fromPicker = DatePickerFactory.makeStandardDatePicker();
+		fromPicker.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filterController.setFromDate(fromPicker.getDate());
+			}
+		});
+		toPicker = DatePickerFactory.makeStandardDatePicker();
+		toPicker.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filterController.setToDate(toPicker.getDate());
+			}
+		});
+		fromOutlet.add(fromPicker);
+		toOutlet.add(toPicker);
+		filterpanel = new JXTitledPanel("Filter");
+		invoicespanel = new JXTitledPanel("Facturen");
+		filterpanel.add(controlPanel);
+		tablePanel.add(invoicespanel, BorderLayout.CENTER);
+		invoicespanel.add(scrollpane, BorderLayout.CENTER);
 
-        final JXCollapsiblePane filtercollapser = new JXCollapsiblePane(JXCollapsiblePane.Direction.UP);
-        filtercollapser.setCollapsed(true);
-        filtercollapser.setContentPane(filterpanel);
-        tablePanel.add(filtercollapser, BorderLayout.NORTH);
+		final JXCollapsiblePane filtercollapser = new JXCollapsiblePane(JXCollapsiblePane.Direction.UP);
+		filtercollapser.setCollapsed(true);
+		filtercollapser.setContentPane(filterpanel);
+		tablePanel.add(filtercollapser, BorderLayout.NORTH);
 
-        final JButton showFilter = new JButton("Filters");
-        showFilter.setFocusable(false);
+		final JButton showFilter = new JButton("Filters");
+		showFilter.setFocusable(false);
 
-        final JButton hideFilter = new JButton("Sluiten");
-        hideFilter.setFocusable(false);
+		final JButton hideFilter = new JButton("Sluiten");
+		hideFilter.setFocusable(false);
 
-        showFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filtercollapser.setCollapsed(false);
-                numberField.requestFocus();
-                invoicespanel.setRightDecoration(null);
-            }
-        });
+		showFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filtercollapser.setCollapsed(false);
+				numberField.requestFocus();
+				invoicespanel.setRightDecoration(null);
+			}
+		});
 
-        hideFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filtercollapser.setCollapsed(true);
-                invoicespanel.setRightDecoration(showFilter);
-            }
-        });
+		hideFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filtercollapser.setCollapsed(true);
+				invoicespanel.setRightDecoration(showFilter);
+			}
+		});
 
-        invoicespanel.setRightDecoration(showFilter);
-        filterpanel.setRightDecoration(hideFilter);
+		invoicespanel.setRightDecoration(showFilter);
+		filterpanel.setRightDecoration(hideFilter);
 
-        bind();
-    }
+		bind();
+	}
 
-    /**
-     * This method is called fromPicker within the constructor toPicker
-     * initialize the form. WARNING: Do NOT modify this code. The content of
-     * this method is always regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+	/**
+	 * This method is called fromPicker within the constructor toPicker
+	 * initialize the form. WARNING: Do NOT modify this code. The content of
+	 * this method is always regenerated by the Form Editor.
+	 */
+	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -370,94 +370,91 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        new AddInvoiceDialog(null, true, this).setVisible(true);
+		new AddInvoiceDialog(null, true, this).setVisible(true);
     }//GEN-LAST:event_addActionPerformed
 
     private void detailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsActionPerformed
-        int row = table.getSelectedRow();
-	if (row >= 0) {
-	    int index = table.convertRowIndexToModel(row);
-	    Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
-	    new InvoiceDetailsDialog(null, true, inv).setVisible(true);
-	}
+		int row = table.getSelectedRow();
+		if (row >= 0) {
+			int index = table.convertRowIndexToModel(row);
+			Invoice inv = (Invoice) (invoicesByID.values().toArray())[index];
+			new InvoiceDetailsDialog(null, true, inv).setVisible(true);
+		}
     }//GEN-LAST:event_detailsActionPerformed
 
     private void numberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberFieldKeyReleased
-        filterController.setNumberString(numberField.getText());
+		filterController.setNumberString(numberField.getText());
     }//GEN-LAST:event_numberFieldKeyReleased
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-        int[] rijen = table.getSelectedRows();
-	
-	if (rijen.length == 0) {
-	    return;
-	}
-	
-	int added = 0;
-	for (int i : rijen) {
-	    rijen[added++]=table.convertRowIndexToModel(i);
-	}
-	
+		int[] rijen = table.getSelectedRows();
+
+		if (rijen.length == 0) {
+			return;
+		}
+
+		int added = 0;
+		for (int i : rijen) {
+			rijen[added++] = table.convertRowIndexToModel(i);
+		}
+
 //        Book b = new Book();
-        PageFormat pf = new PageFormat();
-        pf.setPaper(new A4());
+		PageFormat pf = new PageFormat();
+		pf.setPaper(new A4());
 
 //	MultiPrintable mp = new MultiPrintable();
-	
 //        for (int i : rijen) {
 //            b.append(new PrintableInvoice(tableModel.getInvoiceAtRow(i)), pf);
 //	    mp.add(new PrintableInvoice(tableModel.getInvoiceAtRow(i)));
 //        }
-	
 //        printer.Printer.driver().setPrintableBook(b);
-	
-	Printable p = new PrintableInvoice(tableModel.getInvoiceAtRow(rijen[0]));
+		Printable p = new PrintableInvoice(tableModel.getInvoiceAtRow(rijen[0]));
 //        printer.Printer.driver().setPrintableJob(p);
 //        printer.Printer.driver().setPrintableJob(mp, pf);
-        printer.Printer.driver().setPrintableJob(p, pf);
-        printer.Printer.driver().tryPrint();
+		printer.Printer.driver().setPrintableJob(p, pf);
+		printer.Printer.driver().tryPrint();
     }//GEN-LAST:event_printActionPerformed
 
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
-        clientField.setText("");
-        numberField.setText("");
-        fromPicker.setDate(null);
-        toPicker.setDate(null);
-        filterController.clearFilters();
+		clientField.setText("");
+		numberField.setText("");
+		fromPicker.setDate(null);
+		toPicker.setDate(null);
+		filterController.clearFilters();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
     private void clientFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clientFieldKeyReleased
-        filterController.setClientString(clientField.getText());
+		filterController.setClientString(clientField.getText());
     }//GEN-LAST:event_clientFieldKeyReleased
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        int[] rijen = table.getSelectedRows();
-	
-	int added = 0;
-	for (int i : rijen) {
-	    rijen[added++]=table.convertRowIndexToModel(i);
-	}
-	
-        if (rijen.length > 0) {
-	    String msg = "Bent u zeker dat u deze " + (rijen.length == 1 ? "factuur" : "facturen") + " wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden!";
-            int choice = JOptionPane.showOptionDialog(this, msg, "Aandacht!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Verwijderen", "Terug"}, 1);
-            if (choice == 0) {
-                System.out.println("Deleting...");
-                tableModel.removeInvoiceAtRows(rijen);
-            }
-        }
+		int[] rijen = table.getSelectedRows();
+
+		int added = 0;
+		for (int i : rijen) {
+			rijen[added++] = table.convertRowIndexToModel(i);
+		}
+
+		if (rijen.length > 0) {
+			String msg = "Bent u zeker dat u deze " + (rijen.length == 1 ? "factuur" : "facturen") + " wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden!";
+			int choice = JOptionPane.showOptionDialog(this, msg, "Aandacht!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Verwijderen", "Terug"}, 1);
+			if (choice == 0) {
+				System.out.println("Deleting...");
+				tableModel.removeInvoiceAtRows(rijen);
+			}
+		}
     }//GEN-LAST:event_deleteActionPerformed
 
     private void addMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuItem1ActionPerformed
-        addActionPerformed(null);
+		addActionPerformed(null);
     }//GEN-LAST:event_addMenuItem1ActionPerformed
 
     private void printMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printMenuItemActionPerformed
-        printActionPerformed(evt);
+		printActionPerformed(evt);
     }//GEN-LAST:event_printMenuItemActionPerformed
 
     private void detailMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailMenuItemActionPerformed
-        detailsActionPerformed(evt);
+		detailsActionPerformed(evt);
     }//GEN-LAST:event_detailMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -489,84 +486,82 @@ public class InvoiceViewController extends javax.swing.JPanel implements MasterD
     private javax.swing.JPanel toOutlet;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void updateDetail(Invoice value) {
+	@Override
+	public void updateDetail(Invoice value) {
 //	clientOutlet.setText(value.getClient().getSortKey());
 //	dateOutlet.setText(value.getDate());
 //	priceOutlet.setText(value.getPriceCode());
 //	
 //	articleTableOutlet.setModel(new InvoiceItemTableModel(value.items()));
-    }
+	}
 
-    @Override
-    public JPanel view() {
-        return this;
-    }
+	@Override
+	public JPanel view() {
+		return this;
+	}
 
-    @Override
-    public JMenu menu() {
-        return editMenu1;
-    }
+	@Override
+	public JMenu menu() {
+		return editMenu1;
+	}
 
-    private JXTable createXTable() {
-        JXTable table_l = new JXTable() {
-            @Override
-            protected JTableHeader createDefaultTableHeader() {
-                return new JXTableHeader(columnModel) {
-                    @Override
-                    public void updateUI() {
-                        super.updateUI();
-                        // need toPicker do in updateUI toPicker survive toggling of LAF 
-                        if (getDefaultRenderer() instanceof JLabel) {
-                            ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+	private JXTable createXTable() {
+		JXTable table_l = new JXTable() {
+			@Override
+			protected JTableHeader createDefaultTableHeader() {
+				return new JXTableHeader(columnModel) {
+					@Override
+					public void updateUI() {
+						super.updateUI();
+						// need toPicker do in updateUI toPicker survive toggling of LAF 
+						if (getDefaultRenderer() instanceof JLabel) {
+							((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
-                        }
-                    }
-                };
-            }
-        };
-        return table_l;
-    }
+						}
+					}
+				};
+			}
+		};
+		return table_l;
+	}
 
-    private void bind() {
-        tableModel = new InvoiceTableModel(invoicesByID);
-        table.setModel(tableModel);
-        filterController = new InvoiceFiltering(table);
+	private void bind() {
+		tableModel = new InvoiceTableModel(invoicesByID);
+		table.setModel(tableModel);
+		filterController = new InvoiceFiltering(table);
 
+		table.getColumns().get(0).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
+		table.getColumns().get(1).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
+		table.getColumns().get(2).setCellRenderer(CellRendererFactory.createDateRenderer());
 
-        table.getColumns().get(0).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
-        table.getColumns().get(1).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
-        table.getColumns().get(2).setCellRenderer(CellRendererFactory.createDateRenderer());
+		table.setSortOrder(0, SortOrder.DESCENDING);
 
-        table.setSortOrder(0, SortOrder.DESCENDING);
+	}
 
-    }
+	@Override
+	public void electFirstResponder() {
+	}
 
-    @Override
-    public void electFirstResponder() {
-    }
+	private void configureDisplayProperties() {
+		table.setColumnControlVisible(true);
+		table.setShowHorizontalLines(true);
+		table.addHighlighter(HighlighterFactory.createAlternateStriping());
+		CustomColumnFactory factory = new CustomColumnFactory();
+		InvoiceRendering.configureColumnFactory(factory, getClass());
+		table.setColumnFactory(factory);
+	}
 
-    private void configureDisplayProperties() {
-        table.setColumnControlVisible(true);
-        table.setShowHorizontalLines(true);
-        table.addHighlighter(HighlighterFactory.createAlternateStriping());
-        CustomColumnFactory factory = new CustomColumnFactory();
-        InvoiceRendering.configureColumnFactory(factory, getClass());
-        table.setColumnFactory(factory);
-    }
+	@Override
+	public void addInvoice(Invoice e) {
+		tableModel.fireTableDataChanged();
+	}
 
-    @Override
-    public void addInvoice(Invoice e) {
-        tableModel.fireTableDataChanged();
-    }
+	private class A4 extends Paper {
 
-
-    private class A4 extends Paper {
-
-        public A4() {
-            super();
-            setSize(594.992125984252, 841.8897637795276);
-            setImageableArea(36.0, 36.0, 522.99212598425197, 769.8897637795276);
-        }
-    }
+		public A4() {
+			super();
+			setSize(594.992125984252, 841.8897637795276);
+			setImageableArea(36.0, 36.0, 522.99212598425197, 769.8897637795276);
+		}
+	}
 }

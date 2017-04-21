@@ -11,77 +11,100 @@ import database.tables.Article;
  * @author Warkst
  */
 public class InvoiceItem {
-    private Article article;
-    private double amount;
-    private double price;
-    private String articlename;
-    private double taxes;
+	private Article article;
+	private double amount;
+	private double price;
+	private String articlename;
+	private double taxes;
+	private String lot;
 
-    public InvoiceItem(Article article, String articlename, double amount, double price, double taxes) {
-	this.article = article;
-	this.amount = amount;
-        this.price = price;
-        this.articlename = articlename;
-        this.taxes = taxes;
-    }
+	public InvoiceItem(Article article, String articlename, double amount, double price, double taxes, String lot) {
+		this.article = article;
+		this.amount = amount;
+		this.price = price;
+		this.articlename = articlename;
+		this.taxes = taxes;
+		this.lot = lot;
+	}
+	
+	/**
+	 * Legacy constructor to facilitaty compatibility with previous version of the db which did not yet contain the field "lot" for invoiceitem.
+	 * 
+	 * @param article
+	 * @param articlename
+	 * @param amount
+	 * @param price
+	 * @param taxes 
+	 */
+	@Deprecated
+	public InvoiceItem(Article article, String articlename, double amount, double price, double taxes) {
+		this(article, articlename, amount, price, taxes, "");
+	}
 
-    public String getArticlename() {
-        return articlename;
-    }
+	public String getLot() {
+		return lot;
+	}
 
-    public void setArticlename(String articlename) {
-        this.articlename = articlename;
-    }
-     
+	public void setLot(String lot) {
+		this.lot = lot;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public String getArticlename() {
+		return articlename;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public void setArticlename(String articlename) {
+		this.articlename = articlename;
+	}
 
-    public double getTaxes() {
-        return taxes;
-    }
+	public double getPrice() {
+		return price;
+	}
 
-    public void setTaxes(double taxes) {
-        this.taxes = taxes;
-    }
-    
-    
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-    public Article getArticle() {
-	return article;
-    }
+	public double getTaxes() {
+		return taxes;
+	}
 
-    public void setArticle(Article article) {
-	this.article = article;
-    }
+	public void setTaxes(double taxes) {
+		this.taxes = taxes;
+	}
 
-    public double getAmount() {
-	return amount;
-    }
+	public Article getArticle() {
+		return article;
+	}
 
-    public void setAmount(double amount) {
-	this.amount = amount;
-    } 
-    
-    public InvoiceItem(InvoiceItem copy){
-        this.amount=copy.amount;
-        this.article= new Article(copy.article);
-        this.articlename = copy.articlename;
-        this.price = copy.price;
-        this.taxes = copy.taxes;
-    }
-    
-    public void copy(InvoiceItem copy){
-        this.amount=copy.amount;
-        this.article= new Article(copy.article);
-        this.articlename = copy.articlename;
-        this.price = copy.price;
-        this.taxes = copy.taxes;
-    }
-    
+	public void setArticle(Article article) {
+		this.article = article;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public InvoiceItem(InvoiceItem copy) {
+		this.amount = copy.amount;
+		this.article = new Article(copy.article);
+		this.articlename = copy.articlename;
+		this.price = copy.price;
+		this.taxes = copy.taxes;
+		this.lot = copy.lot;
+	}
+
+	public void copy(InvoiceItem copy) {
+		this.amount = copy.amount;
+		this.article = new Article(copy.article);
+		this.articlename = copy.articlename;
+		this.price = copy.price;
+		this.taxes = copy.taxes;
+		this.lot = copy.lot;
+	}
+
 }

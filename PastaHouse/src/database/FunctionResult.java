@@ -11,25 +11,25 @@ import database.extra.Record;
  * @author Warkst
  */
 public class FunctionResult<Type extends Record> {
-    private final int code;
-    private final Type obj;
-    private final String msg;
+	private final int code;
+	private final Type obj;
+	private final String msg;
 
-    public FunctionResult(int code, Type obj, String msg){
-	this.code = code;
-	this.obj = obj;
-	this.msg = msg;
-    }
+	public FunctionResult(int code, Type obj, String msg) {
+		this.code = code;
+		this.obj = obj;
+		this.msg = msg;
+	}
 
-    public int getCode() {
-	return code;
-    }
+	public int getCode() {
+		return code;
+	}
 
-    public Type getObj() {
-	return obj;
-    }
-    
-    public String getMessage(){
-	return msg;
-    }
+	public Type getObj() {
+		return obj;
+	}
+
+	public String getMessage() {
+		return msg;
+	}
 }

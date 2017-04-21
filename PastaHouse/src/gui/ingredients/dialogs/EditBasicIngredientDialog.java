@@ -45,72 +45,72 @@ import tools.Utilities;
  */
 public class EditBasicIngredientDialog extends javax.swing.JDialog implements AddContactDelegate {
 
-    private final BasicIngredient model;
-    private final BasicIngredient defaultModel;
-    private final EditBasicIngredientDelegate delegate;
-    private final DatePicker dp;
-    private final AutocompleteCombobox supplierBox;
+	private final BasicIngredient model;
+	private final BasicIngredient defaultModel;
+	private final EditBasicIngredientDelegate delegate;
+	private final DatePicker dp;
+	private final AutocompleteCombobox supplierBox;
 //    private final ButtonGroup buttons;
 
-    /**
-     * Creates new form EditBasicIngredientDialog
-     */
-    public EditBasicIngredientDialog(java.awt.Frame parent, boolean modal, EditBasicIngredientDelegate delegate, BasicIngredient model) {
-	super(parent, modal);
-	initComponents();
+	/**
+	 * Creates new form EditBasicIngredientDialog
+	 */
+	public EditBasicIngredientDialog(java.awt.Frame parent, boolean modal, EditBasicIngredientDelegate delegate, BasicIngredient model) {
+		super(parent, modal);
+		initComponents();
 
-	this.delegate = delegate;
-	this.model = model;
-	this.defaultModel = new BasicIngredient(model);
+		this.delegate = delegate;
+		this.model = model;
+		this.defaultModel = new BasicIngredient(model);
 
-	supplierParent.removeAll();
-	List suppliers = new ArrayList();
-	suppliers.add("");
-	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
-	supplierBox = new AutocompleteCombobox(suppliers);
-	supplierParent.add(supplierBox, BorderLayout.CENTER);
-	supplierParent.add(addSupplier, BorderLayout.EAST);
+		supplierParent.removeAll();
+		List suppliers = new ArrayList();
+		suppliers.add("");
+		suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
+		supplierBox = new AutocompleteCombobox(suppliers);
+		supplierParent.add(supplierBox, BorderLayout.CENTER);
+		supplierParent.add(addSupplier, BorderLayout.EAST);
 
-	setLocationRelativeTo(null);
-	setTitle("Ingrediënt wijzigen");
-	
-	notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
+		setLocationRelativeTo(null);
+		setTitle("Ingrediënt wijzigen");
 
-	supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliersAlphabetically().values().toArray()));
+		notesOutlet.setFont(new Font(notesOutlet.getFont().getName(), Font.PLAIN, Utilities.fontSize()));
 
-	dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
-	datePanel.add(dp, BorderLayout.CENTER);
+		supplierOutlet.setModel(ComboBoxModelFactory.createSupplierComboBoxModel(Database.driver().getSuppliersAlphabetically().values().toArray()));
 
-	AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		saveActionPerformed(e);
-	    }
-	});
+		dp = new DatePicker(new Date(), new SimpleDateFormat("dd/MM/yyyy"));
+		datePanel.add(dp, BorderLayout.CENTER);
 
-	AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		cancelActionPerformed(e);
-	    }
-	});
+		AcceleratorAdder.addAccelerator(save, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), new KeyAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveActionPerformed(e);
+			}
+		});
 
-	loadModel();
+		AcceleratorAdder.addAccelerator(cancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), new KeyAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cancelActionPerformed(e);
+			}
+		});
 
-	TextFieldAutoHighlighter.installHighlighter(taxesOutlet);
-	TextFieldAutoHighlighter.installHighlighter(lossOutlet);
-	TextFieldAutoHighlighter.installHighlighter(pricePerWeightOutlet);
-	TextFieldAutoHighlighter.installHighlighter(pricePerUnitOutlet);
-	TextFieldAutoHighlighter.installHighlighter(weightPerUnitOutlet);
+		loadModel();
 
-	packagingOutlet.setInputVerifier(new AbstractValidator(this, packagingOutlet, "Dit veld mag niet leeg zijn!") {
+		TextFieldAutoHighlighter.installHighlighter(taxesOutlet);
+		TextFieldAutoHighlighter.installHighlighter(lossOutlet);
+		TextFieldAutoHighlighter.installHighlighter(pricePerWeightOutlet);
+		TextFieldAutoHighlighter.installHighlighter(pricePerUnitOutlet);
+		TextFieldAutoHighlighter.installHighlighter(weightPerUnitOutlet);
 
-	    @Override
-	    protected boolean validationCriteria(JComponent c) {
-		return !packagingOutlet.getText().isEmpty();
-	    }
-	});
-	
+		packagingOutlet.setInputVerifier(new AbstractValidator(this, packagingOutlet, "Dit veld mag niet leeg zijn!") {
+
+			@Override
+			protected boolean validationCriteria(JComponent c) {
+				return !packagingOutlet.getText().isEmpty();
+			}
+		});
+
 //	weightPerUnitOutlet.setInputVerifier(new AbstractValidator(this, weightPerUnitOutlet, "Vul een geldig gewicht per eenheid in.") {
 //
 //	    @Override
@@ -149,116 +149,114 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 //		}
 //	    }
 //	});
-	
-	ingredientOutlet.setInputVerifier(new AbstractValidator(this, ingredientOutlet, "De naam moet uniek en niet leeg zijn!") {
+		ingredientOutlet.setInputVerifier(new AbstractValidator(this, ingredientOutlet, "De naam moet uniek en niet leeg zijn!") {
 
-	    @Override
-	    protected boolean validationCriteria(JComponent c) {
-		try{
-		    if (ingredientOutlet.getText().isEmpty()) {
-			return false;
-		    }
-		    if (!ingredientOutlet.getText().equalsIgnoreCase(defaultModel.getName())) {
-			List<Ingredient> ingrs = database.Database.driver().getIngredients();
-			for (Ingredient ingredient : ingrs) {
-			    if (ingredient.getName().equalsIgnoreCase(ingredientOutlet.getText())) {
-				return false;
-			    }
+			@Override
+			protected boolean validationCriteria(JComponent c) {
+				try {
+					if (ingredientOutlet.getText().isEmpty()) {
+						return false;
+					}
+					if (!ingredientOutlet.getText().equalsIgnoreCase(defaultModel.getName())) {
+						List<Ingredient> ingrs = database.Database.driver().getIngredients();
+						for (Ingredient ingredient : ingrs) {
+							if (ingredient.getName().equalsIgnoreCase(ingredientOutlet.getText())) {
+								return false;
+							}
+						}
+					}
+					return true;
+				} catch (Exception e) {
+					return false;
+				}
 			}
-		    }
-		    return true;
-		} catch(Exception e){
-		    return false;
-		}
-	    }
-	});
-	lossOutlet.setInputVerifier(new AbstractValidator(this, lossOutlet, "Gelieve een geldige waarde tussen 0.0 en 100.0 (%) in te voeren.") {
+		});
+		lossOutlet.setInputVerifier(new AbstractValidator(this, lossOutlet, "Gelieve een geldige waarde tussen 0.0 en 100.0 (%) in te voeren.") {
 
-	    @Override
-	    protected boolean validationCriteria(JComponent c) {
-		try{
-		    double d = Double.parseDouble(lossOutlet.getText());
-		    return d>=0 && d<100;
-		} catch (Exception e){
-		    return false;
-		}
-	    }
-	});
-	taxesOutlet.setInputVerifier(new AbstractValidator(this, taxesOutlet, "Gelieve een geldige, positieve waarde in te geven.") {
+			@Override
+			protected boolean validationCriteria(JComponent c) {
+				try {
+					double d = Double.parseDouble(lossOutlet.getText());
+					return d >= 0 && d < 100;
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		});
+		taxesOutlet.setInputVerifier(new AbstractValidator(this, taxesOutlet, "Gelieve een geldige, positieve waarde in te geven.") {
 
-	    @Override
-	    protected boolean validationCriteria(JComponent c) {
-		try{
-		    double d = Double.parseDouble(taxesOutlet.getText());
-		    return d>=0;
-		} catch (Exception e){
-		    return false;
-		}
-	    }
-	});
-	
-	detail.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
-	detail.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
-	
-	/*
-	 * Hide the unformatted fields
-	 */
-	grossPriceOutlet.setVisible(false);
-	netPriceOutlet.setVisible(false);
+			@Override
+			protected boolean validationCriteria(JComponent c) {
+				try {
+					double d = Double.parseDouble(taxesOutlet.getText());
+					return d >= 0;
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		});
 
-	ingredientOutlet.requestFocus();
-    }
+		detail.add(new JXTitledPanel("Details", fixedFields), BorderLayout.NORTH);
+		detail.add(new JXTitledPanel("Opmerkingen", stretchableFields), BorderLayout.CENTER);
 
-    private void loadModel() {
-	ingredientOutlet.setText(model.getName());
-	brandOutlet.setText(model.getBrand());
-//	supplierOutlet.setSelectedItem(model.getSupplier());
-	if (model.getSupplier() != null) {
-	    supplierBox.setSelectedItem(model.getSupplier());
+		/*
+		 * Hide the unformatted fields
+		 */
+		grossPriceOutlet.setVisible(false);
+		netPriceOutlet.setVisible(false);
+
+		ingredientOutlet.requestFocus();
 	}
-	packagingOutlet.setText(model.getPackaging());
 
-	DecimalFormat threeFormatter = new DecimalFormat("0.000");
-	DecimalFormat twoFormatter = new DecimalFormat("0.00");
+	private void loadModel() {
+		ingredientOutlet.setText(model.getName());
+		brandOutlet.setText(model.getBrand());
+//	supplierOutlet.setSelectedItem(model.getSupplier());
+		if (model.getSupplier() != null) {
+			supplierBox.setSelectedItem(model.getSupplier());
+		}
+		packagingOutlet.setText(model.getPackaging());
 
-	/*
-	 * check if it is bulk or not (bulk implies -1 for ppu and wpu)
-	 */
+		DecimalFormat threeFormatter = new DecimalFormat("0.000");
+		DecimalFormat twoFormatter = new DecimalFormat("0.00");
+
+		/*
+		 * check if it is bulk or not (bulk implies -1 for ppu and wpu)
+		 */
 //	if (model.getPricePerUnit() >= 0 && model.getWeightPerUnit() >= 0) {
 //	    perUnitOutlet.setSelected(true);
 //	} else {
 //	    bulkOutlet.setSelected(true);
 //	}
+		// compound fields
+		lossOutlet.setText("" + model.getLossPercent());
+		lossFormattedOutlet.setText(twoFormatter.format(model.getLossPercent()) + " %");
+		grossPriceOutlet.setText("" + model.getGrossPrice());
+		grossPriceFormattedOutlet.setText(threeFormatter.format(model.getGrossPrice()) + " euro");
+		taxesOutlet.setText("" + model.getTaxes());
+		taxesFormattedOutlet.setText(twoFormatter.format(model.getTaxes()) + " %");
+		netPriceOutlet.setText("" + model.getNetPrice());
+		netPriceFormattedOutlet.setText(twoFormatter.format(model.getNetPrice()) + " euro");
+		notesOutlet.setText(model.getNotes());
 
-	// compound fields
-	lossOutlet.setText("" + model.getLossPercent());
-	lossFormattedOutlet.setText(twoFormatter.format(model.getLossPercent()) + " %");
-	grossPriceOutlet.setText("" + model.getGrossPrice());
-	grossPriceFormattedOutlet.setText(threeFormatter.format(model.getGrossPrice()) + " euro");
-	taxesOutlet.setText("" + model.getTaxes());
-	taxesFormattedOutlet.setText(twoFormatter.format(model.getTaxes()) + " %");
-	netPriceOutlet.setText("" + model.getNetPrice());
-	netPriceFormattedOutlet.setText(twoFormatter.format(model.getNetPrice()) + " euro");
-	notesOutlet.setText(model.getNotes());
+		pricePerWeightOutlet.setText("" + model.getPricePerWeight());
+		pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight()) + " euro/kg");
 
-	pricePerWeightOutlet.setText(""+model.getPricePerWeight());
-	pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerWeight())+" euro/kg");
+		packagingOutlet.setText(model.getPackaging());
+		weightPerUnitOutlet.setText("" + model.getWeightPerUnit());
+		weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getWeightPerUnit()) + " kg/" + model.getPackaging());
+		pricePerUnitOutlet.setText("" + model.getPricePerUnit());
+		pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerUnit()) + " euro/" + model.getPackaging());
 
-	packagingOutlet.setText(model.getPackaging());
-	weightPerUnitOutlet.setText(""+model.getWeightPerUnit());
-	weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getWeightPerUnit())+" kg/"+model.getPackaging());
-	pricePerUnitOutlet.setText(""+model.getPricePerUnit());
-	pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(model.getPricePerUnit())+" euro/"+model.getPackaging());
-	
-	updateGrossPriceOutlet();
-    }
+		updateGrossPriceOutlet();
+	}
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+	/**
+	 * This method is called from within the constructor to initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is always
+	 * regenerated by the Form Editor.
+	 */
+	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -605,395 +603,396 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
 
     private void weightPerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_weightPerUnitOutletKeyReleased
 //	updatePricePerWeightOutlet();
-	try {
-	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(weightPerUnitOutlet.getText())) + " kg/" + packagingOutlet.getText());
-	    weightPerUnitFormattedOutlet.setForeground(Color.black);
-	    weightPerUnitOutlet.setForeground(Color.black);
-	} catch (Exception e) {
-	    weightPerUnitFormattedOutlet.setText("??? kg/" + packagingOutlet.getText());
-	    weightPerUnitFormattedOutlet.setForeground(Color.red);
-	    weightPerUnitOutlet.setForeground(Color.red);
-	    System.err.println("Exception: " + e.getMessage());
-	}
+		try {
+			weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(weightPerUnitOutlet.getText())) + " kg/" + packagingOutlet.getText());
+			weightPerUnitFormattedOutlet.setForeground(Color.black);
+			weightPerUnitOutlet.setForeground(Color.black);
+		} catch (Exception e) {
+			weightPerUnitFormattedOutlet.setText("??? kg/" + packagingOutlet.getText());
+			weightPerUnitFormattedOutlet.setForeground(Color.red);
+			weightPerUnitOutlet.setForeground(Color.red);
+			System.err.println("Exception: " + e.getMessage());
+		}
 //	updatePricePerWeight();
-	pricePerUnitOutlet.setText("");
-	pricePerUnitFormattedOutlet.setText("");
-	pricePerWeightOutlet.setText("");
-	pricePerWeightFormattedOutlet.setText("");
-	
-	updateGrossPriceOutlet();
+		pricePerUnitOutlet.setText("");
+		pricePerUnitFormattedOutlet.setText("");
+		pricePerWeightOutlet.setText("");
+		pricePerWeightFormattedOutlet.setText("");
+
+		updateGrossPriceOutlet();
     }//GEN-LAST:event_weightPerUnitOutletKeyReleased
 
     private void pricePerUnitOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pricePerUnitOutletKeyReleased
 //	updatePricePerWeightOutlet();
-	try {
-	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerUnitOutlet.getText())) + " euro/" + packagingOutlet.getText());
-	    pricePerUnitFormattedOutlet.setForeground(Color.black);
-	    pricePerUnitOutlet.setForeground(Color.black);
-	} catch (Exception e) {
-	    pricePerUnitFormattedOutlet.setForeground(Color.red);
-	    pricePerUnitOutlet.setForeground(Color.red);
-	    pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
-	    System.err.println("Exception: " + e.getMessage());
-	}
-	try {
-	    Double.parseDouble(weightPerUnitOutlet.getText());
-	    updatePricePerWeight();
-	} catch (Exception ex) {}
+		try {
+			pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerUnitOutlet.getText())) + " euro/" + packagingOutlet.getText());
+			pricePerUnitFormattedOutlet.setForeground(Color.black);
+			pricePerUnitOutlet.setForeground(Color.black);
+		} catch (Exception e) {
+			pricePerUnitFormattedOutlet.setForeground(Color.red);
+			pricePerUnitOutlet.setForeground(Color.red);
+			pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
+			System.err.println("Exception: " + e.getMessage());
+		}
+		try {
+			Double.parseDouble(weightPerUnitOutlet.getText());
+			updatePricePerWeight();
+		} catch (Exception ex) {
+		}
     }//GEN-LAST:event_pricePerUnitOutletKeyReleased
 
-    private void updatePricePerUnit() {
-	try {
-	    double wpu = Double.parseDouble(weightPerUnitOutlet.getText());
-	    double ppw = Double.parseDouble(pricePerWeightOutlet.getText());
-	    double ppu = ppw * wpu;
-	    pricePerUnitOutlet.setText("" + ppu);
-	    pricePerUnitOutlet.setForeground(Color.black);
-	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) + " euro/" + packagingOutlet.getText());
-	    pricePerUnitFormattedOutlet.setForeground(Color.black);
-	} catch (Exception e) {
-	    pricePerUnitOutlet.setText("");
-	    pricePerUnitOutlet.setForeground(Color.red);
-	    pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
-	    pricePerUnitFormattedOutlet.setForeground(Color.red);
-	}
-    }
-
-    private void updatePricePerWeight() {
-	boolean failed = false;
-
-	double wpu;
-	try {
-	    wpu = Double.parseDouble(weightPerUnitOutlet.getText());
-	} catch (Exception e) {
-	    pricePerWeightOutlet.setText("");
-	    pricePerWeightOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
-	    pricePerWeightFormattedOutlet.setForeground(Color.red);
-
-	    failed = true;
-	    wpu = 1.0;
+	private void updatePricePerUnit() {
+		try {
+			double wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+			double ppw = Double.parseDouble(pricePerWeightOutlet.getText());
+			double ppu = ppw * wpu;
+			pricePerUnitOutlet.setText("" + ppu);
+			pricePerUnitOutlet.setForeground(Color.black);
+			pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) + " euro/" + packagingOutlet.getText());
+			pricePerUnitFormattedOutlet.setForeground(Color.black);
+		} catch (Exception e) {
+			pricePerUnitOutlet.setText("");
+			pricePerUnitOutlet.setForeground(Color.red);
+			pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
+			pricePerUnitFormattedOutlet.setForeground(Color.red);
+		}
 	}
 
-	double ppu;
-	try {
-	    ppu = Double.parseDouble(pricePerUnitOutlet.getText());
-	} catch (Exception e) {
-	    pricePerWeightOutlet.setText("");
-	    pricePerWeightOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
-	    pricePerWeightFormattedOutlet.setForeground(Color.red);
+	private void updatePricePerWeight() {
+		boolean failed = false;
 
-	    failed = true;
-	    ppu = 0.0;
+		double wpu;
+		try {
+			wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+		} catch (Exception e) {
+			pricePerWeightOutlet.setText("");
+			pricePerWeightOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setText("??? euro/kg");
+			pricePerWeightFormattedOutlet.setForeground(Color.red);
+
+			failed = true;
+			wpu = 1.0;
+		}
+
+		double ppu;
+		try {
+			ppu = Double.parseDouble(pricePerUnitOutlet.getText());
+		} catch (Exception e) {
+			pricePerWeightOutlet.setText("");
+			pricePerWeightOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setText("??? euro/kg");
+			pricePerWeightFormattedOutlet.setForeground(Color.red);
+
+			failed = true;
+			ppu = 0.0;
+		}
+
+		if (!failed) {
+			double ppw = ppu / wpu;
+			pricePerWeightOutlet.setText("" + ppw);
+			pricePerWeightOutlet.setForeground(Color.black);
+			pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw) + " euro/kg");
+			pricePerWeightFormattedOutlet.setForeground(Color.black);
+		}
+
+		updateGrossPriceOutlet();
 	}
 
-	if (!failed) {
-	    double ppw = ppu / wpu;
-	    pricePerWeightOutlet.setText("" + ppw);
-	    pricePerWeightOutlet.setForeground(Color.black);
-	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw) + " euro/kg");
-	    pricePerWeightFormattedOutlet.setForeground(Color.black);
+	private void disposeLater() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				dispose();
+			}
+		});
 	}
-
-	updateGrossPriceOutlet();
-    }
-
-    private void disposeLater() {
-	SwingUtilities.invokeLater(new Runnable() {
-	    @Override
-	    public void run() {
-		dispose();
-	    }
-	});
-    }
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-	model.copy(defaultModel);
-	disposeLater();
+		model.copy(defaultModel);
+		disposeLater();
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void updatePricePerWeightOutlet() {
-	boolean failed = false;
+	private void updatePricePerWeightOutlet() {
+		boolean failed = false;
 
-	double ppu;
-	try {
-	    ppu = Double.parseDouble(pricePerUnitOutlet.getText());
-	    pricePerUnitOutlet.setForeground(Color.black);
-	    pricePerUnitFormattedOutlet.setForeground(Color.black);
-	    pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) + " euro/" + packagingOutlet.getText());
-	} catch (Exception e) {
-	    pricePerUnitOutlet.setForeground(Color.red);
-	    pricePerUnitFormattedOutlet.setForeground(Color.red);
-	    pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
-	    pricePerWeightOutlet.setForeground(Color.red);
-	    pricePerWeightOutlet.setText("???");
-	    pricePerWeightFormattedOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setText("??? euro");
-	    updateGrossPriceOutlet();
-	    failed = true;
-	    ppu = 0.0;
+		double ppu;
+		try {
+			ppu = Double.parseDouble(pricePerUnitOutlet.getText());
+			pricePerUnitOutlet.setForeground(Color.black);
+			pricePerUnitFormattedOutlet.setForeground(Color.black);
+			pricePerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu) + " euro/" + packagingOutlet.getText());
+		} catch (Exception e) {
+			pricePerUnitOutlet.setForeground(Color.red);
+			pricePerUnitFormattedOutlet.setForeground(Color.red);
+			pricePerUnitFormattedOutlet.setText("??? euro/" + packagingOutlet.getText());
+			pricePerWeightOutlet.setForeground(Color.red);
+			pricePerWeightOutlet.setText("???");
+			pricePerWeightFormattedOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setText("??? euro");
+			updateGrossPriceOutlet();
+			failed = true;
+			ppu = 0.0;
+		}
+
+		double wpu;
+		try {
+			wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+			weightPerUnitOutlet.setForeground(Color.black);
+			weightPerUnitFormattedOutlet.setForeground(Color.black);
+			weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(wpu) + " kg/" + packagingOutlet.getText());
+		} catch (Exception e) {
+			weightPerUnitOutlet.setForeground(Color.red);
+			weightPerUnitFormattedOutlet.setForeground(Color.red);
+			weightPerUnitFormattedOutlet.setText("??? kg/" + packagingOutlet.getText());
+			pricePerWeightOutlet.setForeground(Color.red);
+			pricePerWeightOutlet.setText("???");
+			pricePerWeightFormattedOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setText("??? euro");
+			updateGrossPriceOutlet();
+			failed = true;
+			wpu = 0.0;
+		}
+
+		if (failed) {
+			return;
+		}
+
+		pricePerWeightOutlet.setText("" + (ppu / wpu));
+		pricePerWeightOutlet.setForeground(Color.BLACK);
+		pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu / wpu) + " euro/kg");
+		pricePerWeightFormattedOutlet.setForeground(Color.BLACK);
+
+		updateGrossPriceOutlet();
 	}
 
-	double wpu;
-	try {
-	    wpu = Double.parseDouble(weightPerUnitOutlet.getText());
-	    weightPerUnitOutlet.setForeground(Color.black);
-	    weightPerUnitFormattedOutlet.setForeground(Color.black);
-	    weightPerUnitFormattedOutlet.setText(new DecimalFormat("0.000").format(wpu) + " kg/" + packagingOutlet.getText());
-	} catch (Exception e) {
-	    weightPerUnitOutlet.setForeground(Color.red);
-	    weightPerUnitFormattedOutlet.setForeground(Color.red);
-	    weightPerUnitFormattedOutlet.setText("??? kg/" + packagingOutlet.getText());
-	    pricePerWeightOutlet.setForeground(Color.red);
-	    pricePerWeightOutlet.setText("???");
-	    pricePerWeightFormattedOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setText("??? euro");
-	    updateGrossPriceOutlet();
-	    failed = true;
-	    wpu = 0.0;
+	private void updateGrossPriceOutlet() {
+		boolean failed = false;
+
+		double loss;
+		try {
+			loss = Double.parseDouble(lossOutlet.getText());
+			lossOutlet.setForeground(Color.black);
+			lossFormattedOutlet.setForeground(Color.black);
+			lossFormattedOutlet.setText(new DecimalFormat("0.00").format(loss) + " %");
+		} catch (Exception e) {
+			lossOutlet.setForeground(Color.red);
+			lossFormattedOutlet.setForeground(Color.red);
+			lossFormattedOutlet.setText("??? %");
+			grossPriceOutlet.setForeground(Color.red);
+			grossPriceOutlet.setText("???");
+			grossPriceFormattedOutlet.setForeground(Color.red);
+			grossPriceFormattedOutlet.setText("??? euro");
+			updateNetPriceOutlet();
+			failed = true;
+			loss = 0.0;
+		}
+
+		double ppw;
+		try {
+			ppw = Double.parseDouble(pricePerWeightOutlet.getText());
+			pricePerWeightOutlet.setForeground(Color.black);
+			pricePerWeightFormattedOutlet.setForeground(Color.black);
+			pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw) + " euro/kg");
+		} catch (Exception e) {
+			pricePerWeightOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setText("??? euro/kg");
+			grossPriceOutlet.setForeground(Color.red);
+			grossPriceOutlet.setText("???");
+			grossPriceFormattedOutlet.setForeground(Color.red);
+			grossPriceFormattedOutlet.setText("??? euro");
+			updateNetPriceOutlet();
+			failed = true;
+			ppw = 0.0;
+		}
+
+		if (failed) {
+			return;
+		}
+
+		grossPriceOutlet.setText("" + (ppw / (1.0 - (0.01 * loss))));
+		grossPriceOutlet.setForeground(Color.BLACK);
+		grossPriceFormattedOutlet.setForeground(Color.BLACK);
+		grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw / (1.0 - (0.01 * loss))) + " euro");
+
+		updateNetPriceOutlet();
 	}
 
-	if (failed) {
-	    return;
+	private void updateNetPriceOutlet() {
+		boolean failed = false;
+
+		double taxes;
+		try {
+			taxes = Double.parseDouble(taxesOutlet.getText());
+			taxesOutlet.setForeground(Color.black);
+			taxesFormattedOutlet.setForeground(Color.black);
+			taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(taxes) + " %");
+		} catch (Exception e) {
+			taxesOutlet.setForeground(Color.red);
+			taxesFormattedOutlet.setForeground(Color.red);
+			taxesFormattedOutlet.setText("??? %");
+			netPriceOutlet.setForeground(Color.red);
+			netPriceOutlet.setText("???");
+			netPriceFormattedOutlet.setForeground(Color.red);
+			netPriceFormattedOutlet.setText("??? euro");
+			failed = true;
+			taxes = 0.0;
+		}
+
+		double grossPrice;
+		try {
+			grossPrice = Double.parseDouble(grossPriceOutlet.getText());
+			grossPriceOutlet.setForeground(Color.black);
+			grossPriceFormattedOutlet.setForeground(Color.black);
+			grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(grossPrice) + " euro");
+		} catch (Exception e) {
+			grossPriceOutlet.setForeground(Color.red);
+			grossPriceFormattedOutlet.setForeground(Color.red);
+			grossPriceFormattedOutlet.setText("??? euro");
+			netPriceOutlet.setForeground(Color.red);
+			netPriceOutlet.setText("???");
+			netPriceFormattedOutlet.setForeground(Color.red);
+			netPriceFormattedOutlet.setText("??? euro");
+			failed = true;
+			grossPrice = 0.0;
+		}
+
+		if (failed) {
+			return;
+		}
+
+		netPriceOutlet.setText("" + grossPrice * (1.0 + 0.01 * taxes));
+		netPriceOutlet.setForeground(Color.BLACK);
+		netPriceFormattedOutlet.setText(new DecimalFormat("0.00").format(grossPrice * (1.0 + 0.01 * taxes)) + " euro");
+		netPriceFormattedOutlet.setForeground(Color.black);
 	}
-
-	pricePerWeightOutlet.setText("" + (ppu / wpu));
-	pricePerWeightOutlet.setForeground(Color.BLACK);
-	pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppu / wpu) + " euro/kg");
-	pricePerWeightFormattedOutlet.setForeground(Color.BLACK);
-
-	updateGrossPriceOutlet();
-    }
-
-    private void updateGrossPriceOutlet() {
-	boolean failed = false;
-
-	double loss;
-	try {
-	    loss = Double.parseDouble(lossOutlet.getText());
-	    lossOutlet.setForeground(Color.black);
-	    lossFormattedOutlet.setForeground(Color.black);
-	    lossFormattedOutlet.setText(new DecimalFormat("0.00").format(loss) + " %");
-	} catch (Exception e) {
-	    lossOutlet.setForeground(Color.red);
-	    lossFormattedOutlet.setForeground(Color.red);
-	    lossFormattedOutlet.setText("??? %");
-	    grossPriceOutlet.setForeground(Color.red);
-	    grossPriceOutlet.setText("???");
-	    grossPriceFormattedOutlet.setForeground(Color.red);
-	    grossPriceFormattedOutlet.setText("??? euro");
-	    updateNetPriceOutlet();
-	    failed = true;
-	    loss = 0.0;
-	}
-
-	double ppw;
-	try {
-	    ppw = Double.parseDouble(pricePerWeightOutlet.getText());
-	    pricePerWeightOutlet.setForeground(Color.black);
-	    pricePerWeightFormattedOutlet.setForeground(Color.black);
-	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw) + " euro/kg");
-	} catch (Exception e) {
-	    pricePerWeightOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
-	    grossPriceOutlet.setForeground(Color.red);
-	    grossPriceOutlet.setText("???");
-	    grossPriceFormattedOutlet.setForeground(Color.red);
-	    grossPriceFormattedOutlet.setText("??? euro");
-	    updateNetPriceOutlet();
-	    failed = true;
-	    ppw = 0.0;
-	}
-
-	if (failed) {
-	    return;
-	}
-
-	grossPriceOutlet.setText("" + (ppw / (1.0 - (0.01 * loss))));
-	grossPriceOutlet.setForeground(Color.BLACK);
-	grossPriceFormattedOutlet.setForeground(Color.BLACK);
-	grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(ppw / (1.0 - (0.01 * loss))) + " euro");
-
-	updateNetPriceOutlet();
-    }
-
-    private void updateNetPriceOutlet() {
-	boolean failed = false;
-
-	double taxes;
-	try {
-	    taxes = Double.parseDouble(taxesOutlet.getText());
-	    taxesOutlet.setForeground(Color.black);
-	    taxesFormattedOutlet.setForeground(Color.black);
-	    taxesFormattedOutlet.setText(new DecimalFormat("0.00").format(taxes) + " %");
-	} catch (Exception e) {
-	    taxesOutlet.setForeground(Color.red);
-	    taxesFormattedOutlet.setForeground(Color.red);
-	    taxesFormattedOutlet.setText("??? %");
-	    netPriceOutlet.setForeground(Color.red);
-	    netPriceOutlet.setText("???");
-	    netPriceFormattedOutlet.setForeground(Color.red);
-	    netPriceFormattedOutlet.setText("??? euro");
-	    failed = true;
-	    taxes = 0.0;
-	}
-
-	double grossPrice;
-	try {
-	    grossPrice = Double.parseDouble(grossPriceOutlet.getText());
-	    grossPriceOutlet.setForeground(Color.black);
-	    grossPriceFormattedOutlet.setForeground(Color.black);
-	    grossPriceFormattedOutlet.setText(new DecimalFormat("0.000").format(grossPrice) + " euro");
-	} catch (Exception e) {
-	    grossPriceOutlet.setForeground(Color.red);
-	    grossPriceFormattedOutlet.setForeground(Color.red);
-	    grossPriceFormattedOutlet.setText("??? euro");
-	    netPriceOutlet.setForeground(Color.red);
-	    netPriceOutlet.setText("???");
-	    netPriceFormattedOutlet.setForeground(Color.red);
-	    netPriceFormattedOutlet.setText("??? euro");
-	    failed = true;
-	    grossPrice = 0.0;
-	}
-
-	if (failed) {
-	    return;
-	}
-
-	netPriceOutlet.setText("" + grossPrice * (1.0 + 0.01 * taxes));
-	netPriceOutlet.setForeground(Color.BLACK);
-	netPriceFormattedOutlet.setText(new DecimalFormat("0.00").format(grossPrice * (1.0 + 0.01 * taxes)) + " euro");
-	netPriceFormattedOutlet.setForeground(Color.black);
-    }
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-	try {
-	    /*
-	     * Validity test
-	     */
-	    if (!valid()) {
-		return;
-	    }
-	    
-	    /*
-	     * Warnings
-	     */
-	    double ppw = Double.parseDouble(pricePerWeightOutlet.getText());
-	    if (ppw==0) {
-		int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat de prijs 0 is?", "Opgelet!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
-		if (result!=0) {
-		    if (bulkOutlet.isSelected()) {
-			pricePerWeightOutlet.requestFocus();
-		    } else {
-			pricePerUnitOutlet.requestFocus();
-		    }
-		    return;
-		}
-	    }
+		try {
+			/*
+			 * Validity test
+			 */
+			if (!valid()) {
+				return;
+			}
 
-	    /*
-	     * Set values on the model
-	     */
-	    model.setName(ingredientOutlet.getText());
-	    model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
-	    model.setBrand(brandOutlet.getText());
+			/*
+			 * Warnings
+			 */
+			double ppw = Double.parseDouble(pricePerWeightOutlet.getText());
+			if (ppw == 0) {
+				int result = JOptionPane.showOptionDialog(null, "Bent u zeker dat de prijs 0 is?", "Opgelet!", 0, JOptionPane.WARNING_MESSAGE, null, new String[]{"Ja", "Aanpassen"}, "Ja");
+				if (result != 0) {
+					if (bulkOutlet.isSelected()) {
+						pricePerWeightOutlet.requestFocus();
+					} else {
+						pricePerUnitOutlet.requestFocus();
+					}
+					return;
+				}
+			}
+
+			/*
+			 * Set values on the model
+			 */
+			model.setName(ingredientOutlet.getText());
+			model.setDate(new DateFormatter(dp.getDateFormat()).valueToString(dp.getDate()));
+			model.setBrand(brandOutlet.getText());
 //	    if (bulkOutlet.isSelected()) {
 //		model.setPackaging("Bulk");
 //		model.setWeightPerUnit(-1);
 //		model.setPricePerUnit(-1);
 //	    } else {
-		model.setPackaging(packagingOutlet.getText());
-		model.setWeightPerUnit(weightPerUnitOutlet.getText().isEmpty()? 0.0 : Double.parseDouble(weightPerUnitOutlet.getText()));
-		model.setPricePerUnit(weightPerUnitOutlet.getText().isEmpty()? 0.0 : Double.parseDouble(pricePerUnitOutlet.getText()));
+			model.setPackaging(packagingOutlet.getText());
+			model.setWeightPerUnit(weightPerUnitOutlet.getText().isEmpty() ? 0.0 : Double.parseDouble(weightPerUnitOutlet.getText()));
+			model.setPricePerUnit(weightPerUnitOutlet.getText().isEmpty() ? 0.0 : Double.parseDouble(pricePerUnitOutlet.getText()));
 //	    }
-	    model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
-	    model.setPricePerWeight(Double.parseDouble(pricePerWeightOutlet.getText()));
-	    model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
-	    model.setNotes(notesOutlet.getText());
+			model.setLossPercent(Double.parseDouble(lossOutlet.getText()));
+			model.setPricePerWeight(Double.parseDouble(pricePerWeightOutlet.getText()));
+			model.setTaxes(Double.parseDouble(taxesOutlet.getText()));
+			model.setNotes(notesOutlet.getText());
 
-	    Contact supp = null;
-	    if (supplierBox.getSelectedItem() instanceof Contact) {
-		supp = (Contact) supplierBox.getSelectedItem();
-	    } else if (supplierBox.getSelectedItem() instanceof String) {
-		String s = (String) supplierBox.getSelectedItem();
-		supp = Database.driver().getSuppliersAlphabetically().get(s.toLowerCase());
-	    }
-	    if (supp == null) {
-		throw new Exception("Supplier was not found in the database!");
-	    }
+			Contact supp = null;
+			if (supplierBox.getSelectedItem() instanceof Contact) {
+				supp = (Contact) supplierBox.getSelectedItem();
+			} else if (supplierBox.getSelectedItem() instanceof String) {
+				String s = (String) supplierBox.getSelectedItem();
+				supp = Database.driver().getSuppliersAlphabetically().get(s.toLowerCase());
+			}
+			if (supp == null) {
+				throw new Exception("Supplier was not found in the database!");
+			}
 
-	    model.setSupplier(supp);
+			model.setSupplier(supp);
 
-	    if (!defaultModel.getName().equalsIgnoreCase(model.getName())) {
-		if (Database.driver().getBasicIngredientsAlphabetically().containsKey(model.getName().toLowerCase())) {
-		    JOptionPane.showMessageDialog(null, "Er is al een basisingrediënt met deze naam.", "Fout!", JOptionPane.ERROR_MESSAGE);
-		    return;
+			if (!defaultModel.getName().equalsIgnoreCase(model.getName())) {
+				if (Database.driver().getBasicIngredientsAlphabetically().containsKey(model.getName().toLowerCase())) {
+					JOptionPane.showMessageDialog(null, "Er is al een basisingrediënt met deze naam.", "Fout!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+
+			FunctionResult res = model.update();
+			if (res.getCode() == 0) {
+				delegate.editBasicIngredient(model, defaultModel);
+				disposeLater();
+			} else {
+				String msg;
+				switch (res.getCode()) {
+					case 1:
+					case 2:
+						msg = res.getMessage();
+						break;
+					default:
+						msg = "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
+				}
+				JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+			JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
 		}
-	    }
-
-	    FunctionResult res = model.update();
-	    if (res.getCode() == 0) {
-		delegate.editBasicIngredient(model, defaultModel);
-		disposeLater();
-	    } else {
-		String msg;
-		switch (res.getCode()) {
-		    case 1:
-		    case 2:
-			msg = res.getMessage();
-			break;
-		    default:
-			msg = "Er is een fout opgetreden bij het opslaan van dit basisingrediënt in de databank (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
-		}
-		JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-	    }
-	} catch (Exception ex) {
-	    System.err.println(ex.getMessage());
-	    JOptionPane.showMessageDialog(null, Utilities.incorrectFormMessage, "Fout!", JOptionPane.ERROR_MESSAGE);
-	}
     }//GEN-LAST:event_saveActionPerformed
 
     private void lossOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lossOutletKeyReleased
-	updateGrossPriceOutlet();
+		updateGrossPriceOutlet();
     }//GEN-LAST:event_lossOutletKeyReleased
 
     private void taxesOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taxesOutletKeyReleased
-	updateNetPriceOutlet();
+		updateNetPriceOutlet();
     }//GEN-LAST:event_taxesOutletKeyReleased
 
     private void packagingOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_packagingOutletKeyReleased
-	//update all the formatted labels that use packaging
-	String cppu = pricePerUnitFormattedOutlet.getText();
-	pricePerUnitFormattedOutlet.setText(cppu.substring(0, cppu.lastIndexOf("/") + 1) + packagingOutlet.getText());
-	String cwpu = weightPerUnitFormattedOutlet.getText();
-	weightPerUnitFormattedOutlet.setText(cwpu.substring(0, cwpu.lastIndexOf("/") + 1) + packagingOutlet.getText());
+		//update all the formatted labels that use packaging
+		String cppu = pricePerUnitFormattedOutlet.getText();
+		pricePerUnitFormattedOutlet.setText(cppu.substring(0, cppu.lastIndexOf("/") + 1) + packagingOutlet.getText());
+		String cwpu = weightPerUnitFormattedOutlet.getText();
+		weightPerUnitFormattedOutlet.setText(cwpu.substring(0, cwpu.lastIndexOf("/") + 1) + packagingOutlet.getText());
     }//GEN-LAST:event_packagingOutletKeyReleased
 
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
-	AddContactDialog.createSupplierDialog(this).setVisible(true);
+		AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
 
     private void pricePerWeightOutletKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pricePerWeightOutletKeyReleased
-	try {
-	    pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerWeightOutlet.getText())) + " euro/kg");
-	    pricePerWeightFormattedOutlet.setForeground(Color.black);
-	    pricePerWeightOutlet.setForeground(Color.black);
-	} catch (Exception e) {
-	    pricePerWeightFormattedOutlet.setForeground(Color.red);
-	    pricePerWeightOutlet.setForeground(Color.red);
-	    pricePerWeightFormattedOutlet.setText("??? euro/kg");
-	    System.err.println("Exception: " + e.getMessage());
-	}
-	
-	try {
-	    Double.parseDouble(weightPerUnitOutlet.getText());
-	    updatePricePerUnit();
-	} catch (Exception ex){   
-	}
-	
-	updateGrossPriceOutlet();
+		try {
+			pricePerWeightFormattedOutlet.setText(new DecimalFormat("0.000").format(Double.parseDouble(pricePerWeightOutlet.getText())) + " euro/kg");
+			pricePerWeightFormattedOutlet.setForeground(Color.black);
+			pricePerWeightOutlet.setForeground(Color.black);
+		} catch (Exception e) {
+			pricePerWeightFormattedOutlet.setForeground(Color.red);
+			pricePerWeightOutlet.setForeground(Color.red);
+			pricePerWeightFormattedOutlet.setText("??? euro/kg");
+			System.err.println("Exception: " + e.getMessage());
+		}
+
+		try {
+			Double.parseDouble(weightPerUnitOutlet.getText());
+			updatePricePerUnit();
+		} catch (Exception ex) {
+		}
+
+		updateGrossPriceOutlet();
     }//GEN-LAST:event_pricePerWeightOutletKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addSupplier;
@@ -1055,95 +1054,97 @@ public class EditBasicIngredientDialog extends javax.swing.JDialog implements Ad
     private javax.swing.JTextField weightPerUnitOutlet;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void addContact(Contact s) {
-	supplierParent.removeAll();
-	List suppliers = new ArrayList();
-	suppliers.add("");
-	suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
-	supplierBox.setDataList(suppliers);
-	supplierParent.add(supplierBox, BorderLayout.CENTER);
-	/*
-	 * Select the newly created supplier
-	 */
-	supplierBox.setSelectedItem(s);
+	@Override
+	public void addContact(Contact s) {
+		supplierParent.removeAll();
+		List suppliers = new ArrayList();
+		suppliers.add("");
+		suppliers.addAll(Database.driver().getSuppliersAlphabetically().values());
+		supplierBox.setDataList(suppliers);
+		supplierParent.add(supplierBox, BorderLayout.CENTER);
+		/*
+		 * Select the newly created supplier
+		 */
+		supplierBox.setSelectedItem(s);
 
-	pricePerUnitOutlet.requestFocus();
-    }
-    
-    private boolean valid(){
-	if (!ingredientOutlet.getInputVerifier().verify(ingredientOutlet)) {
-	    JOptionPane.showMessageDialog(null, "Gelieve een geldige naam in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    ingredientOutlet.requestFocus();
-	    return false;
+		pricePerUnitOutlet.requestFocus();
 	}
-	
-	if (supplierBox.getSelectedIndex()==0) {
-	    JOptionPane.showMessageDialog(null, "Gelieve een geldige leverancier te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    supplierBox.requestFocus();
-	    return false;
-	}
-	
+
+	private boolean valid() {
+		if (!ingredientOutlet.getInputVerifier().verify(ingredientOutlet)) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige naam in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			ingredientOutlet.requestFocus();
+			return false;
+		}
+
+		if (supplierBox.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige leverancier te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			supplierBox.requestFocus();
+			return false;
+		}
+
 //	if (!bulkOutlet.isSelected()) {
 //	    /*
 //	     * Test packaging
 //	     */
-	    if (packagingOutlet.getText().isEmpty()) {
-		JOptionPane.showMessageDialog(null, "Gelieve een geldige verpakking in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
-		packagingOutlet.requestFocus();
-		return false;
-	    }
+		if (packagingOutlet.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige verpakking in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			packagingOutlet.requestFocus();
+			return false;
+		}
 //	    /*
 //	     * Test WPU
 //	     */
-	    try{
-		double wpu = Double.parseDouble(weightPerUnitOutlet.getText());
-		if (wpu<=0) {
-		    throw new Exception("derp");
+		try {
+			double wpu = Double.parseDouble(weightPerUnitOutlet.getText());
+			if (wpu <= 0) {
+				throw new Exception("Gewicht per eenheid moet een positief getal zijn!");
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige, strikt positief gewicht per eenheid in te geven!\n(Gewicht mag niet 0.0 zijn)", "Fout!", JOptionPane.ERROR_MESSAGE);
+			weightPerUnitOutlet.requestFocus();
+			return false;
 		}
-	    } catch(Exception e){
-		JOptionPane.showMessageDialog(null, "Gelieve een geldige, strikt positief gewicht per eenheid in te geven!\n(Gewicht mag niet 0.0 zijn)", "Fout!", JOptionPane.ERROR_MESSAGE);
-		weightPerUnitOutlet.requestFocus();
-		return false;
-	    }
 //	    /*
 //	     * Test PPU
 //	     */
-	    try{
-		double ppu = Double.parseDouble(pricePerUnitOutlet.getText());
-		if (ppu<0) {
-		    throw new Exception("derp");
+		try {
+			double ppu = Double.parseDouble(pricePerUnitOutlet.getText());
+			if (ppu < 0) {
+				throw new Exception("Prijs per eenheid moet een positief getal zijn!");
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige, positieve prijs per eenheid in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			pricePerUnitOutlet.requestFocus();
+			return false;
 		}
-	    } catch(Exception e){
-		JOptionPane.showMessageDialog(null, "Gelieve een geldige, positieve prijs per eenheid in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
-		pricePerUnitOutlet.requestFocus();
-		return false;
-	    }
 //	} else {
-	    /*
-	     * Test PPW
-	     */
-	    try{
-		double d = Double.parseDouble(pricePerWeightOutlet.getText());
-		if (d<0.0) throw new Exception("Derp");
-	    } catch(Exception e){
-		JOptionPane.showMessageDialog(null, "Gelieve een geldige, positieve bulkprijs in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
-		pricePerWeightOutlet.requestFocus();
-		return false;
-	    }
+		/*
+		 * Test PPW
+		 */
+		try {
+			double d = Double.parseDouble(pricePerWeightOutlet.getText());
+			if (d < 0.0) {
+				throw new Exception("Prijs per gewicht moet een positief getal zijn!");
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige, positieve bulkprijs in te geven!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			pricePerWeightOutlet.requestFocus();
+			return false;
+		}
 //	}
-	
-	if (!lossOutlet.getInputVerifier().verify(lossOutlet)) {
-	    JOptionPane.showMessageDialog(null, "Kijk het verliespercentage na!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    lossOutlet.requestFocus();
-	    return false;
+
+		if (!lossOutlet.getInputVerifier().verify(lossOutlet)) {
+			JOptionPane.showMessageDialog(null, "Kijk het verliespercentage na!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			lossOutlet.requestFocus();
+			return false;
+		}
+
+		if (!taxesOutlet.getInputVerifier().verify(taxesOutlet)) {
+			JOptionPane.showMessageDialog(null, "Kijk het BTWpercentage na!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			ingredientOutlet.requestFocus();
+			return false;
+		}
+		return true;
 	}
-	
-	if (!taxesOutlet.getInputVerifier().verify(taxesOutlet)) {
-	    JOptionPane.showMessageDialog(null, "Kijk het BTWpercentage na!", "Fout!", JOptionPane.ERROR_MESSAGE);
-	    ingredientOutlet.requestFocus();
-	    return false;
-	}
-	return true;
-    }
 }

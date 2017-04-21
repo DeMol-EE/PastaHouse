@@ -10,20 +10,20 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public class PrintableNewline extends PrintableHorizontalLineObject{
+public class PrintableNewline extends PrintableHorizontalLineObject {
 
-    public PrintableNewline(int height) {
-	super(height);
-    }
-    
-    @Override
-    public void print(Graphics g, int y) {
-	g.drawString("", 0, y);
-    }
+	public PrintableNewline(int height) {
+		super(height);
+	}
 
-    @Override
-    public String toString() {
-	return " ";
-    }
-    
+	@Override
+	public void print(Graphics g, int y) {
+		g.drawString("", 0, y);
+	}
+
+	@Override
+	public String toString() {
+		return " ";
+	}
+
 }

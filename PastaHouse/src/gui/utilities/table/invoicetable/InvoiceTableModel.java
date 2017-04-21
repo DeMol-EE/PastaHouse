@@ -21,116 +21,115 @@ import javax.swing.table.AbstractTableModel;
  */
 public class InvoiceTableModel extends AbstractTableModel {
 
-    private Map<Integer, Invoice> data;
+	private Map<Integer, Invoice> data;
 
-    public InvoiceTableModel(Map<Integer, Invoice> data) {
-        this.data = data;
-    }
-    
-    public void setData(Map<Integer, Invoice> data){
-        this.data = data;
-        fireTableDataChanged();
-    }
+	public InvoiceTableModel(Map<Integer, Invoice> data) {
+		this.data = data;
+	}
 
-    public Invoice getInvoiceAtRow(int row) {
-        return (row > 0 && row < data.size()) ? (Invoice) data.values().toArray()[row] : (Invoice) data.values().toArray()[0];
-    }
+	public void setData(Map<Integer, Invoice> data) {
+		this.data = data;
+		fireTableDataChanged();
+	}
 
-    public boolean removeInvoiceAtRows(int[] rows) {
-        List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
-        for (int row : rows) {
-            invoicesToRemove.add(database.Database.driver().getInvoicesByNumber().get((Integer)getValueAt(row, 0)));
-        }
-	
+	public Invoice getInvoiceAtRow(int row) {
+		return (row > 0 && row < data.size()) ? (Invoice) data.values().toArray()[row] : (Invoice) data.values().toArray()[0];
+	}
+
+	public boolean removeInvoiceAtRows(int[] rows) {
+		List<Invoice> invoicesToRemove = new ArrayList<Invoice>();
+		for (int row : rows) {
+			invoicesToRemove.add(database.Database.driver().getInvoicesByNumber().get((Integer) getValueAt(row, 0)));
+		}
+
 //	System.out.println("To remove: ");
 //	for (Invoice invoice : invoicesToRemove) {
 //	    System.out.println(invoice.getNumber());
 //	}
+		int removed = 0;
 
-        int removed = 0;
+		for (Invoice invoice : invoicesToRemove) {
+			if (invoice.delete()) {
+				removed++;
+			} else {
+				break;
+			}
+		}
 
-        for (Invoice invoice : invoicesToRemove) {
-            if (invoice.delete()) {
-                removed++;
-            } else {
-                break;
-            }
-        }
+		fireTableDataChanged();
 
-        fireTableDataChanged();
+		return removed == rows.length;
+	}
 
-        return removed == rows.length;
-    }
+	@Override
+	public String getColumnName(int column) {
+		switch (column) {
+			case 0:
+				return "Nummer";
+			case 1:
+				return "Klant";
+			case 2:
+				return "Datum";
+			default:
+				return "ID";
+		}
+	}
 
-    @Override
-    public String getColumnName(int column) {
-        switch (column) {
-            case 0:
-                return "Nummer";
-            case 1:
-                return "Klant";
-            case 2:
-                return "Datum";
-            default:
-                return "ID";
-        }
-    }
+	@Override
+	public boolean isCellEditable(int arg0, int arg1) {
+		return false;
+	}
 
-    @Override
-    public boolean isCellEditable(int arg0, int arg1) {
-        return false;
-    }
+	@Override
+	public int getRowCount() {
+		return data.size();
+	}
 
-    @Override
-    public int getRowCount() {
-        return data.size();
-    }
+	@Override
+	public int getColumnCount() {
+		return 3;
+	}
 
-    @Override
-    public int getColumnCount() {
-        return 3;
-    }
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		switch (columnIndex) {
+			case 0:
+				return ((Invoice) data.values().toArray()[rowIndex]).getNumber();
+			case 1:
+				return ((Invoice) data.values().toArray()[rowIndex]).getClient().getSortKey();
+			case 2:
+				String datestring = ((Invoice) data.values().toArray()[rowIndex]).getDate();
+				Date date = new Date();
+				try {
+					date = new SimpleDateFormat("dd/MM/yyyy").parse(datestring);
+				} catch (ParseException ex) {
+					Logger.getLogger(InvoiceTableModel.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				return date;
+			case 3:
+				return ((Invoice) data.values().toArray()[rowIndex]).getPrimaryKeyValue();
+			default:
+				return "Error";
+		}
+	}
 
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        switch (columnIndex) {
-            case 0:
-                return ((Invoice) data.values().toArray()[rowIndex]).getNumber();
-            case 1:
-                return ((Invoice) data.values().toArray()[rowIndex]).getClient().getSortKey();
-            case 2:
-                String datestring = ((Invoice) data.values().toArray()[rowIndex]).getDate();
-                Date date = new Date();
-                try {
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(datestring);
-                } catch (ParseException ex) {
-                    Logger.getLogger(InvoiceTableModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return date;
-            case 3:
-                return ((Invoice) data.values().toArray()[rowIndex]).getPrimaryKeyValue();
-            default:
-                return "Error";
-        }
-    }
+	public Invoice getInvoice(int id) {
+		return data.get(id);
+	}
 
-    public Invoice getInvoice(int id) {
-        return data.get(id);
-    }
-
-    @Override
-    public Class getColumnClass(int col) {
-        switch (col) {
-            case 0:
-                return Integer.class;
-            case 1:
-                return String.class;
-            case 2:
-                return Date.class;
-            case 3:
-                return Boolean.class;
-            default:
-                return Object.class;
-        }
-    }
+	@Override
+	public Class getColumnClass(int col) {
+		switch (col) {
+			case 0:
+				return Integer.class;
+			case 1:
+				return String.class;
+			case 2:
+				return Date.class;
+			case 3:
+				return Boolean.class;
+			default:
+				return Object.class;
+		}
+	}
 }

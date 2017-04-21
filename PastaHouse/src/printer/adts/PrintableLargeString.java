@@ -11,27 +11,27 @@ import java.awt.Graphics;
  *
  * @author Warkst
  */
-public class PrintableLargeString extends PrintableHorizontalLineObject{
+public class PrintableLargeString extends PrintableHorizontalLineObject {
 
-    private final String line;
-    private final int x;
-    
-    public PrintableLargeString(int height, String line, int x){
-	super(height);
-	this.line = line;
-	this.x = x;
-    }
-    
-    @Override
-    public void print(Graphics g, int y) {
-	Font f = g.getFont();
-	g.setFont(new Font(f.getName(), f.getStyle(), f.getSize()+3));
-	g.drawString(line, x, y);
-	g.setFont(f);
-    }
+	private final String line;
+	private final int x;
 
-    @Override
-    public String toString() {
-	return line;
-    }   
+	public PrintableLargeString(int height, String line, int x) {
+		super(height);
+		this.line = line;
+		this.x = x;
+	}
+
+	@Override
+	public void print(Graphics g, int y) {
+		Font f = g.getFont();
+		g.setFont(new Font(f.getName(), f.getStyle(), f.getSize() + 3));
+		g.drawString(line, x, y);
+		g.setFont(f);
+	}
+
+	@Override
+	public String toString() {
+		return line;
+	}
 }

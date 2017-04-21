@@ -96,8 +96,8 @@ public class Invoice extends Record<Invoice> {
         this.save = save;
     }
 
-    public void addItem(double amount, double price, double taxes, String name, Article article) {
-        items.add(new InvoiceItem(article, name, amount, price, taxes));
+    public void addItem(double amount, double price, double taxes, String name, Article article, String lot) {
+        items.add(new InvoiceItem(article, name, amount, price, taxes, lot));
     }
 
     public ArrayList<InvoiceItem> items() {

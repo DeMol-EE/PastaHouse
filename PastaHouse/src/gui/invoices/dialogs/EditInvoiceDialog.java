@@ -20,6 +20,7 @@ import gui.utilities.combobox.AutocompleteCombobox;
 import gui.utilities.table.invoicetable.InvoiceItemTableModel;
 import gui.utilities.table.invoicetable.InvoiceItemTableModelDelegate;
 import gui.utilities.validation.AbstractValidator;
+import gui.utilities.validation.NotEmptyValidator;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -55,102 +56,103 @@ import org.jdesktop.swingx.JXTitledPanel;
  */
 public class EditInvoiceDialog extends javax.swing.JDialog implements AddContactDelegate, InvoiceItemTableModelDelegate {
 
-    private final EditInvoiceDelegate delegate;
-    private JXDatePicker datepicker = DatePickerFactory.makeStandardDatePicker();
-    private JXTable table;
-    private ArrayList<InvoiceItem> data = new ArrayList<InvoiceItem>();
-    private AutocompleteCombobox autobox;
-    private AutocompleteCombobox codepicker;
-    private InvoiceItemTableModel tablemodel;
-    private String pricecode;
-    private Double saving = 0.0;
-    private Contact client;
-    private int number;
-    private Invoice oldinvoice;
-    private Invoice newinvoice;
+	private final EditInvoiceDelegate delegate;
+	private JXDatePicker datepicker = DatePickerFactory.makeStandardDatePicker();
+	private JXTable table;
+	private ArrayList<InvoiceItem> data = new ArrayList<InvoiceItem>();
+	private AutocompleteCombobox autobox;
+	private AutocompleteCombobox codepicker;
+	private InvoiceItemTableModel tablemodel;
+	private String pricecode;
+	private Double saving = 0.0;
+	private Contact client;
+	private int number;
+	private Invoice oldinvoice;
+	private Invoice newinvoice;
 
-    public EditInvoiceDialog(java.awt.Frame parent, boolean modal, EditInvoiceDelegate delegate, Invoice oldinvoice) {
-        super(parent, modal);
-        initComponents();
-        
+	public EditInvoiceDialog(java.awt.Frame parent, boolean modal, EditInvoiceDelegate delegate, Invoice oldinvoice) {
+		super(parent, modal);
+		initComponents();
+
 //        datepicker.setEditable(false);
-        this.delegate = delegate;
+		this.delegate = delegate;
 
-        setTitle("Factuur wijzigen");
-        comboPriceClass.addItem("A");
-        comboPriceClass.addItem("B");
-        comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
-        saving = oldinvoice.getSave();
-        pricecode = oldinvoice.getPriceCode();
-        dateOutlet.add(datepicker);
-        try {
-            datepicker.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(oldinvoice.getDate()));
-        } catch (ParseException ex) {
-            Logger.getLogger(EditInvoiceDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        number = oldinvoice.getNumber();
-        txtNumber.setText("" + number);
-	txtNumber.setEditable(false);
-        
-        this.setTitle("Wijzig factuur - " + number);
-        
-        table = createXTable();
-        this.oldinvoice = oldinvoice;
-        this.newinvoice = new Invoice(oldinvoice);
-        data = newinvoice.items();
-        tablemodel = new InvoiceItemTableModel(data, pricecode, this, true);
-        table.setModel(tablemodel);
-        table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
-        table.getColumns().get(1).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
-        table.getColumns().get(2).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
-        table.getColumns().get(3).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
-        table.getColumns().get(4).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
-        JScrollPane scrollpane = new JScrollPane(table);
-        table.setName("invoiceTable");
-        JXTitledPanel detailstitled = new JXTitledPanel("Details");
-        detailstitled.add(detailspanel);
-        detail.add(detailstitled, BorderLayout.NORTH);
-        JXTitledPanel articlestitled = new JXTitledPanel("Artikelen");
-        articlestitled.add(artikelspanel);
-        detail.add(articlestitled, BorderLayout.CENTER);
-        JXTitledPanel pricetitledpanel = new JXTitledPanel("Prijs");
-        pricetitledpanel.add(pricepanel);
-        detail.add(pricetitledpanel, BorderLayout.SOUTH);
+		setTitle("Factuur wijzigen");
+		comboPriceClass.addItem("A");
+		comboPriceClass.addItem("B");
+		comboPriceClass.setSelectedItem(oldinvoice.getPriceCode());
+		saving = oldinvoice.getSave();
+		pricecode = oldinvoice.getPriceCode();
+		dateOutlet.add(datepicker);
+		try {
+			datepicker.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(oldinvoice.getDate()));
+		} catch (ParseException ex) {
+			Logger.getLogger(EditInvoiceDialog.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		number = oldinvoice.getNumber();
+		txtNumber.setText("" + number);
+		txtNumber.setEditable(false);
 
-        txtReduction.setText("" + saving);
-        
-        articlestablepanel.add(scrollpane, BorderLayout.CENTER);
-	clientOutlet.setText(oldinvoice.getClient().getFirm());
+		this.setTitle("Wijzig factuur - " + number);
 
-        ArrayList articles = new ArrayList();
-        articles.add("");
-        articles.addAll(Database.driver().getArticlesAlphabetically().values());
+		table = createXTable();
+		this.oldinvoice = oldinvoice;
+		this.newinvoice = new Invoice(oldinvoice);
+		data = newinvoice.items();
+		tablemodel = new InvoiceItemTableModel(data, pricecode, this, true);
+		table.setModel(tablemodel);
+		table.getColumns().get(0).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
+		table.getColumns().get(1).setCellRenderer(CellRendererFactory.createIngredientCellRenderer());
+		table.getColumns().get(2).setCellRenderer(CellRendererFactory.createZeroDecimalDoubleCellRenderer());
+		table.getColumns().get(3).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+		table.getColumns().get(4).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+		table.getColumns().get(5).setCellRenderer(CellRendererFactory.createThreeDecimalDoubleCellRenderer());
+		JScrollPane scrollpane = new JScrollPane(table);
+		table.setName("invoiceTable");
+		JXTitledPanel detailstitled = new JXTitledPanel("Details");
+		detailstitled.add(detailspanel);
+		detail.add(detailstitled, BorderLayout.NORTH);
+		JXTitledPanel articlestitled = new JXTitledPanel("Artikelen");
+		articlestitled.add(artikelspanel);
+		detail.add(articlestitled, BorderLayout.CENTER);
+		JXTitledPanel pricetitledpanel = new JXTitledPanel("Prijs");
+		pricetitledpanel.add(pricepanel);
+		detail.add(pricetitledpanel, BorderLayout.SOUTH);
 
-        TextFieldAutoHighlighter.installHighlighter(txtReduction);
-        TextFieldAutoHighlighter.installHighlighter(quantityoutlet);
+		txtReduction.setText("" + saving);
 
-        autobox = new AutocompleteCombobox(articles);
-        choseartickleoutlet.add(autobox, BorderLayout.CENTER);
+		articlestablepanel.add(scrollpane, BorderLayout.CENTER);
+		clientOutlet.setText(oldinvoice.getClient().getFirm());
 
-        ArrayList articlesbycode = new ArrayList();
-        articlesbycode.add("");
-        articlesbycode.addAll(Database.driver().getArticlesByCode().keySet());
-        codepicker = new AutocompleteCombobox(articlesbycode);
-        codeoutlet.add(codepicker, BorderLayout.CENTER);
+		ArrayList articles = new ArrayList();
+		articles.add("");
+		articles.addAll(Database.driver().getArticlesAlphabetically().values());
+
+		TextFieldAutoHighlighter.installHighlighter(txtReduction);
+		TextFieldAutoHighlighter.installHighlighter(lotOutlet);
+		TextFieldAutoHighlighter.installHighlighter(quantityoutlet);
+
+		autobox = new AutocompleteCombobox(articles);
+		choseartickleoutlet.add(autobox, BorderLayout.CENTER);
+
+		ArrayList articlesbycode = new ArrayList();
+		articlesbycode.add("");
+		articlesbycode.addAll(Database.driver().getArticlesByCode().keySet());
+		codepicker = new AutocompleteCombobox(articlesbycode);
+		codeoutlet.add(codepicker, BorderLayout.CENTER);
 
 //        this.pack();
-        addValidators();
-        setLocationRelativeTo(null);
-        
+		addValidators();
+		setLocationRelativeTo(null);
+
 //        clientBox.setEditable(false);
 //	clientBox.getEditor().getEditorComponent().setEnabled(false);
-
-        comboPriceClass.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updatePriceClass((String) comboPriceClass.getSelectedItem());
-            }
-        });
+		comboPriceClass.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updatePriceClass((String) comboPriceClass.getSelectedItem());
+			}
+		});
 
 //        datepicker.addActionListener(new ActionListener() {
 //            @Override
@@ -159,87 +161,106 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 //                txtNumber.setText("" + number);
 //            }
 //        });
+		autobox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String stringart = (String) autobox.getSelectedItem();
 
-        autobox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String stringart = (String) autobox.getSelectedItem();
+				Article art = Database.driver().getArticlesAlphabetically().get(stringart);
+				if (art != null) {
+					codepicker.setSelectedItem(art.getCode());
+				} else {
+					codepicker.setSelectedIndex(0);
+				}
+			}
+		});
 
-                Article art = Database.driver().getArticlesAlphabetically().get(stringart);
-                if(art!=null){
-		    codepicker.setSelectedItem(art.getCode());
-		} else {
-		    codepicker.setSelectedIndex(0);
-		}
-            }
-        });
+		codepicker.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String code = (String) codepicker.getSelectedItem();
 
-        codepicker.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-		String code = (String) codepicker.getSelectedItem();
+				Article art = Database.driver().getArticlesByCode().get(code);
+				if (art != null) {
+					autobox.setSelectedItem(art.getName());
+				} else {
+					autobox.setSelectedIndex(0);
+				}
+			}
+		});
 
-                Article art = Database.driver().getArticlesByCode().get(code);
-                if(art!=null){
-		    autobox.setSelectedItem(art.getName());
-		} else {
-		    autobox.setSelectedIndex(0);
-		}
-            }
-        });
+		autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
+					lotOutlet.requestFocus();
+				}
+			}
 
-        autobox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
-                    quantityoutlet.requestFocus();
-                }
-            }
-	    
-	     @Override
-	    public void keyReleased(KeyEvent e){
-		 String stringart = (String) autobox.getSelectedItem();
-		Article art = Database.driver().getArticlesAlphabetically().get(stringart);
-		if(art!=null){
-		    codepicker.setSelectedItem(art.getCode());
-		} else {
-		    codepicker.setSelectedIndex(0);
-		}
-	    }
-	});
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String stringart = (String) autobox.getSelectedItem();
+				Article art = Database.driver().getArticlesAlphabetically().get(stringart);
+				if (art != null) {
+					codepicker.setSelectedItem(art.getCode());
+				} else {
+					codepicker.setSelectedIndex(0);
+				}
+			}
+		});
+		
+		lotOutlet.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
+					quantityoutlet.requestFocus();
+				}
+			}
 
-        codepicker.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
-                    quantityoutlet.requestFocus();
-                }
-            }
-	    
-	    @Override
-	    public void keyReleased(KeyEvent e){
-		String code = (String) codepicker.getSelectedItem();
-		Article art = Database.driver().getArticlesByCode().get(code);
-		if(art!=null){
-		    autobox.setSelectedItem(art.getName());
-		} else {
-		    autobox.setSelectedIndex(0);
-		}
-	    }
-        });
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String code = (String) codepicker.getSelectedItem();
+				Article art = Database.driver().getArticlesByCode().get(code);
+				if (art != null) {
+					autobox.setSelectedItem(art.getName());
+				} else {
+					autobox.setSelectedIndex(0);
+				}
+			}
+		});
 
-	/*
-	 * load prices for the model
+		codepicker.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
+					lotOutlet.requestFocus();
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String code = (String) codepicker.getSelectedItem();
+				Article art = Database.driver().getArticlesByCode().get(code);
+				if (art != null) {
+					autobox.setSelectedItem(art.getName());
+				} else {
+					autobox.setSelectedIndex(0);
+				}
+			}
+		});
+
+		/*
+		 * load prices for the model
+		 */
+		updatePrices();
+	}
+
+	/**
+	 * This method is called from within the constructor to initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is always
+	 * regenerated by the Form Editor.
 	 */
-        updatePrices();
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -267,10 +288,12 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jPanel2 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         codeoutlet = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         choseartickleoutlet = new javax.swing.JPanel();
+        lotOutlet = new javax.swing.JTextField();
         quantityoutlet = new javax.swing.JTextField();
         addarticlesbuttonpanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -374,7 +397,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
 
         addarticlechooserpanel.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout(2, 0));
+        jPanel2.setLayout(new java.awt.GridLayout(2, 4));
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Artikelcode");
@@ -383,6 +406,10 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Artikel");
         jPanel2.add(jLabel17);
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("LOT");
+        jPanel2.add(jLabel7);
 
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Hoeveelheid");
@@ -397,6 +424,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
         jPanel5.add(choseartickleoutlet, java.awt.BorderLayout.CENTER);
 
         jPanel2.add(jPanel5);
+        jPanel2.add(lotOutlet);
 
         quantityoutlet.setPreferredSize(new java.awt.Dimension(200, 20));
         quantityoutlet.addActionListener(new java.awt.event.ActionListener() {
@@ -537,140 +565,147 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     }// </editor-fold>//GEN-END:initComponents
 
     private void addSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplierActionPerformed
-        AddContactDialog.createSupplierDialog(this).setVisible(true);
+		AddContactDialog.createSupplierDialog(this).setVisible(true);
     }//GEN-LAST:event_addSupplierActionPerformed
 
     private void deleteArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArticleActionPerformed
-        try{
-	    int row = table.getSelectedRow();
-	    if (row >= 0 && row<table.getRowCount()) {
-		data.remove(row);
-		tablemodel.fireTableDataChanged();
-	    }
-	    if (row >= table.getRowCount()) {
-		row = table.getRowCount()-1;
-	    }
-	    table.setRowSelectionInterval(row, row);
-	} catch (Exception e){
-	    
-	}
-	updatePrices();
+		try {
+			int row = table.getSelectedRow();
+			if (row >= 0 && row < table.getRowCount()) {
+				data.remove(row);
+				tablemodel.fireTableDataChanged();
+			}
+			if (row >= table.getRowCount()) {
+				row = table.getRowCount() - 1;
+			}
+			table.setRowSelectionInterval(row, row);
+		} catch (Exception e) {
+
+		}
+		updatePrices();
     }//GEN-LAST:event_deleteArticleActionPerformed
 
     private void quantityoutletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityoutletActionPerformed
-        addArticleActionPerformed(evt);
+		addArticleActionPerformed(evt);
     }//GEN-LAST:event_quantityoutletActionPerformed
 
     private void addArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleActionPerformed
-        Article art;
-        art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
+		Article art;
+		art = Database.driver().getArticlesAlphabetically().get((String) autobox.getSelectedItem());
 
-        if (art == null) {
-            JOptionPane.showMessageDialog(null, "Gelieve een artikel te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
-            autobox.requestFocus();
-            return;
-        }
+		if (art == null) {
+			JOptionPane.showMessageDialog(null, "Gelieve een artikel te kiezen!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			autobox.requestFocus();
+			return;
+		}
+		
+		if (!lotOutlet.getInputVerifier().verify(lotOutlet)) {
+			lotOutlet.requestFocus();
+			return;
+		}
 
-        if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
-            quantityoutlet.requestFocus();
-            return;
-        }
+		if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
+			quantityoutlet.requestFocus();
+			return;
+		}
 
-        double quantity = Double.parseDouble(quantityoutlet.getText());
-        InvoiceItem item = new InvoiceItem(art, art.getName(), quantity, art.getPriceForCode(pricecode), art.getTaxes());
-        data.add(item);
-        tablemodel.addComponent(item);
+		double quantity = Double.parseDouble(quantityoutlet.getText());
+		String lot = lotOutlet.getText();
+		InvoiceItem item = new InvoiceItem(art, art.getName(), quantity, art.getPriceForCode(pricecode), art.getTaxes(), lot);
+		data.add(item);
+		tablemodel.addComponent(item);
 
-        quantityoutlet.setText("");
-	autobox.setSelectedIndex(0);
-	codepicker.setSelectedIndex(0);
+		lotOutlet.setText("");
+		quantityoutlet.setText("");
+		autobox.setSelectedIndex(0);
+		codepicker.setSelectedIndex(0);
 
-        updatePrices();
-	
-	codepicker.getEditor().getEditorComponent().requestFocus();
+		updatePrices();
+
+		codepicker.getEditor().getEditorComponent().requestFocus();
     }//GEN-LAST:event_addArticleActionPerformed
 
-    private void disposeLater() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                dispose();
-            }
-        });
-    }
+	private void disposeLater() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				dispose();
+			}
+		});
+	}
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try {
-            /*
-             * Validity check
-             */
-            if (!valid()) {
-                return;
-            }
-            DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
+		try {
+			/*
+			 * Validity check
+			 */
+			if (!valid()) {
+				return;
+			}
+			DateFormatter df = new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"));
 
-            newinvoice.setDate(df.valueToString(datepicker.getDate()));
-            newinvoice.setClient(oldinvoice.getClient());
+			newinvoice.setDate(df.valueToString(datepicker.getDate()));
+			newinvoice.setClient(oldinvoice.getClient());
 
-            newinvoice.setNumber(number);
-            newinvoice.setPriceCode(pricecode);
-            newinvoice.setSave(saving);
-            FunctionResult<Invoice> res = newinvoice.update();
-            if (res.getCode() == 0) {
-                delegate.editInvoice(oldinvoice, newinvoice);
-                oldinvoice = newinvoice;
-                disposeLater();
-            } else {
-                // switch case error code
-                String msg;
-                switch (res.getCode()) {
-                    case 1:
-                        msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n" + res.getMessage();
-                        break;
-                    case 4:
-                        msg = res.getMessage();
-                        break;
-                    default:
-                        msg = "Het toevoegen van het basisingrediënt is foutgelopen (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
-                }
-                JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            System.err.println("Error: \n" + e.getMessage());
-            JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
-        }
+			newinvoice.setNumber(number);
+			newinvoice.setPriceCode(pricecode);
+			newinvoice.setSave(saving);
+			FunctionResult<Invoice> res = newinvoice.update();
+			if (res.getCode() == 0) {
+				delegate.editInvoice(oldinvoice, newinvoice);
+				oldinvoice = newinvoice;
+				disposeLater();
+			} else {
+				// switch case error code
+				String msg;
+				switch (res.getCode()) {
+					case 1:
+						msg = "Controleer of alle velden uniek zijn. Informatie van de databank:\n" + res.getMessage();
+						break;
+					case 4:
+						msg = res.getMessage();
+						break;
+					default:
+						msg = "Het toevoegen van het basisingrediënt is foutgelopen (code " + res.getCode() + "). Contacteer de ontwikkelaars met deze informatie.";
+				}
+				JOptionPane.showMessageDialog(null, msg, "Fout!", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (Exception e) {
+			System.err.println("Error: \n" + e.getMessage());
+			JOptionPane.showMessageDialog(null, tools.Utilities.incorrectFormMessage, "Fout!", JOptionPane.WARNING_MESSAGE);
+		}
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        newinvoice.copy(oldinvoice);
-        disposeLater();
+		newinvoice.copy(oldinvoice);
+		disposeLater();
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void txtReductionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReductionKeyReleased
-        if (txtReduction.getText().isEmpty()) {
-	    saving = 0.0;
-	}
-	try{
-	    saving = Double.parseDouble(txtReduction.getText());
-	} catch (Exception e){
-	    saving = 0.0;
-	}
-	updatePrices();
-	
-	if (evt.getKeyCode() == KeyEvent.VK_TAB) {
-	    codepicker.getEditor().getEditorComponent().requestFocus();
-	}
+		if (txtReduction.getText().isEmpty()) {
+			saving = 0.0;
+		}
+		try {
+			saving = Double.parseDouble(txtReduction.getText());
+		} catch (Exception e) {
+			saving = 0.0;
+		}
+		updatePrices();
+
+		if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+			codepicker.getEditor().getEditorComponent().requestFocus();
+		}
     }//GEN-LAST:event_txtReductionKeyReleased
 
     private void txtNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberKeyReleased
-        try {
-            number = Integer.parseInt(txtNumber.getText());
-        } catch (Exception e) {
-        }
+		try {
+			number = Integer.parseInt(txtNumber.getText());
+		} catch (Exception e) {
+		}
     }//GEN-LAST:event_txtNumberKeyReleased
 
     private void txtNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumberActionPerformed
-        // TODO add your handling code here:
+		// TODO add your handling code here:
     }//GEN-LAST:event_txtNumberActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -711,6 +746,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -722,6 +758,7 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JPanel jPanel7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField lotOutlet;
     private javax.swing.JPanel pricepanel;
     private javax.swing.JPanel pricesContainer;
     private javax.swing.JTextField quantityoutlet;
@@ -736,163 +773,165 @@ public class EditInvoiceDialog extends javax.swing.JDialog implements AddContact
     private javax.swing.JTextField txtReduction;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void addContact(Contact c) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private JXTable createXTable() {
-        JXTable _table = new JXTable() {
-            @Override
-            protected JTableHeader createDefaultTableHeader() {
-                return new JXTableHeader(columnModel) {
-                    @Override
-                    public void updateUI() {
-                        super.updateUI();
-                        // need toPicker do in updateUI toPicker survive toggling of LAF 
-                        if (getDefaultRenderer() instanceof JLabel) {
-                            ((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
-                        }
-                    }
-                };
-            }
-        };
-        return _table;
-    }
-
-    private void addValidators() {
-        quantityoutlet.setInputVerifier(new AbstractValidator(this, quantityoutlet, "Ongeldige waarde! Verwacht formaat: x.y, groter dan 0.0") {
-            @Override
-            protected boolean validationCriteria(JComponent c) {
-                if (autobox.getSelectedIndex() == 0) {
-                    return true;
-                }
-                try {
-                    return Double.parseDouble(((JTextField) c).getText()) > 0;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        });
-
-        txtReduction.setInputVerifier(new AbstractValidator(this, txtReduction, "Ongeldige waarde! Kies een positief getal tussen 0 en 100 of laat dit veld leeg (=0 % korting)") {
-            @Override
-            protected boolean validationCriteria(JComponent c) {
-                if (txtReduction.getText().isEmpty()) {
-                    return true;
-                }
-                try {
-                    double s = Double.parseDouble(((JTextField) c).getText());
-                    return s >= 0.0 && s <= 100.0;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        });
-    }
-
-    private boolean valid() {
-        if (!txtReduction.getInputVerifier().verify(txtReduction)) {
-            JOptionPane.showMessageDialog(null, "Gelieve de korting na te kijken!", "Fout!", JOptionPane.ERROR_MESSAGE);
-            txtReduction.requestFocus();
-            return false;
-        }
-
-        if (tablemodel.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Gelieve minstens 1 artikel toe te voegen aan deze factuur!", "Fout!", JOptionPane.ERROR_MESSAGE);
-            autobox.requestFocus();
-            return false;
-        }
-
-        if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
-            JOptionPane.showMessageDialog(null, "Gelieve een geldige hoeveelheid in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
-            quantityoutlet.requestFocus();
-            return false;
-        }
-
-        return true;
-    }
-
-    private void updatePriceClass(String newprice) {
-        String oldprice = pricecode;
-        pricecode = newprice;
-        if (!oldprice.equals(pricecode)) {
-            comboPriceClass.setSelectedItem(pricecode);
-            tablemodel.updatePricecode(pricecode);
-        }
-
-        updatePrices();
-    }
-
-    private void updatePrices(){
-	try{
-	    pricesContainer.removeAll();
-	    
-	    totalNetsOutlet.setText("");
-	    totalSavingsOutlet.setText("");
-	    totalAddedOutlet.setText("");
-	    totalOutlet.setText("");
-	    
-	    saveOutlet.setText(saving==0?"0%":"- "+saving+"%");
-	    
-	    Invoice i = new Invoice(data);
-	    i.setSave(saving);
-	    i.setClient(oldinvoice.getClient());
-	    i.setPriceCode(tablemodel.priceCode());
-
-	    Set<Double> cats = i.itemsPerTaxesCategory().keySet();
-
-	    List<Double> net = i.netBeforeSave();
-	    List<Double> save = i.savings();
-	    List<Double> nets = i.netAfterSave();
-	    List<Double> add = i.added();
-	    List<Double> tot = i.total();
-
-	    DecimalFormat threeFormatter = new DecimalFormat("0.000");
-	    DecimalFormat twoFormatter = new DecimalFormat("0.00");
-
-	    int index = 0;
-	    double totalSavings = 0.0;
-	    double totalNets = 0.0;
-	    double totalAdded = 0.0;
-	    double total = 0.0;
-	    for (Double c : cats) {
-		/*
-		 * Format a new panel
-		 */
-		JPanel p = new JPanel(new GridLayout(6, 1));
-		p.add(new JLabel(""+c.intValue()+" %", SwingConstants.TRAILING));
-		p.add(new JLabel(threeFormatter.format(net.get(index)), SwingConstants.TRAILING));
-		p.add(new JLabel(threeFormatter.format(save.get(index)), SwingConstants.TRAILING));
-		totalSavings+=save.get(index);
-		p.add(new JLabel(threeFormatter.format(nets.get(index)), SwingConstants.TRAILING));
-		totalNets+=nets.get(index);
-		p.add(new JLabel(threeFormatter.format(add.get(index)), SwingConstants.TRAILING));
-		totalAdded+=add.get(index);
-		p.add(new JLabel(twoFormatter.format(tot.get(index))+"  ", SwingConstants.TRAILING));
-		total+=tot.get(index);
-
-		/*
-		 * Add the panel
-		 */
-		pricesContainer.add(p);
-		index++;
-	    }
-	    
-	    totalNetsOutlet.setText(threeFormatter.format(totalNets));
-	    totalSavingsOutlet.setText(threeFormatter.format(totalSavings));
-	    totalAddedOutlet.setText(threeFormatter.format(totalAdded));
-	    totalOutlet.setText(twoFormatter.format(total)+"  ");
-	    
-	    pricesContainer.repaint();
-	    pricesContainer.validate();
-	} catch (Exception e){
-	    e.printStackTrace();
+	@Override
+	public void addContact(Contact c) {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
-    }
 
-    @Override
-    public void dataChanged() {
-	updatePrices();
-    }
+	private JXTable createXTable() {
+		JXTable _table = new JXTable() {
+			@Override
+			protected JTableHeader createDefaultTableHeader() {
+				return new JXTableHeader(columnModel) {
+					@Override
+					public void updateUI() {
+						super.updateUI();
+						// need toPicker do in updateUI toPicker survive toggling of LAF 
+						if (getDefaultRenderer() instanceof JLabel) {
+							((JLabel) getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+						}
+					}
+				};
+			}
+		};
+		return _table;
+	}
+
+	private void addValidators() {
+		quantityoutlet.setInputVerifier(new AbstractValidator(this, quantityoutlet, "Ongeldige waarde! Verwacht formaat: x.y, groter dan 0.0") {
+			@Override
+			protected boolean validationCriteria(JComponent c) {
+				if (autobox.getSelectedIndex() == 0) {
+					return true;
+				}
+				try {
+					return Double.parseDouble(((JTextField) c).getText()) > 0;
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		});
+		
+		//lotOutlet.setInputVerifier(new NotEmptyValidator(this, lotOutlet, "Mag niet leeg zijn!"));
+
+		txtReduction.setInputVerifier(new AbstractValidator(this, txtReduction, "Ongeldige waarde! Kies een positief getal tussen 0 en 100 of laat dit veld leeg (=0 % korting)") {
+			@Override
+			protected boolean validationCriteria(JComponent c) {
+				if (txtReduction.getText().isEmpty()) {
+					return true;
+				}
+				try {
+					double s = Double.parseDouble(((JTextField) c).getText());
+					return s >= 0.0 && s <= 100.0;
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		});
+	}
+
+	private boolean valid() {
+		if (!txtReduction.getInputVerifier().verify(txtReduction)) {
+			JOptionPane.showMessageDialog(null, "Gelieve de korting na te kijken!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			txtReduction.requestFocus();
+			return false;
+		}
+
+		if (tablemodel.getRowCount() == 0) {
+			JOptionPane.showMessageDialog(null, "Gelieve minstens 1 artikel toe te voegen aan deze factuur!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			autobox.requestFocus();
+			return false;
+		}
+
+		if (!quantityoutlet.getInputVerifier().verify(quantityoutlet)) {
+			JOptionPane.showMessageDialog(null, "Gelieve een geldige hoeveelheid in te voeren!", "Fout!", JOptionPane.ERROR_MESSAGE);
+			quantityoutlet.requestFocus();
+			return false;
+		}
+
+		return true;
+	}
+
+	private void updatePriceClass(String newprice) {
+		String oldprice = pricecode;
+		pricecode = newprice;
+		if (!oldprice.equals(pricecode)) {
+			comboPriceClass.setSelectedItem(pricecode);
+			tablemodel.updatePricecode(pricecode);
+		}
+
+		updatePrices();
+	}
+
+	private void updatePrices() {
+		try {
+			pricesContainer.removeAll();
+
+			totalNetsOutlet.setText("");
+			totalSavingsOutlet.setText("");
+			totalAddedOutlet.setText("");
+			totalOutlet.setText("");
+
+			saveOutlet.setText(saving == 0 ? "0%" : "- " + saving + "%");
+
+			Invoice i = new Invoice(data);
+			i.setSave(saving);
+			i.setClient(oldinvoice.getClient());
+			i.setPriceCode(tablemodel.priceCode());
+
+			Set<Double> cats = i.itemsPerTaxesCategory().keySet();
+
+			List<Double> net = i.netBeforeSave();
+			List<Double> save = i.savings();
+			List<Double> nets = i.netAfterSave();
+			List<Double> add = i.added();
+			List<Double> tot = i.total();
+
+			DecimalFormat threeFormatter = new DecimalFormat("0.000");
+			DecimalFormat twoFormatter = new DecimalFormat("0.00");
+
+			int index = 0;
+			double totalSavings = 0.0;
+			double totalNets = 0.0;
+			double totalAdded = 0.0;
+			double total = 0.0;
+			for (Double c : cats) {
+				/*
+				 * Format a new panel
+				 */
+				JPanel p = new JPanel(new GridLayout(6, 1));
+				p.add(new JLabel("" + c.intValue() + " %", SwingConstants.TRAILING));
+				p.add(new JLabel(threeFormatter.format(net.get(index)), SwingConstants.TRAILING));
+				p.add(new JLabel(threeFormatter.format(save.get(index)), SwingConstants.TRAILING));
+				totalSavings += save.get(index);
+				p.add(new JLabel(threeFormatter.format(nets.get(index)), SwingConstants.TRAILING));
+				totalNets += nets.get(index);
+				p.add(new JLabel(threeFormatter.format(add.get(index)), SwingConstants.TRAILING));
+				totalAdded += add.get(index);
+				p.add(new JLabel(twoFormatter.format(tot.get(index)) + "  ", SwingConstants.TRAILING));
+				total += tot.get(index);
+
+				/*
+				 * Add the panel
+				 */
+				pricesContainer.add(p);
+				index++;
+			}
+
+			totalNetsOutlet.setText(threeFormatter.format(totalNets));
+			totalSavingsOutlet.setText(threeFormatter.format(totalSavings));
+			totalAddedOutlet.setText(threeFormatter.format(totalAdded));
+			totalOutlet.setText(twoFormatter.format(total) + "  ");
+
+			pricesContainer.repaint();
+			pricesContainer.validate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void dataChanged() {
+		updatePrices();
+	}
 }

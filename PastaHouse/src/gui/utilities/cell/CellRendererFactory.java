@@ -23,321 +23,321 @@ import tools.StringTools;
  */
 public class CellRendererFactory {
 
-    public static TableCellRenderer createTwoDecimalDoubleCellRenderer() {
-        return new TwoDecimalDoubleCellRenderer();
-    }
-    
-    public static TableCellRenderer createTwoDecimalFormattedDoubleCellRenderer() {
-        return new TwoDecimalFormattedDoubleCellRenderer();
-    }
+	public static TableCellRenderer createTwoDecimalDoubleCellRenderer() {
+		return new TwoDecimalDoubleCellRenderer();
+	}
 
-    public static TableCellRenderer createIngredientCellRenderer() {
-        return new IngredientCellRenderer();
-    }
+	public static TableCellRenderer createTwoDecimalFormattedDoubleCellRenderer() {
+		return new TwoDecimalFormattedDoubleCellRenderer();
+	}
 
-    public static TableCellRenderer createThreeDecimalDoubleCellRenderer() {
-        return new ThreeDecimalDoubleCellRenderer();
-    }
-    
-    public static TableCellRenderer createThreeDecimalFormattedDoubleCellRenderer() {
-        return new ThreeDecimalFormattedDoubleCellRenderer();
-    }
+	public static TableCellRenderer createIngredientCellRenderer() {
+		return new IngredientCellRenderer();
+	}
 
-    public static TableCellRenderer createZeroDecimalDoubleCellRenderer() {
-        return new ZeroDecimalDoubleCellRenderer();
-    }
+	public static TableCellRenderer createThreeDecimalDoubleCellRenderer() {
+		return new ThreeDecimalDoubleCellRenderer();
+	}
 
-    public static TableCellRenderer createCapitalizedStringCellRenderer() {
-        return createCapitalizedStringCellRenderer(false);
-    }
+	public static TableCellRenderer createThreeDecimalFormattedDoubleCellRenderer() {
+		return new ThreeDecimalFormattedDoubleCellRenderer();
+	}
 
-    public static TableCellRenderer createCapitalizedStringCellRenderer(boolean centered) {
-        return new CapitalizedStringCellRenderer(centered);
-    }
+	public static TableCellRenderer createZeroDecimalDoubleCellRenderer() {
+		return new ZeroDecimalDoubleCellRenderer();
+	}
 
-    public static TableCellRenderer createComboBoxCellRenderer() {
-        return new ComboBoxCellRenderer();
-    }
+	public static TableCellRenderer createCapitalizedStringCellRenderer() {
+		return createCapitalizedStringCellRenderer(false);
+	}
 
-    public static TableCellRenderer createButtonCellRenderer() {
-        return new ButtonCellRenderer();
-    }
+	public static TableCellRenderer createCapitalizedStringCellRenderer(boolean centered) {
+		return new CapitalizedStringCellRenderer(centered);
+	}
 
-    public static TableCellRenderer createIndexCellRenderer() {
-        return new IndexCellRenderer();
-    }
-    
-    public static DateRenderer createDateRenderer(){
-        return new DateRenderer();
-    }
-    
-    private static class TwoDecimalFormattedDoubleCellRenderer extends JLabel implements TableCellRenderer {
+	public static TableCellRenderer createComboBoxCellRenderer() {
+		return new ComboBoxCellRenderer();
+	}
 
-        public TwoDecimalFormattedDoubleCellRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(JLabel.CENTER);
-        }
+	public static TableCellRenderer createButtonCellRenderer() {
+		return new ButtonCellRenderer();
+	}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-		setBackground(table.getSelectionBackground());
-            } else {
-                setForeground(table.getForeground());
-		setBackground(table.getBackground());
-            }
-            DecimalFormat twoFormatter = new DecimalFormat("0.00");
-	    DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
-	    otherSymbols.setDecimalSeparator(',');
-	    otherSymbols.setGroupingSeparator('.'); 
-	    twoFormatter.setDecimalFormatSymbols(otherSymbols);
-            if (value != null) {
-                this.setText(twoFormatter.format(value));
-            }
-            return this;
-        }
-    }
-    
-    private static class ThreeDecimalFormattedDoubleCellRenderer extends JLabel implements TableCellRenderer {
+	public static TableCellRenderer createIndexCellRenderer() {
+		return new IndexCellRenderer();
+	}
 
-        public ThreeDecimalFormattedDoubleCellRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(JLabel.CENTER);
-        }
+	public static DateRenderer createDateRenderer() {
+		return new DateRenderer();
+	}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-		setBackground(table.getSelectionBackground());
-            } else {
-                setForeground(table.getForeground());
-		setBackground(table.getBackground());
-            }
-            DecimalFormat twoFormatter = new DecimalFormat("0.000");
-	    DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
-	    otherSymbols.setDecimalSeparator(',');
-	    otherSymbols.setGroupingSeparator('.'); 
-	    twoFormatter.setDecimalFormatSymbols(otherSymbols);
-            if (value != null) {
-                this.setText(twoFormatter.format(value));
-            }
-            return this;
-        }
-    }
+	private static class TwoDecimalFormattedDoubleCellRenderer extends JLabel implements TableCellRenderer {
 
-    private static class TwoDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {
+		public TwoDecimalFormattedDoubleCellRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(JLabel.CENTER);
+		}
 
-        public TwoDecimalDoubleCellRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(JLabel.CENTER);
-        }
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+				setBackground(table.getSelectionBackground());
+			} else {
+				setForeground(table.getForeground());
+				setBackground(table.getBackground());
+			}
+			DecimalFormat twoFormatter = new DecimalFormat("0.00");
+			DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+			otherSymbols.setDecimalSeparator(',');
+			otherSymbols.setGroupingSeparator('.');
+			twoFormatter.setDecimalFormatSymbols(otherSymbols);
+			if (value != null) {
+				this.setText(twoFormatter.format(value));
+			}
+			return this;
+		}
+	}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	private static class ThreeDecimalFormattedDoubleCellRenderer extends JLabel implements TableCellRenderer {
+
+		public ThreeDecimalFormattedDoubleCellRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(JLabel.CENTER);
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+				setBackground(table.getSelectionBackground());
+			} else {
+				setForeground(table.getForeground());
+				setBackground(table.getBackground());
+			}
+			DecimalFormat twoFormatter = new DecimalFormat("0.000");
+			DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+			otherSymbols.setDecimalSeparator(',');
+			otherSymbols.setGroupingSeparator('.');
+			twoFormatter.setDecimalFormatSymbols(otherSymbols);
+			if (value != null) {
+				this.setText(twoFormatter.format(value));
+			}
+			return this;
+		}
+	}
+
+	private static class TwoDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {
+
+		public TwoDecimalDoubleCellRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(JLabel.CENTER);
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 //	    
 //	    System.out.println("CALLING "+row+","+column);
 //	    
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-            } else {
-                setForeground(table.getForeground());
-            }
-            DecimalFormat twoFormatter = new DecimalFormat("0.00");
-            if (value != null) {
-                this.setText(twoFormatter.format(value));
-            }
-            return this;
-        }
-    }
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+			} else {
+				setForeground(table.getForeground());
+			}
+			DecimalFormat twoFormatter = new DecimalFormat("0.00");
+			if (value != null) {
+				this.setText(twoFormatter.format(value));
+			}
+			return this;
+		}
+	}
 
-    private static class IngredientCellRenderer extends JLabel implements TableCellRenderer {
+	private static class IngredientCellRenderer extends JLabel implements TableCellRenderer {
 
-        public IngredientCellRenderer() {
-            setOpaque(true);
-        }
+		public IngredientCellRenderer() {
+			setOpaque(true);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-            } else {
-                setForeground(table.getForeground());
-            }
-            if (value != null) {
-                this.setText(value.toString());
-            }
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+			} else {
+				setForeground(table.getForeground());
+			}
+			if (value != null) {
+				this.setText(value.toString());
+			}
 
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 
-    private static class ThreeDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {
+	private static class ThreeDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {
 
-        public ThreeDecimalDoubleCellRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(JLabel.CENTER);
-        }
+		public ThreeDecimalDoubleCellRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(JLabel.CENTER);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-            } else {
-                setForeground(table.getForeground());
-            }
-            DecimalFormat threeFormatter = new DecimalFormat("0.000");
-            if (value != null) {
-                this.setText(threeFormatter.format(value));
-            }
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+			} else {
+				setForeground(table.getForeground());
+			}
+			DecimalFormat threeFormatter = new DecimalFormat("0.000");
+			if (value != null) {
+				this.setText(threeFormatter.format(value));
+			}
 
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 
-    private static class ZeroDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {
+	private static class ZeroDecimalDoubleCellRenderer extends JLabel implements TableCellRenderer {
 
-        public ZeroDecimalDoubleCellRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(JLabel.CENTER);
-        }
+		public ZeroDecimalDoubleCellRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(JLabel.CENTER);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-            } else {
-                setForeground(table.getForeground());
-            }
-            DecimalFormat threeFormatter = new DecimalFormat("0");
-            if (value != null) {
-                this.setText(threeFormatter.format(value));
-            }
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+			} else {
+				setForeground(table.getForeground());
+			}
+			DecimalFormat threeFormatter = new DecimalFormat("0");
+			if (value != null) {
+				this.setText(threeFormatter.format(value));
+			}
 
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 
-    private static class CapitalizedStringCellRenderer extends JLabel implements TableCellRenderer {
+	private static class CapitalizedStringCellRenderer extends JLabel implements TableCellRenderer {
 
-        public CapitalizedStringCellRenderer(boolean centered) {
-            setOpaque(true);
-            if (centered) {
-                setHorizontalAlignment(JLabel.CENTER);
-            }
-        }
+		public CapitalizedStringCellRenderer(boolean centered) {
+			setOpaque(true);
+			if (centered) {
+				setHorizontalAlignment(JLabel.CENTER);
+			}
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
 //	    this.setHorizontalAlignment(JLabel.CENTER)
 
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-            } else {
-                setForeground(table.getForeground());
-            }
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+			} else {
+				setForeground(table.getForeground());
+			}
 
-            if (value == null) {
-                setText("<Kies een item>");
-            } else {
-                setText(" " + StringTools.capitalizeEach(value.toString()));
-            }
-            return this;
-        }
-    }
+			if (value == null) {
+				setText("<Kies een item>");
+			} else {
+				setText(" " + StringTools.capitalizeEach(value.toString()));
+			}
+			return this;
+		}
+	}
 
-    private static class ComboBoxCellRenderer extends JComboBox implements TableCellRenderer {
+	private static class ComboBoxCellRenderer extends JComboBox implements TableCellRenderer {
 
-        public ComboBoxCellRenderer() {
-            setOpaque(true);
-        }
+		public ComboBoxCellRenderer() {
+			setOpaque(true);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
 
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 
-    private static class ButtonCellRenderer extends JButton implements TableCellRenderer {
+	private static class ButtonCellRenderer extends JButton implements TableCellRenderer {
 
-        public ButtonCellRenderer() {
-            setOpaque(true);
-        }
+		public ButtonCellRenderer() {
+			setOpaque(true);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableCellRenderer dtcr = new DefaultTableCellRenderer();
-            Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setBackground(defaultComponent.getBackground());
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TableCellRenderer dtcr = new DefaultTableCellRenderer();
+			Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			setBackground(defaultComponent.getBackground());
 
-            setText("Verwijderen");
+			setText("Verwijderen");
 
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 
-    private static class IndexCellRenderer extends JLabel implements TableCellRenderer {
+	private static class IndexCellRenderer extends JLabel implements TableCellRenderer {
 
-        public IndexCellRenderer() {
-            setOpaque(true);
+		public IndexCellRenderer() {
+			setOpaque(true);
 //	    setHorizontalAlignment(JLabel.LEFT);
-            setHorizontalAlignment(JLabel.CENTER);
-        }
+			setHorizontalAlignment(JLabel.CENTER);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 //	    TableCellRenderer dtcr = new DefaultTableCellRenderer();
 //	    Component defaultComponent = dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-                setBackground(table.getSelectionBackground());
-            } else {
-                setForeground(table.getForeground());
-                setBackground(table.getBackground());
-            }
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+				setBackground(table.getSelectionBackground());
+			} else {
+				setForeground(table.getForeground());
+				setBackground(table.getBackground());
+			}
 
-	    if (value!=null) {
-		setText(value.toString());
-	    } else {
-		setText("derp");
-	    }
+			if (value != null) {
+				setText(value.toString());
+			} else {
+				setText("");
+			}
 
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 
-    private static class DateRenderer extends DefaultTableCellRenderer {
+	private static class DateRenderer extends DefaultTableCellRenderer {
 
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
-        public DateRenderer() {
-            super();
-        }
+		public DateRenderer() {
+			super();
+		}
 
-        @Override
-        public void setValue(Object value) {
-            setText((value == null) ? "" : formatter.format(value));
-        }
-    }
+		@Override
+		public void setValue(Object value) {
+			setText((value == null) ? "" : formatter.format(value));
+		}
+	}
 }
